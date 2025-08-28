@@ -1,1 +1,39 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'tailwindcss';
+@import 'primeicons/primeicons.css';
+
+.html,
+body {
+  font-family: 'Inter', sans-serif !important;
+  font-optical-sizing: auto;
+  font-feature-settings: 'liga', 'kern';
+  font-variation-settings: 'slnt' 0;
+  background-color: var(--grid-bg) !important;
+}
+
+:root {
+  --grid-bg: #09090b; /* warna dasar */
+  --grid-line: rgba(255, 255, 255, 0.05); /* warna garis */
+  --grid-size: 50px; /* ukuran kotak */
+}
+
+/* pakai class ini di wrapper halamanmu */
+.grid-bg {
+  background-color: var(--grid-bg);
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: top left;
+}
+
+.grid-vignette::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    60% 50% at 50% 45%,
+    transparent 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+}

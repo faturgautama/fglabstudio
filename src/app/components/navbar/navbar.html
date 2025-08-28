@@ -1,0 +1,115 @@
+@if (isMobile) {
+<div id="navbar" class="flex gap-2 w-full justify-between items-center p-5">
+  <div id="navbar-brand">
+    <img id="logo" src="/assets/image/logo_transparent_landscape.png" alt="logo" class="w-[7rem]" />
+  </div>
+
+  <div id="navbar-cto" class="flex items-center gap-5">
+    <p-button
+      styleClass="p-button-info p-button-sm"
+      label="Contact Us"
+      icon="pi pi-envelope"
+    ></p-button>
+
+    <span class="cursor-pointer" (click)="showDrawer = true">
+      <i class="pi pi-bars text-white" style="font-size: 20px"></i>
+    </span>
+  </div>
+</div>
+
+<p-drawer
+  [(visible)]="showDrawer"
+  header=""
+  position="right"
+  styleClass="!w-full !bg-[var(--grid-bg)] !border-none"
+  [showCloseIcon]="false"
+>
+  <div class="flex flex-col h-full gap-2">
+    <!-- Brand -->
+    <div
+      id="navbar-brand"
+      class="mb-5 pb-5 border-solid border-gray-600 border-t-0 border-x-0 border-b flex justify-between items-center"
+    >
+      <img
+        id="logo"
+        src="/assets/image/logo_transparent_landscape.png"
+        alt="logo"
+        class="w-[7rem]"
+      />
+
+      <span class="cursor-pointer" (click)="showDrawer = false">
+        <i class="pi pi-times text-gray-300"></i>
+      </span>
+    </div>
+
+    <div id="navbar-menu" class="flex flex-col gap-5 px-5 mb-5">
+      @for (item of NavbarMenu; track $index) {
+      <div class="flex cursor-pointer">
+        <p
+          class="{{
+            item.active ? 'text-sky-500 font-semibold' : 'text-white font-medium'
+          }} text-base hover:text-lg hover:font-semibold hover:text-sky-500 transition-all"
+        >
+          {{ item.menu }}
+        </p>
+      </div>
+      }
+    </div>
+
+    <div id="navbar-cto" class="flex flex-col w-full gap-3 px-5">
+      <p-button
+        styleClass="p-button-secondary p-button-sm w-full"
+        label="Shop Now"
+        icon="pi pi-shopping-cart"
+      ></p-button>
+
+      <p-button
+        styleClass="p-button-info p-button-sm w-full"
+        label="Contact Us"
+        icon="pi pi-envelope"
+      ></p-button>
+    </div>
+
+    <div class="mt-auto px-5 flex items-center justify-center">
+      <p class="text-center text-gray-400 font-medium text-xs">2025 - Copyright FG LAB & STUDIO</p>
+    </div>
+  </div>
+</p-drawer>
+} @else {
+<div
+  id="navbar"
+  class="flex container gap-2 w-full justify-between items-center mx-auto bg-transparent p-5"
+>
+  <div id="navbar-brand">
+    <img id="logo" src="/assets/image/logo_transparent_landscape.png" alt="logo" class="w-[7rem]" />
+  </div>
+
+  <div id="navbar-menu" class="flex gap-10 items-center">
+    @for (item of NavbarMenu; track $index) {
+    <div class="flex cursor-pointer">
+      <p
+        class="{{
+          item.active ? 'text-sky-500 font-semibold' : 'text-white font-medium'
+        }} text-base hover:text-lg hover:font-semibold hover:text-sky-500 transition-all"
+      >
+        {{ item.menu }}
+      </p>
+    </div>
+    }
+  </div>
+
+  <div id="navbar-cto" class="flex gap-5">
+    <p-button
+      styleClass="p-button-secondary p-button-sm"
+      label="Shop Now"
+      icon="pi pi-shopping-cart"
+    ></p-button>
+
+    <p-button
+      styleClass="p-button-info p-button-sm"
+      label="Contact Us"
+      icon="pi pi-envelope"
+    ></p-button>
+  </div>
+</div>
+}
