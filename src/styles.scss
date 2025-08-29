@@ -37,3 +37,9 @@ body {
     rgba(0, 0, 0, 0.25) 100%
   );
 }
+
+.gradient-border {
+  border: 1px solid linear-gradient(to right, #0ea5e9, #3b82f6, #10b981);
+  padding: 1px;
+  border-radius: 8px;
+}

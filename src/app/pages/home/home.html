@@ -1,7 +1,8 @@
 <app-landing-layout>
+  <!-- Banner & Service-->
   <div class="grid-bg grid-vignette w-full mx-auto relative">
-    <!-- Banner -->
-    <div class="container w-full mx-auto py-12">
+    <!-- Hero -->
+    <div class="container w-full mx-auto py-12 mb-16">
       <!-- Text Hero -->
       <div
         class="flex flex-col w-full justify-center items-center gap-0 md:gap-0 p-5 relative z-10"
@@ -24,21 +25,21 @@
       <img
         src="/assets/image/3d-target.png"
         alt="target"
-        class="absolute h-[3rem] md:h-[5rem] top-[20%] md:top-[15%] left-[10%] md:left-[25%]"
+        class="absolute h-[3rem] md:h-[5rem] top-[10%] md:top-[15%] left-[10%] md:left-[25%]"
       />
 
       <!-- Image Rocket -->
       <img
         src="/assets/image/3d-rocket.png"
         alt="rocket"
-        class="absolute h-[5rem] md:h-[7.5rem] top-[4%] md:top-[35%] right-[10%] md:right-[20%] -rotate-45"
+        class="absolute h-[5rem] md:h-[7.5rem] top-[60%] md:top-[35%] right-[10%] md:right-[20%] -rotate-45"
       />
 
       <!-- Image Stopwatch -->
       <img
         src="/assets/image/3d-stopwatch.png"
         alt="rocket"
-        class="hidden md:flex md:absolute h-[2rem] md:h-[6rem] top-[85%] md:top-[65%] left-[3%] md:left-[15%]"
+        class="absolute h-[4rem] md:h-[6rem] top-[60%] md:top-[50%] left-[5%] md:left-[15%]"
       />
 
       <!-- Button -->
@@ -54,6 +55,21 @@
           label="{{ 'BUTTON.Contact Us' | translate }}"
           icon="pi pi-envelope"
         ></p-button>
+      </div>
+    </div>
+
+    <!-- Service -->
+    <div class="container flex flex-col w-full justify-center items-center mx-auto py-10">
+      <!-- Badge Title -->
+      <div class="flex mx-auto mb-5">
+        <app-badge-title [title]="'HOME.Services' | translate"></app-badge-title>
+      </div>
+
+      <!-- Sub heading  -->
+      <div class="flex w-full md:w-5/12 mb-10 px-5">
+        <p class="text-sm md:text-xl text-center font-semibold text-gray-200">
+          {{ 'HOME.Services Subheader' | translate }}
+        </p>
       </div>
     </div>
   </div>

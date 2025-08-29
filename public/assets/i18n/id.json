@@ -9,7 +9,27 @@
   "HOME": {
     "Power Up Your": "Upgrade Level Cara",
     "Creativity Workflow": "Kerja Kamu",
-    "Digital Solution Sub Headline": "Solusi digital sederhana untuk mengelola kerjaan kamu dengan cepat, mudah, dan efisien"
+    "Digital Solution Sub Headline": "Solusi digital sederhana untuk mengelola kerjaan kamu dengan cepat, mudah, dan efisien",
+    "Services": "Butuh Solusi Yang Lebih Spesifik?",
+    "Services Subheader": "Selain produk digital siap pakai, kami juga menyediakan layanan kustom sesuai kebutuhan bisnis Anda.",
+    "Services List": {
+      "UI/UX Design": {
+        "title": "UI/UX Design",
+        "description": "Desain antarmuka modern dengan pengalaman pengguna yang lebih baik."
+      },
+      "Web Development": {
+        "title": "Web Development",
+        "description": "Bangun website sesuai kebutuhan bisnismu, cepat, aman, dan scalable."
+      },
+      "App Development": {
+        "title": "App Development",
+        "description": "Functional, elegant, and user-friendly ios or android applications."
+      },
+      "Custom Enterprise System": {
+        "title": "Custom Enterprise System",
+        "description": "Custom systems to automate business processes and boost efficiency."
+      }
+    }
   },
   "BUTTON": {
     "Shop Now": "Beli Sekarang",

@@ -9,7 +9,27 @@
   "HOME": {
     "Power Up Your": "Power Up Your",
     "Creativity Workflow": "Creativity Workflow",
-    "Digital Solution Sub Headline": "Simplified your workflow with fast, easy and efficient digital solution"
+    "Digital Solution Sub Headline": "Simplified your workflow with fast, easy and efficient digital solution",
+    "Services": "Need a More Tailored Solution?",
+    "Services Subheader": "Beyond ready-to-use digital products, we also provide custom services designed to fit your unique business needs.",
+    "Services List": {
+      "UI/UX Design": {
+        "title": "UI/UX Design",
+        "description": "Modern interfaces crafted for better user experiences."
+      },
+      "Web Development": {
+        "title": "Web Development",
+        "description": "Build websites tailored to your business needs — fast, secure, and scalable."
+      },
+      "App Development": {
+        "title": "App Development",
+        "description": "Functional, elegant, and user-friendly ios or android applications."
+      },
+      "Custom Enterprise System": {
+        "title": "Custom Enterprise System",
+        "description": "Custom systems to automate business processes and boost efficiency."
+      }
+    }
   },
   "BUTTON": {
     "Shop Now": "Shop Now",
