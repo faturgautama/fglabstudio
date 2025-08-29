@@ -1,0 +1,18 @@
+{
+  "NAVBAR": {
+    "Home": "Home",
+    "Product": "Product",
+    "Service": "Service",
+    "AboutUs": "About Us",
+    "FAQ": "FAQ"
+  },
+  "HOME": {
+    "Power Up Your": "Power Up Your",
+    "Creativity Workflow": "Creativity Workflow",
+    "Digital Solution Sub Headline": "Simplified your workflow with fast, easy and efficient digital solution"
+  },
+  "BUTTON": {
+    "Shop Now": "Shop Now",
+    "Contact Us": "Contact Us"
+  }
+}

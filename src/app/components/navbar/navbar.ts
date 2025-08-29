@@ -3,12 +3,14 @@ import { NavbarModel } from '../../model/components/navbar.model';
 import { Navigation } from '../../services/components/navigation';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
   imports: [
     ButtonModule,
-    DrawerModule
+    DrawerModule,
+    TranslatePipe
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',

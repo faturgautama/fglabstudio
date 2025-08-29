@@ -1,15 +1,59 @@
 <app-landing-layout>
-  <div class="grid-bg grid-vignette w-full mx-auto">
+  <div class="grid-bg grid-vignette w-full mx-auto relative">
     <!-- Banner -->
-    <div class="container w-full mx-auto">
+    <div class="container w-full mx-auto py-12">
       <!-- Text Hero -->
-      <div class="flex flex-col w-full justify-center items-center gap-5 md:gap-10 p-5">
-        <img src="/assets/image/logo_blue.png" alt="logo" class="rounded-2xl w-18 md:w-24" />
-        <p class="md:text-8xl text-4xl font-bold text-gray-200 text-center">
-          POWER UP YOUR
-          <br />
-          <span class="md:text-10xl text-3xl"> CREATIVITY WORKFLOW </span>
+      <div
+        class="flex flex-col w-full justify-center items-center gap-0 md:gap-0 p-5 relative z-10"
+      >
+        <img src="/assets/image/logo_blue.png" alt="logo" class="rounded-2xl w-16 md:w-24 mb-5" />
+        <p class="md:text-5xl text-3xl font-bold text-gray-200 text-center mb-1">
+          {{ 'HOME.Power Up Your' | translate | uppercase }}
         </p>
+        <p
+          class="md:text-8xl text-5xl font-extrabold bg-gradient-to-r from-sky-500 via-blue-500 to-emerald-500 bg-clip-text text-transparent mt-0 text-center mb-3"
+        >
+          {{ 'HOME.Creativity Workflow' | translate | uppercase }}
+        </p>
+        <p class="text-base md:text-lg text-gray-400 font-normal text-center">
+          {{ 'HOME.Digital Solution Sub Headline' | translate }}
+        </p>
+      </div>
+
+      <!-- Image Target -->
+      <img
+        src="/assets/image/3d-target.png"
+        alt="target"
+        class="absolute h-[3rem] md:h-[5rem] top-[20%] md:top-[15%] left-[10%] md:left-[25%]"
+      />
+
+      <!-- Image Rocket -->
+      <img
+        src="/assets/image/3d-rocket.png"
+        alt="rocket"
+        class="absolute h-[5rem] md:h-[7.5rem] top-[4%] md:top-[35%] right-[10%] md:right-[20%] -rotate-45"
+      />
+
+      <!-- Image Stopwatch -->
+      <img
+        src="/assets/image/3d-stopwatch.png"
+        alt="rocket"
+        class="hidden md:flex md:absolute h-[2rem] md:h-[6rem] top-[85%] md:top-[65%] left-[3%] md:left-[15%]"
+      />
+
+      <!-- Button -->
+      <div class="flex flex-col w-full md:flex-row md:items-center md:justify-center gap-5 px-8">
+        <p-button
+          styleClass="p-button-secondary w-full"
+          label="{{ 'BUTTON.Shop Now' | translate }}"
+          icon="pi pi-shopping-cart"
+        ></p-button>
+
+        <p-button
+          styleClass="p-button-info w-full"
+          label="{{ 'BUTTON.Contact Us' | translate }}"
+          icon="pi pi-envelope"
+        ></p-button>
       </div>
     </div>
   </div>

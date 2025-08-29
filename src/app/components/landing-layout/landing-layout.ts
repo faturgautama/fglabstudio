@@ -27,11 +27,11 @@ export class LandingLayout implements OnInit, OnDestroy {
     private _navigationService: Navigation
   ) {
     this.NavbarMenu = [
-      { id: 'home', menu: 'Home', url: '/', active: true },
-      { id: 'product', menu: 'Product', url: '/product', active: false },
-      { id: 'service', menu: 'Service', url: '/service', active: false },
-      { id: 'about_us', menu: 'About Us', url: '/about-us', active: false },
-      { id: 'faq', menu: 'FAQ', url: '/faq', active: false },
+      { id: 'home', menu: 'NAVBAR.Home', url: '/', active: true },
+      { id: 'product', menu: 'NAVBAR.Product', url: '/product', active: false },
+      { id: 'service', menu: 'NAVBAR.Service', url: '/service', active: false },
+      { id: 'about_us', menu: 'NAVBAR.AboutUs', url: '/about-us', active: false },
+      { id: 'faq', menu: 'NAVBAR.FAQ', url: '/faq', active: false },
     ];
 
     this._navigationService.setNavbarMenu(this.NavbarMenu);

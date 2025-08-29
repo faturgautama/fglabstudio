@@ -1,0 +1,18 @@
+{
+  "NAVBAR": {
+    "Home": "Home",
+    "Product": "Produk",
+    "Service": "Layanan",
+    "AboutUs": "Tentang Kami",
+    "FAQ": "FAQ"
+  },
+  "HOME": {
+    "Power Up Your": "Upgrade Level Cara",
+    "Creativity Workflow": "Kerja Kamu",
+    "Digital Solution Sub Headline": "Solusi digital sederhana untuk mengelola kerjaan kamu dengan cepat, mudah, dan efisien"
+  },
+  "BUTTON": {
+    "Shop Now": "Beli Sekarang",
+    "Contact Us": "Hubungi Kami"
+  }
+}
