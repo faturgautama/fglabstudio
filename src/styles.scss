@@ -8,6 +8,8 @@ body {
   font-feature-settings: 'liga', 'kern';
   font-variation-settings: 'slnt' 0;
   background-color: var(--grid-bg) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
 :root {

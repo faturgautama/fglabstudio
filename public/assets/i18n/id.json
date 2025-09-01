@@ -23,16 +23,17 @@
       },
       "App Development": {
         "title": "App Development",
-        "description": "Functional, elegant, and user-friendly ios or android applications."
+        "description": "Aplikasi IOS atau Android yang fungsional, elegan, dan user-friendly."
       },
       "Custom Enterprise System": {
         "title": "Custom Enterprise System",
-        "description": "Custom systems to automate business processes and boost efficiency."
+        "description": "Bangun sistem kustom untuk automatisasi proses bisnis dan meningkatkan efisiensi."
       }
     }
   },
   "BUTTON": {
     "Shop Now": "Beli Sekarang",
-    "Contact Us": "Hubungi Kami"
+    "Contact Us": "Hubungi Kami",
+    "Learn More": "Lebih Lanjut"
   }
 }

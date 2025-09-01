@@ -1,8 +1,22 @@
-<div id="card_services_{{ props.id }}" class="grid gap-3 p-5 rounded-lg bg-transparent">
-  <p class="text-gray-300 text-base md:text-lg font-medium">
+<div
+  id="card_services_{{ props.id }}"
+  class="flex flex-col w-full items-start gap-3 p-5 rounded-2xl bg-[rgba(42,42,42,0.32)] backdrop-blur-lg border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] overflow-hidden h-[20rem] relative"
+>
+  <p class="text-white text-base md:text-lg font-medium relative z-10">
     {{ props.title }}
   </p>
-  <p class="text-gray-500 text-sm md:text-base">
-    {{ props.description }}
+  <p class="text-white/80 text-sm md:text-base relative z-10">
+    {{ props.description | translate }}
   </p>
+
+  <div class="flex mt-auto">
+    <p-button
+      styleClass="p-button-sm p-button-info"
+      [label]="'BUTTON.Learn More' | translate"
+    ></p-button>
+  </div>
+
+  <span class="absolute bottom-[-25px] right-4">
+    <i class="{{ props.icon }} text-gray-400" style="font-size: 7rem"></i>
+  </span>
 </div>
