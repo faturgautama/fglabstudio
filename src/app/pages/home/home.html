@@ -124,8 +124,8 @@
 
       <!-- Card Service -->
       <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-5 px-10">
-        @for (item of Services; track $index) {
-        <app-card-service [props]="item"></app-card-service>
+        @for (item of Product$ | async; track $index) {
+        <app-card-product [props]="item"></app-card-product>
         }
       </div>
     </div>

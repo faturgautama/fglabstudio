@@ -1,0 +1,29 @@
+<div id="card_product_{{ props.id }}"
+    class="flex flex-col w-full items-start gap-0 p-0 rounded-2xl bg-[rgba(42,42,42,0.32)] backdrop-blur-lg border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] overflow-hidden h-[25rem] relative">
+    <img [src]="props.image" alt="image" class="rounded-t-lg w-full h-[12rem] object-cover object-center">
+
+    <div class="flex w-full flex-col p-5 h-full">
+        <p class="text-sky-500 text-xs mt-4 mb-1">
+            {{props.category}}
+        </p>
+        <p class="text-white text-lg md:text-xl font-semibold relative z-10">
+            {{ props.title }}
+        </p>
+
+        <div class="flex w-full justify-between items-center mt-auto mb-3">
+            <div class="flex flex-col gap-0">
+                <p class="text-gray-400 text-xs line-through">
+                    {{ props.price | currency: 'Rp. ' }}
+                </p>
+
+                <p class="text-gray-100 font-medium text-base">
+                    {{ props.discount_price | currency: 'Rp. ' }}
+                </p>
+            </div>
+
+            <p-button styleClass="p-button-sm p-button-info" icon="pi pi-cart-plus"
+                [label]="'BUTTON.Shop Now' | translate">
+            </p-button>
+        </div>
+    </div>
+</div>

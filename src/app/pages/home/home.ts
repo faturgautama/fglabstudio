@@ -1,12 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LandingLayout } from "../../components/landing-layout/landing-layout";
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
-import { UpperCasePipe } from '@angular/common';
-import { Button, ButtonModule } from "primeng/button";
+import { TranslatePipe } from '@ngx-translate/core';
+import { AsyncPipe, UpperCasePipe } from '@angular/common';
+import { ButtonModule } from "primeng/button";
 import { CardService } from '../../components/card-service/card-service';
 import { BadgeTitle } from "../../components/badge-title/badge-title";
 import { CardServiceModel } from '../../model/components/card-service.model';
 import { CountingProof } from "../../components/counting-proof/counting-proof";
+import { CardProduct } from "../../components/card-product/card-product";
+import { Store } from '@ngxs/store';
+import { ProductAction } from '../../store/product/product.action';
+import { ProductState } from '../../store/product/product.state';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { CardProductModel } from '../../model/components/card-product.model';
 
 @Component({
   selector: 'app-home',
@@ -17,15 +23,48 @@ import { CountingProof } from "../../components/counting-proof/counting-proof";
     ButtonModule,
     CardService,
     BadgeTitle,
-    CountingProof
+    CountingProof,
+    CardProduct,
+    AsyncPipe
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   standalone: true
 })
-export class Home implements OnInit {
+export class Home implements OnInit, OnDestroy {
 
-  Services: CardServiceModel.ICardService[];
+  Destroy$ = new Subject();
+
+  Services: CardServiceModel.ICardService[] = [
+    {
+      id: 'ui-ux-design',
+      title: 'UI/UX Design',
+      description: 'HOME.Services List.UI/UX Design.description',
+      icon: 'pi pi-palette',
+      status: true,
+    },
+    {
+      id: 'web-development',
+      title: 'Web Development',
+      description: 'HOME.Services List.Web Development.description',
+      icon: 'pi pi-globe',
+      status: true,
+    },
+    {
+      id: 'app-development',
+      title: 'App Development',
+      description: 'HOME.Services List.App Development.description',
+      icon: 'pi pi-mobile',
+      status: true,
+    },
+    {
+      id: 'custom-enterprise-system',
+      title: 'Custom Enterprise System',
+      description: 'HOME.Services List.Custom Enterprise System.description',
+      icon: 'pi pi-objects-column',
+      status: true,
+    },
+  ];
 
   Count: any = {
     client: 100,
@@ -34,65 +73,22 @@ export class Home implements OnInit {
     experience: 5
   };
 
-  displayCount: Record<string, number> = {};
-  keys: string[] = [];
+  Product$: Observable<CardProductModel.ICardProduct[]>;
 
-  constructor() {
-    this.Services = [
-      {
-        id: 'ui-ux-design',
-        title: 'UI/UX Design',
-        description: 'HOME.Services List.UI/UX Design.description',
-        icon: 'pi pi-palette',
-        status: true,
-      },
-      {
-        id: 'web-development',
-        title: 'Web Development',
-        description: 'HOME.Services List.Web Development.description',
-        icon: 'pi pi-globe',
-        status: true,
-      },
-      {
-        id: 'app-development',
-        title: 'App Development',
-        description: 'HOME.Services List.App Development.description',
-        icon: 'pi pi-mobile',
-        status: true,
-      },
-      {
-        id: 'custom-enterprise-system',
-        title: 'Custom Enterprise System',
-        description: 'HOME.Services List.Custom Enterprise System.description',
-        icon: 'pi pi-objects-column',
-        status: true,
-      },
-    ]
+  constructor(
+    private _store: Store
+  ) {
+    this.Product$ = this._store
+      .select(ProductState.getData)
+      .pipe(takeUntil(this.Destroy$));
   }
 
   ngOnInit() {
-    this.keys = Object.keys(this.Count);
-    this.keys.forEach(key => {
-      this.displayCount[key] = 0;
-      this.animateCount(key, this.Count[key]);
-    });
   }
 
-  animateCount(key: string, target: number) {
-    const duration = 10000;
-    const steps = 60;
-    const increment = target / steps;
-    const intervalTime = duration / steps;
-
-    let current = 0;
-    const interval = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        this.displayCount[key] = target;
-        clearInterval(interval);
-      } else {
-        this.displayCount[key] = Math.floor(current);
-      }
-    }, intervalTime);
+  ngOnDestroy(): void {
+    this.Destroy$.next(0);
+    this.Destroy$.complete();
   }
+
 }

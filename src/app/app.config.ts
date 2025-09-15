@@ -1,15 +1,16 @@
 import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
-import { provideStore } from '@ngrx/store';
-import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngxs/store';
 import { provideTranslateService, TranslateService } from "@ngx-translate/core";
 import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
+import { STATE } from './store';
+import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -26,8 +27,7 @@ export const appConfig: ApplicationConfig = {
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideRouter(routes),
-        provideStore(),
-        provideEffects(),
+        provideStore(([...STATE]), withNgxsLoggerPlugin({ disabled: environment.production })),
         provideTranslateService({
             lang: 'en',
             fallbackLang: 'en',
@@ -39,6 +39,6 @@ export const appConfig: ApplicationConfig = {
         provideAppInitializer(() => {
             const translate = inject(TranslateService);
             translate.use(translate.getBrowserLang() || "en");
-        })
+        }),
     ]
 };

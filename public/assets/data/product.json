@@ -1,0 +1,21 @@
+[
+    {
+        "id": "invoice-generator",
+        "title": "Invoice Generator",
+        "description": "",
+        "image": "/assets/image/coming_soon.jpg",
+        "price": 100000,
+        "discount_price": 25000,
+        "category": "Web Development",
+        "review": [],
+        "highlight": [
+            "Responsive, Clean and Modern Design",
+            "Support Offline Mode",
+            "Fast and Modern Web Framework",
+            "Bug Free",
+            "Installable Like App",
+            "1 Device Life Time License"
+        ],
+        "published_at": "2025-14-09 12:00:00"
+    }
+]
