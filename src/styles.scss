@@ -13,9 +13,12 @@ body {
 }
 
 :root {
-  --grid-bg: #09090b; /* warna dasar */
-  --grid-line: rgba(255, 255, 255, 0.05); /* warna garis */
-  --grid-size: 50px; /* ukuran kotak */
+  --grid-bg: #09090b;
+  /* warna dasar */
+  --grid-line: rgba(255, 255, 255, 0.05);
+  /* warna garis */
+  --grid-size: 50px;
+  /* ukuran kotak */
 }
 
 /* pakai class ini di wrapper halamanmu */
@@ -32,16 +35,46 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(
-    60% 50% at 50% 45%,
-    transparent 0%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.25) 100%
-  );
+  background: radial-gradient(60% 50% at 50% 45%,
+      transparent 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.25) 100%);
 }
 
 .gradient-border {
   border: 1px solid linear-gradient(to right, #0ea5e9, #3b82f6, #10b981);
   padding: 1px;
   border-radius: 8px;
+}
+
+.pattern-bg {
+  position: relative;
+  background-color: var(--grid-bg);
+  background-image: url('../public/assets/image/bg_pattern.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  z-index: 0;
+}
+
+.pattern-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle,
+      rgba(0, 0, 0, 0.321) 0%,
+      /* tengah agak gelap */
+      rgba(0, 0, 0, 0.507) 50%,
+      /* transisi */
+      rgba(0, 0, 0, 0.86) 100%
+      /* pinggir transparan */
+    );
+  /* overlay hitam tipis */
+  z-index: 1;
+}
+
+/* Biar konten tetap kelihatan di atas overlay */
+.pattern-bg>* {
+  position: relative;
+  z-index: 2;
 }

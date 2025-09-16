@@ -75,6 +75,29 @@ export class Home implements OnInit, OnDestroy {
 
   Product$: Observable<CardProductModel.ICardProduct[]>;
 
+  WhyChooseUs = [
+    {
+      title: 'HOME.Proven Expertise',
+      description: 'HOME.Proven Expertise Description',
+      icon: 'pi pi-thumbs-up-fill text-2xl text-white'
+    },
+    {
+      title: 'HOME.Innovative Approach',
+      description: 'HOME.Innovative Approach Description',
+      icon: 'pi pi-lightbulb text-2xl text-white'
+    },
+    {
+      title: 'HOME.Customer-Centric Service',
+      description: 'HOME.Customer-Centric Service Description',
+      icon: 'pi pi-users text-2xl text-white'
+    },
+    {
+      title: 'HOME.Quality Commitment',
+      description: 'HOME.Quality Commitment Description',
+      icon: 'pi pi-star-fill text-2xl text-white'
+    },
+  ]
+
   constructor(
     private _store: Store
   ) {
