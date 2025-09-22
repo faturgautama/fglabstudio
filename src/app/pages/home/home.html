@@ -64,7 +64,7 @@
   </div>
 
   <!-- Couting -->
-  <div class="flex flex-col gap-5 bg-gray-800 py-10 w-full">
+  <div class="flex flex-col gap-5 bg-gray-900 py-10 w-full">
     <div class="container flex flex-row w-full justify-center items-center mx-auto">
       <!-- Headling -->
       <div class="flex flex-col gap-2 w-7/12">
@@ -166,6 +166,48 @@
 
         </div>
         }
+      </div>
+    </div>
+  </div>
+
+  <!-- Who We Are -->
+  <div class="grid bg-gray-900 w-full">
+    <div class="container flex flex-row w-full items-center justify-center mx-auto">
+      <div class="flex w-6/12">
+        <img src="/assets/image/we.png" alt="who-we-are" class="w-full h-auto object-cover object-center">
+      </div>
+
+      <div class="flex flex-col w-5/12">
+        <!-- Badge Title -->
+        <div class="flex mb-5">
+          <app-badge-title [title]="'HOME.Who We Are' | translate"></app-badge-title>
+        </div>
+
+        <!-- Sub heading  -->
+        <div class="flex w-full mb-4">
+          <p class="text-sm md:text-4xl font-semibold text-gray-300 text-justify">
+            {{ 'HOME.Who We Are Subheader' | translate }}
+          </p>
+        </div>
+
+        <!-- Description  -->
+        <div class="flex w-full mb-6">
+          <p class="text-base text-gray-500 text-justify">
+            {{ 'HOME.Who We Are Description' | translate }}
+          </p>
+        </div>
+
+        <!-- Point -->
+        <div class="grid grid-cols-2 gap-3 p-5 rounded-lg border border-dashed border-gray-500">
+          @for (item of WhoWeAreValues; track $index) {
+          <p class="text-sm text-gray-500 text-justify">
+            <span class="mr-2">
+              <i class="pi pi-check text-emerald-400" style="font-size: 12px;"></i>
+            </span>
+            {{ item.title| translate }}
+          </p>
+          }
+        </div>
       </div>
     </div>
   </div>

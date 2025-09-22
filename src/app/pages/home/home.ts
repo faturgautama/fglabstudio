@@ -96,7 +96,18 @@ export class Home implements OnInit, OnDestroy {
       description: 'HOME.Quality Commitment Description',
       icon: 'pi pi-star-fill text-2xl text-white'
     },
-  ]
+  ];
+
+  WhoWeAreValues = [
+    { title: 'HOME.Who We Are Values.Innovation at Core' },
+    { title: 'HOME.Who We Are Values.Customer-Centric Thinking' },
+    { title: 'HOME.Who We Are Values.Trust and Transparency' },
+    { title: 'HOME.Who We Are Values.Empowering Creators' },
+    { title: 'HOME.Who We Are Values.Inclusive by Design' },
+    { title: 'HOME.Who We Are Values.Sustainable Growth' },
+    { title: 'HOME.Who We Are Values.Data-Informed Decisions' },
+    { title: 'HOME.Who We Are Values.Community Driven' }
+  ];
 
   constructor(
     private _store: Store

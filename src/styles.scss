@@ -30,16 +30,16 @@ body {
   background-position: top left;
 }
 
-.grid-vignette::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(60% 50% at 50% 45%,
-      transparent 0%,
-      transparent 40%,
-      rgba(0, 0, 0, 0.25) 100%);
-}
+// .grid-vignette::before {
+//   content: '';
+//   position: fixed;
+//   inset: 0;
+//   pointer-events: none;
+//   background: radial-gradient(60% 50% at 50% 0%,
+//       transparent 0%,
+//       transparent 0%,
+//       rgba(0, 0, 0, 0.25) 0%);
+// }
 
 .gradient-border {
   border: 1px solid linear-gradient(to right, #0ea5e9, #3b82f6, #10b981);

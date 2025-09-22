@@ -43,7 +43,20 @@
     "Customer-Centric Service": "Layanan Berorientasi Pelanggan",
     "Customer-Centric Service Description": "Kebutuhan Anda adalah prioritas kami, dengan solusi yang disesuaikan",
     "Quality Commitment": "Komitmen Kualitas",
-    "Quality Commitment Description": "Kami tidak pernah mengabaikan standar demi hasil terbaik"
+    "Quality Commitment Description": "Kami tidak pernah mengabaikan standar demi hasil terbaik",
+    "Who We Are": "Siapakah Kami",
+    "Who We Are Subheader": "Mengubah Ide Menjadi Produk Digital yang Sederhana tapi Hebat",
+    "Who We Are Description": "Kami lahir dengan satu misi: membuat teknologi bisa diakses oleh semua orang. Kami fokus menciptakan aplikasi yang ringan namun andal, dirancang untuk memenuhi kebutuhan pasar tanpa kerumitan yang tidak perlu. Perjalanan kreatif kami adalah tentang inovasi yang punya tujuan—membangun alat yang memberdayakan orang dan bisnis untuk berkembang.",
+    "Who We Are Values": {
+      "Innovation at Core": "Inovasi sebagai Inti",
+      "Customer-Centric Thinking": "Berpikir Berpusat pada Pelanggan",
+      "Trust and Transparency": "Kepercayaan dan Transparansi",
+      "Empowering Creators": "Memberdayakan Kreator",
+      "Inclusive by Design": "Inklusif sejak Awal",
+      "Sustainable Growth": "Pertumbuhan Berkelanjutan",
+      "Data-Informed Decisions": "Keputusan Berdasarkan Data",
+      "Community Driven": "Didorong oleh Komunitas"
+    }
   },
   "BUTTON": {
     "Shop Now": "Beli Sekarang",

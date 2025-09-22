@@ -43,7 +43,20 @@
     "Customer-Centric Service": "Customer-Centric Service",
     "Customer-Centric Service Description": "Your needs come first, and we tailor our solutions to you",
     "Quality Commitment": "Quality Commitment",
-    "Quality Commitment Description": "We never compromise on standards to ensure the best results"
+    "Quality Commitment Description": "We never compromise on standards to ensure the best results",
+    "Who We Are": "Who We Are",
+    "Who We Are Subheader": "Turning Ideas into Simple, Powerful Digital Products",
+    "Who We Are Description": "We started with one mission: to make technology accessible for everyone. We focus on creating apps that are lightweight yet reliable, designed to meet market needs without unnecessary complexity. Our creative journey is about innovation with purpose—building tools that empower people and businesses to grow.",
+    "Who We Are Values": {
+      "Innovation at Core": "Innovation at Core",
+      "Customer-Centric Thinking": "Customer-Centric Thinking",
+      "Trust and Transparency": "Trust and Transparency",
+      "Empowering Creators": "Empowering Creators",
+      "Inclusive by Design": "Inclusive by Design",
+      "Sustainable Growth": "Sustainable Growth",
+      "Data-Informed Decisions": "Data-Informed Decisions",
+      "Community Driven": "Community Driven"
+    }
   },
   "BUTTON": {
     "Shop Now": "Shop Now",
