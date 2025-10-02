@@ -56,7 +56,55 @@
       "Sustainable Growth": "Pertumbuhan Berkelanjutan",
       "Data-Informed Decisions": "Keputusan Berdasarkan Data",
       "Community Driven": "Didorong oleh Komunitas"
+    },
+    "FAQ": "Frequently Ask Question",
+    "FAQ Description": "Jawaban Untuk Pertanyaan Umum Pengguna",
+    "FAQ Datasource": {
+      "1": {
+        "question": "Apakah aplikasi ini bisa digunakan tanpa internet?",
+        "answer": "Ya. Semua transaksi tetap tersimpan di perangkat (offline). Saat ada koneksi internet, data otomatis tersinkron ke server."
+      },
+      "2": {
+        "question": "Apakah harus install di komputer atau HP?",
+        "answer": "Tidak perlu install. Aplikasi ini berbasis web, cukup buka lewat browser (Chrome, Safari, Edge). Bisa juga dipasang sebagai PWA sehingga terlihat seperti aplikasi di HP/laptop."
+      },
+      "3": {
+        "question": "Bagaimana cara mendapatkan akun setelah membeli?",
+        "answer": "Setelah membeli di marketplace, Anda akan menerima email berisi username & password untuk login."
+      },
+      "4": {
+        "question": "Apakah saya bisa memilih hanya modul tertentu?",
+        "answer": "Bisa. Sistem ini modular. Misalnya, Anda hanya butuh Kasir & Stok, modul lainnya bisa ditambahkan kapan saja sesuai kebutuhan."
+      },
+      "5": {
+        "question": "Berapa biaya langganannya?",
+        "answer": "Kami menyediakan beberapa paket: Starter (POS + Invoice + Stok dasar), Business (Starter + Purchasing + Finance + Surat Jalan), dan Enterprise UMKM (semua modul termasuk HR/Payroll). Harga mulai dari Rp xx.xxx/bulan."
+      },
+      "6": {
+        "question": "Apakah ada masa trial gratis?",
+        "answer": "Ya. Anda bisa mencoba aplikasi selama 7 hari gratis."
+      },
+      "7": {
+        "question": "Apakah aplikasi ini bisa dipakai multi cabang?",
+        "answer": "Ya, tersedia dukungan multi user & multi cabang di paket tertentu."
+      },
+      "8": {
+        "question": "Apakah data saya aman?",
+        "answer": "Ya, data tersimpan di server dengan enkripsi standar industri, serta bisa diakses kembali walau perangkat Anda hilang atau rusak."
+      },
+      "9": {
+        "question": "Apakah ada dukungan customer service?",
+        "answer": "Ya, kami menyediakan support via WhatsApp, email, dan grup komunitas pengguna."
+      }
     }
+  },
+  "FOOTER": {
+    "Product": "Produk",
+    "Service": "Layanan & Solusi",
+    "Support": "Dukungan",
+    "Contact Us": "Hubungi Kami",
+    "License": "Lisensi",
+    "Refund Policy": "Kebijakan Refund"
   },
   "BUTTON": {
     "Shop Now": "Beli Sekarang",

@@ -56,7 +56,55 @@
       "Sustainable Growth": "Sustainable Growth",
       "Data-Informed Decisions": "Data-Informed Decisions",
       "Community Driven": "Community Driven"
+    },
+    "FAQ": "Frequently Ask Question",
+    "FAQ Description": "Helpful Answer to Common User Questions",
+    "FAQ Datasource": {
+      "1": {
+        "question": "Can this app be used without internet?",
+        "answer": "Yes. All transactions are stored locally (offline). When the internet is available, data will automatically sync to the server."
+      },
+      "2": {
+        "question": "Do I need to install it on my computer or phone?",
+        "answer": "No installation needed. The app is web-based, just open it in a browser (Chrome, Safari, Edge). It can also be installed as a PWA to look like a native app on your phone/laptop."
+      },
+      "3": {
+        "question": "How do I get an account after purchase?",
+        "answer": "After purchasing from the marketplace, you will receive an email with a username and password to log in."
+      },
+      "4": {
+        "question": "Can I choose only specific modules?",
+        "answer": "Yes. The system is modular. For example, if you only need POS & Inventory, you can add other modules anytime later."
+      },
+      "5": {
+        "question": "How much is the subscription fee?",
+        "answer": "We provide several packages: Starter (POS + Invoice + Basic Inventory), Business (Starter + Purchasing + Finance + Delivery), and Enterprise (all modules including HR/Payroll). Pricing starts from Rp xx.xxx/month."
+      },
+      "6": {
+        "question": "Is there a free trial?",
+        "answer": "Yes. You can try the app free for 7 days."
+      },
+      "7": {
+        "question": "Can the app be used for multiple branches?",
+        "answer": "Yes, multi-user and multi-branch support is available in certain packages."
+      },
+      "8": {
+        "question": "Is my data safe?",
+        "answer": "Yes, your data is stored on secure servers with industry-standard encryption and can be restored even if your device is lost or damaged."
+      },
+      "9": {
+        "question": "Is customer support available?",
+        "answer": "Yes, we provide support via WhatsApp, email, and a user community group."
+      }
     }
+  },
+  "FOOTER": {
+    "Product": "Product",
+    "Service": "Service",
+    "Support": "Support",
+    "Contact Us": "Contact Us",
+    "License": "License",
+    "Refund Policy": "Refund Policy"
   },
   "BUTTON": {
     "Shop Now": "Shop Now",

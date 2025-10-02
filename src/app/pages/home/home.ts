@@ -9,10 +9,11 @@ import { CardServiceModel } from '../../model/components/card-service.model';
 import { CountingProof } from "../../components/counting-proof/counting-proof";
 import { CardProduct } from "../../components/card-product/card-product";
 import { Store } from '@ngxs/store';
-import { ProductAction } from '../../store/product/product.action';
 import { ProductState } from '../../store/product/product.state';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { CardProductModel } from '../../model/components/card-product.model';
+import { AccordionModule } from 'primeng/accordion';
+import { SolutionState } from '../../store/solution';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,8 @@ import { CardProductModel } from '../../model/components/card-product.model';
     BadgeTitle,
     CountingProof,
     CardProduct,
-    AsyncPipe
+    AsyncPipe,
+    AccordionModule
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -35,36 +37,7 @@ export class Home implements OnInit, OnDestroy {
 
   Destroy$ = new Subject();
 
-  Services: CardServiceModel.ICardService[] = [
-    {
-      id: 'ui-ux-design',
-      title: 'UI/UX Design',
-      description: 'HOME.Services List.UI/UX Design.description',
-      icon: 'pi pi-palette',
-      status: true,
-    },
-    {
-      id: 'web-development',
-      title: 'Web Development',
-      description: 'HOME.Services List.Web Development.description',
-      icon: 'pi pi-globe',
-      status: true,
-    },
-    {
-      id: 'app-development',
-      title: 'App Development',
-      description: 'HOME.Services List.App Development.description',
-      icon: 'pi pi-mobile',
-      status: true,
-    },
-    {
-      id: 'custom-enterprise-system',
-      title: 'Custom Enterprise System',
-      description: 'HOME.Services List.Custom Enterprise System.description',
-      icon: 'pi pi-objects-column',
-      status: true,
-    },
-  ];
+  Services$: Observable<CardServiceModel.ICardService[]>;
 
   Count: any = {
     client: 100,
@@ -109,11 +82,27 @@ export class Home implements OnInit, OnDestroy {
     { title: 'HOME.Who We Are Values.Community Driven' }
   ];
 
+  Faq = [
+    { question: 'HOME.FAQ Datasource.1.question', answer: 'HOME.FAQ Datasource.1.answer' },
+    { question: 'HOME.FAQ Datasource.2.question', answer: 'HOME.FAQ Datasource.2.answer' },
+    { question: 'HOME.FAQ Datasource.3.question', answer: 'HOME.FAQ Datasource.3.answer' },
+    { question: 'HOME.FAQ Datasource.4.question', answer: 'HOME.FAQ Datasource.4.answer' },
+    { question: 'HOME.FAQ Datasource.5.question', answer: 'HOME.FAQ Datasource.5.answer' },
+    { question: 'HOME.FAQ Datasource.6.question', answer: 'HOME.FAQ Datasource.6.answer' },
+    { question: 'HOME.FAQ Datasource.7.question', answer: 'HOME.FAQ Datasource.7.answer' },
+    { question: 'HOME.FAQ Datasource.8.question', answer: 'HOME.FAQ Datasource.8.answer' },
+    { question: 'HOME.FAQ Datasource.9.question', answer: 'HOME.FAQ Datasource.9.answer' },
+  ];
+
   constructor(
     private _store: Store
   ) {
     this.Product$ = this._store
       .select(ProductState.getData)
+      .pipe(takeUntil(this.Destroy$));
+
+    this.Services$ = this._store
+      .select(SolutionState.getData)
       .pipe(takeUntil(this.Destroy$));
   }
 

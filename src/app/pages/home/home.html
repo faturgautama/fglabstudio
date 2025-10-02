@@ -56,7 +56,7 @@
 
       <!-- Card Service -->
       <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-5 px-10">
-        @for (item of Services; track $index) {
+        @for (item of Services$ | async; track $index) {
         <app-card-service [props]="item"></app-card-service>
         }
       </div>
@@ -208,6 +208,41 @@
           </p>
           }
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="grid bg-gray-900 w-full mx-auto relative">
+    <div class="container flex flex-col w-full items-center justify-center mx-auto py-10">
+      <!-- Badge Title -->
+      <div class="flex mx-auto mb-5">
+        <app-badge-title [title]="'HOME.FAQ' | translate"></app-badge-title>
+      </div>
+
+      <!-- Sub heading  -->
+      <div class="flex w-full md:w-5/12 mb-10 justify-center">
+        <p class="text-sm md:text-2xl text-center font-semibold text-gray-200">
+          {{ 'HOME.FAQ Description' | translate }}
+        </p>
+      </div>
+
+      <!-- Card Service -->
+      <div class="grid grid-cols-1 w-full gap-5 px-10">
+        <p-accordion [value]="0">
+          @for (tab of Faq; track $index) {
+          <p-accordion-panel [value]="$index">
+            <p-accordion-header>
+              <p class="text-base font-medium text-gray-300">
+              {{ tab.question | translate }}
+              </p>
+            </p-accordion-header>
+            <p-accordion-content>
+              <p class="text-base text-gray-500">{{ tab.answer | translate}}</p>
+            </p-accordion-content>
+          </p-accordion-panel>
+          }
+        </p-accordion>
       </div>
     </div>
   </div>

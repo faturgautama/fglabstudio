@@ -1,11 +1,68 @@
 [
     {
-        "id": "invoice-generator",
-        "title": "Invoice Generator",
+        "id": "pos-kasir",
+        "title": "Point Of Sales (POS Cashier)",
         "description": "",
         "image": "/assets/image/coming_soon.jpg",
-        "price": 100000,
-        "discount_price": 25000,
+        "price": 250000,
+        "discount_price": 99000,
+        "category": "Web Development",
+        "review": [],
+        "highlight": [
+            "Responsive, Clean and Modern Design",
+            "Support Offline Mode",
+            "Fast and Modern Web Framework",
+            "Bug Free",
+            "Installable Like App",
+            "1 Device Life Time License"
+        ],
+        "published_at": "2025-14-09 12:00:00"
+    },
+    {
+        "id": "inventory",
+        "title": "Inventory (Management Stock)",
+        "description": "",
+        "image": "/assets/image/coming_soon.jpg",
+        "price": 250000,
+        "discount_price": 99000,
+        "category": "Web Development",
+        "review": [],
+        "highlight": [
+            "Responsive, Clean and Modern Design",
+            "Support Offline Mode",
+            "Fast and Modern Web Framework",
+            "Bug Free",
+            "Installable Like App",
+            "1 Device Life Time License"
+        ],
+        "published_at": "2025-14-09 12:00:00"
+    },
+    {
+        "id": "human-resource",
+        "title": "Human Resource System",
+        "description": "",
+        "image": "/assets/image/coming_soon.jpg",
+        "price": 250000,
+        "discount_price": 99000,
+        "category": "Web Development",
+        "review": [],
+        "highlight": [
+            "Responsive, Clean and Modern Design",
+            "Support Offline Mode",
+            "Fast and Modern Web Framework",
+            "Bug Free",
+            "Installable Like App",
+            "1 Device Life Time License"
+        ],
+        "published_at": "2025-14-09 12:00:00"
+    },
+    {
+        "id": "surat-jalan",
+        "title": "Surat Jalan",
+        "description": "",
+        "image": "/assets/image/coming_soon.jpg",
+        "price": 250000,
+        "discount_price": 99000,
         "category": "Web Development",
         "review": [],
         "highlight": [
