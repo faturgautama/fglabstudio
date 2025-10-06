@@ -151,7 +151,7 @@ export class Home implements OnInit, OnDestroy {
       .submitForm(data)
       .pipe(takeUntil(this.Destroy$))
       .subscribe((result) => {
-        console.log(result);
+        // console.log(result);
       })
   }
 }
