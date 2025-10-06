@@ -6,7 +6,6 @@ import { ButtonModule } from "primeng/button";
 import { CardService } from '../../components/card-service/card-service';
 import { BadgeTitle } from "../../components/badge-title/badge-title";
 import { CardServiceModel } from '../../model/components/card-service.model';
-import { CountingProof } from "../../components/counting-proof/counting-proof";
 import { CardProduct } from "../../components/card-product/card-product";
 import { Store } from '@ngxs/store';
 import { ProductState } from '../../store/product/product.state';
@@ -14,6 +13,11 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { CardProductModel } from '../../model/components/card-product.model';
 import { AccordionModule } from 'primeng/accordion';
 import { SolutionState } from '../../store/solution';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Contact } from '../../services/pages/contact';
+import { ContactModel } from '../../model/pages/contact.model';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-home',
@@ -24,10 +28,12 @@ import { SolutionState } from '../../store/solution';
     ButtonModule,
     CardService,
     BadgeTitle,
-    CountingProof,
     CardProduct,
     AsyncPipe,
-    AccordionModule
+    AccordionModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    TextareaModule
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -94,8 +100,12 @@ export class Home implements OnInit, OnDestroy {
     { question: 'HOME.FAQ Datasource.9.question', answer: 'HOME.FAQ Datasource.9.answer' },
   ];
 
+  ContactForm: FormGroup;
+
   constructor(
-    private _store: Store
+    private _store: Store,
+    private _formBuilder: FormBuilder,
+    private _contactService: Contact,
   ) {
     this.Product$ = this._store
       .select(ProductState.getData)
@@ -104,9 +114,31 @@ export class Home implements OnInit, OnDestroy {
     this.Services$ = this._store
       .select(SolutionState.getData)
       .pipe(takeUntil(this.Destroy$));
+
+    this.ContactForm = this._formBuilder.group({
+      full_name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone_number: ['', [Validators.required]],
+      subject: ['', [Validators.required]],
+      content: ['', [Validators.required]],
+      ip_address: ['', []],
+      city: ['', []],
+      region: ['', []],
+      country: ['', []],
+      created_at: ['', []],
+    });
   }
 
   ngOnInit() {
+    // setTimeout(() => {
+    //   this.handleSubmitContact(this.ContactForm.value);
+    // }, 1000);
+
+    // this._contactService
+    //   .getContact()
+    //   .subscribe((result) => {
+    //     console.log(result);
+    //   })
   }
 
   ngOnDestroy(): void {
@@ -114,4 +146,12 @@ export class Home implements OnInit, OnDestroy {
     this.Destroy$.complete();
   }
 
+  handleSubmitContact(data: ContactModel.Submit) {
+    this._contactService
+      .submitForm(data)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe((result) => {
+        console.log(result);
+      })
+  }
 }

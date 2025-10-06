@@ -96,7 +96,9 @@
         "question": "Apakah ada dukungan customer service?",
         "answer": "Ya, kami menyediakan support via WhatsApp, email, dan grup komunitas pengguna."
       }
-    }
+    },
+    "Contact Us": "Hubungi Kami",
+    "Contact Us Subheader": "Mari terhubung dengan kami. Apabila ada yang ingin Anda tanyakan, jangan sungkan untuk kirimkan pesan"
   },
   "FOOTER": {
     "Product": "Produk",
@@ -110,5 +112,32 @@
     "Shop Now": "Beli Sekarang",
     "Contact Us": "Hubungi Kami",
     "Learn More": "Lebih Lanjut"
+  },
+  "FORM": {
+    "Full Name": {
+      "Label": "Nama Lengkap",
+      "Placeholder": "Masukkan nama lengkap disini..."
+    },
+    "Email": {
+      "Label": "Email",
+      "Placeholder": "Masukkan email disini..."
+    },
+    "Phone Number": {
+      "Label": "No. Handphone",
+      "Placeholder": "Masukkan no. handphone disini..."
+    },
+    "Subject": {
+      "Label": "Judul",
+      "Placeholder": "Masukkan judul disini..."
+    },
+    "Content": {
+      "Label": "Isi Pesan",
+      "Placeholder": "Masukkan isi pesan disini..."
+    },
+    "Chat With Us": "Kirim Pesan Kepada Kami",
+    "Speak To Our Friendly Team": "Ngobrol dengan tim kami via",
+    "Message Whatsapp": "Kirim pesan ke Whatsapp",
+    "Message Email": "Kirim pesan ke Email",
+    "Lets Connect": "atau mari terhubung ke social media kami"
   }
 }

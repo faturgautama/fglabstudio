@@ -96,7 +96,9 @@
         "question": "Is customer support available?",
         "answer": "Yes, we provide support via WhatsApp, email, and a user community group."
       }
-    }
+    },
+    "Contact Us": "Contact Us",
+    "Contact Us Subheader": "Let's connect with us. If there is any question, feel free to write"
   },
   "FOOTER": {
     "Product": "Product",
@@ -111,5 +113,32 @@
     "Contact Us": "Contact Us",
     "Learn More": "Learn More",
     "Buy Now": "Buy Now"
+  },
+  "FORM": {
+    "Full Name": {
+      "Label": "Full Name",
+      "Placeholder": "Enter full name here..."
+    },
+    "Email": {
+      "Label": "Email",
+      "Placeholder": "Enter email here..."
+    },
+    "Phone Number": {
+      "Label": "Phone Number",
+      "Placeholder": "Enter phone number here..."
+    },
+    "Subject": {
+      "Label": "Subject",
+      "Placeholder": "Enter subject here..."
+    },
+    "Content": {
+      "Label": "Message",
+      "Placeholder": "Enter message here..."
+    },
+    "Chat With Us": "Chat With Us",
+    "Speak To Our Friendly Team": "Speak to our friendly team via",
+    "Message Whatsapp": "Message us on Whatsapp",
+    "Message Email": "Shoot us an email",
+    "Lets Connect": "or Let's connect our social media"
   }
 }
