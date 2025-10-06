@@ -65,48 +65,48 @@
 
   <!-- Couting -->
   <div class="flex flex-col gap-5 bg-gray-900 py-10 w-full">
-    <div class="container flex flex-row w-full justify-center items-center mx-auto">
+    <div class="container flex flex-col md:flex-row w-full justify-center items-center mx-auto">
       <!-- Headling -->
-      <div class="flex flex-col gap-2 w-7/12">
-        <p class="text-gray-200 text-2xl font-semibold mb-2">
+      <div class="flex flex-col gap-2 w-full md:w-7/12 px-10 md:px-0">
+        <p class="text-gray-200 text-xl md:text-2xl font-semibold mb-2">
           {{ 'HOME.Count Headline' | translate }}
         </p>
-        <p class="text-gray-400 text-base font-medium md:pr-20 text-justify">
+        <p class="text-gray-400 text-sm md:text-base font-medium md:pr-20 text-justify">
           {{ 'HOME.Count Sub Headline' | translate }}
         </p>
       </div>
 
-      <div class="grid grid-cols-2 w-5/12 items-center justify-center gap-10 px-5">
+      <div class="grid grid-cols-2 w-full md:w-5/12 mt-5 md:mt-0 items-center justify-center gap-5 md:gap-10 px-5">
         <!-- Happy Client -->
         <div class="flex flex-col w-full items-center justify-center">
-          <p class="text-7xl font-bold text-gray-200">
+          <p class="text-5xl md:text-7xl font-bold text-gray-200">
             {{ Count.client }}
           </p>
-          <p class="text-base text-gray-400 font-medium">Happy Client</p>
+          <p class="text-sm md:text-base text-gray-400 font-medium">Happy Client</p>
         </div>
 
         <!-- Project -->
         <div class="flex flex-col w-full items-center justify-center">
-          <p class="text-7xl font-bold text-gray-200">
+          <p class="text-5xl md:text-7xl font-bold text-gray-200">
             {{ Count.project }}
           </p>
-          <p class="text-base text-gray-400 font-medium">Awesome Project</p>
+          <p class="text-sm md:text-base text-gray-400 font-medium">Awesome Project</p>
         </div>
 
         <!-- Years Experience -->
         <div class="flex flex-col w-full items-center justify-center">
-          <p class="text-7xl font-bold text-gray-200">
+          <p class="text-5xl md:text-7xl font-bold text-gray-200">
             {{ Count.experience }}
           </p>
-          <p class="text-base text-gray-400 font-medium">Years Experience</p>
+          <p class="text-sm md:text-base text-gray-400 font-medium">Years Experience</p>
         </div>
 
         <!-- Tech Stack -->
         <div class="flex flex-col w-full items-center justify-center">
-          <p class="text-7xl font-bold text-gray-200">
+          <p class="text-5xl md:text-7xl font-bold text-gray-200">
             {{ Count.tech_stack }}
           </p>
-          <p class="text-base text-gray-400 font-medium">Tech Stack</p>
+          <p class="text-sm md:text-base text-gray-400 font-medium">Tech Stack</p>
         </div>
       </div>
     </div>
@@ -138,12 +138,12 @@
 
   <!-- Who We Are -->
   <div class="grid bg-gray-900 w-full">
-    <div class="container flex flex-row w-full items-center justify-center mx-auto">
-      <div class="flex w-6/12">
+    <div class="container flex flex-col md:flex-row w-full items-center justify-center mx-auto">
+      <div class="flex w-full md:w-6/12">
         <img src="/assets/image/we.png" alt="who-we-are" class="w-full h-auto object-cover object-center">
       </div>
 
-      <div class="flex flex-col w-5/12">
+      <div class="flex flex-col w=full md:w-5/12 px-10 md:px-0 pb-10 md:pb-0">
         <!-- Badge Title -->
         <div class="flex mb-5">
           <app-badge-title [title]="'HOME.Who We Are' | translate"></app-badge-title>
@@ -151,20 +151,20 @@
 
         <!-- Sub heading  -->
         <div class="flex w-full mb-4">
-          <p class="text-sm md:text-4xl font-semibold text-gray-300 text-justify">
+          <p class="text-lg md:text-4xl font-semibold text-gray-300 text-justify">
             {{ 'HOME.Who We Are Subheader' | translate }}
           </p>
         </div>
 
         <!-- Description  -->
         <div class="flex w-full mb-6">
-          <p class="text-base text-gray-500 text-justify">
+          <p class="text-sm md:text-base text-gray-500 text-justify">
             {{ 'HOME.Who We Are Description' | translate }}
           </p>
         </div>
 
         <!-- Point -->
-        <div class="grid grid-cols-2 gap-3 p-5 rounded-lg border border-dashed border-gray-500">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 p-5 rounded-lg border border-dashed border-gray-500">
           @for (item of WhoWeAreValues; track $index) {
           <p class="text-sm text-gray-500 text-justify">
             <span class="mr-2">
@@ -188,7 +188,7 @@
 
       <!-- Sub heading  -->
       <div class="flex w-full md:w-6/12 mb-10">
-        <p class="text-sm md:text-xl text-center font-semibold text-gray-200">
+        <p class="text-lg md:text-xl text-center font-semibold text-gray-200">
           {{ 'HOME.Why Choose Us Subheader' | translate }}
         </p>
       </div>
@@ -198,15 +198,13 @@
         @for (item of WhyChooseUs; track $index) {
         <div class="flex flex-row w-full gap-3 items-center p-5 rounded-xl bg-gray-800/70">
 
-          <div class="flex items-center justify-center rounded-full bg-sky-600 w-[3rem] h-[3rem]">
-            <i [class]="item.icon" style="font-size: 20px;"></i>
-          </div>
+          <p-button [icon]="item.icon" severity="info" styleClass="p-button-sm" [rounded]="true"></p-button>
 
           <div class="flex flex-col">
-            <p class="text-lg text-gray-100 font-semibold">
+            <p class="text-base md:text-lg text-gray-100 font-semibold">
               {{ item.title | translate }}
             </p>
-            <p class="text-sm text-gray-400">
+            <p class="text-xs md:text-sm text-gray-400">
               {{ item.description | translate }}
             </p>
           </div>
@@ -226,24 +224,24 @@
       </div>
 
       <!-- Sub heading  -->
-      <div class="flex w-full md:w-5/12 mb-10 justify-center">
-        <p class="text-sm md:text-2xl text-center font-semibold text-gray-200">
+      <div class="flex w-full md:w-5/12 mb-10 justify-center px-10 md:px-0">
+        <p class="text-lg md:text-2xl text-center font-semibold text-gray-200">
           {{ 'HOME.FAQ Description' | translate }}
         </p>
       </div>
 
       <!-- Card Service -->
-      <div class="grid grid-cols-1 w-full gap-5 px-10 md:px-36">
+      <div class="grid grid-cols-1 w-full gap-5 px-5 md:px-36">
         <p-accordion [value]="0">
           @for (tab of Faq; track $index) {
           <p-accordion-panel [value]="$index">
             <p-accordion-header>
-              <p class="text-base font-medium text-gray-300">
+              <p class="text-sm md:text-base font-medium text-gray-300">
                 {{ tab.question | translate }}
               </p>
             </p-accordion-header>
             <p-accordion-content>
-              <p class="text-base text-gray-500">{{ tab.answer | translate}}</p>
+              <p class="text-sm md:text-base text-gray-500">{{ tab.answer | translate}}</p>
             </p-accordion-content>
           </p-accordion-panel>
           }
@@ -254,7 +252,7 @@
 
   <!-- Contact Us -->
   <div class="grid-bg grid-vignette w-full mx-auto relative">
-    <div class="container flex flex-col w-full items-center justify-center mx-auto py-10">
+    <div class="container flex flex-col w-full items-center justify-center mx-auto py-10 md:px-0 px-10">
       <!-- Contact Us -->
       <div class="flex mx-auto mb-5">
         <app-badge-title [title]="'HOME.Contact Us' | translate"></app-badge-title>
@@ -262,14 +260,15 @@
 
       <!-- Sub heading  -->
       <div class="flex w-full md:w-5/12 mb-10">
-        <p class="text-sm md:text-xl text-center font-semibold text-gray-200">
+        <p class="text-lg md:text-xl text-center font-semibold text-gray-200">
           {{ 'HOME.Contact Us Subheader' | translate }}
         </p>
       </div>
 
       <!-- Form and Whatsapp number  -->
-      <div class="flex flex-row justify-center w-8/12 gap-3 bg-gray-900/80 p-10 rounded-xl shadow">
-        <div class="flex flex-col w-6/12 p-5 gap-5">
+      <div
+        class="flex flex-col md:flex-row justify-center w-full md:w-8/12 gap-3 bg-gray-900/80 p-0 md:p-10 rounded-xl shadow">
+        <div class="flex flex-col w-full md:w-6/12 p-5 gap-5">
           <!-- Full Name -->
           <div class="flex flex-col gap-1 w-full">
             <p class="text-gray-300 text-sm font-medium">
@@ -311,9 +310,9 @@
           </div>
         </div>
 
-        <div class="flex flex-col w-6/12 p-5 gap-0">
+        <div class="flex flex-col md:items-start items-center w-full md:w-6/12 p-5 gap-0">
 
-          <div class="flex flex-col w-full mb-8">
+          <div class="flex flex-col md:items-start items-center w-full mb-8">
             <p class="text-lg text-gray-200 font-medium">
               {{ 'FORM.Chat With Us' | translate}}
             </p>
@@ -341,12 +340,12 @@
             </p>
           </div>
 
-          <div class="flex flex-col gap-3 cursor-pointer">
+          <div class="flex flex-col md:items-start items-center gap-3 cursor-pointer">
             <p class="text-gray-300 text-sm font-medium">
               {{ 'FORM.Lets Connect' | translate}}
             </p>
 
-            <div class="flex flex-row gap-3 w-full items-center">
+            <div class="flex flex-row gap-3 w-full items-center md:justify-start justify-center">
               <img src="/assets/image/instagram.png" alt="instagram" class="w-[2rem] h-[2rem]">
 
               <img src="/assets/image/threads.png" alt="threads" class="w-[2rem] h-[2rem]">
