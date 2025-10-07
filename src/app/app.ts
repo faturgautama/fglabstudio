@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button'
+import AOS from 'aos';
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -12,6 +13,10 @@ import { ButtonModule } from 'primeng/button'
   styleUrl: './app.scss',
   standalone: true
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('fglabstudio');
+
+  ngOnInit(): void {
+    AOS.init();
+  }
 }

@@ -130,15 +130,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // setTimeout(() => {
-    //   this.handleSubmitContact(this.ContactForm.value);
-    // }, 1000);
 
-    // this._contactService
-    //   .getContact()
-    //   .subscribe((result) => {
-    //     console.log(result);
-    //   })
   }
 
   ngOnDestroy(): void {

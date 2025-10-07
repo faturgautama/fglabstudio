@@ -5,38 +5,46 @@
     <div class="container w-full mx-auto py-12 mb-16">
       <!-- Text Hero -->
       <div class="flex flex-col w-full justify-center items-center gap-0 md:gap-0 p-5 relative z-10">
-        <img src="/assets/image/logo_blue.png" alt="logo" class="rounded-2xl w-16 md:w-24 mb-5" />
-        <p class="md:text-5xl text-3xl font-bold text-gray-200 text-center mb-1">
+        <img src="/assets/image/logo_blue.png" alt="logo" class="rounded-2xl w-16 md:w-24 mb-5" data-aos="fade-up"
+          data-aos-duration="1000" />
+        <p class="md:text-5xl text-3xl font-bold text-gray-200 text-center mb-1" data-aos="fade-up"
+          data-aos-duration="1100">
           {{ 'HOME.Power Up Your' | translate | uppercase }}
         </p>
-        <p
-          class="md:text-8xl text-5xl font-extrabold bg-gradient-to-r from-sky-500 via-blue-500 to-emerald-500 bg-clip-text text-transparent mt-0 text-center mb-3">
+        <p class="md:text-8xl text-5xl font-extrabold bg-gradient-to-r from-sky-500 via-blue-500 to-emerald-500 bg-clip-text text-transparent mt-0 text-center mb-3"
+          data-aos="fade-up" data-aos-duration="1200">
           {{ 'HOME.Creativity Workflow' | translate | uppercase }}
         </p>
-        <p class="text-base md:text-lg text-gray-400 font-normal text-center">
+        <p class="text-base md:text-lg text-gray-400 font-normal text-center" data-aos="fade-up"
+          data-aos-duration="1300">
           {{ 'HOME.Digital Solution Sub Headline' | translate }}
         </p>
       </div>
 
       <!-- Image Target -->
       <img src="/assets/image/3d-target.png" alt="target"
-        class="absolute h-[3rem] md:h-[5rem] top-[45px] md:top-[15%] left-[65px] md:left-[25%]" />
+        class="absolute h-[3rem] md:h-[5rem] top-[45px] md:top-[15%] left-[65px] md:left-[25%]" data-aos="fade-right"
+        data-aos-duration="1100" />
 
       <!-- Image Rocket -->
       <img src="/assets/image/3d-rocket.png" alt="rocket"
-        class="absolute h-[5rem] md:h-[7.5rem] top-[460px] md:top-[35%] right-[10%] md:right-[20%] -rotate-45" />
+        class="absolute h-[5rem] md:h-[7.5rem] top-[460px] md:top-[35%] right-[10%] md:right-[20%] -rotate-45"
+        data-aos="fade-left" data-aos-duration="1100" />
 
       <!-- Image Stopwatch -->
       <img src="/assets/image/3d-stopwatch.png" alt="rocket"
-        class="absolute h-[4rem] md:h-[6rem] top-[460px] md:top-[40%] left-[5%] md:left-[15%]" />
+        class="absolute h-[4rem] md:h-[6rem] top-[460px] md:top-[40%] left-[5%] md:left-[15%]" data-aos="fade-right"
+        data-aos-duration="1100" />
 
       <!-- Button -->
       <div class="flex flex-col w-full md:flex-row md:items-center md:justify-center gap-5 px-8">
         <p-button styleClass="p-button-secondary w-full" label="{{ 'BUTTON.Shop Now' | translate }}"
-          icon="pi pi-shopping-cart"></p-button>
+          icon="pi pi-shopping-cart" data-aos="fade-up" data-aos-duration="1400" data-aos-easing="ease-out-cubic">
+        </p-button>
 
-        <p-button styleClass="p-button-info w-full" label="{{ 'BUTTON.Contact Us' | translate }}"
-          icon="pi pi-envelope"></p-button>
+        <p-button styleClass="p-button-info w-full" label="{{ 'BUTTON.Contact Us' | translate }}" icon="pi pi-envelope"
+          data-aos="fade-up" data-aos-duration="1400" data-aos-easing="ease-out-cubic">
+        </p-button>
       </div>
     </div>
 
@@ -44,12 +52,14 @@
     <div class="container flex flex-col w-full items-center justify-center mx-auto py-10">
       <!-- Badge Title -->
       <div class="flex mx-auto mb-5">
-        <app-badge-title [title]="'HOME.Services' | translate"></app-badge-title>
+        <app-badge-title [title]="'HOME.Services' | translate" data-aos="fade-right"
+          data-aos-duration="1500"></app-badge-title>
       </div>
 
       <!-- Sub heading  -->
       <div class="flex w-full md:w-5/12 mb-10">
-        <p class="text-sm md:text-xl text-center font-semibold text-gray-200">
+        <p class="text-sm md:text-xl text-center font-semibold text-gray-200" data-aos="fade-right"
+          data-aos-duration="1550">
           {{ 'HOME.Services Subheader' | translate }}
         </p>
       </div>
@@ -57,7 +67,7 @@
       <!-- Card Service -->
       <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-5 px-10">
         @for (item of Services$ | async; track $index) {
-        <app-card-service [props]="item"></app-card-service>
+        <app-card-service [props]="item" data-aos="fade-right" data-aos-duration="1600"></app-card-service>
         }
       </div>
     </div>
@@ -68,10 +78,11 @@
     <div class="container flex flex-col md:flex-row w-full justify-center items-center mx-auto">
       <!-- Headling -->
       <div class="flex flex-col gap-2 w-full md:w-7/12 px-10 md:px-0">
-        <p class="text-gray-200 text-xl md:text-2xl font-semibold mb-2">
+        <p class="text-gray-200 text-xl md:text-2xl font-semibold mb-2" data-aos="fade-right" data-aos-duration="1500">
           {{ 'HOME.Count Headline' | translate }}
         </p>
-        <p class="text-gray-400 text-sm md:text-base font-medium md:pr-20 text-justify">
+        <p class="text-gray-400 text-sm md:text-base font-medium md:pr-20 text-justify" data-aos="fade-right"
+          data-aos-duration="1500">
           {{ 'HOME.Count Sub Headline' | translate }}
         </p>
       </div>
@@ -79,34 +90,38 @@
       <div class="grid grid-cols-2 w-full md:w-5/12 mt-5 md:mt-0 items-center justify-center gap-5 md:gap-10 px-5">
         <!-- Happy Client -->
         <div class="flex flex-col w-full items-center justify-center">
-          <p class="text-5xl md:text-7xl font-bold text-gray-200">
+          <p class="text-5xl md:text-7xl font-bold text-gray-200" data-aos="fade-left" data-aos-duration="2000">
             {{ Count.client }}
           </p>
-          <p class="text-sm md:text-base text-gray-400 font-medium">Happy Client</p>
+          <p class="text-sm md:text-base text-gray-400 font-medium" data-aos="fade-left" data-aos-duration="2000">Happy
+            Client</p>
         </div>
 
         <!-- Project -->
         <div class="flex flex-col w-full items-center justify-center">
-          <p class="text-5xl md:text-7xl font-bold text-gray-200">
+          <p class="text-5xl md:text-7xl font-bold text-gray-200" data-aos="fade-left" data-aos-duration="2500">
             {{ Count.project }}
           </p>
-          <p class="text-sm md:text-base text-gray-400 font-medium">Awesome Project</p>
+          <p class="text-sm md:text-base text-gray-400 font-medium" data-aos="fade-left" data-aos-duration="2500">
+            Awesome Project</p>
         </div>
 
         <!-- Years Experience -->
         <div class="flex flex-col w-full items-center justify-center">
-          <p class="text-5xl md:text-7xl font-bold text-gray-200">
+          <p class="text-5xl md:text-7xl font-bold text-gray-200" data-aos="fade-left" data-aos-duration="2000">
             {{ Count.experience }}
           </p>
-          <p class="text-sm md:text-base text-gray-400 font-medium">Years Experience</p>
+          <p class="text-sm md:text-base text-gray-400 font-medium" data-aos="fade-left" data-aos-duration="2000">Years
+            Experience</p>
         </div>
 
         <!-- Tech Stack -->
         <div class="flex flex-col w-full items-center justify-center">
-          <p class="text-5xl md:text-7xl font-bold text-gray-200">
+          <p class="text-5xl md:text-7xl font-bold text-gray-200" data-aos="fade-left" data-aos-duration="2500">
             {{ Count.tech_stack }}
           </p>
-          <p class="text-sm md:text-base text-gray-400 font-medium">Tech Stack</p>
+          <p class="text-sm md:text-base text-gray-400 font-medium" data-aos="fade-left" data-aos-duration="2500">Tech
+            Stack</p>
         </div>
       </div>
     </div>
@@ -117,12 +132,14 @@
     <div class="container flex flex-col w-full items-center justify-center mx-auto py-10">
       <!-- Badge Title -->
       <div class="flex mx-auto mb-5">
-        <app-badge-title [title]="'HOME.Product' | translate"></app-badge-title>
+        <app-badge-title [title]="'HOME.Product' | translate" data-aos="flip-left"
+          data-aos-duration="1500"></app-badge-title>
       </div>
 
       <!-- Sub heading  -->
       <div class="flex w-full md:w-5/12 mb-10">
-        <p class="text-sm md:text-xl text-center font-semibold text-gray-200">
+        <p class="text-sm md:text-xl text-center font-semibold text-gray-200" data-aos="fade-up"
+          data-aos-duration="1500">
           {{ 'HOME.Product Subheader' | translate }}
         </p>
       </div>
@@ -130,7 +147,8 @@
       <!-- Card Service -->
       <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-5 px-10">
         @for (item of Product$ | async; track $index) {
-        <app-card-product [props]="item"></app-card-product>
+        <app-card-product [props]="item" data-aos="flip-up" data-aos-duration="1700"
+          data-aos-easing="ease-out-cubic"></app-card-product>
         }
       </div>
     </div>
