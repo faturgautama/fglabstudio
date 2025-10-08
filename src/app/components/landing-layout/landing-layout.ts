@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Navbar } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -23,13 +23,15 @@ export class LandingLayout implements OnInit, OnDestroy {
 
   NavbarMenu: NavbarModel.INavbarMenu[];
 
+  @Output('onClickNavbar') onClickNavbar = new EventEmitter<NavbarModel.INavbarMenu>();
+
   constructor(
     private _navigationService: Navigation
   ) {
     this.NavbarMenu = [
       { id: 'home', menu: 'NAVBAR.Home', url: '/', active: true },
-      { id: 'product', menu: 'NAVBAR.Product', url: '/product', active: false },
       { id: 'service', menu: 'NAVBAR.Service', url: '/service', active: false },
+      { id: 'product', menu: 'NAVBAR.Product', url: '/product', active: false },
       { id: 'about_us', menu: 'NAVBAR.AboutUs', url: '/about-us', active: false },
       { id: 'faq', menu: 'NAVBAR.FAQ', url: '/faq', active: false },
     ];
@@ -44,5 +46,9 @@ export class LandingLayout implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.Destroy$.next(0);
     this.Destroy$.complete();
+  }
+
+  handleClickNavbar(args: NavbarModel.INavbarMenu) {
+    this.onClickNavbar.emit(args);
   }
 }

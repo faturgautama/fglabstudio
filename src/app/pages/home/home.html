@@ -1,8 +1,8 @@
-<app-landing-layout>
+<app-landing-layout (onClickNavbar)="handleClickNavbar($event)">
   <!-- Banner & Service-->
-  <div class="grid-bg grid-vignette w-full mx-auto relative">
+  <div class="grid-bg grid-vignette w-full mx-auto relative pt-20">
     <!-- Hero -->
-    <div class="container w-full mx-auto py-12 mb-16">
+    <div id="home" class="container w-full mx-auto py-12 mb-16">
       <!-- Text Hero -->
       <div class="flex flex-col w-full justify-center items-center gap-0 md:gap-0 p-5 relative z-10">
         <img src="/assets/image/logo_blue.png" alt="logo" class="rounded-2xl w-16 md:w-24 mb-5" data-aos="fade-up"
@@ -23,33 +23,35 @@
 
       <!-- Image Target -->
       <img src="/assets/image/3d-target.png" alt="target"
-        class="absolute h-[3rem] md:h-[5rem] top-[45px] md:top-[15%] left-[65px] md:left-[25%]" data-aos="fade-right"
+        class="absolute h-[3rem] md:h-[5rem] top-[120px] md:top-[15%] left-[100px] md:left-[25%]" data-aos="fade-right"
         data-aos-duration="1100" />
 
       <!-- Image Rocket -->
       <img src="/assets/image/3d-rocket.png" alt="rocket"
-        class="absolute h-[5rem] md:h-[7.5rem] top-[460px] md:top-[35%] right-[10%] md:right-[20%] -rotate-45"
+        class="absolute h-[5rem] md:h-[7.5rem] top-[530px] md:top-[35%] right-[10%] md:right-[20%] -rotate-45"
         data-aos="fade-left" data-aos-duration="1100" />
 
       <!-- Image Stopwatch -->
       <img src="/assets/image/3d-stopwatch.png" alt="rocket"
-        class="absolute h-[4rem] md:h-[6rem] top-[460px] md:top-[40%] left-[5%] md:left-[15%]" data-aos="fade-right"
+        class="absolute h-[4rem] md:h-[6rem] top-[560px] md:top-[40%] left-[5%] md:left-[15%]" data-aos="fade-right"
         data-aos-duration="1100" />
 
       <!-- Button -->
       <div class="flex flex-col w-full md:flex-row md:items-center md:justify-center gap-5 px-8">
         <p-button styleClass="p-button-secondary w-full" label="{{ 'BUTTON.Shop Now' | translate }}"
-          icon="pi pi-shopping-cart" data-aos="fade-up" data-aos-duration="1400" data-aos-easing="ease-out-cubic">
+          icon="pi pi-shopping-cart" data-aos="fade-up" data-aos-duration="1400" data-aos-easing="ease-out-cubic"
+          (onClick)="handleClickButtonBaner('product')">
         </p-button>
 
         <p-button styleClass="p-button-info w-full" label="{{ 'BUTTON.Contact Us' | translate }}" icon="pi pi-envelope"
-          data-aos="fade-up" data-aos-duration="1400" data-aos-easing="ease-out-cubic">
+          data-aos="fade-up" data-aos-duration="1400" data-aos-easing="ease-out-cubic"
+          (onClick)="handleClickButtonBaner('contact_us')">
         </p-button>
       </div>
     </div>
 
     <!-- Service -->
-    <div class="container flex flex-col w-full items-center justify-center mx-auto py-10">
+    <div id="service" class="container flex flex-col w-full items-center justify-center mx-auto py-10">
       <!-- Badge Title -->
       <div class="flex mx-auto mb-5">
         <app-badge-title [title]="'HOME.Services' | translate" data-aos="fade-right"
@@ -128,7 +130,7 @@
   </div>
 
   <!-- Latest Product -->
-  <div class="grid-bg grid-vignette w-full mx-auto relative">
+  <div id="product" class="grid-bg grid-vignette w-full mx-auto relative">
     <div class="container flex flex-col w-full items-center justify-center mx-auto py-10">
       <!-- Badge Title -->
       <div class="flex mx-auto mb-5">
@@ -155,36 +157,42 @@
   </div>
 
   <!-- Who We Are -->
-  <div class="grid bg-gray-900 w-full">
+  <div id="about_us" class="grid bg-gray-900 w-full">
     <div class="container flex flex-col md:flex-row w-full items-center justify-center mx-auto">
-      <div class="flex w-full md:w-6/12">
-        <img src="/assets/image/we.png" alt="who-we-are" class="w-full h-auto object-cover object-center">
+      <div class="flex justify-center w-full md:w-6/12">
+        <img src="/assets/image/we.png" alt="who-we-are" class="w-[75%] md:w-full md:h-auto object-cover object-center"
+          data-aos="fade-right" data-aos-duration="1500" data-aos-easing="ease-out-cubic">
       </div>
 
       <div class="flex flex-col w=full md:w-5/12 px-10 md:px-0 pb-10 md:pb-0">
         <!-- Badge Title -->
         <div class="flex mb-5">
-          <app-badge-title [title]="'HOME.Who We Are' | translate"></app-badge-title>
+          <app-badge-title [title]="'HOME.Who We Are' | translate" data-aos="fade-left" data-aos-duration="1500"
+            data-aos-easing="ease-out-cubic"></app-badge-title>
         </div>
 
         <!-- Sub heading  -->
         <div class="flex w-full mb-4">
-          <p class="text-lg md:text-4xl font-semibold text-gray-300 text-justify">
+          <p class="text-lg md:text-4xl font-semibold text-gray-300 text-justify" data-aos="fade-left"
+            data-aos-duration="1600" data-aos-easing="ease-out-cubic">
             {{ 'HOME.Who We Are Subheader' | translate }}
           </p>
         </div>
 
         <!-- Description  -->
         <div class="flex w-full mb-6">
-          <p class="text-sm md:text-base text-gray-500 text-justify">
+          <p class="text-sm md:text-base text-gray-500 text-justify" data-aos="fade-left" data-aos-duration="1700"
+            data-aos-easing="ease-out-cubic">
             {{ 'HOME.Who We Are Description' | translate }}
           </p>
         </div>
 
         <!-- Point -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 p-5 rounded-lg border border-dashed border-gray-500">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 p-5 rounded-lg border border-dashed border-gray-500"
+          data-aos="fade-left" data-aos-duration="1800" data-aos-easing="ease-out-cubic">
           @for (item of WhoWeAreValues; track $index) {
-          <p class="text-sm text-gray-500 text-justify">
+          <p class="text-sm text-gray-500 text-justify" data-aos="fade-left" data-aos-duration="1900"
+            data-aos-easing="ease-out-cubic">
             <span class="mr-2">
               <i class="pi pi-check text-emerald-400" style="font-size: 12px;"></i>
             </span>
@@ -201,12 +209,14 @@
     <div class="container flex flex-col w-full items-center justify-center mx-auto py-10">
       <!-- Badge Title -->
       <div class="flex mx-auto mb-5">
-        <app-badge-title [title]="'HOME.Why Choose Us' | translate"></app-badge-title>
+        <app-badge-title [title]="'HOME.Why Choose Us' | translate" data-aos="fade-up" data-aos-duration="1500"
+          data-aos-easing="ease-out-cubic"></app-badge-title>
       </div>
 
       <!-- Sub heading  -->
       <div class="flex w-full md:w-6/12 mb-10">
-        <p class="text-lg md:text-xl text-center font-semibold text-gray-200">
+        <p class="text-lg md:text-xl text-center font-semibold text-gray-200" data-aos="fade-up"
+          data-aos-duration="1600" data-aos-easing="ease-out-cubic">
           {{ 'HOME.Why Choose Us Subheader' | translate }}
         </p>
       </div>
@@ -214,7 +224,8 @@
       <!-- Card Service -->
       <div class="grid grid-cols-1 md:grid-cols-2 w-full gap-6 px-10">
         @for (item of WhyChooseUs; track $index) {
-        <div class="flex flex-row w-full gap-3 items-center p-5 rounded-xl bg-gray-800/70">
+        <div class="flex flex-row w-full gap-3 items-center p-5 rounded-xl bg-gray-800/70" data-aos="fade-up"
+          data-aos-duration="1800" data-aos-easing="ease-out-cubic">
 
           <p-button [icon]="item.icon" severity="info" styleClass="p-button-sm" [rounded]="true"></p-button>
 
@@ -234,22 +245,25 @@
   </div>
 
   <!-- FAQ -->
-  <div class="grid bg-gray-900 w-full mx-auto relative">
+  <div id="faq" class="grid bg-gray-900 w-full mx-auto relative">
     <div class="container flex flex-col w-full items-center justify-center mx-auto py-10">
       <!-- Badge Title -->
       <div class="flex mx-auto mb-5">
-        <app-badge-title [title]="'HOME.FAQ' | translate"></app-badge-title>
+        <app-badge-title [title]="'HOME.FAQ' | translate" data-aos="fade-left" data-aos-duration="1700"
+          data-aos-easing="ease-out-cubic"></app-badge-title>
       </div>
 
       <!-- Sub heading  -->
       <div class="flex w-full md:w-5/12 mb-10 justify-center px-10 md:px-0">
-        <p class="text-lg md:text-2xl text-center font-semibold text-gray-200">
+        <p class="text-lg md:text-2xl text-center font-semibold text-gray-200" data-aos="fade-left"
+          data-aos-duration="1700" data-aos-easing="ease-out-cubic">
           {{ 'HOME.FAQ Description' | translate }}
         </p>
       </div>
 
       <!-- Card Service -->
-      <div class="grid grid-cols-1 w-full gap-5 px-5 md:px-36">
+      <div class="grid grid-cols-1 w-full gap-5 px-5 md:px-36" data-aos="fade-left" data-aos-duration="1700"
+        data-aos-easing="ease-out-cubic">
         <p-accordion [value]="0">
           @for (tab of Faq; track $index) {
           <p-accordion-panel [value]="$index">
@@ -269,23 +283,26 @@
   </div>
 
   <!-- Contact Us -->
-  <div class="grid-bg grid-vignette w-full mx-auto relative">
+  <div id="contact_us" class="grid-bg grid-vignette w-full mx-auto relative">
     <div class="container flex flex-col w-full items-center justify-center mx-auto py-10 md:px-0 px-10">
       <!-- Contact Us -->
       <div class="flex mx-auto mb-5">
-        <app-badge-title [title]="'HOME.Contact Us' | translate"></app-badge-title>
+        <app-badge-title [title]="'HOME.Contact Us' | translate" data-aos="fade-right" data-aos-duration="1500"
+          data-aos-easing="ease-out-cubic"></app-badge-title>
       </div>
 
       <!-- Sub heading  -->
       <div class="flex w-full md:w-5/12 mb-10">
-        <p class="text-lg md:text-xl text-center font-semibold text-gray-200">
+        <p class="text-lg md:text-xl text-center font-semibold text-gray-200" data-aos="fade-right"
+          data-aos-duration="1600" data-aos-easing="ease-out-cubic">
           {{ 'HOME.Contact Us Subheader' | translate }}
         </p>
       </div>
 
       <!-- Form and Whatsapp number  -->
       <div
-        class="flex flex-col md:flex-row justify-center w-full md:w-8/12 gap-3 bg-gray-900/80 p-0 md:p-10 rounded-xl shadow">
+        class="flex flex-col md:flex-row justify-center w-full md:w-8/12 gap-3 bg-gray-900/80 p-0 md:p-10 rounded-xl shadow"
+        data-aos="fade-right" data-aos-duration="1700" data-aos-easing="ease-out-cubic">
         <div class="flex flex-col w-full md:w-6/12 p-5 gap-5">
           <!-- Full Name -->
           <div class="flex flex-col gap-1 w-full">

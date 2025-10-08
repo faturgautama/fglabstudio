@@ -18,6 +18,7 @@ import { Contact } from '../../services/pages/contact';
 import { ContactModel } from '../../model/pages/contact.model';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
+import { NavbarModel } from '../../model/components/navbar.model';
 
 @Component({
   selector: 'app-home',
@@ -138,6 +139,22 @@ export class Home implements OnInit, OnDestroy {
     this.Destroy$.complete();
   }
 
+  handleClickNavbar(args: NavbarModel.INavbarMenu) {
+    const element = document.getElementById(args.id);
+    if (element) {
+      const offset = element!.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  }
+
+  handleClickButtonBaner(id: string) {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = element!.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  }
+
   handleSubmitContact(data: ContactModel.Submit) {
     this._contactService
       .submitForm(data)
@@ -146,4 +163,5 @@ export class Home implements OnInit, OnDestroy {
         // console.log(result);
       })
   }
+
 }

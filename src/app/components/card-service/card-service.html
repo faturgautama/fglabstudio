@@ -1,7 +1,5 @@
-<div
-  id="card_services_{{ props.id }}"
-  class="flex flex-col w-full items-start gap-3 p-5 rounded-2xl bg-[rgba(42,42,42,0.32)] backdrop-blur-lg border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] overflow-hidden h-[20rem] relative"
->
+<div id="card_services_{{ props.id }}"
+  class="flex flex-col w-full items-start gap-3 p-5 rounded-2xl bg-[rgba(42,42,42,0.32)] backdrop-blur-lg border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] overflow-hidden h-[15rem] md:h-[20rem] relative">
   <p class="text-white text-base md:text-lg font-medium relative z-10">
     {{ props.title }}
   </p>
@@ -10,10 +8,7 @@
   </p>
 
   <div class="flex mt-auto">
-    <p-button
-      styleClass="p-button-sm p-button-info"
-      [label]="'BUTTON.Learn More' | translate"
-    ></p-button>
+    <p-button styleClass="p-button-sm p-button-info" [label]="'BUTTON.Learn More' | translate"></p-button>
   </div>
 
   <span class="absolute bottom-[-25px] right-4">
