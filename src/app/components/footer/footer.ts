@@ -7,12 +7,14 @@ import { ProductState } from '../../store/product';
 import { SolutionState } from '../../store/solution';
 import { AsyncPipe, NgFor } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
+import { SocialMediaList } from "../social-media-list/social-media-list";
 
 @Component({
   selector: 'app-footer',
   imports: [
     AsyncPipe,
-    TranslatePipe
+    TranslatePipe,
+    SocialMediaList
   ],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',

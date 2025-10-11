@@ -11,6 +11,7 @@ import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
 import { STATE } from './store';
 import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import { environment } from '../environments/environment';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -40,5 +41,6 @@ export const appConfig: ApplicationConfig = {
             const translate = inject(TranslateService);
             translate.use(translate.getBrowserLang() || "en");
         }),
+        MessageService
     ]
 };

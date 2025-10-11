@@ -19,6 +19,8 @@ import { ContactModel } from '../../model/pages/contact.model';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { NavbarModel } from '../../model/components/navbar.model';
+import { MessageService } from 'primeng/api';
+import { SocialMediaList } from "../../components/social-media-list/social-media-list";
 
 @Component({
   selector: 'app-home',
@@ -34,11 +36,15 @@ import { NavbarModel } from '../../model/components/navbar.model';
     AccordionModule,
     ReactiveFormsModule,
     InputTextModule,
-    TextareaModule
+    TextareaModule,
+    SocialMediaList
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  standalone: true
+  standalone: true,
+  providers: [
+    MessageService
+  ]
 })
 export class Home implements OnInit, OnDestroy {
 
@@ -107,6 +113,7 @@ export class Home implements OnInit, OnDestroy {
     private _store: Store,
     private _formBuilder: FormBuilder,
     private _contactService: Contact,
+    private _messageService: MessageService,
   ) {
     this.Product$ = this._store
       .select(ProductState.getData)
@@ -120,7 +127,7 @@ export class Home implements OnInit, OnDestroy {
       full_name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone_number: ['', [Validators.required]],
-      subject: ['', [Validators.required]],
+      subject: ['', []],
       content: ['', [Validators.required]],
       ip_address: ['', []],
       city: ['', []],
@@ -156,12 +163,25 @@ export class Home implements OnInit, OnDestroy {
   }
 
   handleSubmitContact(data: ContactModel.Submit) {
-    this._contactService
-      .submitForm(data)
-      .pipe(takeUntil(this.Destroy$))
-      .subscribe((result) => {
-        // console.log(result);
-      })
+    if (this.ContactForm.valid) {
+      this._contactService
+        .submitForm(data)
+        .pipe(takeUntil(this.Destroy$))
+        .subscribe((result) => {
+          console.log(result);
+          if (result.status == 201 || result.status == 200) {
+            this._messageService.clear();
+            this._messageService.add({ severity: 'success', summary: 'Yeay!', detail: 'Thanks, we will get back to you' });
+          } else {
+            this._messageService.clear();
+            this._messageService.add({ severity: 'error', summary: 'Oops', detail: result.error?.message });
+          }
+        })
+    } else {
+      this._messageService.clear();
+      this._messageService.add({ severity: 'error', summary: 'Oops', detail: 'Please check your data' });
+    }
+
   }
 
 }

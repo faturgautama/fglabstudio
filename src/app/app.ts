@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button'
+import { ToastModule, Toast } from 'primeng/toast'
 import AOS from 'aos';
 
 @Component({
@@ -8,6 +9,7 @@ import AOS from 'aos';
   imports: [
     RouterOutlet,
     ButtonModule,
+    ToastModule
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

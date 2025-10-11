@@ -1,0 +1,12 @@
+<div class="flex flex-row gap-3 w-full items-center md:justify-start justify-center">
+    @for (item of SocialMedia; track $index) {
+    <img [src]="item.image" [alt]="item.id" class="w-[2rem] h-[2rem]" (click)="handleNavigate(item.url)">
+    }
+
+    <p class="text-gray-400">|</p>
+
+    @for (item of Marketplace; track $index) {
+    <img [src]="item.image" [alt]="item.id" class="w-[2rem] {{ item.id == 'tokopedia' ? 'h-[2.5rem]' : 'h-[2rem]' }}"
+        (click)="handleNavigate(item.url)">
+    }
+</div>
