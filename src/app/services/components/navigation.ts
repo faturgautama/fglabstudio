@@ -1,6 +1,7 @@
-import { computed, effect, HostListener, Injectable, OnDestroy, signal } from '@angular/core';
+import { computed, effect, Injectable, OnDestroy, signal } from '@angular/core';
 import { NavbarModel } from '../../model/components/navbar.model';
 import { BehaviorSubject, debounceTime, fromEvent } from 'rxjs';
+import { SidebarModel } from '../../model/components/dashboard/sidebar.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +10,14 @@ export class Navigation implements OnDestroy {
   private _navbarMenu = signal<NavbarModel.INavbarMenu[]>([]);
   NavbarMenu = computed(() => this._navbarMenu());
 
-
   private readonly MOBILE_BREAKPOINT = 768;
   private resizeSubscription?: any;
   private windowWidth = signal<number>(this.getCurrentWindowWidth());
   readonly isMobile = computed(() => this.windowWidth() < this.MOBILE_BREAKPOINT);
+
+  toggleDashboardSidebar = new BehaviorSubject(false);
+  private _sidebarDashboardMenu = signal<SidebarModel.ISidebar[]>([]);
+  SidebarDashboardMenu = computed(() => this._sidebarDashboardMenu());
 
   constructor() {
     effect(() => {
@@ -59,5 +63,9 @@ export class Navigation implements OnDestroy {
       .subscribe(() => {
         this.windowWidth.set(this.getCurrentWindowWidth());
       });
+  }
+
+  setSidebarDashboardMenu(menu: SidebarModel.ISidebar[]) {
+    this._sidebarDashboardMenu.set(menu);
   }
 }

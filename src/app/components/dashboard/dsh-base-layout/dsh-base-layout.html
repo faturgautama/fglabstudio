@@ -1,0 +1,13 @@
+<div class="flex w-full">
+    <app-dsh-sidebar></app-dsh-sidebar>
+
+    <div class="flex flex-col w-full">
+        <app-dsh-navbar></app-dsh-navbar>
+
+        <div class="grid w-full bg-gray-200 p-5">
+            <div class="grid w-full bg-white p-3 rounded-lg shadow-sm" style="height: calc(100vh - 7rem);">
+                <ng-content></ng-content>
+            </div>
+        </div>
+    </div>
+</div>
