@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { DepartementAction } from "./departement.action";
-import { debounceTime, delay, map, tap } from "rxjs";
+import { tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { DepartmentService } from "../../../services/pages/application/human-resource/departement.service";
 import { UtilityService } from "../../../services/shared/utility";
@@ -39,8 +39,6 @@ export class DepartementState implements NgxsOnInit {
 
     @Action(DepartementAction.GetDepartement)
     getDepartement(ctx: StateContext<DepartementStateModel>) {
-        this._utilityService._showDashboardLoading.next(true);
-
         return this._departementService
             .getAll()
             .pipe(
@@ -50,12 +48,7 @@ export class DepartementState implements NgxsOnInit {
                         ...state,
                         data: result
                     });
-                    this._utilityService._showDashboardLoading.next(false);
                 }),
-                delay(3000),
-                tap(() => {
-                    this._utilityService._showDashboardLoading.next(false);
-                })
             )
     }
 
@@ -82,9 +75,6 @@ export class DepartementState implements NgxsOnInit {
                 tap((result) => {
                     const state = ctx.getState();
                     ctx.dispatch(new DepartementAction.GetDepartement());
-                    setTimeout(() => {
-                        this._utilityService._showDashboardLoading.next(false);
-                    }, 2500);
                 })
             )
     }

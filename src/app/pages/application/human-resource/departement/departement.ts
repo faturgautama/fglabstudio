@@ -114,7 +114,6 @@ export class Departement implements OnInit, OnDestroy {
       takeUntil(this.Destroy$),
       tap((result) => {
         this.TableProps.datasource = result;
-        console.log("datasource =>", this.TableProps.datasource);
       })
     );
 

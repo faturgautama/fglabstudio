@@ -1,6 +1,6 @@
 export namespace EmployeeModel {
     export interface IBaseModel {
-        id?: string | number;
+        id?: any;
         created_at: Date;
         updated_at?: Date;
     }

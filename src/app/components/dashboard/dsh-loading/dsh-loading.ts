@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { DialogModule } from "primeng/dialog";
 import { UtilityService } from '../../../services/shared/utility';
 import { Subject, takeUntil } from 'rxjs';
@@ -19,11 +19,16 @@ export class DshLoading implements OnDestroy {
 
   _utilityService = inject(UtilityService);
 
-  constructor() {
+  constructor(
+    private _cdr: ChangeDetectorRef,
+  ) {
     this._utilityService
       ._showDashboardLoading
       .pipe(takeUntil(this.Destroy$))
-      .subscribe(result => this._showLoading = result);
+      .subscribe((result) => {
+        this._showLoading = result;
+        setTimeout(() => this._cdr.detectChanges(), 0);
+      });
   }
 
   ngOnDestroy(): void {
