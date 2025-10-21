@@ -1,6 +1,5 @@
-<div class="flex flex-col bg-white p-5 {{ toggleSidebar ? 'w-[20rem]' : 'w-[5rem]' }} h-full border-r border-y-0 border-l-0 border-gray-200 border-solid transition-all"
-    (click)="handleToggleSidebar()">
-
+<div
+    class="flex flex-col bg-white p-5 {{ toggleSidebar ? 'w-[20rem]' : 'w-[5rem]' }} h-full border-r border-y-0 border-l-0 border-gray-200 border-solid transition-all">
     <!-- Brand -->
     <div class="flex flex-row gap-2 items-center mb-5 pb-5 border-b border-t-0 border-x-0 border-solid border-gray-300">
         @if (toggleSidebar) {
@@ -15,7 +14,7 @@
         }
 
         <p-button [rounded]="true" severity="secondary" icon="pi pi-angle-double-{{ toggleSidebar ? 'left' : 'right' }}"
-            styleClass="p-button-sm">
+            styleClass="p-button-sm" (onClick)="handleToggleSidebar()">
         </p-button>
     </div>
 
@@ -48,7 +47,7 @@
 
         @for (item of sidebarMenu; track $index) {
         <div
-            class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4">
+            class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer">
             <span class="text-gray-700">
                 <i [class]="item.icon"></i>
             </span>
@@ -62,18 +61,25 @@
     </div>
 
     <!-- Department -->
+    @if (resolverExtraData) {
     <div class="flex flex-col w-full px-4">
         @if (toggleSidebar) {
-        <p class="text-sm text-gray-400 mb-4">
-            Department
-        </p>
+        <div class="flex flex-row items-center justify-between mb-4">
+            <p class="text-sm text-gray-400">
+                {{ resolverExtraData.title }}
+            </p>
+
+            <span class="px-2 py-[0.5px] rounded-lg bg-gray-100 cursor-pointer" (click)="handleClickExtraData()">
+                <i class="pi pi-plus text-gray-600" style="font-size: 10px;"></i>
+            </span>
+        </div>
         }
 
-        @for (item of sidebarMenu; track $index) {
+        @for (item of resolverExtraData.datasource; track $index) {
         <div
-            class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4">
+            class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer">
             <span class="text-gray-700">
-                <i [class]="item.icon"></i>
+                <i class="pi pi-circle-fill {{ item.color }}" style="font-size: 10px;"></i>
             </span>
             @if (toggleSidebar) {
             <p class="text-sm text-gray-700">
@@ -83,6 +89,7 @@
         </div>
         }
     </div>
+    }
 
     <!-- Others -->
     <div class="flex flex-col w-full px-4 mt-auto">

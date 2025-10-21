@@ -1,3 +1,111 @@
 <app-dsh-base-layout>
-    <p>home works!</p>
+    <div class="flex flex-col w-full h-full gap-5 p-3">
+        <!-- Counting -->
+        <div class="grid grid-cols-3 w-full gap-5">
+            <div
+                class="flex flex-col w-full bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 gap-1 p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
+                <p class="text-sm text-gray-300">
+                    Total Karyawan
+                </p>
+                <p class="text-5xl font-semibold text-gray-100">
+                    {{ Counting.total_employee }}
+                </p>
+
+                <span class="absolute bottom-[-20px] right-4">
+                    <i class="pi pi-users text-gray-300" style="font-size: 5rem"></i>
+                </span>
+            </div>
+
+            <div
+                class="flex flex-col w-full bg-gradient-to-r from-purple-700 via-purple-600 to-purple-500 gap-1 p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
+                <p class="text-sm text-gray-300">
+                    Total Departemen
+                </p>
+                <p class="text-5xl font-semibold text-gray-100">
+                    {{ Counting.total_departement }}
+                </p>
+
+                <span class="absolute bottom-[-20px] right-4">
+                    <i class="pi pi-building text-gray-300" style="font-size: 5rem"></i>
+                </span>
+            </div>
+
+            <div
+                class="flex flex-col w-full bg-gradient-to-r from-sky-700 via-sky-600 to-sky-500 gap-1 p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
+                <p class="text-sm text-gray-300">
+                    Total Payroll
+                </p>
+                <p class="text-2xl font-semibold text-gray-100">
+                    {{ Counting.total_payroll | currency: 'Rp. ' }}
+                </p>
+
+                <span class="absolute bottom-[-20px] right-4">
+                    <i class="pi pi-receipt text-gray-300" style="font-size: 5rem"></i>
+                </span>
+            </div>
+        </div>
+
+        <!-- Work Hours & Info -->
+        <div class="grid grid-cols-3 w-full gap-5 ">
+            <!-- Work Hours -->
+            <div class="flex flex-col w-full col-span-2 p-5 bg-white rounded-lg shadow-sm">
+                <div class="flex flex-row justify-between items-center mb-5">
+                    <div class="flex flex-col">
+                        <p class="text-lg font-semibold text-gray-700">
+                            Jam Kerja Karyawan
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Total jam kerja dan overtime karyawan
+                        </p>
+                    </div>
+
+                    <div class="w-4/12">
+                        <p-datepicker selectionMode="range" [readonlyInput]="true" dateFormat="dd MM yy"
+                            placeholder="Cari tanggal mulai s.d tanggal selesai" styleClass="p-inputtext-sm w-full"
+                            size="small" />
+                    </div>
+                </div>
+
+                <div class="grid w-full">
+                    <p-chart type="bar" [data]="WorkHoursChart.datasource" [options]="WorkHoursChart.options"
+                        class="h-[20rem]" [responsive]="true" />
+                </div>
+            </div>
+
+            <!-- Info -->
+            <div class="flex flex-col w-full p-5 bg-white rounded-lg">
+                <div class="flex flex-col mb-5">
+                    <p class="text-lg font-semibold text-gray-700">
+                        Yang Baru di Bulan Ini
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Informasi seputar karyawan bulan ini
+                    </p>
+                </div>
+
+                <div class="flex flex-col w-full gap-3">
+                    @for (item of MonthlyInfo; track $index) {
+                    <div
+                        class="flex flex-row w-full items-center gap-4 pb-3 border-b border-t-0 border-x-0 border-solid border-gray-200">
+                        <p-avatar [label]="item.full_name[0]" />
+
+                        <div class="flex flex-col gap-0">
+                            <p class="text-base text-gray-800 font-medium">
+                                {{ item.full_name }}
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                Berulang tahun pada {{ item.birthday | date: 'dd MMMM yyyy' }}
+                            </p>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Employee List -->
+        <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+            <app-dynamic-table [props]="TableProps"></app-dynamic-table>
+        </div>
+    </div>
 </app-dsh-base-layout>

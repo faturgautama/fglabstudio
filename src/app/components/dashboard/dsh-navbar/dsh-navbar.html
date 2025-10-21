@@ -1,3 +1,33 @@
-<div class="flex flex-row p-5 bg-white shadow-sm h-[4.5rem]">
+<div class="flex flex-row justify-between p-5 bg-white shadow-sm h-[4.5rem]">
+    <div class="flex w-4/12">
+        <p-iconfield styleClass="w-full">
+            <p-inputicon class="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" class="p-inputtext-sm w-full" />
+        </p-iconfield>
+    </div>
 
+    <div class="flex items-center gap-5">
+        <p-button styleClass="p-button-sm" [rounded]="false" icon="pi pi-cloud-download" [outlined]="true"
+            severity="secondary" [pTooltip]="'Download Database'" tooltipStyleClass="text-sm" tooltipPosition="bottom">
+        </p-button>
+
+        <p-button styleClass="p-button-sm mr-2" [rounded]="false" icon="pi pi-external-link" [outlined]="true"
+            severity="secondary" [pTooltip]="'Apps Lainnya'" tooltipStyleClass="text-sm" tooltipPosition="bottom">
+        </p-button>
+
+        <div class="flex flex-row items-center gap-3 pl-6 border-l border-y-0 border-r-0 border-solid border-gray-200">
+            <p-button styleClass="p-button-sm" [rounded]="true" icon="pi pi-user" [outlined]="true"
+                severity="secondary">' '
+            </p-button>
+
+            <div class="flex flex-col gap-0">
+                <p class="text-sm text-gray-700 font-medium">
+                    Superadmin
+                </p>
+                <p class="text-xs text-gray-500">
+                    superadmin@codebyxerenity.my.id
+                </p>
+            </div>
+        </div>
+    </div>
 </div>

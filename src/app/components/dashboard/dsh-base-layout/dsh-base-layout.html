@@ -5,9 +5,16 @@
         <app-dsh-navbar></app-dsh-navbar>
 
         <div class="grid w-full bg-gray-200 p-5">
-            <div class="grid w-full bg-white p-3 rounded-lg shadow-sm" style="height: calc(100vh - 7rem);">
-                <ng-content></ng-content>
+            <div class="flex flex-col w-full gap-4" style="height: calc(100vh - 7rem);">
+                <app-icon-title></app-icon-title>
+
+                <div class="grid w-full" style="height: calc(100vh - 8rem); overflow-y: auto;">
+                    <ng-content></ng-content>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<app-dsh-loading></app-dsh-loading>
+<p-toast></p-toast>

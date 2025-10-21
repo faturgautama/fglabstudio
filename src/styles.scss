@@ -91,3 +91,37 @@ body {
 textarea.p-inputtext-sm {
   font-size: 14px;
 }
+
+.p-inputtext-sm .p-inputtext {
+  width: 100% !important;
+  font-size: 14px !important;
+}
+
+.p-inputtext-sm.text-end .p-inputtext {
+  width: 100% !important;
+  font-size: 14px !important;
+  text-align: right !important;
+}
+
+.p-inputtext-sm .p-inputnumber {
+  width: 100% !important;
+}
+
+p-inputnumber,
+.p-inputnumber {
+  width: 100% !important;
+}
+
+.p-dropdown.p-inputtext-sm {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.p-dropdown-item {
+  font-size: 14px !important;
+}
+
+p-select.p-inputtext-sm {
+  width: 100% !important;
+  padding: 0 !important;
+}

@@ -3,6 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button'
 import { ToastModule, Toast } from 'primeng/toast'
 import AOS from 'aos';
+import { liveQuery } from 'dexie';
+import { db } from './app.database';
 
 @Component({
   selector: 'app-root',
@@ -20,5 +22,11 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     AOS.init();
+
+    liveQuery(() => db.employees
+      .toArray())
+      .subscribe((result) => {
+        console.log("employee =>", result);
+      })
   }
 }

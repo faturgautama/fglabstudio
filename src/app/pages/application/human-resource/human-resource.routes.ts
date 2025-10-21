@@ -4,15 +4,23 @@ export const humanResourceRoutes: Routes = [
     {
         path: '',
         loadComponent: async () => (await import('./login/login')).Login,
-        data: {
-            title: 'Login'
-        }
     },
     {
         path: 'home',
         loadComponent: async () => (await import('./home/home')).Home,
         data: {
-            title: 'Home'
+            icon: 'pi pi-objects-column',
+            title: 'Dashboard',
+            description: 'Welcome to People HR App Code By Xerenity'
+        }
+    },
+    {
+        path: 'departement',
+        loadComponent: async () => (await import('./departement/departement')).Departement,
+        data: {
+            icon: 'pi pi-users',
+            title: 'Departement',
+            description: 'Manage dan atur semua departemen'
         }
     }
 ];

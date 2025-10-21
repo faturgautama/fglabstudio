@@ -1,0 +1,89 @@
+<div class="grid w-full">
+    <div class="flex items-center w-full justify-between mb-5">
+        <div class="flex flex-col">
+            <p class="text-lg font-semibold text-gray-700">
+                {{ props.title }}
+            </p>
+            <p class="text-sm text-gray-500">
+                {{ props.description }}
+            </p>
+        </div>
+
+        <div class="flex flex-row gap-3">
+            <p-button severity="secondary" [outlined]="true" icon="pi pi-filter" label="Filter"
+                styleClass="p-button-sm">
+            </p-button>
+
+            <p-button severity="secondary" [outlined]="true" icon="pi pi-sort" label="Sort" styleClass="p-button-sm">
+            </p-button>
+
+            @for (item of props.custom_button; track $index) {
+            <p-button [id]="item.id" severity="secondary" [outlined]="true" [icon]="item.icon" [label]="item.title"
+                styleClass="p-button-sm" (onClick)="handleCustomButtonClicked(item)">
+            </p-button>
+            }
+        </div>
+    </div>
+
+    <div class="grid w-full">
+        <p-table id="GridComponents" [value]="props.datasource" [columns]="props.column"
+            styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}" selectionMode="single"
+            [(selection)]="selectedRow" [paginator]="props.paging" [first]="0" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Data ke {first} - {last} dari {totalRecords} total data" [rows]="5"
+            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [scrollable]="true" scrollHeight="calc(100vh - 19rem)">
+            <ng-template pTemplate="header" let-columns>
+                <tr class="bg-gray-100">
+                    @for (col of columns; track $index) {
+                    <th class="text-sm text-center">
+                        {{ col.title }}
+                    </th>
+                    }
+                </tr>
+            </ng-template>
+            @if (props.datasource) {
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData" (dblclick)="handleRowDoubbleClicked(rowData)"
+                    (click)="handleCellClicked(rowData)">
+                    @for (col of columns; track $index) {
+                    <td class="text-sm {{ col.class }}" [style.width]="col.width ? col.width : 'auto'">
+                        @if (col.type == columType.TEXT) {
+                        {{ rowData[col.id] }}
+                        } @else if (col.type == columType.NUMBER) {
+                        {{ handleFormatStringToNumber(rowData[col.id]) | number: '' }}
+                        } @else if (col.type == columType.DATE) {
+                        {{ rowData[col.id] | date: 'dd-MM-yyyy' }}
+                        } @else if (col.type == columType.DATETIME) {
+                        {{ rowData[col.id] | date: 'dd-MM-yyyy HH:mm:ss' }}
+                        } @else if (col.type == columType.CURRENCY) {
+                        {{ handleFormatStringToNumber(rowData[col.id]) | currency: 'Rp. ' }}
+                        } @else if (col.type == columType.BADGE) {
+                        <span class="px-2 py-1 rounded text-white" [ngClass]="'bg-' + col.badge_color + '200'">
+                            <span>
+                                <i class="pi pi-circle-fill text-{{ col.badge_color }}-800" style="font-size: 9px;"></i>
+                            </span>
+                            <p class="text-xs text-{{ col.badge_color }}-800">
+                                {{ rowData[col.id] }}
+                            </p>
+                        </span>
+                        } @else if (col.type == undefined) {
+                        {{ rowData[col.id] }}
+                        } @else {
+                        {{ rowData[col.id] }}
+                        }
+                    </td>
+                    }
+
+                </tr>
+            </ng-template>
+            } @else {
+            <ng-template>
+                <div class="flex w-full justify-center">
+                    <p class="text-sm font-medium text-gray-700">
+                        No data displayed
+                    </p>
+                </div>
+            </ng-template>
+            }
+        </p-table>
+    </div>
+</div>
