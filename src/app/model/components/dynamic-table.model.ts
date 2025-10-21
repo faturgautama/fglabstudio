@@ -6,6 +6,7 @@ export namespace DynamicTableModel {
         DATE = 'date',
         DATETIME = 'datetime',
         ICON = 'icon',
+        BUTTON_ICON = 'button_icon',
         BADGE = 'badge',
         DROPDOWN = 'dropdown',
     }
@@ -15,7 +16,7 @@ export namespace DynamicTableModel {
         title: string;
         type: IColumnType;
         width?: string;
-        badge_color?: () => {};
+        button_icon_description?: string;
     }
 
     export interface IFilter {

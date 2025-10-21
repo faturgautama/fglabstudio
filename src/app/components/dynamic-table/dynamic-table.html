@@ -34,18 +34,22 @@
             <ng-template pTemplate="header" let-columns>
                 <tr class="bg-gray-100">
                     @for (col of columns; track $index) {
-                    <th class="text-sm text-center">
+                    <th class="text-sm">
                         {{ col.title }}
                     </th>
                     }
+
+                    <th class="text-sm text-center">
+                        Aksi
+                    </th>
                 </tr>
             </ng-template>
             @if (props.datasource) {
             <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr [pSelectableRow]="rowData" (dblclick)="handleRowDoubbleClicked(rowData)"
-                    (click)="handleCellClicked(rowData)">
+                <tr [pSelectableRow]="rowData" (dblclick)="handleRowDoubbleClicked(rowData)">
                     @for (col of columns; track $index) {
-                    <td class="text-sm {{ col.class }}" [style.width]="col.width ? col.width : 'auto'">
+                    <td class="text-sm {{ col.class }}" [style.width]="col.width ? col.width : 'auto'"
+                        (click)="handleCellClicked(rowData)">
                         @if (col.type == columType.TEXT) {
                         {{ rowData[col.id] }}
                         } @else if (col.type == columType.NUMBER) {
@@ -65,6 +69,15 @@
                                 {{ rowData[col.id] }}
                             </p>
                         </span>
+                        } @else if (col.type == columType.BUTTON_ICON) {
+                        <div class="flex flex-row gap-2 items-center px-2 py-1">
+                            <span>
+                                <i class="pi pi-circle-fill {{ rowData[col.id] }}" style="font-size: 9px;"></i>
+                            </span>
+                            <p class="text-sm text-gray-700">
+                                {{ handleFormatColor(rowData[col.id]) | titlecase}}
+                            </p>
+                        </div>
                         } @else if (col.type == undefined) {
                         {{ rowData[col.id] }}
                         } @else {
@@ -73,6 +86,19 @@
                     </td>
                     }
 
+                    <!-- toolbar -->
+                    @if (props.toolbar) {
+                    <td>
+                        <div class="flex justify-center w-full gap-3">
+                            @for (item of props.toolbar; track $index) {
+                            <p-button [id]="item.id" [severity]="item.id == 'delete' ? 'danger' : 'secondary'"
+                                [icon]="item.icon" [outlined]="true" styleClass="p-button-sm"
+                                (onClick)="handleToolbarClicked(item)">
+                            </p-button>
+                            }
+                        </div>
+                    </td>
+                    }
                 </tr>
             </ng-template>
             } @else {

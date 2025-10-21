@@ -5,6 +5,7 @@ import { DynamicTableModel } from '../../model/components/dynamic-table.model';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ActivatedRoute } from '@angular/router';
+import { PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -12,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
     TableModule,
     CommonModule,
     ButtonModule,
+    PopoverModule
   ],
   standalone: true,
   templateUrl: './dynamic-table.html',
@@ -32,6 +34,8 @@ export class DynamicTable implements OnInit, OnDestroy {
   @Output('onSort') onSort = new EventEmitter<DynamicTableModel.ISort[]>();
 
   @Output('onCustomButtonClicked') onCustomButtonClicked = new EventEmitter<DynamicTableModel.ICustomButton>();
+
+  @Output('onToolbarClicked') onToolbarClicked = new EventEmitter<DynamicTableModel.IToolbar>();
 
   columType = DynamicTableModel.IColumnType;
 
@@ -58,6 +62,7 @@ export class DynamicTable implements OnInit, OnDestroy {
   }
 
   handleCellClicked(args: any) {
+    console.log(args);
     this.onCellClicked.emit(args);
   }
 
@@ -69,7 +74,15 @@ export class DynamicTable implements OnInit, OnDestroy {
     return parseFloat(data);
   }
 
+  handleFormatColor(color: string) {
+    return color.split("-")[1];
+  }
+
   handleCustomButtonClicked(args: DynamicTableModel.ICustomButton) {
     this.onCustomButtonClicked.emit(args);
+  }
+
+  handleToolbarClicked(args: any) {
+    this.onToolbarClicked.emit(args);
   }
 }

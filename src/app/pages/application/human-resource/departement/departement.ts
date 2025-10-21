@@ -48,25 +48,31 @@ export class Departement implements OnInit, OnDestroy {
         id: 'code',
         title: 'Kode Departemen',
         type: DynamicTableModel.IColumnType.TEXT,
-        width: '200px'
+        width: '250px'
       },
       {
         id: 'title',
         title: 'Nama Departemen',
         type: DynamicTableModel.IColumnType.TEXT,
-        width: '200px'
+        width: '400px'
       },
       {
         id: 'description',
         title: 'Keterangan',
         type: DynamicTableModel.IColumnType.TEXT,
-        width: '200px'
+        width: '250px'
       },
       {
         id: 'color',
         title: 'Warna',
-        type: DynamicTableModel.IColumnType.TEXT,
-        width: '200px',
+        type: DynamicTableModel.IColumnType.BUTTON_ICON,
+        button_icon_description: 'title',
+      },
+      {
+        id: 'created_at',
+        title: 'Waktu Entry',
+        type: DynamicTableModel.IColumnType.DATETIME,
+        width: '300px'
       },
     ],
     datasource: [],
@@ -102,20 +108,15 @@ export class Departement implements OnInit, OnDestroy {
         value: ''
       },
     ],
+    toolbar: [
+      { id: 'detail', icon: 'pi pi-info', title: 'Detail' },
+      { id: 'delete', icon: 'pi pi-trash', title: 'Hapus' },
+    ],
     paging: true,
     custom_button: [
       { id: 'add', title: 'Add', icon: 'pi pi-plus' }
     ]
   };
-
-  Departement$ = this._store
-    .select(DepartementState.getAll)
-    .pipe(
-      takeUntil(this.Destroy$),
-      tap((result) => {
-        this.TableProps.datasource = result;
-      })
-    );
 
   _modalToggler = false;
 
@@ -155,7 +156,10 @@ export class Departement implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
-    this.Departement$.subscribe((result) => console.log(result));
+    this._store
+      .select(DepartementState.getAll)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.TableProps.datasource = result);
   }
 
   ngOnDestroy(): void {
@@ -169,6 +173,10 @@ export class Departement implements OnInit, OnDestroy {
       this.Form.reset();
       this._modalToggler = true;
     }
+  }
+
+  handleToolbarClicked(args: DynamicTableModel.IToolbar) {
+    console.log(args);
   }
 
   handleSave(args: any) {
