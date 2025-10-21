@@ -35,7 +35,7 @@ export class DynamicTable implements OnInit, OnDestroy {
 
   @Output('onCustomButtonClicked') onCustomButtonClicked = new EventEmitter<DynamicTableModel.ICustomButton>();
 
-  @Output('onToolbarClicked') onToolbarClicked = new EventEmitter<DynamicTableModel.IToolbar>();
+  @Output('onToolbarClicked') onToolbarClicked = new EventEmitter<any>();
 
   columType = DynamicTableModel.IColumnType;
 
@@ -82,7 +82,7 @@ export class DynamicTable implements OnInit, OnDestroy {
     this.onCustomButtonClicked.emit(args);
   }
 
-  handleToolbarClicked(args: any) {
-    this.onToolbarClicked.emit(args);
+  handleToolbarClicked(args: DynamicTableModel.IToolbar, data: any) {
+    this.onToolbarClicked.emit({ toolbar: args, data: data });
   }
 }

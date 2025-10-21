@@ -30,7 +30,8 @@
             styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}" selectionMode="single"
             [(selection)]="selectedRow" [paginator]="props.paging" [first]="0" [showCurrentPageReport]="true"
             currentPageReportTemplate="Data ke {first} - {last} dari {totalRecords} total data" [rows]="5"
-            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [scrollable]="true" scrollHeight="calc(100vh - 19rem)">
+            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [scrollable]="true" scrollHeight="calc(100vh - 19rem)"
+            appendTo="body">
             <ng-template pTemplate="header" let-columns>
                 <tr class="bg-gray-100">
                     @for (col of columns; track $index) {
@@ -93,7 +94,7 @@
                             @for (item of props.toolbar; track $index) {
                             <p-button [id]="item.id" [severity]="item.id == 'delete' ? 'danger' : 'secondary'"
                                 [icon]="item.icon" [outlined]="true" styleClass="p-button-sm"
-                                (onClick)="handleToolbarClicked(item)">
+                                (onClick)="handleToolbarClicked(item, rowData)">
                             </p-button>
                             }
                         </div>

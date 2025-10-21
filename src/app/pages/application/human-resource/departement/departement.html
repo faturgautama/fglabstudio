@@ -89,9 +89,15 @@
                 <p-button severity="secondary" label="Tutup" styleClass="p-button-sm" (onClick)="_modalToggler = false">
                 </p-button>
 
+                @if (_formState == 'insert') {
                 <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
                     (onClick)="handleSave(Form.value)">
                 </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                }
             </div>
         </p-dialog>
     </div>

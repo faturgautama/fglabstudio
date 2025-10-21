@@ -13,6 +13,7 @@ import { SelectModule } from 'primeng/select';
 import { TitleCasePipe } from '@angular/common';
 import { TextareaModule } from 'primeng/textarea';
 import { DepartmentService } from '../../../../services/pages/application/human-resource/departement.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-departement',
@@ -36,6 +37,7 @@ export class Departement implements OnInit, OnDestroy {
 
   _store = inject(Store);
   _departemenService = inject(DepartmentService);
+  _messageService = inject(MessageService);
 
   Destroy$ = new Subject();
 
@@ -175,8 +177,12 @@ export class Departement implements OnInit, OnDestroy {
     }
   }
 
-  handleToolbarClicked(args: DynamicTableModel.IToolbar) {
-    console.log(args);
+  handleToolbarClicked(args: any) {
+    if (args.toolbar.id == 'detail') {
+      this._formState = 'update';
+      this._modalToggler = true;
+      this.Form.patchValue(args.data);
+    }
   }
 
   handleSave(args: any) {
@@ -186,6 +192,35 @@ export class Departement implements OnInit, OnDestroy {
         .subscribe((result) => {
           console.log(result);
         })
+    }
+  }
+
+  handleUpdate(args: any) {
+    if (this.Form.valid) {
+      this._store
+        .dispatch(new DepartementAction.UpdateDepartement(args))
+        .subscribe((result) => {
+          setTimeout(() => {
+            this._messageService.clear();
+            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Departemen Berhasil Diubah' });
+            this.resetForm(true);
+          }, 3100);
+        })
+    }
+  }
+
+  private resetForm(closeModal?: boolean) {
+    this.Form.reset();
+    this._formBuilder.group({
+      id: ['', []],
+      code: ['', [Validators.required]],
+      title: ['', [Validators.required]],
+      description: ['', []],
+      color: ['', [Validators.required]]
+    });
+    this._formState = 'insert';
+    if (closeModal) {
+      this._modalToggler = false;
     }
   }
 }
