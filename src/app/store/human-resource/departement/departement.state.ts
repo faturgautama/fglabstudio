@@ -4,8 +4,6 @@ import { DepartementAction } from "./departement.action";
 import { tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { DepartmentService } from "../../../services/pages/application/human-resource/departement.service";
-import { UtilityService } from "../../../services/shared/utility";
-import { MessageService } from "primeng/api";
 
 export interface DepartementStateModel {
     data: EmployeeModel.IDepartment[];
@@ -23,8 +21,6 @@ export interface DepartementStateModel {
 export class DepartementState implements NgxsOnInit {
 
     constructor(
-        private _messageService: MessageService,
-        private _utilityService: UtilityService,
         private _departementService: DepartmentService
     ) { }
 

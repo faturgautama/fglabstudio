@@ -1,5 +1,5 @@
 <div class="grid w-full">
-    <div class="flex items-center w-full justify-between mb-5">
+    <div class="flex items-center w-full mb-5">
         <div class="flex flex-col">
             <p class="text-lg font-semibold text-gray-700">
                 {{ props.title }}
@@ -9,9 +9,17 @@
             </p>
         </div>
 
+        <div class="flex w-3/12 ml-auto mr-10">
+            <p-iconfield styleClass="w-full">
+                <p-inputicon class="pi pi-search" />
+                <input type="text" pInputText placeholder="Search" class="p-inputtext-sm w-full"
+                    [(ngModel)]="KeywordSearch" (ngModelChange)="handleKeydownSearch($event)" />
+            </p-iconfield>
+        </div>
+
         <div class="flex flex-row gap-3">
-            <p-button severity="secondary" [outlined]="true" icon="pi pi-filter" label="Filter"
-                styleClass="p-button-sm">
+            <p-button severity="secondary" [outlined]="true" icon="pi pi-filter" label="Filter" styleClass="p-button-sm"
+                (onClick)="opFilter.toggle($event)" [badge]="FilterCount">
             </p-button>
 
             <p-button severity="secondary" [outlined]="true" icon="pi pi-sort" label="Sort" styleClass="p-button-sm">
@@ -25,9 +33,9 @@
         </div>
     </div>
 
-    <div class="grid w-full">
+    <div class="grid w-full pt-1 border-t border-b-0 border-x-0 border-gray-200 border-solid">
         <p-table id="GridComponents" [value]="props.datasource" [columns]="props.column"
-            styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}" selectionMode="single"
+            styleClass="p-datatable-striped transition-all" [tableStyle]="{'min-width': '50rem'}" selectionMode="single"
             [(selection)]="selectedRow" [paginator]="props.paging" [first]="0" [showCurrentPageReport]="true"
             currentPageReportTemplate="Data ke {first} - {last} dari {totalRecords} total data" [rows]="5"
             [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [scrollable]="true" scrollHeight="calc(100vh - 19rem)"
@@ -114,3 +122,19 @@
         </p-table>
     </div>
 </div>
+
+<p-popover #opFilter appendTo="body">
+    <div class="flex flex-col gap-4 w-[25rem]">
+        <div class="flex flex-row justify-between items-center">
+            <p class="text-gray-700 font-medium text-base">Filter</p>
+
+            <p class="text-sky-600 text-xs cursor-pointer" (click)="handleClearFilter(); opFilter.hide()">
+                Hapus Semua
+            </p>
+        </div>
+
+        <app-dynamic-table-filter #FilterComps [props]="props.filter!"
+            (onFilter)="handleFilter($event); opFilter.hide()">
+        </app-dynamic-table-filter>
+    </div>
+</p-popover>

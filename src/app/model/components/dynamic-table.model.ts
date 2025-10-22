@@ -5,10 +5,17 @@ export namespace DynamicTableModel {
         CURRENCY = 'currency',
         DATE = 'date',
         DATETIME = 'datetime',
+        DATERANGE = 'daterange',
         ICON = 'icon',
         BUTTON_ICON = 'button_icon',
         BADGE = 'badge',
         DROPDOWN = 'dropdown',
+    }
+
+    export interface ISelectProps {
+        name: string;
+        value: string;
+        datasource: any[];
     }
 
     export interface IColumn {
@@ -24,6 +31,7 @@ export namespace DynamicTableModel {
         title: string;
         type: IColumnType;
         value?: string;
+        select_props?: ISelectProps;
     }
 
     export interface ISort {

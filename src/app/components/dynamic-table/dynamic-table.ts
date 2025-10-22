@@ -1,19 +1,30 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { TableModule } from 'primeng/table';
 import { DynamicTableModel } from '../../model/components/dynamic-table.model';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { ActivatedRoute } from '@angular/router';
 import { PopoverModule } from 'primeng/popover';
+import { InputTextModule } from 'primeng/inputtext';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { FormsModule } from '@angular/forms';
+import { DynamicTableFilter } from "./dynamic-table-filter/dynamic-table-filter";
 
 @Component({
   selector: 'app-dynamic-table',
   imports: [
+    FormsModule,
     TableModule,
     CommonModule,
     ButtonModule,
-    PopoverModule
+    PopoverModule,
+    InputTextModule,
+    IconFieldModule,
+    InputIconModule,
+    PopoverModule,
+    DynamicTableFilter
   ],
   standalone: true,
   templateUrl: './dynamic-table.html',
@@ -22,6 +33,8 @@ import { PopoverModule } from 'primeng/popover';
 export class DynamicTable implements OnInit, OnDestroy {
 
   Destroy$ = new Subject();
+
+  _originalDatasource: any[] = [];
 
   @Input('props') props!: DynamicTableModel.ITable;
 
@@ -41,19 +54,44 @@ export class DynamicTable implements OnInit, OnDestroy {
 
   selectedRow: any;
 
+  KeywordSearch = "";
+
+  _keywordSearch$ = new BehaviorSubject<string>('');
+
+  @ViewChild('FilterComps') FilterComps!: DynamicTableFilter;
+  FilterCount: any;
+
   constructor(
+    private _cdr: ChangeDetectorRef,
     private _activatedRoute: ActivatedRoute
   ) {
-    this._activatedRoute
-      .data
-      .pipe(takeUntil(this.Destroy$))
-      .subscribe((result) => {
-        console.log(result);
-      })
+    this._keywordSearch$
+      .pipe(
+        takeUntil(this.Destroy$),
+        debounceTime(750),
+        distinctUntilChanged()
+      ).subscribe((result) => {
+        if (!result.length) {
+          this.props.datasource = this._originalDatasource;
+          this._cdr.detectChanges();
+          return;
+        }
+
+        if (result.length) {
+          this.props.datasource = this._originalDatasource.filter((item) => {
+            const stringified = JSON.stringify(item);
+            if (stringified.toLowerCase().includes(result.toLowerCase())) {
+              return item;
+            }
+          });
+
+          this._cdr.detectChanges();
+        };
+      });
   }
 
   ngOnInit(): void {
-
+    this._originalDatasource = JSON.parse(JSON.stringify(this.props.datasource));
   }
 
   ngOnDestroy(): void {
@@ -61,21 +99,16 @@ export class DynamicTable implements OnInit, OnDestroy {
     this.Destroy$.complete();
   }
 
+  handleKeydownSearch(args: any) {
+    this._keywordSearch$.next(args);
+  }
+
   handleCellClicked(args: any) {
-    console.log(args);
     this.onCellClicked.emit(args);
   }
 
   handleRowDoubbleClicked(args: any) {
     this.onRowDoubleClicked.emit(args);
-  }
-
-  handleFormatStringToNumber(data: string): number {
-    return parseFloat(data);
-  }
-
-  handleFormatColor(color: string) {
-    return color.split("-")[1];
   }
 
   handleCustomButtonClicked(args: DynamicTableModel.ICustomButton) {
@@ -84,5 +117,23 @@ export class DynamicTable implements OnInit, OnDestroy {
 
   handleToolbarClicked(args: DynamicTableModel.IToolbar, data: any) {
     this.onToolbarClicked.emit({ toolbar: args, data: data });
+  }
+
+  handleClearFilter() {
+    this.FilterCount = null;
+    this.FilterComps.handleClearFilter();
+  }
+
+  handleFilter(args: DynamicTableModel.IFilter[]) {
+    this.FilterCount = args.length;
+    this.onFilter.emit(args);
+  }
+
+  handleFormatStringToNumber(data: string): number {
+    return parseFloat(data);
+  }
+
+  handleFormatColor(color: string) {
+    return color.split("-")[1];
   }
 }

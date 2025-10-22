@@ -1,0 +1,41 @@
+<div class="grid w-full" [formGroup]="_formFilter">
+    @for (item of props; track $index) {
+    <div class="flex flex-col gap-1 w-full pb-2 mb-2">
+        <label [for]="item.id" class="text-sm text-gray-700 font-medium">
+            {{ item.title }}
+        </label>
+
+        @if (item.type == type.TEXT) {
+        <input [id]="item.id" type="text" pInputText class="p-inputtext-sm w-full" formControlName="{{ item.id }}">
+        }
+
+        @if (item.type == type.NUMBER) {
+        <p-input-number styleClass="p-inputtext-sm w-full" formControlName="{{ item.id }}"
+            size="small"></p-input-number>
+        }
+
+        @if (item.type == type.DATE) {
+        <p-date-picker styleClass="p-inputtext-sm w-full" formControlName="{{ item.id }}" dateFormat="dd MM yy"
+            appendTo="body" size="small">
+        </p-date-picker>
+        }
+
+        @if (item.type == type.DATERANGE) {
+        <p-date-picker styleClass="p-inputtext-sm w-full" formControlName="{{ item.id }}" dateFormat="dd MM yy"
+            appendTo="body" selectionMode="range" size="small">
+        </p-date-picker>
+        }
+
+        @if (item.type == type.DROPDOWN) {
+        <p-select [options]="item.select_props?.datasource" [optionLabel]="item.select_props?.name"
+            [optionValue]="item.select_props?.value" class="w-full" size="small" appendTo="body" [filter]="true">
+        </p-select>
+        }
+    </div>
+    }
+
+    <div class="grid mt-1">
+        <p-button severity="info" label="Filter" styleClass="p-button-sm w-full" (onClick)="handleApplyFilter()">
+        </p-button>
+    </div>
+</div>
