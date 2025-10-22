@@ -13,7 +13,7 @@ import { SelectModule } from 'primeng/select';
 import { TitleCasePipe } from '@angular/common';
 import { TextareaModule } from 'primeng/textarea';
 import { DepartmentService } from '../../../../services/pages/application/human-resource/departement.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-departement',
@@ -38,6 +38,7 @@ export class Departement implements OnInit, OnDestroy {
   _store = inject(Store);
   _departemenService = inject(DepartmentService);
   _messageService = inject(MessageService);
+  _confirmationService = inject(ConfirmationService);
 
   Destroy$ = new Subject();
 
@@ -178,11 +179,41 @@ export class Departement implements OnInit, OnDestroy {
   }
 
   handleToolbarClicked(args: any) {
+    console.log(args.data);
+
     if (args.toolbar.id == 'detail') {
       this._formState = 'update';
       this._modalToggler = true;
       this.Form.patchValue(args.data);
-    }
+    };
+
+    if (args.toolbar.id == 'delete') {
+      this._confirmationService.confirm({
+        message: 'Apakah anda yakin menghapus data ini?',
+        header: 'Danger Zone',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancel',
+        rejectButtonProps: {
+          label: 'Cancel',
+          severity: 'secondary',
+          outlined: true,
+        },
+        acceptButtonProps: {
+          label: 'Hapus',
+          severity: 'danger',
+        },
+        accept: () => {
+          this._store
+            .dispatch(new DepartementAction.DeleteDepartement(args.data.id))
+            .subscribe((result) => {
+              setTimeout(() => {
+                this._messageService.clear();
+                this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Departemen Berhasil Dihapus' });
+              }, 3100);
+            })
+        },
+      });
+    };
   }
 
   handleSave(args: any) {
@@ -190,7 +221,11 @@ export class Departement implements OnInit, OnDestroy {
       this._store
         .dispatch(new DepartementAction.AddDepartement(args))
         .subscribe((result) => {
-          console.log(result);
+          setTimeout(() => {
+            this._messageService.clear();
+            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Departemen Berhasil Disimpan' });
+            this.resetForm(true);
+          }, 3100);
         })
     }
   }

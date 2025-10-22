@@ -31,7 +31,7 @@
             [(selection)]="selectedRow" [paginator]="props.paging" [first]="0" [showCurrentPageReport]="true"
             currentPageReportTemplate="Data ke {first} - {last} dari {totalRecords} total data" [rows]="5"
             [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [scrollable]="true" scrollHeight="calc(100vh - 19rem)"
-            appendTo="body">
+            appendTo="body" paginatorDropdownAppendTo="body">
             <ng-template pTemplate="header" let-columns>
                 <tr class="bg-gray-100">
                     @for (col of columns; track $index) {
@@ -106,7 +106,7 @@
             <ng-template>
                 <div class="flex w-full justify-center">
                     <p class="text-sm font-medium text-gray-700">
-                        No data displayed
+                        Tidak ada data
                     </p>
                 </div>
             </ng-template>

@@ -11,7 +11,7 @@ import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
 import { STATE } from './store';
 import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
 import { environment } from '../environments/environment';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { definePreset } from '@primeuix/themes';
 
 const myPreset = definePreset(Aura, {
@@ -61,6 +61,7 @@ export const appConfig: ApplicationConfig = {
             const translate = inject(TranslateService);
             translate.use(translate.getBrowserLang() || "en");
         }),
-        MessageService
+        MessageService,
+        ConfirmationService
     ]
 };

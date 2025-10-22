@@ -4,6 +4,7 @@ import { DshNavbar } from '../dsh-navbar/dsh-navbar';
 import { IconTitle } from "../../icon-title/icon-title";
 import { DshLoading } from "../dsh-loading/dsh-loading";
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-dsh-base-layout',
@@ -13,6 +14,7 @@ import { ToastModule } from 'primeng/toast';
     IconTitle,
     DshLoading,
     ToastModule,
+    ConfirmDialogModule
   ],
   standalone: true,
   templateUrl: './dsh-base-layout.html',

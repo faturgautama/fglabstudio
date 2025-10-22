@@ -94,7 +94,7 @@ export class DepartementState implements NgxsOnInit {
     @Action(DepartementAction.DeleteDepartement)
     delete(ctx: StateContext<DepartementStateModel>, payload: any) {
         return this._departementService
-            .delete(payload.payload.id)
+            .delete(payload.id)
             .pipe(
                 tap((result) => {
                     const state = ctx.getState();
