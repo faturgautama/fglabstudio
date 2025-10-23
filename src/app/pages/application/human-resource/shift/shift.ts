@@ -1,24 +1,24 @@
 import { TitleCasePipe } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Store } from '@ngxs/store';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
+import { Subject, takeUntil } from 'rxjs';
 import { DshBaseLayout } from '../../../../components/dashboard/dsh-base-layout/dsh-base-layout';
 import { DynamicTable } from '../../../../components/dynamic-table/dynamic-table';
-import { Store } from '@ngxs/store';
-import { MessageService, ConfirmationService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
 import { DynamicTableModel } from '../../../../model/components/dynamic-table.model';
-import { PositionState, PositionAction } from '../../../../store/human-resource/position';
-import { PositionService } from '../../../../services/pages/application/human-resource/position.service';
-import { DepartementState } from '../../../../store/human-resource/departement';
-import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
+import { ShiftService } from '../../../../services/pages/application/human-resource/shift.service';
+import { ShiftState, ShiftAction } from '../../../../store/human-resource/shift';
+import { DatePickerModule } from 'primeng/datepicker';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
-  selector: 'app-position',
+  selector: 'app-shift',
   imports: [
     FormsModule,
     ButtonModule,
@@ -26,57 +26,59 @@ import { EmployeeModel } from '../../../../model/pages/application/human-resourc
     DialogModule,
     SelectModule,
     DshBaseLayout,
-    TitleCasePipe,
     TextareaModule,
     InputTextModule,
+    DatePickerModule,
+    InputNumberModule,
     ReactiveFormsModule,
   ],
   standalone: true,
-  templateUrl: './position.html',
-  styleUrl: './position.scss'
+  templateUrl: './shift.html',
+  styleUrl: './shift.scss'
 })
-export class Position implements OnInit, OnDestroy {
+export class Shift implements OnInit, OnDestroy {
 
   _store = inject(Store);
-  _posisiService = inject(PositionService);
+  _shiftService = inject(ShiftService);
   _messageService = inject(MessageService);
   _confirmationService = inject(ConfirmationService);
 
   Destroy$ = new Subject();
 
   TableProps: DynamicTableModel.ITable = {
-    id: 'posisit',
-    title: 'Daftar Posisi Jabatan',
-    description: 'Daftar posisi jabatan aktif perusahaan',
+    id: 'shift',
+    title: 'Daftar Shift Karyawan',
+    description: 'Daftar shift aktif perusahaan',
     column: [
       {
         id: 'code',
-        title: 'Kode Posisi',
+        title: 'Kode Shift',
         type: DynamicTableModel.IColumnType.TEXT,
         width: '250px'
       },
       {
         id: 'title',
-        title: 'Nama Posisi',
+        title: 'Nama Shift',
         type: DynamicTableModel.IColumnType.TEXT,
         width: '400px'
       },
       {
-        id: 'description',
-        title: 'Keterangan',
-        type: DynamicTableModel.IColumnType.TEXT,
+        id: 'start_time',
+        title: 'Waktu Mulai',
+        type: DynamicTableModel.IColumnType.TIME,
         width: '250px'
       },
       {
-        id: 'department.color',
-        title: 'Departemen',
-        type: DynamicTableModel.IColumnType.BUTTON_ICON,
-        button_icon: {
-          title: 'department.title',
-          icon_class: 'pi pi-circle-fill',
-          icon_color: 'department.color',
-          use_parsing_func: false,
-        }
+        id: 'end_time',
+        title: 'Waktu Selesai',
+        type: DynamicTableModel.IColumnType.TIME,
+        width: '250px'
+      },
+      {
+        id: 'break_duration',
+        title: 'Durasi Istirahat',
+        type: DynamicTableModel.IColumnType.TEXT,
+        width: '250px'
       },
       {
         id: 'created_at',
@@ -89,37 +91,26 @@ export class Position implements OnInit, OnDestroy {
     filter: [
       {
         id: 'code',
-        title: 'Kode Posisi',
+        title: 'Kode Shift',
         type: DynamicTableModel.IColumnType.TEXT,
         value: ''
       },
       {
         id: 'title',
-        title: 'Nama Posisi',
+        title: 'Nama Shift',
         type: DynamicTableModel.IColumnType.TEXT,
         value: ''
-      },
-      {
-        id: 'department_id',
-        title: 'Departemen',
-        type: DynamicTableModel.IColumnType.DROPDOWN,
-        value: '',
-        select_props: {
-          datasource: [],
-          name: 'title',
-          value: 'id'
-        }
       },
     ],
     sort: [
       {
         id: 'code',
-        title: 'Kode Posisi',
+        title: 'Kode Shift',
         value: ''
       },
       {
         id: 'title',
-        title: 'Nama Posisi',
+        title: 'Nama Shift',
         value: ''
       },
     ],
@@ -141,22 +132,16 @@ export class Position implements OnInit, OnDestroy {
     id: ['', []],
     code: ['', [Validators.required]],
     title: ['', [Validators.required]],
-    description: ['', []],
-    department_id: ['', [Validators.required]],
+    start_time: ['', [Validators.required]],
+    end_time: ['', [Validators.required]],
+    break_duration: [0, [Validators.required]],
   });
-
-  _departemenDatasource: EmployeeModel.IDepartment[] = [];
 
   ngOnInit(): void {
     this._store
-      .select(DepartementState.getAll)
+      .select(ShiftState.getAll)
       .pipe(takeUntil(this.Destroy$))
-      .subscribe(result => this._departemenDatasource = result);
-
-    this._store
-      .select(PositionState.getAll)
-      .pipe(takeUntil(this.Destroy$))
-      .subscribe(result => this.TableProps.datasource = result);
+      .subscribe(result => this.TableProps.datasource = result.map((item: any) => { return { ...item, break_duration: `${item.break_duration} Menit` } }));
   }
 
   ngOnDestroy(): void {
@@ -176,17 +161,9 @@ export class Position implements OnInit, OnDestroy {
     if (args.toolbar.id == 'detail') {
       this._formState = 'update';
       this._modalToggler = true;
-      // Wait a tick for the select to render its options
-      setTimeout(() => {
-        const selectedDept = this._departemenDatasource.find(
-          d => d.id === args.data.department?.id
-        );
-
-        this.Form.patchValue({
-          ...args.data,
-          department_id: selectedDept ?? args.data.department
-        });
-      }, 0);
+      this.Form.patchValue({
+        ...args.data,
+      });
     };
 
     if (args.toolbar.id == 'delete') {
@@ -206,11 +183,11 @@ export class Position implements OnInit, OnDestroy {
         },
         accept: () => {
           this._store
-            .dispatch(new PositionAction.DeletePosition(args.data.id))
+            .dispatch(new ShiftAction.DeleteShift(args.data.id))
             .subscribe((result) => {
               setTimeout(() => {
                 this._messageService.clear();
-                this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Posisi Berhasil Dihapus' });
+                this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Shift Berhasil Dihapus' });
               }, 3100);
             })
         },
@@ -220,13 +197,12 @@ export class Position implements OnInit, OnDestroy {
 
   handleSave(args: any) {
     if (this.Form.valid) {
-      let { department_id, ...payload } = args;
       this._store
-        .dispatch(new PositionAction.AddPosition({ ...payload, department_id: department_id.id }))
+        .dispatch(new ShiftAction.AddShift(args))
         .subscribe((result) => {
           setTimeout(() => {
             this._messageService.clear();
-            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Posisi Berhasil Disimpan' });
+            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Shift Berhasil Disimpan' });
             this.resetForm(true);
           }, 3100);
         })
@@ -235,13 +211,12 @@ export class Position implements OnInit, OnDestroy {
 
   handleUpdate(args: any) {
     if (this.Form.valid) {
-      let { department_id, ...payload } = args;
       this._store
-        .dispatch(new PositionAction.UpdatePosition({ ...payload, department_id: department_id.id }))
+        .dispatch(new ShiftAction.UpdateShift(args))
         .subscribe((result) => {
           setTimeout(() => {
             this._messageService.clear();
-            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Posisi Berhasil Diubah' });
+            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Shift Berhasil Diubah' });
             this.resetForm(true);
           }, 3100);
         })
@@ -254,8 +229,9 @@ export class Position implements OnInit, OnDestroy {
       id: ['', []],
       code: ['', [Validators.required]],
       title: ['', [Validators.required]],
-      description: ['', []],
-      department_id: ['', [Validators.required]]
+      start_time: ['', [Validators.required]],
+      end_time: ['', [Validators.required]],
+      break_duration: [0, [Validators.required]],
     });
     this._formState = 'insert';
     if (closeModal) {

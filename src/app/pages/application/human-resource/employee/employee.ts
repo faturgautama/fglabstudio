@@ -115,20 +115,13 @@ export class Employee implements OnInit, OnDestroy {
         id: 'employee_code',
         title: 'Kode Karyawan',
         type: DynamicTableModel.IColumnType.TEXT,
-        width: '150px'
+        width: '200px'
       },
       {
         id: 'full_name',
         title: 'Nama Lengkap',
-        type: DynamicTableModel.IColumnType.TEXT,
-        width: '250px',
+        type: DynamicTableModel.IColumnType.TEXTWITHDESCRIPTION,
         description: 'email'
-      },
-      {
-        id: 'email',
-        title: 'Email',
-        type: DynamicTableModel.IColumnType.TEXT,
-        width: '250px'
       },
       {
         id: 'phone_number',
@@ -140,7 +133,6 @@ export class Employee implements OnInit, OnDestroy {
         id: 'position.title',
         title: 'Posisi',
         type: DynamicTableModel.IColumnType.TEXT,
-        width: '150px'
       },
       {
         id: 'department.title',
@@ -152,19 +144,19 @@ export class Employee implements OnInit, OnDestroy {
           icon_color: 'department.color',
           use_parsing_func: false,
         },
-        width: '150px'
+        width: '180px'
       },
       {
         id: 'employment_status',
         title: 'Status Kepegawaian',
         type: DynamicTableModel.IColumnType.TEXT,
-        width: '150px'
+        width: '250px'
       },
       {
         id: 'created_at',
-        title: 'Tanggal Entry',
-        type: DynamicTableModel.IColumnType.DATE,
-        width: '150px'
+        title: 'Waktu Entry',
+        type: DynamicTableModel.IColumnType.DATETIME,
+        width: '200px'
       },
     ],
     datasource: [],
@@ -258,7 +250,7 @@ export class Employee implements OnInit, OnDestroy {
     this._store
       .select(EmployeeState.getAll)
       .pipe(takeUntil(this.Destroy$))
-      .subscribe(result => this.TableProps.datasource = result);
+      .subscribe(result => this.TableProps.datasource = result.map((item: any) => { return { ...item, employment_status: (<String>item.employment_status).toUpperCase() } }));
   }
 
   ngOnDestroy(): void {

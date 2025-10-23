@@ -1,0 +1,112 @@
+<app-dsh-base-layout>
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)">
+        </app-dynamic-table>
+
+        <p-dialog appendTo="body" [(visible)]="_modalToggler" [style]="{ width: '30rem' }"
+            [header]="_formState == 'insert' ? 'Tambah Shift' : 'Ubah Shift'" [maximizable]="false" [resizable]="false"
+            [draggable]="false" [modal]="true">
+
+            <div class="flex flex-col w-full mb-7 gap-5" [formGroup]="Form">
+                <!-- Kode -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Kode Shift
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+                    <input formControlName="code" pInputText placeholder="Masukkan kode shift"
+                        class="p-inputtext-sm w-full">
+
+                    @if (Form.get('code')?.touched && Form.get('code')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Kode shift tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Nama -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Nama Shift
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+
+                    <input formControlName="title" pInputText placeholder="Masukkan nama shift"
+                        class="p-inputtext-sm w-full">
+
+                    @if (Form.get('title')?.touched && Form.get('title')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Nama shift tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Waktu Mulai Shift -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Waktu Mulai Shift
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+
+                    <p-datepicker formControlName="start_time" [timeOnly]="true" hourFormat="24" size="small"
+                        appendTo="body" placeholder="Masukkan waktu mulai shift" />
+
+                    @if (Form.get('start_time')?.touched && Form.get('start_time')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Waktu mulai shift tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Waktu Selesai Shift -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Waktu Selesai Shift
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+
+                    <p-datepicker formControlName="end_time" [timeOnly]="true" hourFormat="24" size="small"
+                        appendTo="body" placeholder="Masukkan waktu selesai shift" />
+
+                    @if (Form.get('end_time')?.touched && Form.get('end_time')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Waktu selesai shift tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Nama -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Durasi Istirahat (menit)
+                    </p>
+
+                    <p-input-number formControlName="break_duration" placeholder="Masukkan durasi istirahat"
+                        size="small" class="w-full"></p-input-number>
+
+                    @if (Form.get('break_duration')?.touched && Form.get('break_duration')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Durasi istirahat tidak boleh kosong
+                    </span>
+                    }
+                </div>
+            </div>
+
+            <div class="flex w-full justify-end items-center gap-3">
+                <p-button severity="secondary" label="Tutup" styleClass="p-button-sm" (onClick)="_modalToggler = false">
+                </p-button>
+
+                @if (_formState == 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave(Form.value)">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                }
+            </div>
+        </p-dialog>
+    </div>
+</app-dsh-base-layout>

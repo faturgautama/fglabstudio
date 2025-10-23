@@ -5,6 +5,7 @@ export namespace DynamicTableModel {
         NUMBER = 'number',
         CURRENCY = 'currency',
         DATE = 'date',
+        TIME = 'time',
         DATETIME = 'datetime',
         DATERANGE = 'daterange',
         ICON = 'icon',

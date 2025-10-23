@@ -62,7 +62,9 @@
                         @if (col.type == columType.TEXT) {
                         {{ handleGetNestedValue(rowData, col.id) }}
                         } @else if (col.type == columType.TEXTWITHDESCRIPTION) {
-                        {{ handleGetNestedValue(rowData, col.id) }}
+                        <span class="text-sm text-gray-700 font-medium mb-0">
+                            {{ handleGetNestedValue(rowData, col.id) }}
+                        </span>
                         <br>
                         <span class="text-xs text-gray-600">
                             {{ handleGetNestedValue(rowData, col.description) }}
@@ -71,6 +73,8 @@
                         {{ handleFormatStringToNumber(rowData[col.id]) | number: '' }}
                         } @else if (col.type == columType.DATE) {
                         {{ rowData[col.id] | date: 'dd-MM-yyyy' }}
+                        } @else if (col.type == columType.TIME) {
+                        {{ rowData[col.id] | date: 'HH:mm:ss' }}
                         } @else if (col.type == columType.DATETIME) {
                         {{ rowData[col.id] | date: 'dd-MM-yyyy HH:mm:ss' }}
                         } @else if (col.type == columType.CURRENCY) {

@@ -20,6 +20,12 @@ export const humanResourceResolver: ResolveFn<any> = async (route) => {
             path: '/people/position'
         },
         {
+            id: 'shift',
+            title: 'Shift',
+            icon: 'pi pi-hourglass',
+            path: '/people/shift'
+        },
+        {
             id: 'employee',
             title: 'Pegawai',
             icon: 'pi pi-users',

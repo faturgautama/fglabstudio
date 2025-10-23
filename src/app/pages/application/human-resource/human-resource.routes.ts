@@ -33,6 +33,15 @@ export const humanResourceRoutes: Routes = [
         }
     },
     {
+        path: 'shift',
+        loadComponent: async () => (await import('./shift/shift')).Shift,
+        data: {
+            icon: 'pi pi-hourglass',
+            title: 'Shift',
+            description: 'Manage dan atur semua data shift'
+        }
+    },
+    {
         path: 'employee',
         loadComponent: async () => (await import('./employee/employee')).Employee,
         data: {
