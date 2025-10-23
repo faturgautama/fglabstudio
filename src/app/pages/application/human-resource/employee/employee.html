@@ -1,1 +1,439 @@
-<p>employee works!</p>
+<app-dsh-base-layout>
+    @if (_pageState() === 'list') {
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)">
+        </app-dynamic-table>
+    </div>
+    } @else if (_pageState() === 'form') {
+    <div class="grid w-full gap-5 p-5">
+        <!-- Header -->
+        <div class="flex flex-row justify-between items-center bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col">
+                <p class="text-lg font-semibold text-gray-700">
+                    {{ _formState === 'insert' ? 'Tambah Karyawan' : 'Edit Karyawan' }}
+                </p>
+                <p class="text-sm text-gray-500">
+                    {{ _formState === 'insert'
+                    ? 'Tambahkan data karyawan baru ke sistem'
+                    : 'Ubah data karyawan yang sudah ada' }}
+                </p>
+            </div>
+
+            <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left" (onClick)="handleBackToList()"
+                styleClass="p-button-sm">
+            </p-button>
+        </div>
+
+        <!-- Form Container -->
+        <div class="grid w-full" [formGroup]="Form">
+            <!-- Section 1: Informasi Dasar -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Informasi Dasar</p>
+                    <p class="text-sm text-gray-500">Data identitas dan informasi personal karyawan</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Kode Karyawan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Kode Karyawan <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="employee_code" pInputText placeholder="Misal: EMP001"
+                            class="p-inputtext-sm w-full">
+                        @if (Form.get('employee_code')?.touched && Form.get('employee_code')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Kode Karyawan tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Nama Lengkap -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Nama Lengkap <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="full_name" pInputText placeholder="Masukkan nama lengkap"
+                            class="p-inputtext-sm w-full">
+                        @if (Form.get('full_name')?.touched && Form.get('full_name')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Nama Lengkap tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Nama Panggilan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Nama Panggilan</label>
+                        <input formControlName="nickname" pInputText placeholder="Masukkan nama panggilan"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Gender <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="[
+              { id: 'male', title: 'Laki-laki' },
+              { id: 'female', title: 'Perempuan' },
+              { id: 'other', title: 'Lainnya' }
+            ]" formControlName="gender" optionLabel="title" optionValue="id" placeholder="Pilih gender" size="small"
+                            class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Email</label>
+                        <input formControlName="email" pInputText placeholder="email@example.com"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Nomor Telepon -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Nomor Telepon</label>
+                        <input formControlName="phone_number" pInputText placeholder="Misal: 0812345678"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Tanggal Lahir -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Tanggal Lahir</label>
+                        <p-date-picker formControlName="birth_date" dateFormat="dd MM yy"
+                            placeholder="Pilih tanggal lahir" size="small" appendTo="body" class="w-full">
+                        </p-date-picker>
+                    </div>
+
+                    <!-- Golongan Darah -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Golongan Darah</label>
+                        <p-select [options]="[
+              { id: 'A', title: 'A' },
+              { id: 'B', title: 'B' },
+              { id: 'AB', title: 'AB' },
+              { id: 'O', title: 'O' }
+            ]" formControlName="blood_type" optionLabel="title" optionValue="id" placeholder="Pilih golongan darah"
+                            size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Status Perkawinan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Status Perkawinan</label>
+                        <p-select [options]="[
+              { id: 'single', title: 'Belum Menikah' },
+              { id: 'married', title: 'Menikah' },
+              { id: 'divorced', title: 'Cerai' },
+              { id: 'widowed', title: 'Janda/Duda' }
+            ]" formControlName="marital_status" optionLabel="title" optionValue="id" placeholder="Pilih status"
+                            size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Jumlah Tanggungan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Jumlah Tanggungan</label>
+                        <p-input-number formControlName="number_of_dependents" size="small" class="w-full"
+                            placeholder="Masukkan jumlah">
+                        </p-input-number>
+                    </div>
+
+                    <!-- Alamat -->
+                    <div class="flex flex-col gap-1 md:col-span-2">
+                        <label class="text-sm text-gray-700 font-medium">Alamat</label>
+                        <textarea formControlName="address" pInputTextarea rows="3" class="p-inputtext-sm"
+                            placeholder="Masukkan alamat lengkap"></textarea>
+                    </div>
+
+                    <!-- Kota -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Kota</label>
+                        <input formControlName="city" pInputText placeholder="Masukkan kota"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Provinsi -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Provinsi</label>
+                        <input formControlName="province" pInputText placeholder="Masukkan provinsi"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Kode Pos -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Kode Pos</label>
+                        <input formControlName="postal_code" pInputText placeholder="Masukkan kode pos"
+                            class="p-inputtext-sm w-full">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Informasi Pekerjaan -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Informasi Pekerjaan</p>
+                    <p class="text-sm text-gray-500">Data posisi, departemen, dan status ketenagakerjaan</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Departemen -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Departemen</label>
+                        <p-select [options]="_departmentDatasource" formControlName="department_id" optionLabel="title"
+                            optionValue="id" placeholder="Pilih departemen" size="small" class="w-full" appendTo="body">
+                            <ng-template #selectedItem let-option>
+                                @if (option) {
+                                <div class="flex items-center gap-2">
+                                    <i class="pi pi-circle-fill {{ option.color }}" style="font-size: 9px;"></i>
+                                    <span>{{ option.title }}</span>
+                                </div>
+                                }
+                            </ng-template>
+                            <ng-template let-option #item>
+                                <div class="flex items-center gap-2">
+                                    <i class="pi pi-circle-fill {{ option.color }}" style="font-size: 9px;"></i>
+                                    <span>{{ option.title }}</span>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                    </div>
+
+                    <!-- Posisi -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Posisi Jabatan</label>
+                        <p-select [options]="_positionDatasource" formControlName="position_id" optionLabel="title"
+                            optionValue="id" placeholder="Pilih posisi" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Shift -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Shift Kerja</label>
+                        <p-select [options]="_shiftDatasource" formControlName="shift_id" optionLabel="title"
+                            optionValue="id" placeholder="Pilih shift" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Tipe Karyawan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Tipe Karyawan</label>
+                        <p-select [options]="[
+              { id: 'full-time', title: 'Full Time' },
+              { id: 'part-time', title: 'Part Time' },
+              { id: 'contract', title: 'Kontrak' },
+              { id: 'intern', title: 'Magang' }
+            ]" formControlName="employee_type" optionLabel="title" optionValue="id" placeholder="Pilih tipe"
+                            size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Status Kepegawaian -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Status Kepegawaian</label>
+                        <p-select [options]="[
+              { id: 'permanent', title: 'Tetap' },
+              { id: 'contract', title: 'Kontrak' },
+              { id: 'intern', title: 'Magang' }
+            ]" formControlName="employment_status" optionLabel="title" optionValue="id" placeholder="Pilih status"
+                            size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Status Kerja -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Status Kerja</label>
+                        <p-select [options]="[
+              { id: 'active', title: 'Aktif' },
+              { id: 'resigned', title: 'Resign' },
+              { id: 'suspended', title: 'Suspend' },
+              { id: 'on-leave', title: 'Cuti' }
+            ]" formControlName="work_status" optionLabel="title" optionValue="id" placeholder="Pilih status"
+                            size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Tanggal Bergabung -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Tanggal Bergabung</label>
+                        <p-date-picker formControlName="join_date" dateFormat="dd MM yy" placeholder="Pilih tanggal"
+                            size="small" appendTo="body" class="w-full">
+                        </p-date-picker>
+                    </div>
+
+                    <!-- Akhir Probasi -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Akhir Probasi</label>
+                        <p-date-picker formControlName="probation_end_date" dateFormat="dd MM yy"
+                            placeholder="Pilih tanggal" size="small" appendTo="body" class="w-full">
+                        </p-date-picker>
+                    </div>
+
+                    <!-- Tanggal Resign -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Tanggal Resign</label>
+                        <p-date-picker formControlName="resign_date" dateFormat="dd MM yy" placeholder="Pilih tanggal"
+                            size="small" appendTo="body" class="w-full">
+                        </p-date-picker>
+                    </div>
+
+                    <!-- Lokasi Kantor -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Lokasi Kantor</label>
+                        <input formControlName="office_location" pInputText placeholder="Masukkan lokasi"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Nomor Workstation -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Nomor Workstation</label>
+                        <input formControlName="workstation_number" pInputText placeholder="Misal: WS-001"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Remote -->
+                    <div class="flex items-center gap-2 mt-6">
+                        <p-checkbox formControlName="is_remote" [binary]="true" name="is_remote"></p-checkbox>
+                        <label class="text-sm text-gray-700">Kerja Remote</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Informasi Kompensasi & Dokumen -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Kompensasi & Dokumen</p>
+                    <p class="text-sm text-gray-500">Data gaji, rekening bank, dan dokumen identitas</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Gaji Pokok -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Gaji Pokok</label>
+                        <p-input-number formControlName="salary" size="small" class="w-full" [useGrouping]="true"
+                            placeholder="Masukkan gaji">
+                        </p-input-number>
+                    </div>
+
+                    <!-- Mata Uang -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Mata Uang</label>
+                        <p-select [options]="[
+              { id: 'IDR', title: 'IDR' },
+              { id: 'USD', title: 'USD' },
+              { id: 'EUR', title: 'EUR' }
+            ]" formControlName="salary_currency" optionLabel="title" optionValue="id" placeholder="Pilih mata uang"
+                            size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Nomor Rekening -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Nomor Rekening</label>
+                        <input formControlName="bank_account_number" pInputText placeholder="Masukkan nomor rekening"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Nama Rekening -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Nama Pemilik Rekening</label>
+                        <input formControlName="bank_account_name" pInputText placeholder="Masukkan nama"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Nama Bank -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Nama Bank</label>
+                        <input formControlName="bank_name" pInputText placeholder="Misal: BCA"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- NPWP -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">NPWP</label>
+                        <input formControlName="tax_id" pInputText placeholder="Masukkan NPWP"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- NIK -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">NIK (KTP)</label>
+                        <input formControlName="id_card_number" pInputText placeholder="Masukkan NIK"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Berlaku hingga KTP -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Berlaku Hingga (KTP)</label>
+                        <p-date-picker formControlName="id_card_expiry" dateFormat="dd MM yy"
+                            placeholder="Pilih tanggal" size="small" appendTo="body" class="w-full">
+                        </p-date-picker>
+                    </div>
+
+                    <!-- Nomor Passport -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Nomor Passport</label>
+                        <input formControlName="passport_number" pInputText placeholder="Masukkan nomor"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Berlaku hingga Passport -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Berlaku Hingga (Passport)</label>
+                        <p-date-picker formControlName="passport_expiry" dateFormat="dd MM yy"
+                            placeholder="Pilih tanggal" size="small" appendTo="body" class="w-full">
+                        </p-date-picker>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Informasi Tambahan -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Informasi Tambahan</p>
+                    <p class="text-sm text-gray-500">Skill, catatan, dan status keaktifan karyawan</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Skills -->
+                    <div class="flex flex-col gap-1 md:col-span-2">
+                        <label class="text-sm text-gray-700 font-medium">Keahlian/Skills</label>
+                        <textarea formControlName="skills" pInputTextarea rows="3" class="p-inputtext-sm"
+                            placeholder="Masukkan keahlian (pisahkan dengan koma)"></textarea>
+                    </div>
+
+                    <!-- Catatan -->
+                    <div class="flex flex-col gap-1 md:col-span-2">
+                        <label class="text-sm text-gray-700 font-medium">Catatan</label>
+                        <textarea formControlName="notes" pInputTextarea rows="3" class="p-inputtext-sm"
+                            placeholder="Masukkan catatan tambahan"></textarea>
+                    </div>
+
+                    <!-- Status Aktif -->
+                    <div class="flex items-center gap-3">
+                        <p-checkbox formControlName="is_active" [binary]="true" name="is_active"></p-checkbox>
+                        <label class="text-sm text-gray-700">Karyawan Aktif</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex w-full justify-end items-center gap-3 bg-white p-5 rounded-lg shadow-sm">
+                <p-button severity="secondary" label="Batal" styleClass="p-button-sm" (onClick)="handleBackToList()">
+                </p-button>
+
+                @if (_formState === 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave(Form.value)">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</app-dsh-base-layout>

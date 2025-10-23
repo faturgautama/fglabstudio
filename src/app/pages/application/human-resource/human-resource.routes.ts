@@ -20,7 +20,7 @@ export const humanResourceRoutes: Routes = [
         data: {
             icon: 'pi pi-at',
             title: 'Posisi Jabatan',
-            description: 'Manage dan atur semua posisi jabatan'
+            description: 'Manage dan atur semua data posisi jabatan'
         }
     },
     {
@@ -29,7 +29,16 @@ export const humanResourceRoutes: Routes = [
         data: {
             icon: 'pi pi-users',
             title: 'Departement',
-            description: 'Manage dan atur semua departemen'
+            description: 'Manage dan atur semua data departemen'
+        }
+    },
+    {
+        path: 'employee',
+        loadComponent: async () => (await import('./employee/employee')).Employee,
+        data: {
+            icon: 'pi pi-users',
+            title: 'Karyawan',
+            description: 'Manage dan atur semua data karyawan'
         }
     }
 ];

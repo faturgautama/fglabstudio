@@ -1,6 +1,7 @@
 export namespace DynamicTableModel {
     export enum IColumnType {
         TEXT = 'text',
+        TEXTWITHDESCRIPTION = 'textwithdescription',
         NUMBER = 'number',
         CURRENCY = 'currency',
         DATE = 'date',
@@ -31,6 +32,7 @@ export namespace DynamicTableModel {
         type: IColumnType;
         width?: string;
         button_icon?: IButtonIcon;
+        description?: string;
     }
 
     export interface IFilter {

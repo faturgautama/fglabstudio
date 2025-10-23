@@ -60,7 +60,13 @@
                     <td class="text-sm {{ col.class }}" [style.width]="col.width ? col.width : 'auto'"
                         (click)="handleCellClicked(rowData, col)">
                         @if (col.type == columType.TEXT) {
-                        {{ rowData[col.id] }}
+                        {{ handleGetNestedValue(rowData, col.id) }}
+                        } @else if (col.type == columType.TEXTWITHDESCRIPTION) {
+                        {{ handleGetNestedValue(rowData, col.id) }}
+                        <br>
+                        <span class="text-xs text-gray-600">
+                            {{ handleGetNestedValue(rowData, col.description) }}
+                        </span>
                         } @else if (col.type == columType.NUMBER) {
                         {{ handleFormatStringToNumber(rowData[col.id]) | number: '' }}
                         } @else if (col.type == columType.DATE) {

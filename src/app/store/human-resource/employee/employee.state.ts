@@ -6,8 +6,8 @@ import { EmployeeModel } from "../../../model/pages/application/human-resource/e
 import { EmployeeService } from "../../../services/pages/application/human-resource/employee.service";
 
 export interface EmployeeStateModel {
-    data: EmployeeModel.IDepartment[];
-    single: EmployeeModel.IDepartment | null | undefined;
+    data: EmployeeModel.IEmployee[];
+    single: EmployeeModel.IEmployee | null | undefined;
 }
 
 @State<EmployeeStateModel>({
@@ -31,6 +31,11 @@ export class EmployeeState implements NgxsOnInit {
     @Selector()
     static getAll(state: EmployeeStateModel) {
         return state.data;
+    }
+
+    @Selector()
+    static getSingle(state: EmployeeStateModel) {
+        return state.single;
     }
 
     @Action(EmployeeAction.GetEmployee)
@@ -66,11 +71,9 @@ export class EmployeeState implements NgxsOnInit {
     @Action(EmployeeAction.AddEmployee)
     add(ctx: StateContext<EmployeeStateModel>, payload: any) {
         return this._employeeService
-            .add(payload)
+            .add(payload.payload)
             .pipe(
                 tap((result) => {
-                    const state = ctx.getState();
-
                     ctx.dispatch(new EmployeeAction.GetEmployee());
                 })
             )
@@ -79,10 +82,9 @@ export class EmployeeState implements NgxsOnInit {
     @Action(EmployeeAction.UpdateEmployee)
     update(ctx: StateContext<EmployeeStateModel>, payload: any) {
         return this._employeeService
-            .update(payload.id, payload)
+            .update(payload.payload.id, payload.payload)
             .pipe(
                 tap((result) => {
-                    const state = ctx.getState();
                     ctx.dispatch(new EmployeeAction.GetEmployee());
                 })
             )
@@ -94,7 +96,6 @@ export class EmployeeState implements NgxsOnInit {
             .delete(payload.id)
             .pipe(
                 tap((result) => {
-                    const state = ctx.getState();
                     ctx.dispatch(new EmployeeAction.GetEmployee());
                 })
             )
