@@ -15,6 +15,15 @@ export const humanResourceRoutes: Routes = [
         }
     },
     {
+        path: 'position',
+        loadComponent: async () => (await import('./position/position')).Position,
+        data: {
+            icon: 'pi pi-at',
+            title: 'Posisi Jabatan',
+            description: 'Manage dan atur semua posisi jabatan'
+        }
+    },
+    {
         path: 'departement',
         loadComponent: async () => (await import('./departement/departement')).Departement,
         data: {

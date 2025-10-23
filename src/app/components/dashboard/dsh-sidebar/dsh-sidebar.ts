@@ -4,6 +4,8 @@ import { ButtonModule } from 'primeng/button';
 import { Subject, takeUntil } from 'rxjs';
 import { SidebarModel } from '../../../model/components/dashboard/sidebar.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { DepartementState } from '../../../store/human-resource/departement';
 
 @Component({
   selector: 'app-dsh-sidebar',
@@ -27,6 +29,7 @@ export class DshSidebar implements OnInit, OnDestroy {
   resolverExtraData: any = null;
 
   constructor(
+    private _store: Store,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
   ) {
@@ -41,12 +44,16 @@ export class DshSidebar implements OnInit, OnDestroy {
       .data
       .pipe(takeUntil(this.Destroy$))
       .subscribe((result) => {
-        this.resolverExtraData = result['resolver']['extra_data']
+        this.resolverExtraData = result['resolver']['extra_data'];
       });
   }
 
   ngOnInit(): void {
-
+    if (this.resolverExtraData.title == 'Departement') {
+      this._store.select(DepartementState.getAll)
+        .pipe(takeUntil(this.Destroy$))
+        .subscribe(result => this.resolverExtraData.datasource = result);
+    }
   }
 
   ngOnDestroy(): void {

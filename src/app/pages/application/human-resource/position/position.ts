@@ -1,22 +1,24 @@
+import { TitleCasePipe } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { DynamicTableModel } from '../../../../model/components/dynamic-table.model';
-import { Subject, takeUntil } from 'rxjs';
-import { DynamicTable } from '../../../../components/dynamic-table/dynamic-table';
-import { Store } from '@ngxs/store';
-import { DepartementAction, DepartementState } from '../../../../store/human-resource/departement';
-import { DshBaseLayout } from "../../../../components/dashboard/dsh-base-layout/dsh-base-layout";
-import { DialogModule } from "primeng/dialog";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
-import { TitleCasePipe } from '@angular/common';
 import { TextareaModule } from 'primeng/textarea';
-import { DepartmentService } from '../../../../services/pages/application/human-resource/departement.service';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { DshBaseLayout } from '../../../../components/dashboard/dsh-base-layout/dsh-base-layout';
+import { DynamicTable } from '../../../../components/dynamic-table/dynamic-table';
+import { Store } from '@ngxs/store';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
+import { DynamicTableModel } from '../../../../model/components/dynamic-table.model';
+import { PositionState, PositionAction } from '../../../../store/human-resource/position';
+import { PositionService } from '../../../../services/pages/application/human-resource/position.service';
+import { DepartementState } from '../../../../store/human-resource/departement';
+import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
 
 @Component({
-  selector: 'app-departement',
+  selector: 'app-position',
   imports: [
     FormsModule,
     ButtonModule,
@@ -30,32 +32,32 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     ReactiveFormsModule,
   ],
   standalone: true,
-  templateUrl: './departement.html',
-  styleUrl: './departement.scss'
+  templateUrl: './position.html',
+  styleUrl: './position.scss'
 })
-export class Departement implements OnInit, OnDestroy {
+export class Position implements OnInit, OnDestroy {
 
   _store = inject(Store);
-  _departemenService = inject(DepartmentService);
+  _posisiService = inject(PositionService);
   _messageService = inject(MessageService);
   _confirmationService = inject(ConfirmationService);
 
   Destroy$ = new Subject();
 
   TableProps: DynamicTableModel.ITable = {
-    id: 'departement',
-    title: 'Daftar Departemen',
-    description: 'Daftar departemen aktif perusahaan',
+    id: 'posisit',
+    title: 'Daftar Posisi Jabatan',
+    description: 'Daftar posisi jabatan aktif perusahaan',
     column: [
       {
         id: 'code',
-        title: 'Kode Departemen',
+        title: 'Kode Posisi',
         type: DynamicTableModel.IColumnType.TEXT,
         width: '250px'
       },
       {
         id: 'title',
-        title: 'Nama Departemen',
+        title: 'Nama Posisi',
         type: DynamicTableModel.IColumnType.TEXT,
         width: '400px'
       },
@@ -66,14 +68,14 @@ export class Departement implements OnInit, OnDestroy {
         width: '250px'
       },
       {
-        id: 'color',
-        title: 'Warna',
+        id: 'department.color',
+        title: 'Departemen',
         type: DynamicTableModel.IColumnType.BUTTON_ICON,
         button_icon: {
-          title: 'color',
+          title: 'department.title',
           icon_class: 'pi pi-circle-fill',
-          icon_color: 'color',
-          use_parsing_func: true,
+          icon_color: 'department.color',
+          use_parsing_func: false,
         }
       },
       {
@@ -87,32 +89,37 @@ export class Departement implements OnInit, OnDestroy {
     filter: [
       {
         id: 'code',
-        title: 'Kode Departemen',
+        title: 'Kode Posisi',
         type: DynamicTableModel.IColumnType.TEXT,
         value: ''
       },
       {
         id: 'title',
-        title: 'Nama Departemen',
+        title: 'Nama Posisi',
         type: DynamicTableModel.IColumnType.TEXT,
         value: ''
       },
       {
-        id: 'description',
-        title: 'Keterangan',
-        type: DynamicTableModel.IColumnType.TEXT,
-        value: ''
+        id: 'department_id',
+        title: 'Departemen',
+        type: DynamicTableModel.IColumnType.DROPDOWN,
+        value: '',
+        select_props: {
+          datasource: [],
+          name: 'title',
+          value: 'id'
+        }
       },
     ],
     sort: [
       {
         id: 'code',
-        title: 'Kode Departemen',
+        title: 'Kode Posisi',
         value: ''
       },
       {
         id: 'title',
-        title: 'Nama Departemen',
+        title: 'Nama Posisi',
         value: ''
       },
     ],
@@ -135,37 +142,19 @@ export class Departement implements OnInit, OnDestroy {
     code: ['', [Validators.required]],
     title: ['', [Validators.required]],
     description: ['', []],
-    color: ['', [Validators.required]]
+    department_id: ['', [Validators.required]],
   });
 
-  _colorDatasource = [
-    { id: 'red', value: 'text-red-600' },
-    { id: 'orange', value: 'text-orange-600' },
-    { id: 'amber', value: 'text-amber-600' },
-    { id: 'yellow', value: 'text-yellow-600' },
-    { id: 'lime', value: 'text-lime-600' },
-    { id: 'green', value: 'text-green-600' },
-    { id: 'emerald', value: 'text-emerald-600' },
-    { id: 'teal', value: 'text-teal-600' },
-    { id: 'cyan', value: 'text-cyan-600' },
-    { id: 'sky', value: 'text-sky-600' },
-    { id: 'blue', value: 'text-blue-600' },
-    { id: 'indigo', value: 'text-indigo-600' },
-    { id: 'violet', value: 'text-violet-600' },
-    { id: 'purple', value: 'text-purple-600' },
-    { id: 'fuchsia', value: 'text-fuchsia-600' },
-    { id: 'pink', value: 'text-pink-600' },
-    { id: 'rose', value: 'text-rose-600' },
-    { id: 'slate', value: 'text-slate-600' },
-    { id: 'gray', value: 'text-gray-600' },
-    { id: 'zinc', value: 'text-zinc-600' },
-    { id: 'neutral', value: 'text-neutral-600' },
-    { id: 'stone', value: 'text-stone-600' },
-  ];
+  _departemenDatasource: EmployeeModel.IDepartment[] = [];
 
   ngOnInit(): void {
     this._store
       .select(DepartementState.getAll)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this._departemenDatasource = result);
+
+    this._store
+      .select(PositionState.getAll)
       .pipe(takeUntil(this.Destroy$))
       .subscribe(result => this.TableProps.datasource = result);
   }
@@ -184,12 +173,20 @@ export class Departement implements OnInit, OnDestroy {
   }
 
   handleToolbarClicked(args: any) {
-    console.log(args.data);
-
     if (args.toolbar.id == 'detail') {
       this._formState = 'update';
       this._modalToggler = true;
-      this.Form.patchValue(args.data);
+      // Wait a tick for the select to render its options
+      setTimeout(() => {
+        const selectedDept = this._departemenDatasource.find(
+          d => d.id === args.data.department?.id
+        );
+
+        this.Form.patchValue({
+          ...args.data,
+          department_id: selectedDept ?? args.data.department
+        });
+      }, 0);
     };
 
     if (args.toolbar.id == 'delete') {
@@ -209,11 +206,11 @@ export class Departement implements OnInit, OnDestroy {
         },
         accept: () => {
           this._store
-            .dispatch(new DepartementAction.DeleteDepartement(args.data.id))
+            .dispatch(new PositionAction.DeletePosition(args.data.id))
             .subscribe((result) => {
               setTimeout(() => {
                 this._messageService.clear();
-                this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Departemen Berhasil Dihapus' });
+                this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Posisi Berhasil Dihapus' });
               }, 3100);
             })
         },
@@ -223,12 +220,13 @@ export class Departement implements OnInit, OnDestroy {
 
   handleSave(args: any) {
     if (this.Form.valid) {
+      let { department_id, ...payload } = args;
       this._store
-        .dispatch(new DepartementAction.AddDepartement(args))
+        .dispatch(new PositionAction.AddPosition({ ...payload, department_id: department_id.id }))
         .subscribe((result) => {
           setTimeout(() => {
             this._messageService.clear();
-            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Departemen Berhasil Disimpan' });
+            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Posisi Berhasil Disimpan' });
             this.resetForm(true);
           }, 3100);
         })
@@ -237,12 +235,13 @@ export class Departement implements OnInit, OnDestroy {
 
   handleUpdate(args: any) {
     if (this.Form.valid) {
+      let { department_id, ...payload } = args;
       this._store
-        .dispatch(new DepartementAction.UpdateDepartement(args))
+        .dispatch(new PositionAction.UpdatePosition({ ...payload, department_id: department_id.id }))
         .subscribe((result) => {
           setTimeout(() => {
             this._messageService.clear();
-            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Departemen Berhasil Diubah' });
+            this._messageService.add({ severity: 'success', summary: 'Berhasil!', detail: 'Posisi Berhasil Diubah' });
             this.resetForm(true);
           }, 3100);
         })
@@ -256,11 +255,12 @@ export class Departement implements OnInit, OnDestroy {
       code: ['', [Validators.required]],
       title: ['', [Validators.required]],
       description: ['', []],
-      color: ['', [Validators.required]]
+      department_id: ['', [Validators.required]]
     });
     this._formState = 'insert';
     if (closeModal) {
       this._modalToggler = false;
     }
   }
+
 }

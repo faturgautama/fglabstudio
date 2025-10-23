@@ -58,7 +58,7 @@
                 <tr [pSelectableRow]="rowData" (dblclick)="handleRowDoubbleClicked(rowData)">
                     @for (col of columns; track $index) {
                     <td class="text-sm {{ col.class }}" [style.width]="col.width ? col.width : 'auto'"
-                        (click)="handleCellClicked(rowData)">
+                        (click)="handleCellClicked(rowData, col)">
                         @if (col.type == columType.TEXT) {
                         {{ rowData[col.id] }}
                         } @else if (col.type == columType.NUMBER) {
@@ -79,13 +79,21 @@
                             </p>
                         </span>
                         } @else if (col.type == columType.BUTTON_ICON) {
-                        <div class="flex flex-row gap-2 items-center px-2 py-1">
+                        <div
+                            class="flex flex-row gap-2 items-center px-2 py-1 border border-solid border-gray-300 bg-white rounded-lg shadow-sm">
                             <span>
-                                <i class="pi pi-circle-fill {{ rowData[col.id] }}" style="font-size: 9px;"></i>
+                                <i [class]="col.button_icon.icon_class + ' ' + handleGetNestedValue(rowData, col.button_icon.icon_color)"
+                                    style="font-size: 9px;"></i>
                             </span>
+                            @if (col.button_icon.use_parsing_func) {
                             <p class="text-sm text-gray-700">
-                                {{ handleFormatColor(rowData[col.id]) | titlecase}}
+                                {{ handleFormatColor(rowData[col.button_icon.title]) | titlecase}}
                             </p>
+                            } @else {
+                            <p class="text-sm text-gray-700">
+                                {{ handleGetNestedValue(rowData, col.button_icon.title) | titlecase}}
+                            </p>
+                            }
                         </div>
                         } @else if (col.type == undefined) {
                         {{ rowData[col.id] }}

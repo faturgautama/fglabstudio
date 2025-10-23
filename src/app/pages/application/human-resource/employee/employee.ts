@@ -1,0 +1,12 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-employee',
+  imports: [],
+  standalone: true,
+  templateUrl: './employee.html',
+  styleUrl: './employee.scss'
+})
+export class Employee {
+
+}

@@ -46,8 +46,8 @@
         }
 
         @for (item of sidebarMenu; track $index) {
-        <div
-            class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer">
+        <div class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer"
+            (click)="handleClickMenu(item); toggleSidebar = false">
             <span class="text-gray-700">
                 <i [class]="item.icon"></i>
             </span>
@@ -69,7 +69,8 @@
                 {{ resolverExtraData.title }}
             </p>
 
-            <span class="px-2 py-[0.5px] rounded-lg bg-gray-100 cursor-pointer" (click)="handleClickExtraData()">
+            <span class="px-2 py-[0.5px] rounded-lg bg-gray-100 cursor-pointer"
+                (click)="handleClickExtraData(); toggleSidebar = false">
                 <i class="pi pi-plus text-gray-600" style="font-size: 10px;"></i>
             </span>
         </div>

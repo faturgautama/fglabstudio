@@ -103,7 +103,9 @@ export class DynamicTable implements OnInit, OnDestroy {
     this._keywordSearch$.next(args);
   }
 
-  handleCellClicked(args: any) {
+  handleCellClicked(args: any, columns: any) {
+    console.log("args =>", args);
+    console.log("columns =>", columns);
     this.onCellClicked.emit(args);
   }
 
@@ -135,5 +137,10 @@ export class DynamicTable implements OnInit, OnDestroy {
 
   handleFormatColor(color: string) {
     return color.split("-")[1];
+  }
+
+  handleGetNestedValue(obj: any, path: string): any {
+    if (!obj || !path) return null;
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   }
 }

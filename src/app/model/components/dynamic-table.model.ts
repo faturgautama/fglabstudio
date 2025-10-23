@@ -18,12 +18,19 @@ export namespace DynamicTableModel {
         datasource: any[];
     }
 
+    export interface IButtonIcon {
+        title: string;
+        icon_class: string;
+        icon_color: string;
+        use_parsing_func: boolean;
+    }
+
     export interface IColumn {
         id: string;
         title: string;
         type: IColumnType;
         width?: string;
-        button_icon_description?: string;
+        button_icon?: IButtonIcon;
     }
 
     export interface IFilter {
