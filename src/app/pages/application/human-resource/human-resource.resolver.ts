@@ -32,10 +32,10 @@ export const humanResourceResolver: ResolveFn<any> = async (route) => {
             path: '/people/employee'
         },
         {
-            id: 'absensi',
+            id: 'attendance',
             title: 'Absensi',
             icon: 'pi pi-calendar',
-            path: '/people/absensi'
+            path: '/people/attendance'
         },
         {
             id: 'payroll',
@@ -44,7 +44,7 @@ export const humanResourceResolver: ResolveFn<any> = async (route) => {
             path: '/people/payroll'
         },
         {
-            id: 'jadwal',
+            id: 'schedule',
             title: 'Jadwal',
             icon: 'pi pi-calendar',
             path: '/people/schedule'

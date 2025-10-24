@@ -49,5 +49,14 @@ export const humanResourceRoutes: Routes = [
             title: 'Karyawan',
             description: 'Manage dan atur semua data karyawan'
         }
+    },
+    {
+        path: 'attendance',
+        loadComponent: async () => (await import('./attendance/attendance')).Attendance,
+        data: {
+            icon: 'pi pi-calendar',
+            title: 'Absensi',
+            description: 'Manage dan atur semua data absensi karyawan'
+        }
     }
 ];

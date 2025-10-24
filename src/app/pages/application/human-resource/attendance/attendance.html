@@ -1,0 +1,278 @@
+<app-dsh-base-layout>
+    @if (_pageState() === 'list') {
+    <div class="grid w-full gap-5 p-5">
+        <!-- Action Buttons -->
+        <div class="flex flex-row gap-3 flex-wrap">
+            <p-button severity="info" label="Absen Mandiri" icon="pi pi-user" (onClick)="_pageState.set('self-checkin')"
+                styleClass="p-button-sm">
+            </p-button>
+            <p-button severity="warn" label="Absen Manual" icon="pi pi-file-edit" (onClick)="_pageState.set('manual')"
+                styleClass="p-button-sm">
+            </p-button>
+            <p-button severity="success" label="Import Mesin" icon="pi pi-upload" (onClick)="_pageState.set('import')"
+                styleClass="p-button-sm">
+            </p-button>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+                (onToolbarClicked)="handleToolbarClicked($event)">
+            </app-dynamic-table>
+        </div>
+    </div>
+
+    } @else if (_pageState() === 'self-checkin') {
+    <div class="grid w-full gap-5 p-5">
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col gap-1 mb-7 pb-5 border-b border-gray-300">
+                <p class="text-lg font-semibold text-gray-700">Absen Mandiri</p>
+                <p class="text-sm text-gray-500">Masukkan kode karyawan untuk check in / check out otomatis</p>
+            </div>
+
+            <div class="grid w-full" [formGroup]="SelfCheckInForm">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+                    <!-- Employee Code -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Kode Karyawan <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="employee_code" pInputText placeholder="Masukkan kode karyawan"
+                            class="p-inputtext-sm w-full" (keyup.enter)="handleSelfCheckIn(SelfCheckInForm.value)">
+                        @if (SelfCheckInForm.get('employee_code')?.touched &&
+                        SelfCheckInForm.get('employee_code')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Kode karyawan tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Button Check In/Out -->
+                    <div class="flex flex-col justify-end">
+                        <p-button severity="success" label="Check In / Check Out" icon="pi pi-check"
+                            styleClass="p-button-sm w-full" [disabled]="SelfCheckInForm.invalid"
+                            (onClick)="handleSelfCheckIn(SelfCheckInForm.value)">
+                        </p-button>
+                    </div>
+
+                    <!-- Back Button -->
+                    <div class="flex flex-col justify-end">
+                        <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left"
+                            styleClass="p-button-sm w-full" (onClick)="handleBackToList()">
+                        </p-button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-5">
+                <p class="text-sm text-blue-800">
+                    <i class="pi pi-info-circle mr-2"></i>
+                    Sistem akan otomatis mendeteksi apakah ini check in atau check out berdasarkan history hari ini.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    } @else if (_pageState() === 'manual') {
+    <div class="grid w-full gap-5 p-5">
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col gap-1 mb-7 pb-5 border-b border-gray-300">
+                <p class="text-lg font-semibold text-gray-700">Absen Manual</p>
+                <p class="text-sm text-gray-500">Admin input data absensi secara manual untuk karyawan</p>
+            </div>
+
+            <div class="grid w-full" [formGroup]="ManualCheckInForm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                    <!-- Employee -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Karyawan <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="_employeeDatasource" formControlName="employee_id" optionLabel="full_name"
+                            optionValue="id" placeholder="Pilih karyawan" size="small" class="w-full" appendTo="body"
+                            [filter]="true">
+                        </p-select>
+                        @if (ManualCheckInForm.get('employee_id')?.touched &&
+                        ManualCheckInForm.get('employee_id')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Karyawan tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Tanggal -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Tanggal <span class="text-red-500">*</span>
+                        </label>
+                        <p-date-picker formControlName="date" dateFormat="dd MM yy" placeholder="Pilih tanggal"
+                            size="small" class="w-full" appendTo="body">
+                        </p-date-picker>
+                        @if (ManualCheckInForm.get('date')?.touched && ManualCheckInForm.get('date')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Tanggal tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Jam Masuk -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Jam Masuk <span class="text-red-500">*</span>
+                        </label>
+                        <p-datepicker formControlName="check_in" hourFormat="24" placeholder="HH:MM" size="small"
+                            class="w-full" appendTo="body" [timeOnly]="true">
+                        </p-datepicker>
+                        @if (ManualCheckInForm.get('check_in')?.touched && ManualCheckInForm.get('check_in')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Jam masuk tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Jam Keluar -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Jam Keluar</label>
+                        <p-datepicker formControlName="check_out" hourFormat="24" placeholder="HH:MM" size="small"
+                            class="w-full" appendTo="body" [timeOnly]="true">
+                        </p-datepicker>
+                    </div>
+
+                    <!-- Shift -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Shift</label>
+                        <p-select [options]="_shiftDatasource" formControlName="shift_id" optionLabel="title"
+                            optionValue="id" placeholder="Pilih shift" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Hadir -->
+                    <div class="flex items-center gap-3 mt-6">
+                        <p-checkbox formControlName="is_present" name="is_present"></p-checkbox>
+                        <label class="text-sm text-gray-700">Hadir</label>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex w-full justify-end items-center gap-3 mt-7 pt-5 border-t border-gray-300">
+                    <p-button severity="secondary" label="Batal" styleClass="p-button-sm"
+                        (onClick)="handleBackToList()">
+                    </p-button>
+                    <p-button severity="info" label="Simpan" styleClass="p-button-sm"
+                        [disabled]="ManualCheckInForm.invalid" (onClick)="handleManualCheckIn(ManualCheckInForm.value)">
+                    </p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    } @else if (_pageState() === 'import') {
+    <div class="grid w-full gap-5 p-5">
+        <div class="bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col gap-1 mb-7 pb-5 border-b border-gray-300">
+                <p class="text-lg font-semibold text-gray-700">Import Mesin Fingerprint</p>
+                <p class="text-sm text-gray-500">Upload file CSV dari mesin fingerprint untuk import data absensi</p>
+            </div>
+
+            <!-- Settings -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="flex flex-col gap-1">
+                    <label class="text-sm text-gray-700 font-medium">Format Tanggal</label>
+                    <p-select [(ngModel)]="_fingerprintDateFormat" [options]="[
+              { label: 'DD/MM/YYYY', value: 'DD/MM/YYYY' },
+              { label: 'MM/DD/YYYY', value: 'MM/DD/YYYY' },
+              { label: 'YYYY-MM-DD', value: 'YYYY-MM-DD' }
+            ]" size="small" class="w-full" appendTo="body">
+                    </p-select>
+                </div>
+                <div class="text-xs text-gray-500 mt-7">
+                    Sesuaikan dengan format tanggal di file CSV Anda
+                </div>
+            </div>
+
+            <!-- File Upload -->
+            @if (_importPreview.length === 0) {
+            <div class="mb-5">
+                <p-fileupload name="csv[]" [customUpload]="true" (uploadHandler)="handleFingerprintFileSelect($event)"
+                    accept=".csv" [showUploadButton]="false" [showCancelButton]="false" chooseLabel="Pilih File CSV">
+                </p-fileupload>
+            </div>
+            }
+
+            <!-- Preview & Errors -->
+            @if (_importErrors.length > 0) {
+            <div class="mb-5">
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p class="text-sm font-semibold text-red-800 mb-3">
+                        <i class="pi pi-exclamation-triangle mr-2"></i>
+                        {{ _importErrors.length }} Baris Error:
+                    </p>
+                    <div class="grid gap-2">
+                        @for (error of _importErrors; track $index) {
+                        <div class="text-xs text-red-700 p-2 bg-red-100 rounded">
+                            <span class="font-semibold">Baris {{ error.row.rowIndex }}:</span> {{ error.error }}
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            }
+
+            @if (_importPreview.length > 0) {
+            <div class="mb-5">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                    <p class="text-sm font-semibold text-green-800">
+                        <i class="pi pi-check-circle mr-2"></i>
+                        {{ _importPreview.length }} Baris Valid (Siap Diimport)
+                    </p>
+                </div>
+
+                <!-- Preview Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100 border-b border-gray-300">
+                            <tr>
+                                <th class="text-left px-3 py-2">Kode</th>
+                                <th class="text-left px-3 py-2">Tanggal</th>
+                                <th class="text-left px-3 py-2">Jam Masuk</th>
+                                <th class="text-left px-3 py-2">Jam Keluar</th>
+                                <th class="text-center px-3 py-2">Hadir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of _importPreview.slice(0, 10); track $index) {
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="px-3 py-2">{{ item.employee_code }}</td>
+                                <td class="px-3 py-2">{{ item.date | date: 'dd MMM yyyy' }}</td>
+                                <td class="px-3 py-2">{{ item.check_in || '-' }}</td>
+                                <td class="px-3 py-2">{{ item.check_out || '-' }}</td>
+                                <td class="text-center px-3 py-2">
+                                    <i class="pi"
+                                        [ngClass]="item.is_present ? 'pi-check text-green-600' : 'pi-times text-gray-400'"></i>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @if (_importPreview.length > 10) {
+                    <p class="text-xs text-gray-500 mt-2">+ {{ _importPreview.length - 10 }} baris lainnya</p>
+                    }
+                </div>
+            </div>
+            }
+
+            <!-- Action Buttons -->
+            <div class="flex w-full justify-end items-center gap-3 pt-5 border-t border-gray-300">
+                <p-button severity="secondary" label="Batal" styleClass="p-button-sm" (onClick)="handleBackToList()">
+                </p-button>
+                @if (_importPreview.length > 0) {
+                <p-button severity="success" label="Import" icon="pi pi-upload" [loading]="_uploading"
+                    styleClass="p-button-sm" (onClick)="handleConfirmImport()">
+                </p-button>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</app-dsh-base-layout>

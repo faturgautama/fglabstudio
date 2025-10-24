@@ -1,3 +1,4 @@
+import { AttendanceState } from "./attendance";
 import { DepartementState } from "./departement";
 import { EmployeeState } from "./employee";
 import { PositionState } from "./position";
@@ -8,4 +9,5 @@ export const HR_APP_STATE = [
     PositionState,
     EmployeeState,
     ShiftState,
+    AttendanceState
 ]
