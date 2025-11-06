@@ -48,7 +48,7 @@ export const appConfig: ApplicationConfig = {
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideRouter(routes),
-        provideStore(([...STATE]), withNgxsLoggerPlugin({ disabled: environment.production })),
+        provideStore(([...STATE])),
         provideTranslateService({
             lang: 'en',
             fallbackLang: 'en',

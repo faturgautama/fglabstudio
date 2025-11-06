@@ -3,6 +3,7 @@ import { AuthenticationService } from '../../../services/pages/authentication/au
 import { TranslatePipe } from '@ngx-translate/core';
 import { UpperCasePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-your-application',
@@ -17,11 +18,15 @@ import { ButtonModule } from 'primeng/button';
 })
 export class YourApplication implements OnInit {
 
+  _router = inject(Router);
   _authenticationService = inject(AuthenticationService);
 
   user = this._authenticationService._userData;
 
   ngOnInit(): void {
-    console.log(this._authenticationService._userData)
+  }
+
+  handleClickApps(url: string) {
+    this._router.navigateByUrl(url);
   }
 }

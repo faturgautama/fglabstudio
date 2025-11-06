@@ -30,7 +30,6 @@
                         Main Menu
                     </p>
 
-
                     <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-5">
                         @for (item of user.applications; track $index) {
                         <div class="grid w-full bg-gray-100 rounded-lg">
@@ -45,8 +44,9 @@
                                     {{ item.application.description }}
                                 </p>
 
-                                <p-button severity="info" label="Masuk" styleClass="p-button-sm w-full"
-                                    size="small"></p-button>
+                                <p-button severity="info" label="Masuk" styleClass="p-button-sm w-full" size="small"
+                                    (onClick)="handleClickApps(item.application.url)">
+                                </p-button>
                             </div>
                         </div>
                         }

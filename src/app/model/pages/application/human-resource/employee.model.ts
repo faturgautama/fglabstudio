@@ -115,6 +115,7 @@ export namespace EmployeeModel {
         is_late?: boolean;
         is_present: boolean;
         is_delete: boolean;
+        description?: string;
     }
 
     export interface IPayroll extends IBaseModel {
@@ -129,3 +130,5 @@ export namespace EmployeeModel {
         is_delete: boolean;
     }
 }
+
+

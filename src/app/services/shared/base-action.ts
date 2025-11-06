@@ -14,9 +14,9 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
     }
 
     /**
-   * Resolves foreign key references by finding related tables
-   * Looks for properties ending with '_id' and fetches the related record
-   */
+     * Resolves foreign key references by finding related tables
+     * Looks for properties ending with '_id' and fetches the related record
+    */
     private async resolveRelations(record: T): Promise<any> {
         const enriched: any = { ...record };
         const keys = Object.keys(record) as (keyof T)[];
@@ -25,7 +25,7 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
             const keyStr = String(key);
             // Check if property ends with '_id' (e.g., department_id, position_id, shift_id)
             if (keyStr.endsWith('_id')) {
-                const tableName = keyStr.replace('_id', ''); // Remove '_id' suffix
+                const tableName = keyStr.replace('_id', '') == 'employee' ? 'employees' : keyStr.replace('_id', ''); // Remove '_id' suffix
                 const foreignKeyValue = record[key];
 
                 // Get the related table dynamically
@@ -34,6 +34,7 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
                 if (relatedTable && foreignKeyValue) {
                     try {
                         const relatedRecord = await relatedTable.get(Number(foreignKeyValue));
+
                         if (relatedRecord) {
                             // Add the full related object with a key without '_id'
                             enriched[tableName] = relatedRecord;
@@ -77,6 +78,7 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
             created_at: new Date(),
             is_active: true,
         };
+
         return this.withLoading(() => this.table.add(payload as T));
     }
 
@@ -85,7 +87,7 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
     }
 
     delete(id: number) {
-        return this.withLoading(() => this.table.update(id, { is_active: false } as any));
+        return this.withLoading(() => this.table.update(id, { is_active: false, is_delete: true } as any));
     }
 
     bulkAdd(entities: T[]) {

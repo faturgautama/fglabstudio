@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { db } from '../../../../app.database';
 import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
 import { BaseActionService } from '../../../shared/base-action';
-import { from } from 'rxjs';
+import { from, switchMap, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AttendanceService extends BaseActionService<EmployeeModel.IAttendance> {
@@ -25,14 +25,16 @@ export class AttendanceService extends BaseActionService<EmployeeModel.IAttendan
         return from(db.attendance.update(attendanceId as any, { check_out: checkOutTime }));
     }
 
-    findTodayAttendance(employeeId: string | number, date: string) {
+    findTodayAttendance(employeeId: string | number, date?: string) {
         const today = date || new Date().toISOString().split('T')[0];
+
         return from(
             db.attendance
                 .where('employee_id')
                 .equals(employeeId as any)
-                .filter(record => record.date === today && !record.is_delete)
+                .and(record => record.date === today && !record.is_delete)
                 .first()
         );
     }
+
 }

@@ -3,7 +3,8 @@ import { Routes } from '@angular/router';
 export const humanResourceRoutes: Routes = [
     {
         path: '',
-        loadComponent: async () => (await import('./login/login')).Login,
+        redirectTo: 'home',
+        pathMatch: 'full'
     },
     {
         path: 'home',

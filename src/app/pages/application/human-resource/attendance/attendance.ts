@@ -16,7 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, formatDate } from '@angular/common';
 import { TextareaModule } from 'primeng/textarea';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -69,6 +69,7 @@ export class Attendance implements OnInit, OnDestroy {
   // Self Check-in Form
   SelfCheckInForm = this._formBuilder.group({
     employee_code: ['', [Validators.required]],
+    shift_id: ['', [Validators.required]],
   });
 
   // Manual Check-in Form
@@ -94,16 +95,24 @@ export class Attendance implements OnInit, OnDestroy {
     description: 'Data absensi lengkap karyawan',
     column: [
       {
-        id: 'employee.employee_code',
+        id: 'employees.employee_code',
         title: 'Kode Karyawan',
         type: DynamicTableModel.IColumnType.TEXT,
         width: '150px'
       },
       {
-        id: 'employee.full_name',
+        id: 'employees.full_name',
         title: 'Nama Karyawan',
-        type: DynamicTableModel.IColumnType.TEXT,
-        width: '200px'
+        type: DynamicTableModel.IColumnType.TEXTWITHDESCRIPTION,
+        width: '300px',
+        description: 'employees.email'
+      },
+      {
+        id: 'shift.title',
+        title: 'Shift',
+        type: DynamicTableModel.IColumnType.TEXTWITHDESCRIPTION,
+        width: '200px',
+        description: 'shift.time'
       },
       {
         id: 'date',
@@ -114,26 +123,20 @@ export class Attendance implements OnInit, OnDestroy {
       {
         id: 'check_in',
         title: 'Jam Masuk',
-        type: DynamicTableModel.IColumnType.TEXT,
+        type: DynamicTableModel.IColumnType.TIME,
         width: '150px'
       },
       {
         id: 'check_out',
         title: 'Jam Keluar',
-        type: DynamicTableModel.IColumnType.TEXT,
+        type: DynamicTableModel.IColumnType.TIME,
         width: '150px'
       },
       {
-        id: 'is_late',
+        id: 'description',
         title: 'Terlambat',
-        type: DynamicTableModel.IColumnType.BADGE,
-        width: '100px'
-      },
-      {
-        id: 'is_present',
-        title: 'Hadir',
-        type: DynamicTableModel.IColumnType.BADGE,
-        width: '100px'
+        type: DynamicTableModel.IColumnType.TEXT,
+        width: '200px'
       },
     ],
     datasource: [],
@@ -182,7 +185,16 @@ export class Attendance implements OnInit, OnDestroy {
     this._store
       .select(AttendanceState.getAll)
       .pipe(takeUntil(this.Destroy$))
-      .subscribe(result => this.TableProps.datasource = result);
+      .subscribe((result) => {
+        this.TableProps.datasource = result.map((item: any) => {
+          item.shift = {
+            ...item.shift,
+            time: `${formatDate(item.shift.start_time, 'HH:mm', 'EN')} s.d ${formatDate(item.shift.end_time, 'HH:mm', 'EN')}`
+          };
+
+          return item;
+        });
+      });
   }
 
   ngOnDestroy(): void {
@@ -224,7 +236,7 @@ export class Attendance implements OnInit, OnDestroy {
               this._store
                 .dispatch(new AttendanceAction.UpdateAttendance({
                   ...existing,
-                  check_out: currentTime
+                  check_out: new Date().toISOString()
                 }))
                 .subscribe(() => {
                   this._messageService.add({
@@ -236,16 +248,20 @@ export class Attendance implements OnInit, OnDestroy {
                 });
             } else {
               // Check in
+              const payload = {
+                employee_id: employee.id,
+                shift_id: formValue.shift_id ?? '',
+                date: today,
+                check_in: new Date().toISOString(),
+                check_out: null as any,
+                is_present: true,
+                is_delete: false,
+                created_at: new Date(),
+                description: 'SELF'
+              };
+
               this._store
-                .dispatch(new AttendanceAction.AddAttendance({
-                  employee_id: employee.id,
-                  shift_id: employee.shift_id ?? '',
-                  date: today,
-                  check_in: currentTime,
-                  is_present: true,
-                  is_delete: false,
-                  created_at: new Date(),
-                }))
+                .dispatch(new AttendanceAction.AddAttendance(payload))
                 .subscribe(() => {
                   this._messageService.add({
                     severity: 'success',
@@ -261,12 +277,14 @@ export class Attendance implements OnInit, OnDestroy {
             this._store
               .dispatch(new AttendanceAction.AddAttendance({
                 employee_id: employee.id,
-                shift_id: employee.shift_id ? employee.shift_id : '',
+                shift_id: formValue.shift_id ? formValue.shift_id : '',
                 date: today,
-                check_in: currentTime,
+                check_in: new Date().toISOString(),
+                check_out: null as any,
                 is_present: true,
                 is_delete: false,
                 created_at: new Date(),
+                description: 'SELF'
               }))
               .subscribe(() => {
                 this._messageService.add({
@@ -293,6 +311,7 @@ export class Attendance implements OnInit, OnDestroy {
         is_present: formValue.is_present,
         is_delete: false,
         created_at: new Date(),
+        description: 'MANUAL'
       };
 
       this._store
