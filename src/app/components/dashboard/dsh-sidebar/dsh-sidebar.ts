@@ -28,6 +28,8 @@ export class DshSidebar implements OnInit, OnDestroy {
 
   resolverExtraData: any = null;
 
+  _settingUrl = '';
+
   constructor(
     private _store: Store,
     private _router: Router,
@@ -45,6 +47,7 @@ export class DshSidebar implements OnInit, OnDestroy {
       .pipe(takeUntil(this.Destroy$))
       .subscribe((result) => {
         this.resolverExtraData = result['resolver']['extra_data'];
+        this._settingUrl = this.resolverExtraData.setting;
       });
   }
 
@@ -76,5 +79,9 @@ export class DshSidebar implements OnInit, OnDestroy {
     } else {
       this._router.navigateByUrl(`${this.resolverExtraData.routes}`);
     }
+  }
+
+  handleClickSetting() {
+    this._router.navigateByUrl(this._settingUrl);
   }
 }

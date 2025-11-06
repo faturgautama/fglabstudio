@@ -59,5 +59,14 @@ export const humanResourceRoutes: Routes = [
             title: 'Absensi',
             description: 'Manage dan atur semua data absensi karyawan'
         }
+    },
+    {
+        path: 'setting',
+        loadComponent: async () => (await import('./company-setting/company-setting')).CompanySetting,
+        data: {
+            icon: 'pi pi-cog',
+            title: 'Pengaturan Perusahaan',
+            description: 'Manage dan atur data pengaturan perusahaan'
+        }
     }
 ];

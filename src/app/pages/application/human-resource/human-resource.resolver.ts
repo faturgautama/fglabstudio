@@ -57,6 +57,7 @@ export const humanResourceResolver: ResolveFn<any> = async (route) => {
         extra_data: {
             title: 'Departement',
             routes: '/people/departement',
+            setting: '/people/setting'
         }
     };
 };
