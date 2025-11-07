@@ -29,57 +29,70 @@ export class AppDatabase extends Dexie {
     }
 }
 
-export function openUserDatabase(userId: string | number): AppDatabase {
-    const dbName = `CodeByXerenityDatabase_${userId}`;
-    return new AppDatabase(dbName);
-}
-
 @Injectable({ providedIn: 'root' })
 export class DatabaseService {
     db!: AppDatabase;
-    private currentDbName = 'CodeByXerenityDatabase'; // default kosong
+    private currentDbName = 'CodeByXerenityDatabase';
+    private switchPromise: Promise<void> | null = null; // ✅ Track switching state
 
     constructor() {
-        // Awal: buka DB kosong
         this.db = new AppDatabase(this.currentDbName);
     }
 
     /**
-     * Ganti database aktif sesuai user login.
-     * Akan membuat baru jika belum ada DB untuk user tsb.
+     * ✅ Pastikan DB ready sebelum operasi
      */
-    async switchToUserDatabase(userId: string): Promise<void> {
-        const newDbName = `CodeByXerenityDatabase_${userId}`;
+    async ensureReady(): Promise<void> {
+        if (this.switchPromise) {
+            await this.switchPromise; // Tunggu switching selesai
+        }
 
-        // Hindari reinit kalau sudah pakai DB yg sama
-        if (this.currentDbName === newDbName) return;
-
-        console.log(`🔄 Switching IndexedDB: ${this.currentDbName} → ${newDbName}`);
-
-        try {
-            // Tutup DB lama jika terbuka
-            if (this.db?.isOpen()) {
-                await this.db.close();
-            }
-
-            // Ganti ke DB user
-            this.db = new AppDatabase(newDbName);
+        if (!this.db.isOpen()) {
             await this.db.open();
-            this.currentDbName = newDbName;
-
-            console.log(`✅ Database aktif: ${newDbName}`);
-        } catch (err) {
-            console.error('❌ Gagal switch database:', err);
-            // fallback ke default kosong
-            this.db = new AppDatabase('CodeByXerenityDatabase');
-            this.currentDbName = 'CodeByXerenityDatabase';
         }
     }
 
     /**
-     * Reset ke DB default (misalnya saat logout)
+     * Ganti database aktif sesuai user login
+     */
+    async switchToUserDatabase(userId: string): Promise<void> {
+        const newDbName = `CodeByXerenityDatabase_${userId}`;
+
+        if (this.currentDbName === newDbName) return;
+
+        // ✅ Tandai sedang proses switching
+        this.switchPromise = (async () => {
+            console.log(`🔄 Switching IndexedDB: ${this.currentDbName} → ${newDbName}`);
+
+            try {
+                if (this.db?.isOpen()) {
+                    await this.db.close();
+                }
+
+                this.db = new AppDatabase(newDbName);
+                await this.db.open();
+                this.currentDbName = newDbName;
+
+                console.log(`✅ Database aktif: ${newDbName}`);
+            } catch (err) {
+                console.error('❌ Gagal switch database:', err);
+                this.db = new AppDatabase('CodeByXerenityDatabase');
+                this.currentDbName = 'CodeByXerenityDatabase';
+                await this.db.open();
+            } finally {
+                this.switchPromise = null; // ✅ Selesai switching
+            }
+        })();
+
+        await this.switchPromise;
+    }
+
+    /**
+     * Reset ke DB default
      */
     async resetToDefaultDatabase(): Promise<void> {
+        await this.ensureReady(); // Pastikan tidak ada operasi pending
+
         if (this.db?.isOpen()) await this.db.close();
 
         this.currentDbName = 'CodeByXerenityDatabase';

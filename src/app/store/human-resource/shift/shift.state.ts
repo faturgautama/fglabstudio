@@ -34,7 +34,7 @@ export class ShiftState implements NgxsOnInit {
     }
 
     @Action(ShiftAction.GetShift)
-    getShift(ctx: StateContext<ShiftStateModel>) {
+    async getShift(ctx: StateContext<ShiftStateModel>) {
         return this._shiftService
             .getAll()
             .pipe(

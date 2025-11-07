@@ -10,15 +10,16 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
     protected abstract table: Dexie.Table<T, number>;
     private readonly DEFAULT_DELAY = 2500;
 
-    /** Lazy getter — ambil db hanya ketika dipanggil */
     protected get db() {
         if (!this.dbService.db) {
-            throw new Error('Database belum diinisialisasi. Pastikan DatabaseService.init() sudah dipanggil.');
+            throw new Error('Database belum diinisialisasi.');
         }
         return this.dbService.db;
     }
 
-    protected withLoading<R>(operation: () => Promise<R>, delayMs = this.DEFAULT_DELAY) {
+    // ✅ Semua operasi harus call ensureReady() dulu
+    protected async withLoading<R>(operation: () => Promise<R>, delayMs = this.DEFAULT_DELAY) {
+        await this.dbService.ensureReady(); // ✅ Pastikan DB ready
         return from(operation()).pipe(this._utilityService.withLoading(delayMs));
     }
 

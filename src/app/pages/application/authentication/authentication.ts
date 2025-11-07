@@ -70,10 +70,13 @@ export class Authentication {
   handleLogin(form: any) {
     this._authenticationService
       .signIn(form.email, form.password)
-      .subscribe((result: any) => {
+      .subscribe(async (result: any) => { // ✅ Tambah async
         console.log(result);
 
         if (result.user) {
+          // ✅ Tunggu switching selesai
+          await this.databaseService.switchToUserDatabase(result.user.id);
+
           this._messageService.clear();
           this._messageService.add({
             severity: 'success',
@@ -81,14 +84,7 @@ export class Authentication {
             detail: 'Sign in successfully',
           });
 
-          // ✅ Switch ke DB user (buat kalau belum ada)
-          from(this.databaseService
-            .switchToUserDatabase(result.user.id))
-            .subscribe((result) => {
-
-            })
-
-          // ✅ Baru arahkan user ke halaman utama
+          // ✅ Sekarang aman untuk navigate (State akan auto-fetch)
           this._router.navigateByUrl('/your-apps');
         } else {
           this._messageService.clear();
