@@ -5,6 +5,48 @@ export namespace EmployeeModel {
         updated_at?: Date;
     }
 
+    export interface IHumanResourceSetting extends IBaseModel {
+        // Informasi Umum
+        company_name: string;
+        effective_date: Date;
+        is_active: boolean;
+
+        // Tarif Lembur
+        overtime_rate_per_hour: number; // contoh: 25000
+
+        // Komponen Potongan Wajib
+        has_bpjs_ketenagakerjaan: boolean;
+        bpjs_ketenagakerjaan_employee: number; // 2%
+        bpjs_ketenagakerjaan_company: number;  // 3.7%
+
+        has_bpjs_pensiun: boolean;
+        bpjs_pensiun_employee: number; // 1%
+        bpjs_pensiun_company: number;  // 2%
+
+        has_bpjs_kesehatan: boolean;
+        bpjs_kesehatan_employee: number; // 1%
+        bpjs_kesehatan_company: number;  // 4%
+
+        // Pajak
+        has_tax: boolean;
+        tax_method: 'gross' | 'net' | 'gross-up'; // metode pajak PPh21
+        tax_ptkp_type: 'TK0' | 'K0' | 'K1' | 'K2' | 'K3'; // kategori PTKP
+
+        leave_policies?: ILeavePolicy[];
+    }
+
+    export interface ILeavePolicy extends IBaseModel {
+        code: string;
+        title: string;
+        description?: string;
+        leave_type: 'annual' | 'maternity' | 'paternity' | 'sick' | 'unpaid' | 'other';
+        total_days: number;
+        gender_restriction?: 'male' | 'female' | 'all';
+        requires_approval: boolean;
+        is_paid: boolean;
+        is_active: boolean;
+    }
+
     export interface IDepartment extends IBaseModel {
         code: string;
         title: string;
@@ -95,6 +137,19 @@ export namespace EmployeeModel {
         last_login?: Date;
     }
 
+    export interface ILeave extends IBaseModel {
+        employee_id: string;
+        leave_policy_id: string; // relasi ke ILeavePolicy
+        start_date: Date;
+        end_date: Date;
+        total_days: number;
+        reason?: string;
+        status: 'pending' | 'approved' | 'rejected' | 'cancelled';
+        approved_by?: string;
+        remarks?: string;
+        is_delete: boolean;
+    }
+
     export interface IShift extends IBaseModel {
         code: string;
         title: string;
@@ -118,6 +173,29 @@ export namespace EmployeeModel {
         description?: string;
     }
 
+    export interface IOvertime extends EmployeeModel.IBaseModel {
+        employee_id: string;
+        date: string;
+        start_time: string;
+        end_time: string;
+        total_hours: number;
+
+        // Jenis lembur: weekday, weekend, atau public holiday
+        overtime_type: 'weekday' | 'weekend' | 'public-holiday';
+
+        // Status approval
+        status: 'pending' | 'approved' | 'rejected';
+
+        // Catatan atau alasan lembur
+        reason?: string;
+        approved_by?: string;
+
+        // Perhitungan lembur (dihitung otomatis saat generate payroll)
+        calculated_pay?: number;
+
+        is_delete?: boolean;
+    }
+
     export interface IPayroll extends IBaseModel {
         employee_id: string;
         month: string;
@@ -127,8 +205,8 @@ export namespace EmployeeModel {
         deduction?: number;
         net_salary: number;
         payment_status: 'pending' | 'paid';
+        additional_allowances?: { name: string; amount: number }[];
+        additional_deductions?: { name: string; amount: number }[];
         is_delete: boolean;
     }
 }
-
-

@@ -10,6 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { TableModule } from "primeng/table";
 import { AuthenticationService } from '../../../services/pages/authentication/authentication';
+import { DatabaseService } from '../../../app.database';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-authentication',
@@ -29,6 +31,8 @@ import { AuthenticationService } from '../../../services/pages/authentication/au
   styleUrl: './authentication.scss'
 })
 export class Authentication {
+
+  databaseService = inject(DatabaseService);
 
   WhyChooseUs = [
     {
@@ -66,18 +70,41 @@ export class Authentication {
   handleLogin(form: any) {
     this._authenticationService
       .signIn(form.email, form.password)
-      .subscribe((result) => {
-        if (result) {
+      .subscribe((result: any) => {
+        console.log(result);
+
+        if (result.user) {
           this._messageService.clear();
-          this._messageService.add({ severity: 'success', summary: 'Success', detail: 'Sign In Succesfully' });
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Sign in successfully',
+          });
+
+          // ✅ Switch ke DB user (buat kalau belum ada)
+          from(this.databaseService
+            .switchToUserDatabase(result.user.id))
+            .subscribe((result) => {
+
+            })
+
+          // ✅ Baru arahkan user ke halaman utama
           this._router.navigateByUrl('/your-apps');
         } else {
           this._messageService.clear();
-          this._messageService.add({ severity: 'error', summary: 'Oops', detail: 'Sign In Failed' });
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Oops',
+            detail: 'Sign in failed',
+          });
         }
       }, (error: any) => {
         this._messageService.clear();
-        this._messageService.add({ severity: 'error', summary: 'Oops', detail: error.error.error });
+        this._messageService.add({
+          severity: 'error',
+          summary: 'Oops',
+          detail: error.error?.error || 'Unknown error',
+        });
       });
   }
 }

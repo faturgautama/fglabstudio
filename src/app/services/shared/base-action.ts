@@ -2,12 +2,21 @@ import { inject } from '@angular/core';
 import { from } from 'rxjs';
 import { UtilityService } from './utility';
 import Dexie from 'dexie';
-import { db } from '../../app.database';
+import { DatabaseService } from '../../app.database';
 
 export abstract class BaseActionService<T extends { id?: number; is_active?: boolean }> {
     protected _utilityService = inject(UtilityService);
+    private dbService = inject(DatabaseService);
     protected abstract table: Dexie.Table<T, number>;
     private readonly DEFAULT_DELAY = 2500;
+
+    /** Lazy getter — ambil db hanya ketika dipanggil */
+    protected get db() {
+        if (!this.dbService.db) {
+            throw new Error('Database belum diinisialisasi. Pastikan DatabaseService.init() sudah dipanggil.');
+        }
+        return this.dbService.db;
+    }
 
     protected withLoading<R>(operation: () => Promise<R>, delayMs = this.DEFAULT_DELAY) {
         return from(operation()).pipe(this._utilityService.withLoading(delayMs));
@@ -29,7 +38,7 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
                 const foreignKeyValue = record[key];
 
                 // Get the related table dynamically
-                const relatedTable: any = (db as any)[tableName];
+                const relatedTable: any = (this.db as any)[tableName];
 
                 if (relatedTable && foreignKeyValue) {
                     try {

@@ -9,8 +9,6 @@ import { provideStore } from '@ngxs/store';
 import { provideTranslateService, TranslateService } from "@ngx-translate/core";
 import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
 import { STATE } from './store';
-import { withNgxsLoggerPlugin } from '@ngxs/logger-plugin';
-import { environment } from '../environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { definePreset } from '@primeuix/themes';
 
@@ -62,6 +60,6 @@ export const appConfig: ApplicationConfig = {
             translate.use(translate.getBrowserLang() || "en");
         }),
         MessageService,
-        ConfirmationService
+        ConfirmationService,
     ]
 };

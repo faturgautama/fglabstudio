@@ -71,13 +71,13 @@ export class DynamicTable implements OnInit, OnDestroy {
         debounceTime(750),
         distinctUntilChanged()
       ).subscribe((result) => {
-        if (!result.length) {
+        if (this.props && !result.length) {
           this.props.datasource = this._originalDatasource;
           this._cdr.detectChanges();
           return;
         }
 
-        if (result.length) {
+        if (this.props && result.length) {
           this.props.datasource = this._originalDatasource.filter((item) => {
             const stringified = JSON.stringify(item);
             if (stringified.toLowerCase().includes(result.toLowerCase())) {

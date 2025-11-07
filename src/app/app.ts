@@ -1,10 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button'
 import { ToastModule, Toast } from 'primeng/toast'
 import AOS from 'aos';
-import { liveQuery } from 'dexie';
-import { db } from './app.database';
+import { DatabaseService } from './app.database';
 
 @Component({
   selector: 'app-root',
@@ -19,14 +18,9 @@ import { db } from './app.database';
 })
 export class App implements OnInit {
   protected readonly title = signal('fglabstudio');
+  private dbService = inject(DatabaseService);
 
-  ngOnInit(): void {
+  async ngOnInit() {
     AOS.init();
-
-    liveQuery(() => db.employees
-      .toArray())
-      .subscribe((result) => {
-        console.log("employee =>", result);
-      })
   }
 }

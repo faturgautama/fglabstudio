@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
-import { db } from '../../../../app.database';
+import { inject, Injectable } from '@angular/core';
+import { DatabaseService } from '../../../../app.database';
 import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
 import { BaseActionService } from '../../../shared/base-action';
 
 @Injectable({ providedIn: 'root' })
 export class EmployeeService extends BaseActionService<EmployeeModel.IEmployee> {
-    protected override table = db.employees;
+    private databaseService = inject(DatabaseService);
+
+    protected override table = this.databaseService.db.employees;
 
     calculateAge(birthDate: Date): number {
         if (!birthDate) return 0;
