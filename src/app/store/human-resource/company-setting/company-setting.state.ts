@@ -44,6 +44,10 @@ export class CompanySettingState implements NgxsOnInit {
             .getAll()
             .pipe(
                 tap((result) => {
+                    if (result.length > 0 && result[0].is_active) {
+                        ctx.dispatch(new CompanySettingAction.GetByIdCompanySetting(result[0].id));
+                    }
+
                     const state = ctx.getState();
                     ctx.setState({
                         ...state,

@@ -27,7 +27,7 @@ export const humanResourceResolver: ResolveFn<any> = async (route) => {
         },
         {
             id: 'employee',
-            title: 'Pegawai',
+            title: 'Karyawan',
             icon: 'pi pi-users',
             path: '/people/employee'
         },

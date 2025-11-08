@@ -174,9 +174,29 @@ export class CompanySetting implements OnInit, OnDestroy {
 
   handleSave(formValue: any) {
     if (this.Form.valid) {
+
+      console.log("payload =>", formValue);
+
+      // Remove empty id for new records (Dexie auto-increment requirement)
+      const payload = { ...formValue };
+      if (!payload.id || payload.id === '') {
+        delete payload.id;
+      }
+
+      // Clean up leave_policies - remove empty ids
+      if (Array.isArray(payload.leave_policies)) {
+        payload.leave_policies = payload.leave_policies.map((policy: any) => {
+          const cleanPolicy = { ...policy };
+          if (!cleanPolicy.id || cleanPolicy.id === '') {
+            delete cleanPolicy.id;
+          }
+          return cleanPolicy;
+        });
+      }
+
       this._isLoading = true;
       this._store
-        .dispatch(new CompanySettingAction.AddCompanySetting(formValue))
+        .dispatch(new CompanySettingAction.AddCompanySetting(payload))
         .subscribe(() => {
           this._isLoading = false;
           setTimeout(() => {

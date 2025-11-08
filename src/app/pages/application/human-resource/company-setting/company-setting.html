@@ -57,7 +57,8 @@
                             Tarif Lembur per Jam <span class="text-red-500">*</span>
                         </label>
                         <p-input-number formControlName="overtime_rate_per_hour" size="small" class="w-full"
-                            [useGrouping]="true" placeholder="Masukkan tarif lembur">
+                            [useGrouping]="true" placeholder="Masukkan tarif lembur" mode="decimal"
+                            [maxFractionDigits]="0">
                         </p-input-number>
                         @if (Form.get('overtime_rate_per_hour')?.touched && Form.get('overtime_rate_per_hour')?.invalid)
                         {
@@ -88,7 +89,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">Potongan Karyawan (%)</label>
                         <p-input-number formControlName="bpjs_ketenagakerjaan_employee" size="small" class="w-full"
-                            placeholder="Misal: 2">
+                            placeholder="Misal: 2" mode="decimal" [maxFractionDigits]="2">
                         </p-input-number>
                     </div>
 
@@ -96,7 +97,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">Kontribusi Perusahaan (%)</label>
                         <p-input-number formControlName="bpjs_ketenagakerjaan_company" size="small" class="w-full"
-                            placeholder="Misal: 3.7">
+                            placeholder="Misal: 3.7" mode="decimal" [maxFractionDigits]="2">
                         </p-input-number>
                     </div>
                 </div>
@@ -154,7 +155,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">Potongan Karyawan (%)</label>
                         <p-input-number formControlName="bpjs_kesehatan_employee" size="small" class="w-full"
-                            placeholder="Misal: 1">
+                            placeholder="Misal: 1" mode="decimal" [maxFractionDigits]="2">
                         </p-input-number>
                     </div>
 
@@ -162,7 +163,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">Kontribusi Perusahaan (%)</label>
                         <p-input-number formControlName="bpjs_kesehatan_company" size="small" class="w-full"
-                            placeholder="Misal: 4">
+                            placeholder="Misal: 4" mode="decimal" [maxFractionDigits]="2">
                         </p-input-number>
                     </div>
                 </div>
