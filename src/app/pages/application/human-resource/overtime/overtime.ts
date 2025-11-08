@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, combineLatest } from 'rxjs';
 import { DynamicTableModel } from '../../../../model/components/dynamic-table.model';
 import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
 import { DshBaseLayout } from '../../../../components/dashboard/dsh-base-layout/dsh-base-layout';
@@ -98,13 +98,13 @@ export class Overtime implements OnInit, OnDestroy {
             {
                 id: 'start_time',
                 title: 'Jam Mulai',
-                type: DynamicTableModel.IColumnType.TIME,
+                type: DynamicTableModel.IColumnType.TEXT,
                 width: '120px'
             },
             {
                 id: 'end_time',
                 title: 'Jam Akhir',
-                type: DynamicTableModel.IColumnType.TIME,
+                type: DynamicTableModel.IColumnType.TEXT,
                 width: '120px'
             },
             {
@@ -172,6 +172,19 @@ export class Overtime implements OnInit, OnDestroy {
             .pipe(takeUntil(this.Destroy$))
             .subscribe((result) => {
                 this.TableProps.datasource = result;
+            });
+
+        // Setup auto-calculate total_hours
+        combineLatest([
+            this.OvertimeForm.get('start_time')!.valueChanges,
+            this.OvertimeForm.get('end_time')!.valueChanges
+        ])
+            .pipe(takeUntil(this.Destroy$))
+            .subscribe(([startTime, endTime]) => {
+                if (startTime && endTime) {
+                    const totalHours = this.calculateTotalHours(startTime, endTime);
+                    this.OvertimeForm.get('total_hours')?.setValue(totalHours.toString(), { emitEvent: false });
+                }
             });
     }
 

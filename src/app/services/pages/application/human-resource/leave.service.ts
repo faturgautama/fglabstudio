@@ -99,15 +99,6 @@ export class LeaveService extends BaseActionService<EmployeeModel.ILeave> {
                     // Generate unique ID: prioritize id > code > title
                     const uniqueId = policy.id ? String(policy.id) : (policy.code || policy.title || `policy_${index}`);
 
-                    // Debug: log untuk melihat structure policy
-                    console.log(`Policy ${index}:`, {
-                        policy_id: policy.id,
-                        policy_code: policy.code,
-                        policy_title: policy.title,
-                        uniqueId: uniqueId,
-                        usedDays: usedDays
-                    });
-
                     return {
                         ...policy,
                         id: uniqueId, // Ensure unique, non-empty ID

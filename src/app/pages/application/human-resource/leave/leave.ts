@@ -164,8 +164,6 @@ export class Leave implements OnInit, OnDestroy {
             .select(CompanySettingState.getLeavePolicies)
             .pipe(takeUntil(this.Destroy$))
             .subscribe((result: any) => {
-                console.log('Original Leave Policies from store:', result);
-                console.log('First policy details:', result?.[0]);
                 this._originalLeavePolicies = result;
                 this._leavePolicyDatasource = result;
             });
@@ -199,12 +197,8 @@ export class Leave implements OnInit, OnDestroy {
         this.LeaveForm.get('leave_policy_id')?.valueChanges
             .pipe(takeUntil(this.Destroy$))
             .subscribe((policyId) => {
-                console.log('leave_policy_id valueChanges:', policyId, 'type:', typeof policyId);
-                console.log('Available policies:', this._leavePolicyDatasource.map((p: any) => ({ id: p.id, title: p.title })));
-
                 if (policyId) {
                     const selectedPolicy = this._leavePolicyDatasource.find((p: any) => p.id === policyId);
-                    console.log('Selected policy:', selectedPolicy);
                     if (selectedPolicy) {
                         // Jika requires_approval false, auto-set status ke 'approved'
                         const newStatus = selectedPolicy.requires_approval === false ? 'approved' : 'pending';
@@ -306,8 +300,6 @@ export class Leave implements OnInit, OnDestroy {
     }
 
     handleToolbarClicked(args: any) {
-        console.log('Toolbar clicked:', args);
-
         const data = args.data as EmployeeModel.ILeave;
 
         if (args.toolbar.id === 'edit') {
@@ -463,21 +455,16 @@ export class Leave implements OnInit, OnDestroy {
             this._originalLeavePolicies
         ).subscribe({
             next: (policiesWithRemaining: any[]) => {
-                console.log('Policies with remaining days:', policiesWithRemaining);
-                console.log('Policy IDs:', policiesWithRemaining.map((p: any) => ({ id: p.id, type: typeof p.id })));
-
                 this._leavePolicyDatasource = policiesWithRemaining;
 
                 // Reset leave_policy_id jika current value tidak ada di new datasource
                 const currentPolicyId = this.LeaveForm.get('leave_policy_id')?.value;
                 const isValidPolicy = policiesWithRemaining.some((p: any) => p.id === currentPolicyId);
                 if (currentPolicyId && !isValidPolicy) {
-                    console.warn('Current policy ID not in new datasource, resetting:', currentPolicyId);
                     this.LeaveForm.patchValue({ leave_policy_id: '' }, { emitEvent: false });
                 }
             },
             error: (err) => {
-                console.error('Error fetching remaining leaves:', err);
                 // Fallback to original policies
                 this._leavePolicyDatasource = this._originalLeavePolicies;
                 this._messageService.add({
