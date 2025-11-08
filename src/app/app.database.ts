@@ -10,6 +10,7 @@ export class AppDatabase extends Dexie {
     shift!: Table<EmployeeModel.IShift, number>;
     attendance!: Table<EmployeeModel.IAttendance, number>;
     leave!: Table<EmployeeModel.ILeave, number>;
+    overtime!: Table<EmployeeModel.IOvertime, number>;
     payroll!: Table<EmployeeModel.IPayroll, number>;
     employees!: Table<EmployeeModel.IEmployee, number>;
 

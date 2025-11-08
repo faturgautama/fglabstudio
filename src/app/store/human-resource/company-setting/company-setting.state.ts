@@ -38,6 +38,12 @@ export class CompanySettingState implements NgxsOnInit {
         return state.single;
     }
 
+    @Selector()
+    static getLeavePolicies(state: CompanySettingStateModel) {
+        return state.single?.leave_policies;
+    }
+
+
     @Action(CompanySettingAction.GetCompanySetting)
     getCompanySetting(ctx: StateContext<CompanySettingStateModel>) {
         return this._companySettingService

@@ -38,6 +38,18 @@ export const humanResourceResolver: ResolveFn<any> = async (route) => {
             path: '/people/attendance'
         },
         {
+            id: 'leave',
+            title: 'Cuti',
+            icon: 'pi pi-calendar-times',
+            path: '/people/leave'
+        },
+        {
+            id: 'overtime',
+            title: 'Lembur',
+            icon: 'pi pi-clock',
+            path: '/people/overtime'
+        },
+        {
             id: 'payroll',
             title: 'Payroll',
             icon: 'pi pi-receipt',

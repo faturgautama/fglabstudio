@@ -1,0 +1,54 @@
+.card {
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    h3 {
+        margin-bottom: 1.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #333;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    label {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #555;
+        font-size: 0.875rem;
+    }
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+
+    p-button {
+        flex: 1;
+    }
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.col-md-6 {
+    @media (min-width: 768px) {
+        grid-column: span 1;
+    }
+}

@@ -1,0 +1,102 @@
+<app-dsh-base-layout>
+    <!-- List View -->
+    <div *ngIf="_pageState() === 'list'">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (toolbarClicked)="handleToolbarClicked($event)">
+        </app-dynamic-table>
+    </div>
+
+    <!-- Create/Edit View -->
+    <div *ngIf="_pageState() === 'create' || _pageState() === 'edit'" class="card">
+        <h3>{{ _pageState() === 'create' ? 'Tambah Lembur' : 'Edit Lembur' }}</h3>
+
+        <form [formGroup]="OvertimeForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Karyawan</label>
+                        <p-select [options]="_employeeDatasource" optionLabel="full_name" optionValue="id"
+                            formControlName="employee_id" [showClear]="true" placeholder="Pilih Karyawan">
+                        </p-select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Tanggal</label>
+                        <p-datepicker formControlName="date" dateFormat="dd/mm/yy" placeholder="Pilih Tanggal">
+                        </p-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Jam Mulai</label>
+                        <input type="time" pInputText formControlName="start_time" placeholder="Masukkan jam mulai">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Jam Akhir</label>
+                        <input type="time" pInputText formControlName="end_time" placeholder="Masukkan jam akhir">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Total Jam</label>
+                        <p-inputNumber formControlName="total_hours" [readonly]="true" placeholder="Dihitung Otomatis">
+                        </p-inputNumber>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Tipe Lembur</label>
+                        <p-select [options]="[
+                { label: 'Hari Kerja', value: 'weekday' },
+                { label: 'Hari Weekend', value: 'weekend' },
+                { label: 'Hari Libur Umum', value: 'public-holiday' }
+              ]" optionLabel="label" optionValue="value" formControlName="overtime_type" [showClear]="true"
+                            placeholder="Pilih Tipe Lembur">
+                        </p-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label>Status</label>
+                        <p-select [options]="[
+                { label: 'Pending', value: 'pending' },
+                { label: 'Approved', value: 'approved' },
+                { label: 'Rejected', value: 'rejected' }
+              ]" optionLabel="label" optionValue="value" formControlName="status" [showClear]="true"
+                            placeholder="Pilih Status">
+                        </p-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label>Alasan Lembur</label>
+                <textarea pTextarea formControlName="reason" rows="3" placeholder="Masukkan alasan lembur...">
+        </textarea>
+            </div>
+
+            <div class="form-actions">
+                <p-button [label]="_pageState() === 'create' ? 'Tambah' : 'Update'" icon="pi pi-save"
+                    (onClick)="_pageState() === 'create' ? handleAddOvertime(OvertimeForm.value) : handleEditOvertime(OvertimeForm.value)">
+                </p-button>
+                <p-button label="Batal" icon="pi pi-times" severity="secondary" (onClick)="handleBackToList()">
+                </p-button>
+            </div>
+        </form>
+    </div>
+</app-dsh-base-layout>

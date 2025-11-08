@@ -61,6 +61,24 @@ export const humanResourceRoutes: Routes = [
         }
     },
     {
+        path: 'leave',
+        loadComponent: async () => (await import('./leave/leave')).Leave,
+        data: {
+            icon: 'pi pi-calendar-times',
+            title: 'Cuti',
+            description: 'Manage dan atur semua data pengajuan cuti karyawan'
+        }
+    },
+    {
+        path: 'overtime',
+        loadComponent: async () => (await import('./overtime/overtime')).Overtime,
+        data: {
+            icon: 'pi pi-clock',
+            title: 'Lembur',
+            description: 'Manage dan atur semua data pengajuan lembur karyawan'
+        }
+    },
+    {
         path: 'setting',
         loadComponent: async () => (await import('./company-setting/company-setting')).CompanySetting,
         data: {

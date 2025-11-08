@@ -1,0 +1,134 @@
+<app-dsh-base-layout>
+    <div>
+        <!-- List View -->
+        <div *ngIf="_pageState() === 'list'" class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+            <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+                (onToolbarClicked)="handleToolbarClicked($event)">
+            </app-dynamic-table>
+        </div>
+
+        <!-- Create/Edit View -->
+        <div *ngIf="_pageState() === 'create' || _pageState() === 'edit'" class="flex flex-col w-full gap-5">
+            <!-- Header -->
+            <div class="flex flex-row justify-between items-center bg-white p-5 rounded-lg shadow-sm">
+                <div class="flex flex-col">
+                    <p class="text-lg font-semibold text-gray-700">
+                        {{ _pageState() === 'create' ? 'Tambah Cuti' : 'Edit Cuti' }}
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        {{ _pageState() === 'edit'
+                        ? 'Tambahkan data cuti karyawan baru ke sistem'
+                        : 'Ubah data cuti karyawan yang sudah ada' }}
+                    </p>
+                </div>
+
+                <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left" (onClick)="handleBackToList()"
+                    styleClass="p-button-sm">
+                </p-button>
+            </div>
+
+            <form [formGroup]="LeaveForm" class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Karyawan</label>
+                            <p-select [options]="_employeeDatasource" optionLabel="full_name" optionValue="id"
+                                formControlName="employee_id" [showClear]="true" placeholder="Pilih Karyawan"
+                                [filter]="true" size="small" appendTo="body">
+                            </p-select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Kebijakan Cuti</label>
+                            <p-select [options]="_leavePolicyDatasource" optionLabel="title" [optionValue]="'id'"
+                                formControlName="leave_policy_id" [showClear]="true" placeholder="Pilih Kebijakan Cuti"
+                                size="small" appendTo="body">
+                                <ng-template let-option pTemplate="item">
+                                    <div class="flex justify-between items-center w-full">
+                                        <span>{{ option.title }}</span>
+                                        <span class="text-xs text-gray-600 ml-2"
+                                            *ngIf="option.remaining_days !== undefined">
+                                            (Sisa: {{ option.remaining_days }}/{{ option.total_days }} hari)
+                                        </span>
+                                    </div>
+                                </ng-template>
+                            </p-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Tanggal Mulai</label>
+                            <p-datepicker formControlName="start_date" dateFormat="dd MMyy" placeholder="Pilih Tanggal"
+                                size="small" appendTo="body">
+                            </p-datepicker>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Tanggal Akhir</label>
+                            <p-datepicker formControlName="end_date" dateFormat="dd MM yy" placeholder="Pilih Tanggal"
+                                size="small" appendTo="body">
+                            </p-datepicker>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Total Hari</label>
+                            <p-inputNumber formControlName="total_days" [readonly]="true"
+                                placeholder="Dihitung Otomatis" size="small" appendTo="body">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label>Status</label>
+                            <p-select [options]="[
+            { label: 'Pending', value: 'pending' },
+            { label: 'Approved', value: 'approved' },
+            { label: 'Rejected', value: 'rejected' },
+            { label: 'Cancelled', value: 'cancelled' }
+          ]" optionLabel="label" optionValue="value" formControlName="status" [showClear]="true"
+                                placeholder="Pilih Status" size="small" appendTo="body" [disabled]="isStatusDisabled()">
+                            </p-select>
+                            <small class="text-gray-600" *ngIf="isStatusDisabled()">
+                                Status otomatis di-set ke Approved karena kebijakan tidak memerlukan approval
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Alasan Cuti</label>
+                    <textarea pTextarea formControlName="reason" rows="3"
+                        placeholder="Masukkan alasan cuti..."></textarea>
+                </div>
+
+                <div class="form-group mb-8">
+                    <label>Catatan</label>
+                    <textarea pTextarea formControlName="remarks" rows="3" placeholder="Masukkan catatan..."></textarea>
+                </div>
+
+                <div class="flex flex-row justify-end items-center gap-5">
+                    <p-button label="Batal" severity="secondary" (onClick)="handleBackToList()" size="small">
+                    </p-button>
+
+                    <p-button [label]="_pageState() === 'create' ? 'Simpan' : 'Update'"
+                        (onClick)="_pageState() === 'create' ? handleAddLeave(LeaveForm.value) : handleEditLeave(LeaveForm.value)"
+                        size="small" [disabled]="LeaveForm.invalid">
+                    </p-button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</app-dsh-base-layout>
