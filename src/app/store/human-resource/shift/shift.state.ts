@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { ShiftAction } from "./shift.action";
-import { tap } from "rxjs";
+import { from, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { ShiftService } from "../../../services/pages/application/human-resource/shift.service";
 
@@ -35,18 +35,15 @@ export class ShiftState implements NgxsOnInit {
 
     @Action(ShiftAction.GetShift)
     async getShift(ctx: StateContext<ShiftStateModel>) {
-        return this._shiftService
-            .getAll()
+        return this._shiftService.getAll()
             .pipe(
                 tap((result) => {
-                    console.log("shift =>", result);
-
                     const state = ctx.getState();
                     ctx.setState({
                         ...state,
                         data: result
                     });
-                }),
+                })
             )
     }
 

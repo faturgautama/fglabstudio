@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { from } from 'rxjs';
+import { from, catchError, throwError } from 'rxjs';
 import { UtilityService } from './utility';
 import Dexie from 'dexie';
 import { DatabaseService } from '../../app.database';
@@ -9,6 +9,8 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
     private dbService = inject(DatabaseService);
     protected abstract table: Dexie.Table<T, number>;
     private readonly DEFAULT_DELAY = 2500;
+    private readonly MAX_RETRIES = 3;
+    private readonly RETRY_DELAY = 1000; // ms
 
     protected get db() {
         if (!this.dbService.db) {
@@ -17,10 +19,52 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
         return this.dbService.db;
     }
 
-    // ✅ Semua operasi harus call ensureReady() dulu
-    protected async withLoading<R>(operation: () => Promise<R>, delayMs = this.DEFAULT_DELAY) {
-        await this.dbService.ensureReady(); // ✅ Pastikan DB ready
-        return from(operation()).pipe(this._utilityService.withLoading(delayMs));
+    /**
+     * ✅ Retry logic untuk mengatasi race condition
+     * Coba operasi berkali-kali jika terjadi error akibat database switching
+     */
+    private async retryOperation<R>(
+        operation: () => Promise<R>,
+        retries = this.MAX_RETRIES
+    ): Promise<R> {
+        for (let i = 0; i < retries; i++) {
+            try {
+                return await operation();
+            } catch (err: any) {
+                const isLastAttempt = i === retries - 1;
+                const isDatabaseError = err?.message?.includes('Database') ||
+                    err?.message?.includes('database') ||
+                    err?.name === 'VersionChangeError';
+
+                if (isDatabaseError && !isLastAttempt) {
+                    console.warn(`⚠️ Database error (retry ${i + 1}/${retries}):`, err.message);
+                    await this.delay(this.RETRY_DELAY);
+                    await this.dbService.ensureReady();
+                    continue;
+                }
+
+                throw err;
+            }
+        }
+        throw new Error('Operation failed after max retries');
+    }
+
+    private delay(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // ✅ Semua operasi harus call ensureReady() dulu dengan retry logic
+    protected withLoading<R>(operation: () => Promise<R>, delayMs = this.DEFAULT_DELAY) {
+        return from((async () => {
+            await this.dbService.ensureReady(); // ✅ Pastikan DB ready
+            return await this.retryOperation(operation);
+        })()).pipe(
+            this._utilityService.withLoading(delayMs),
+            catchError((err: any) => {
+                console.error('❌ Operation failed:', err);
+                return throwError(() => new Error(`Database operation failed: ${err.message}`));
+            })
+        );
     }
 
     /**
@@ -89,20 +133,20 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
             is_active: true,
         };
 
-        return this.withLoading(() => this.table.add(payload as T));
+        return this.withLoading(async () => await this.table.add(payload as T));
     }
 
     update(id: number, changes: Partial<T>) {
-        return this.withLoading(() => this.table.update(id, { ...changes, updated_at: new Date() } as any));
+        return this.withLoading(async () => await this.table.update(id, { ...changes, updated_at: new Date() } as any));
     }
 
     delete(id: number) {
-        return this.withLoading(() => this.table.update(id, { is_active: false, is_delete: true } as any));
+        return this.withLoading(async () => await this.table.update(id, { is_active: false, is_delete: true } as any));
     }
 
     bulkAdd(entities: T[]) {
         const payload = entities.map(e => ({ ...e, created_at: new Date() }));
-        return from(this.table.bulkAdd(payload));
+        return this.withLoading(async () => await this.table.bulkAdd(payload));
     }
 
     /**

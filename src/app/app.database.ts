@@ -1,6 +1,7 @@
 import Dexie, { Table } from 'dexie';
 import { EmployeeModel } from './model/pages/application/human-resource/employee.model';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 export class AppDatabase extends Dexie {
     hr_setting!: Table<EmployeeModel.IHumanResourceSetting, number>;
@@ -33,52 +34,91 @@ export class AppDatabase extends Dexie {
 export class DatabaseService {
     db!: AppDatabase;
     private currentDbName = 'CodeByXerenityDatabase';
-    private switchPromise: Promise<void> | null = null; // ✅ Track switching state
+    private switchPromise: Promise<void> | null = null;
+    private dbReadySubject = new BehaviorSubject<boolean>(false);
+    public dbReady$ = this.dbReadySubject.asObservable();
 
     constructor() {
         this.db = new AppDatabase(this.currentDbName);
+        this.initializeDb();
+    }
+
+    private async initializeDb(): Promise<void> {
+        try {
+            await this.db.open();
+            this.dbReadySubject.next(true);
+        } catch (err) {
+            console.error('❌ Gagal inisialisasi database:', err);
+            this.dbReadySubject.next(false);
+        }
     }
 
     /**
-     * ✅ Pastikan DB ready sebelum operasi
+     * ✅ Pastikan DB ready sebelum operasi dengan error handling
      */
     async ensureReady(): Promise<void> {
+        // Tunggu switching selesai jika sedang berlangsung
         if (this.switchPromise) {
-            await this.switchPromise; // Tunggu switching selesai
+            await this.switchPromise;
         }
 
+        // Jika DB belum open, coba buka
         if (!this.db.isOpen()) {
-            await this.db.open();
+            try {
+                await this.db.open();
+                this.dbReadySubject.next(true);
+            } catch (err) {
+                console.error('❌ Gagal membuka database:', err);
+                this.dbReadySubject.next(false);
+                throw new Error('Database tidak siap');
+            }
         }
     }
 
     /**
-     * Ganti database aktif sesuai user login
+     * ✅ Ganti database aktif sesuai user login dengan proper locking
      */
     async switchToUserDatabase(userId: string): Promise<void> {
         const newDbName = `CodeByXerenityDatabase_${userId}`;
 
         if (this.currentDbName === newDbName) return;
 
+        // ✅ Jika sudah ada switching, tunggu dulu
+        if (this.switchPromise) {
+            await this.switchPromise;
+        }
+
         // ✅ Tandai sedang proses switching
+        this.dbReadySubject.next(false);
+
         this.switchPromise = (async () => {
             console.log(`🔄 Switching IndexedDB: ${this.currentDbName} → ${newDbName}`);
 
             try {
+                // Close DB lama
                 if (this.db?.isOpen()) {
                     await this.db.close();
                 }
 
+                // Buat instance DB baru
                 this.db = new AppDatabase(newDbName);
                 await this.db.open();
                 this.currentDbName = newDbName;
 
                 console.log(`✅ Database aktif: ${newDbName}`);
+                this.dbReadySubject.next(true);
             } catch (err) {
                 console.error('❌ Gagal switch database:', err);
+                // Fallback ke DB default
                 this.db = new AppDatabase('CodeByXerenityDatabase');
                 this.currentDbName = 'CodeByXerenityDatabase';
-                await this.db.open();
+                try {
+                    await this.db.open();
+                    this.dbReadySubject.next(true);
+                } catch (fallbackErr) {
+                    console.error('❌ Gagal fallback ke DB default:', fallbackErr);
+                    this.dbReadySubject.next(false);
+                }
             } finally {
                 this.switchPromise = null; // ✅ Selesai switching
             }

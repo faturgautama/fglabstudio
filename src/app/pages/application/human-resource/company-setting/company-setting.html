@@ -1,4 +1,354 @@
 <app-dsh-base-layout>
-    <p>company-setting works!</p>
+    <div class="grid w-full gap-5 p-5">
+        <!-- Header -->
+        <div class="flex flex-row justify-between items-center bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col">
+                <p class="text-lg font-semibold text-gray-700">
+                    Pengaturan Perusahaan
+                </p>
+                <p class="text-sm text-gray-500">
+                    Kelola pengaturan kebijakan dan benefit perusahaan Anda
+                </p>
+            </div>
+        </div>
 
+        <!-- Form Container -->
+        <div class="grid w-full" [formGroup]="Form">
+            <!-- Section 1: Informasi Umum -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Informasi Umum</p>
+                    <p class="text-sm text-gray-500">Data dasar perusahaan dan kebijakan umum</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Nama Perusahaan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Nama Perusahaan <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="company_name" pInputText placeholder="Masukkan nama perusahaan"
+                            class="p-inputtext-sm w-full">
+                        @if (Form.get('company_name')?.touched && Form.get('company_name')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Nama Perusahaan tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Tanggal Berlaku -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Tanggal Berlaku <span class="text-red-500">*</span>
+                        </label>
+                        <p-date-picker formControlName="effective_date" dateFormat="dd MM yy"
+                            placeholder="Pilih tanggal berlaku" size="small" appendTo="body" class="w-full">
+                        </p-date-picker>
+                        @if (Form.get('effective_date')?.touched && Form.get('effective_date')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Tanggal Berlaku tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Tarif Lembur per Jam -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Tarif Lembur per Jam <span class="text-red-500">*</span>
+                        </label>
+                        <p-input-number formControlName="overtime_rate_per_hour" size="small" class="w-full"
+                            [useGrouping]="true" placeholder="Masukkan tarif lembur">
+                        </p-input-number>
+                        @if (Form.get('overtime_rate_per_hour')?.touched && Form.get('overtime_rate_per_hour')?.invalid)
+                        {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Tarif Lembur tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: BPJS Ketenagakerjaan -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">BPJS Ketenagakerjaan</p>
+                    <p class="text-sm text-gray-500">Konfigurasi tunjangan BPJS ketenagakerjaan</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Checkbox BPJS Ketenagakerjaan -->
+                    <div class="flex items-center gap-3 md:col-span-2">
+                        <p-checkbox formControlName="has_bpjs_ketenagakerjaan" [binary]="true"
+                            name="has_bpjs_ketenagakerjaan"></p-checkbox>
+                        <label class="text-sm text-gray-700">Aktifkan BPJS Ketenagakerjaan</label>
+                    </div>
+
+                    <!-- Potongan Karyawan BPJS Ketenagakerjaan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Potongan Karyawan (%)</label>
+                        <p-input-number formControlName="bpjs_ketenagakerjaan_employee" size="small" class="w-full"
+                            placeholder="Misal: 2">
+                        </p-input-number>
+                    </div>
+
+                    <!-- Kontribusi Perusahaan BPJS Ketenagakerjaan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Kontribusi Perusahaan (%)</label>
+                        <p-input-number formControlName="bpjs_ketenagakerjaan_company" size="small" class="w-full"
+                            placeholder="Misal: 3.7">
+                        </p-input-number>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: BPJS Pensiun -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">BPJS Pensiun</p>
+                    <p class="text-sm text-gray-500">Konfigurasi tunjangan BPJS pensiun</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Checkbox BPJS Pensiun -->
+                    <div class="flex items-center gap-3 md:col-span-2">
+                        <p-checkbox formControlName="has_bpjs_pensiun" [binary]="true"
+                            name="has_bpjs_pensiun"></p-checkbox>
+                        <label class="text-sm text-gray-700">Aktifkan BPJS Pensiun</label>
+                    </div>
+
+                    <!-- Potongan Karyawan BPJS Pensiun -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Potongan Karyawan (%)</label>
+                        <p-input-number formControlName="bpjs_pensiun_employee" size="small" class="w-full"
+                            placeholder="Misal: 1">
+                        </p-input-number>
+                    </div>
+
+                    <!-- Kontribusi Perusahaan BPJS Pensiun -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Kontribusi Perusahaan (%)</label>
+                        <p-input-number formControlName="bpjs_pensiun_company" size="small" class="w-full"
+                            placeholder="Misal: 2">
+                        </p-input-number>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: BPJS Kesehatan -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">BPJS Kesehatan</p>
+                    <p class="text-sm text-gray-500">Konfigurasi tunjangan BPJS kesehatan</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Checkbox BPJS Kesehatan -->
+                    <div class="flex items-center gap-3 md:col-span-2">
+                        <p-checkbox formControlName="has_bpjs_kesehatan" [binary]="true"
+                            name="has_bpjs_kesehatan"></p-checkbox>
+                        <label class="text-sm text-gray-700">Aktifkan BPJS Kesehatan</label>
+                    </div>
+
+                    <!-- Potongan Karyawan BPJS Kesehatan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Potongan Karyawan (%)</label>
+                        <p-input-number formControlName="bpjs_kesehatan_employee" size="small" class="w-full"
+                            placeholder="Misal: 1">
+                        </p-input-number>
+                    </div>
+
+                    <!-- Kontribusi Perusahaan BPJS Kesehatan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Kontribusi Perusahaan (%)</label>
+                        <p-input-number formControlName="bpjs_kesehatan_company" size="small" class="w-full"
+                            placeholder="Misal: 4">
+                        </p-input-number>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Pajak -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-col gap-1 mb-5 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Konfigurasi Pajak</p>
+                    <p class="text-sm text-gray-500">Pengaturan pajak PPh21 dan kategori PTKP</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Checkbox Pajak -->
+                    <div class="flex items-center gap-3 md:col-span-2">
+                        <p-checkbox formControlName="has_tax" [binary]="true" name="has_tax"></p-checkbox>
+                        <label class="text-sm text-gray-700">Aktifkan Perhitungan Pajak</label>
+                    </div>
+
+                    <!-- Metode Pajak -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Metode Pajak</label>
+                        <p-select [options]="TAX_METHODS" formControlName="tax_method" optionLabel="label"
+                            optionValue="value" placeholder="Pilih metode" size="small" class="w-full" appendTo="body">
+                            <ng-template #item let-option>
+                                <div class="flex flex-col gap-1">
+                                    <span class="font-medium">{{ option.label }}</span>
+                                    <span class="text-xs text-gray-500">{{ option.description }}</span>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                    </div>
+
+                    <!-- Kategori PTKP -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Kategori PTKP</label>
+                        <p-select [options]="TAX_PTKP_TYPES" formControlName="tax_ptkp_type" optionLabel="label"
+                            optionValue="value" placeholder="Pilih kategori" size="small" class="w-full"
+                            appendTo="body">
+                            <ng-template #item let-option>
+                                <div class="flex flex-col gap-1">
+                                    <span class="font-medium">{{ option.label }}</span>
+                                    <span class="text-xs text-gray-500">{{ option.description }}</span>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6: Kebijakan Cuti -->
+            <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex flex-row justify-between items-start mb-5 pb-3 border-b border-gray-300">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-base font-semibold text-gray-700">Kebijakan Cuti</p>
+                        <p class="text-sm text-gray-500">Kelola kebijakan cuti perusahaan</p>
+                    </div>
+                    <p-button severity="success" size="small" [icon]="'pi pi-plus'" label="Tambah Cuti"
+                        (onClick)="addLeavePolicy()">
+                    </p-button>
+                </div>
+
+                @if (leavePolicies.length > 0) {
+                <div class="space-y-5">
+                    @for (policy of leavePoliciesControls; track $index; let i = $index) {
+                    <div [formGroup]="policy" class="p-4 border-l-4 border-blue-500 bg-gray-50 rounded-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <p class="text-sm font-semibold text-gray-700">Kebijakan Cuti #{{ i + 1 }}</p>
+                            <p-button severity="danger" size="small" [icon]="'pi pi-trash'" [text]="true"
+                                (onClick)="removeLeavePolicy(i)">
+                            </p-button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <!-- Kode Kebijakan -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Kode <span class="text-red-500">*</span>
+                                </label>
+                                <input formControlName="code" pInputText placeholder="Misal: CUTI_TAHUNAN"
+                                    class="p-inputtext-sm w-full">
+                                @if (policy.get('code')?.touched && policy.get('code')?.invalid) {
+                                <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                                    Kode tidak boleh kosong
+                                </span>
+                                }
+                            </div>
+
+                            <!-- Nama Kebijakan -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Nama Kebijakan <span class="text-red-500">*</span>
+                                </label>
+                                <input formControlName="title" pInputText placeholder="Misal: Cuti Tahunan"
+                                    class="p-inputtext-sm w-full">
+                                @if (policy.get('title')?.touched && policy.get('title')?.invalid) {
+                                <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                                    Nama tidak boleh kosong
+                                </span>
+                                }
+                            </div>
+
+                            <!-- Deskripsi -->
+                            <div class="flex flex-col gap-1 md:col-span-2">
+                                <label class="text-sm text-gray-700 font-medium">Deskripsi</label>
+                                <textarea formControlName="description" pTextarea
+                                    placeholder="Deskripsi kebijakan cuti..." rows="2"
+                                    class="p-inputtext-sm w-full"></textarea>
+                            </div>
+
+                            <!-- Jenis Cuti -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Jenis Cuti <span class="text-red-500">*</span>
+                                </label>
+                                <p-select [options]="LEAVE_TYPES" formControlName="leave_type" optionLabel="label"
+                                    optionValue="value" placeholder="Pilih jenis cuti" size="small" class="w-full"
+                                    appendTo="body">
+                                </p-select>
+                            </div>
+
+                            <!-- Total Hari -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Total Hari <span class="text-red-500">*</span>
+                                </label>
+                                <p-input-number formControlName="total_days" size="small" class="w-full"
+                                    [useGrouping]="false" placeholder="Misal: 12" [min]="0">
+                                </p-input-number>
+                                @if (policy.get('total_days')?.touched && policy.get('total_days')?.invalid) {
+                                <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                                    Masukkan jumlah hari yang valid
+                                </span>
+                                }
+                            </div>
+
+                            <!-- Pembatasan Gender -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">Pembatasan Gender</label>
+                                <p-select [options]="GENDER_RESTRICTIONS" formControlName="gender_restriction"
+                                    optionLabel="label" optionValue="value" placeholder="Pilih" size="small"
+                                    class="w-full" appendTo="body">
+                                </p-select>
+                            </div>
+
+                            <!-- Checkboxes -->
+                            <div class="flex flex-col gap-3 md:col-span-2">
+                                <div class="flex items-center gap-3">
+                                    <p-checkbox formControlName="is_paid" [binary]="true"></p-checkbox>
+                                    <label class="text-sm text-gray-700">Cuti Berbayar</label>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <p-checkbox formControlName="requires_approval" [binary]="true"></p-checkbox>
+                                    <label class="text-sm text-gray-700">Memerlukan Persetujuan</label>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <p-checkbox formControlName="is_active" [binary]="true"></p-checkbox>
+                                    <label class="text-sm text-gray-700">Aktif</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+                } @else {
+                <div class="text-center py-8">
+                    <p class="text-gray-500">Belum ada kebijakan cuti. Klik tombol "Tambah Cuti" untuk menambahkan.</p>
+                </div>
+                }
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex w-full justify-end items-center gap-3 bg-white p-5 rounded-lg shadow-sm">
+                <p-button severity="secondary" label="Reset" styleClass="p-button-sm" (onClick)="handleReset()">
+                </p-button>
+
+                @if (!_isEditMode) {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm"
+                    [disabled]="Form.invalid || _isLoading" [loading]="_isLoading" (onClick)="handleSave(Form.value)">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm"
+                    [disabled]="Form.invalid || _isLoading" [loading]="_isLoading" (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                }
+            </div>
+        </div>
+    </div>
 </app-dsh-base-layout>

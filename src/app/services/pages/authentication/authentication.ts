@@ -28,11 +28,29 @@ export class AuthenticationService {
         }
       }
     ).pipe(
-      tap((result) => {
-        if (result) {
+      tap((result: any) => {
+        if (result['user']) {
+          this._userData = result['user'];
           localStorage.setItem("_CXUSER_", JSON.stringify(result));
         }
       })
+    )
+  }
+
+  signOut(user_id: number) {
+    const payload = {
+      user_id,
+    };
+
+    return this._http.post(
+      `${environment.SUPABASE_URL}/logout`,
+      payload,
+      {
+        headers: {
+          'Authorization': `Bearer ${environment.SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
     )
   }
 }

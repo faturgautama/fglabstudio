@@ -4,6 +4,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { UpperCasePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { Router } from '@angular/router';
+import { DatabaseService } from '../../../app.database';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-your-application',
@@ -20,7 +22,8 @@ export class YourApplication implements OnInit {
 
   _router = inject(Router);
   _authenticationService = inject(AuthenticationService);
-
+  _databaseService = inject(DatabaseService);
+  _messageService = inject(MessageService);
   user = this._authenticationService._userData;
 
   ngOnInit(): void {
@@ -28,5 +31,18 @@ export class YourApplication implements OnInit {
 
   handleClickApps(url: string) {
     this._router.navigateByUrl(url);
+  }
+
+  handleSignOut() {
+    this._authenticationService
+      .signOut(this.user.user.id)
+      .subscribe(async (result: any) => {
+        if (result.data.id) {
+          this._messageService.add({ severity: 'success', summary: 'Success', detail: 'Sign Out Successfully' });
+          await this._databaseService.switchToUserDatabase(result.data.id);
+          localStorage.clear();
+          this._router.navigateByUrl("/login");
+        }
+      });
   }
 }
