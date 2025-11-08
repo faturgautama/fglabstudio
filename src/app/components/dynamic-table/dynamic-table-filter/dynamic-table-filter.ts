@@ -26,7 +26,7 @@ export class DynamicTableFilter implements OnInit {
 
   @Input('props') props!: DynamicTableModel.IFilter[];
 
-  @Output('onFilter') onFilter = new EventEmitter<DynamicTableModel.IFilter[]>();
+  @Output('onFilter') onFilter = new EventEmitter<any>();
 
   type = DynamicTableModel.IColumnType;
 
@@ -48,20 +48,8 @@ export class DynamicTableFilter implements OnInit {
 
   handleApplyFilter() {
     const formValue = this._formFilter.value;
-
-    const filters = this.props
-      .map((item: any) => {
-        for (const form in formValue) {
-          if (formValue[form] && item.id == form) {
-            item.value = formValue[form];
-          }
-        };
-
-        return item;
-      })
-      .filter(item => item.value.length || item.value);
-
-    this.onFilter.emit(filters);
+    const filtered = Object.fromEntries(Object.entries(formValue).filter(([key, value]) => value !== null && value !== ''));
+    this.onFilter.emit(filtered);
   }
 
   handleClearFilter() {

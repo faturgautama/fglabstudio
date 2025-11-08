@@ -183,9 +183,11 @@ export class Departement implements OnInit, OnDestroy {
     }
   }
 
-  handleToolbarClicked(args: any) {
-    console.log(args.data);
+  handleFilter(args: any) {
+    this._store.dispatch(new DepartementAction.GetDepartement(args));
+  }
 
+  handleToolbarClicked(args: any) {
     if (args.toolbar.id == 'detail') {
       this._formState = 'update';
       this._modalToggler = true;

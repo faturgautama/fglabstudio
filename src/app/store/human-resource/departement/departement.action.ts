@@ -8,6 +8,7 @@ export namespace DepartementAction {
 
     export class GetDepartement {
         static readonly type = '[Departement] Get All';
+        constructor(public filter?: any) { }
     }
 
     export class GetByIdDepartement {

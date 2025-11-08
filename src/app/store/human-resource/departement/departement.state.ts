@@ -25,7 +25,7 @@ export class DepartementState implements NgxsOnInit {
     ) { }
 
     ngxsOnInit(ctx: StateContext<any>): void {
-        ctx.dispatch(new DepartementAction.GetDepartement());
+        ctx.dispatch(new DepartementAction.GetDepartement({}));
     }
 
     @Selector()
@@ -34,9 +34,9 @@ export class DepartementState implements NgxsOnInit {
     }
 
     @Action(DepartementAction.GetDepartement)
-    getDepartement(ctx: StateContext<DepartementStateModel>) {
+    getDepartement(ctx: StateContext<DepartementStateModel>, payload: any) {
         return this._departementService
-            .getAll()
+            .getAll(payload.filter)
             .pipe(
                 tap((result) => {
                     const state = ctx.getState();

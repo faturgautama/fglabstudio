@@ -42,7 +42,7 @@ export class DynamicTable implements OnInit, OnDestroy {
 
   @Output('onRowDoubleClicked') onRowDoubleClicked = new EventEmitter<any>();
 
-  @Output('onFilter') onFilter = new EventEmitter<DynamicTableModel.IFilter[]>();
+  @Output('onFilter') onFilter = new EventEmitter<any>();
 
   @Output('onSort') onSort = new EventEmitter<DynamicTableModel.ISort[]>();
 
@@ -124,10 +124,11 @@ export class DynamicTable implements OnInit, OnDestroy {
   handleClearFilter() {
     this.FilterCount = null;
     this.FilterComps.handleClearFilter();
+    this.onFilter.emit({});
   }
 
-  handleFilter(args: DynamicTableModel.IFilter[]) {
-    this.FilterCount = args.length;
+  handleFilter(args: any) {
+    this.FilterCount = Object.keys(args).length;
     this.onFilter.emit(args);
   }
 

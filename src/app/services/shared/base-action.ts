@@ -110,10 +110,24 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
         return Promise.all(records.map(record => this.resolveRelations(record)));
     }
 
-    getAll() {
+    getAll(filter?: any) {
         return this.withLoading(async () => {
             const result = await this.table.toArray();
-            const filtered = result.filter(item => item.is_active !== false);
+            let filtered = result.filter(item => item.is_active !== false);
+
+            if (filter) {
+                for (const key in filter) {
+                    if (filter[key]) {
+                        filtered = filtered.filter((item: T) => {
+                            const value = item[key as keyof T];
+                            if (typeof value === 'string') {
+                                return value.toLowerCase().includes(filter[key]?.toLowerCase() || '');
+                            }
+                            return value == filter[key];
+                        });
+                    }
+                }
+            }
             return this.resolveMultipleRelations(filtered);
         });
     }

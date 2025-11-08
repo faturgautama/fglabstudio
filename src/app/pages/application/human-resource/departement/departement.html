@@ -1,7 +1,7 @@
 <app-dsh-base-layout>
     <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
         <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
-            (onToolbarClicked)="handleToolbarClicked($event)">
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)">
         </app-dynamic-table>
 
         <p-dialog appendTo="body" [(visible)]="_modalToggler" [style]="{ width: '30rem' }"
