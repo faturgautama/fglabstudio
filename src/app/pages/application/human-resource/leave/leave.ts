@@ -305,6 +305,16 @@ export class Leave implements OnInit, OnDestroy {
         }
     }
 
+    handleFilter(args: any) {
+        const filter = args || {};
+        this._store.dispatch(new LeaveAction.GetLeave(filter, {}));
+    }
+
+    handleSort(args: any) {
+        const sort = args || {};
+        this._store.dispatch(new LeaveAction.GetLeave({}, sort));
+    }
+
     handleToolbarClicked(args: any) {
         const data = args.data as EmployeeModel.ILeave;
 

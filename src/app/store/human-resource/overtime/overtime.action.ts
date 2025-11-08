@@ -8,6 +8,7 @@ export namespace OvertimeAction {
 
     export class GetOvertime {
         static readonly type = '[Overtime] Get All';
+        constructor(public filter?: any, public sort?: any) { }
     }
 
     export class GetByIdOvertime {

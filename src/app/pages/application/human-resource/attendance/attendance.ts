@@ -451,6 +451,16 @@ export class Attendance implements OnInit, OnDestroy {
     }
   }
 
+  handleFilter(args: any) {
+    const filter = args || {};
+    this._store.dispatch(new AttendanceAction.GetAttendance(filter, {}));
+  }
+
+  handleSort(args: any) {
+    const sort = args || {};
+    this._store.dispatch(new AttendanceAction.GetAttendance({}, sort));
+  }
+
   handleToolbarClicked(args: any) {
     if (args.toolbar.id === 'delete') {
       this._confirmationService.confirm({

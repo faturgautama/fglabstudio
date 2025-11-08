@@ -34,8 +34,8 @@ export class AttendanceState implements NgxsOnInit {
     }
 
     @Action(AttendanceAction.GetAttendance)
-    getAttendance(ctx: StateContext<AttendanceStateModel>) {
-        return this._attendanceService.getAll().pipe(
+    getAttendance(ctx: StateContext<AttendanceStateModel>, payload: any) {
+        return this._attendanceService.getAll(payload.filter, payload.sort).pipe(
             tap((result) => {
                 const state = ctx.getState();
 

@@ -36,7 +36,7 @@ export class DepartementState implements NgxsOnInit {
     @Action(DepartementAction.GetDepartement)
     getDepartement(ctx: StateContext<DepartementStateModel>, payload: any) {
         return this._departementService
-            .getAll(payload.filter)
+            .getAll(payload.filter, payload.sort)
             .pipe(
                 tap((result) => {
                     const state = ctx.getState();

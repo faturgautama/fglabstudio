@@ -39,8 +39,8 @@ export class OvertimeState implements NgxsOnInit {
     }
 
     @Action(OvertimeAction.GetOvertime)
-    getOvertime(ctx: StateContext<OvertimeStateModel>) {
-        return this._overtimeService.getAll().pipe(
+    getOvertime(ctx: StateContext<OvertimeStateModel>, payload: any) {
+        return this._overtimeService.getAll(payload.filter, payload.sort).pipe(
             tap((result) => {
                 const state = ctx.getState();
                 ctx.setState({

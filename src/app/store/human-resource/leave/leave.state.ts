@@ -39,8 +39,8 @@ export class LeaveState implements NgxsOnInit {
     }
 
     @Action(LeaveAction.GetLeave)
-    getLeave(ctx: StateContext<LeaveStateModel>) {
-        return this._leaveService.getAll().pipe(
+    getLeave(ctx: StateContext<LeaveStateModel>, payload: any) {
+        return this._leaveService.getAll(payload.filter, payload.sort).pipe(
             tap((result) => {
                 const state = ctx.getState();
                 ctx.setState({

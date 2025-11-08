@@ -172,6 +172,16 @@ export class Position implements OnInit, OnDestroy {
     }
   }
 
+  handleFilter(args: any) {
+    const filter = args || {};
+    this._store.dispatch(new PositionAction.GetPosition(filter, {}));
+  }
+
+  handleSort(args: any) {
+    const sort = args || {};
+    this._store.dispatch(new PositionAction.GetPosition({}, sort));
+  }
+
   handleToolbarClicked(args: any) {
     if (args.toolbar.id == 'detail') {
       this._formState = 'update';

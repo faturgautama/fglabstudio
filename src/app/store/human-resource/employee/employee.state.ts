@@ -54,7 +54,7 @@ export class EmployeeState implements NgxsOnInit {
     }
 
     @Action(EmployeeAction.GetEmployee)
-    getEmployee(ctx: StateContext<EmployeeStateModel>) {
+    getEmployee(ctx: StateContext<EmployeeStateModel>, payload: any) {
         const state = ctx.getState();
         ctx.setState({
             ...state,
@@ -63,7 +63,7 @@ export class EmployeeState implements NgxsOnInit {
         });
 
         return this._employeeService
-            .getAll()
+            .getAll(payload.filter, payload.sort)
             .pipe(
                 tap((result) => {
                     ctx.setState({

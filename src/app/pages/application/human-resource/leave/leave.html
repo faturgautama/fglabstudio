@@ -3,7 +3,8 @@
         <!-- List View -->
         <div *ngIf="_pageState() === 'list'" class="grid w-full p-5 bg-white rounded-lg shadow-sm">
             <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
-                (onToolbarClicked)="handleToolbarClicked($event)">
+                (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+                (onSort)="handleSort($event)">
             </app-dynamic-table>
         </div>
 

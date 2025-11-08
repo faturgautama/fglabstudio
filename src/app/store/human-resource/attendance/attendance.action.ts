@@ -13,6 +13,7 @@ export namespace AttendanceAction {
 
     export class GetAttendance {
         static readonly type = '[Attendance] Get All';
+        constructor(public filter?: any, public sort?: any) { }
     }
 
     export class GetByIdAttendance {

@@ -8,6 +8,7 @@ export namespace EmployeeAction {
 
     export class GetEmployee {
         static readonly type = '[Employee] Get All';
+        constructor(public filter?: any, public sort?: any) { }
     }
 
     export class GetByIdEmployee {

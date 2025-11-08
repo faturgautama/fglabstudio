@@ -157,6 +157,16 @@ export class Shift implements OnInit, OnDestroy {
     }
   }
 
+  handleFilter(args: any) {
+    const filter = args || {};
+    this._store.dispatch(new ShiftAction.GetShift(filter, {}));
+  }
+
+  handleSort(args: any) {
+    const sort = args || {};
+    this._store.dispatch(new ShiftAction.GetShift({}, sort));
+  }
+
   handleToolbarClicked(args: any) {
     if (args.toolbar.id == 'detail') {
       this._formState = 'update';

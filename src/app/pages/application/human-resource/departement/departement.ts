@@ -115,6 +115,11 @@ export class Departement implements OnInit, OnDestroy {
         title: 'Nama Departemen',
         value: ''
       },
+      {
+        id: 'created_at',
+        title: 'Waktu Entry',
+        value: ''
+      },
     ],
     toolbar: [
       { id: 'detail', icon: 'pi pi-info', title: 'Detail' },
@@ -184,7 +189,13 @@ export class Departement implements OnInit, OnDestroy {
   }
 
   handleFilter(args: any) {
-    this._store.dispatch(new DepartementAction.GetDepartement(args));
+    const filter = args || {};
+    this._store.dispatch(new DepartementAction.GetDepartement(filter, {}));
+  }
+
+  handleSort(args: any) {
+    const sort = args || {};
+    this._store.dispatch(new DepartementAction.GetDepartement({}, sort));
   }
 
   handleToolbarClicked(args: any) {

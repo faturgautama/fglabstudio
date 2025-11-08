@@ -110,7 +110,7 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
         return Promise.all(records.map(record => this.resolveRelations(record)));
     }
 
-    getAll(filter?: any) {
+    getAll(filter?: any, sort?: any) {
         return this.withLoading(async () => {
             const result = await this.table.toArray();
             let filtered = result.filter(item => item.is_active !== false);
@@ -128,6 +128,30 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
                     }
                 }
             }
+
+            if (sort) {
+                filtered = filtered.sort((a: T, b: T) => {
+                    const valueA = a[sort.sort_by as keyof T];
+                    const valueB = b[sort.sort_by as keyof T];
+
+                    let comparison = 0;
+
+                    if (typeof valueA === 'number' && typeof valueB === 'number') {
+                        comparison = valueA - valueB;
+                    } else if (valueA instanceof Date && valueB instanceof Date) {
+                        comparison = valueA.getTime() - valueB.getTime();
+                    } else if (typeof valueA === 'string' && typeof valueB === 'string') {
+                        comparison = valueA.localeCompare(valueB);
+                    } else {
+                        comparison = String(valueA).localeCompare(String(valueB));
+                    }
+
+                    // Support both 'asc'/'desc' and 'Ascending'/'Descending' formats
+                    const sortType = sort.sort_type?.toLowerCase() || 'asc';
+                    return sortType === 'asc' || sortType === 'ascending' ? comparison : -comparison;
+                });
+            }
+
             return this.resolveMultipleRelations(filtered);
         });
     }

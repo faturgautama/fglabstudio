@@ -8,7 +8,7 @@ export namespace DepartementAction {
 
     export class GetDepartement {
         static readonly type = '[Departement] Get All';
-        constructor(public filter?: any) { }
+        constructor(public filter?: any, public sort?: any) { }
     }
 
     export class GetByIdDepartement {

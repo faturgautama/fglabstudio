@@ -22,7 +22,8 @@
                 (onClick)="opFilter.toggle($event)" [badge]="FilterCount">
             </p-button>
 
-            <p-button severity="secondary" [outlined]="true" icon="pi pi-sort" label="Sort" styleClass="p-button-sm">
+            <p-button severity="secondary" [outlined]="true" icon="pi pi-sort" label="Sort" styleClass="p-button-sm"
+                (onClick)="opSort.toggle($event)">
             </p-button>
 
             @for (item of props.custom_button; track $index) {
@@ -152,5 +153,16 @@
         <app-dynamic-table-filter #FilterComps [props]="props.filter!"
             (onFilter)="handleFilter($event); opFilter.hide()">
         </app-dynamic-table-filter>
+    </div>
+</p-popover>
+
+<p-popover #opSort appendTo="body">
+    <div class="flex flex-col gap-4 w-[25rem]">
+        <div class="flex flex-row justify-between items-center">
+            <p class="text-gray-700 font-medium text-base">Sort</p>
+        </div>
+
+        <app-dynamic-table-sort #SortComps [props]="props.sort!" (onSort)="handleSort($event); opSort.hide()">
+        </app-dynamic-table-sort>
     </div>
 </p-popover>

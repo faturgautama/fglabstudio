@@ -1,1 +1,31 @@
-<p>dynamic-table-sort works!</p>
+<div class="grid w-full" [formGroup]="_formSort">
+    <div class="flex flex-col gap-1 w-full pb-2 mb-2">
+        <label class="text-sm text-gray-700 font-medium">
+            Urutkan Berdasarkan
+        </label>
+
+        <p-select #SortBySelect [options]="props" optionLabel="title" optionValue="id" class="w-full" size="small"
+            appendTo="body" [filter]="true">
+        </p-select>
+    </div>
+
+    <div class="flex flex-col gap-1 w-full pb-2 mb-2">
+        <label class="text-sm text-gray-700 font-medium">
+            Jenis Pengurutan
+        </label>
+
+        <p-select #SortTypeSelect [options]="['Ascending', 'Descending']" class="w-full" size="small" appendTo="body">
+            <ng-template pTemplate="item" let-item>
+                <div class="flex flex-row justify-between items-center">
+                    <span>{{ item }}</span>
+                </div>
+            </ng-template>
+        </p-select>
+    </div>
+
+    <div class="grid mt-1">
+        <p-button severity="info" label="Sort" styleClass="p-button-sm w-full"
+            (onClick)="handleApplySort(SortBySelect.value, SortTypeSelect.value)">
+        </p-button>
+    </div>
+</div>

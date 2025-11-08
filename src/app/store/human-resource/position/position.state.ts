@@ -34,13 +34,11 @@ export class PositionState implements NgxsOnInit {
     }
 
     @Action(PositionAction.GetPosition)
-    getPosition(ctx: StateContext<PositionStateModel>) {
+    getPosition(ctx: StateContext<PositionStateModel>, payload: any) {
         return this._positionService
-            .getAll()
+            .getAll(payload.filter, payload.sort)
             .pipe(
                 tap((result) => {
-                    console.log("position =>", result);
-
                     const state = ctx.getState();
                     ctx.setState({
                         ...state,

@@ -8,6 +8,7 @@ export namespace ShiftAction {
 
     export class GetShift {
         static readonly type = '[Shift] Get All';
+        constructor(public filter?: any, public sort?: any) { }
     }
 
     export class GetByIdShift {

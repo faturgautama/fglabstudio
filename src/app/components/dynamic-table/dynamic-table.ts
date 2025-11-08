@@ -11,6 +11,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { FormsModule } from '@angular/forms';
 import { DynamicTableFilter } from "./dynamic-table-filter/dynamic-table-filter";
+import { DynamicTableSort } from './dynamic-table-sort/dynamic-table-sort';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -24,7 +25,8 @@ import { DynamicTableFilter } from "./dynamic-table-filter/dynamic-table-filter"
     IconFieldModule,
     InputIconModule,
     PopoverModule,
-    DynamicTableFilter
+    DynamicTableFilter,
+    DynamicTableSort
   ],
   standalone: true,
   templateUrl: './dynamic-table.html',
@@ -60,24 +62,33 @@ export class DynamicTable implements OnInit, OnDestroy {
 
   @ViewChild('FilterComps') FilterComps!: DynamicTableFilter;
   FilterCount: any;
+  SortCount: any;
+
+  @ViewChild('SortComps') SortComps!: DynamicTableSort;
 
   constructor(
     private _cdr: ChangeDetectorRef,
     private _activatedRoute: ActivatedRoute
   ) {
+
+  }
+
+  ngOnInit(): void {
+    this._originalDatasource = JSON.parse(JSON.stringify(this.props.datasource));
+
     this._keywordSearch$
       .pipe(
         takeUntil(this.Destroy$),
         debounceTime(750),
         distinctUntilChanged()
       ).subscribe((result) => {
-        if (this.props && !result.length) {
+        if (!result.length) {
           this.props.datasource = this._originalDatasource;
           this._cdr.detectChanges();
           return;
         }
 
-        if (this.props && result.length) {
+        if (result.length) {
           this.props.datasource = this._originalDatasource.filter((item) => {
             const stringified = JSON.stringify(item);
             if (stringified.toLowerCase().includes(result.toLowerCase())) {
@@ -90,22 +101,17 @@ export class DynamicTable implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit(): void {
-    this._originalDatasource = JSON.parse(JSON.stringify(this.props.datasource));
-  }
-
   ngOnDestroy(): void {
     this.Destroy$.next(0);
     this.Destroy$.complete();
   }
 
   handleKeydownSearch(args: any) {
+    console.log(args);
     this._keywordSearch$.next(args);
   }
 
   handleCellClicked(args: any, columns: any) {
-    console.log("args =>", args);
-    console.log("columns =>", columns);
     this.onCellClicked.emit(args);
   }
 
@@ -130,6 +136,10 @@ export class DynamicTable implements OnInit, OnDestroy {
   handleFilter(args: any) {
     this.FilterCount = Object.keys(args).length;
     this.onFilter.emit(args);
+  }
+
+  handleSort(args: any) {
+    this.onSort.emit(args);
   }
 
   handleFormatBadgeClass(value: string) {

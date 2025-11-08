@@ -8,6 +8,7 @@ export namespace LeaveAction {
 
     export class GetLeave {
         static readonly type = '[Leave] Get All';
+        constructor(public filter?: any, public sort?: any) { }
     }
 
     export class GetByIdLeave {

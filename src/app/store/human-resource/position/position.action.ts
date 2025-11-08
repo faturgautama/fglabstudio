@@ -8,6 +8,7 @@ export namespace PositionAction {
 
     export class GetPosition {
         static readonly type = '[Position] Get All';
+        constructor(public filter?: any, public sort?: any) { }
     }
 
     export class GetByIdPosition {
