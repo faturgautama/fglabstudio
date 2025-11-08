@@ -27,10 +27,12 @@
         @if (toggleSidebar) {
         <div class="flex flex-col">
             <p class="text-sm text-gray-700 font-medium mb-0">
-                PT. Code By Xerenity
+                {{ resolverExtraData.company_setting
+                ? resolverExtraData.company_setting?.company_name
+                : 'Perusahaan Belum Diatur' }}
             </p>
             <p class="text-xs text-gray-500">
-                20 Pegawai
+                {{ resolverExtraData.employee_count }} Pegawai
             </p>
         </div>
         }

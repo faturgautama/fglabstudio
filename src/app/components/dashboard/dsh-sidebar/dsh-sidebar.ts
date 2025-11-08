@@ -6,6 +6,9 @@ import { SidebarModel } from '../../../model/components/dashboard/sidebar.model'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { DepartementState } from '../../../store/human-resource/departement';
+import { CompanySettingState } from '../../../store/human-resource/company-setting';
+import { EmployeeModel } from '../../../model/pages/application/human-resource/employee.model';
+import { EmployeeState } from '../../../store/human-resource/employee';
 
 @Component({
   selector: 'app-dsh-sidebar',
@@ -30,6 +33,8 @@ export class DshSidebar implements OnInit, OnDestroy {
 
   _settingUrl = '';
 
+  _companySetting!: EmployeeModel.IHumanResourceSetting | null | undefined;
+
   constructor(
     private _store: Store,
     private _router: Router,
@@ -53,9 +58,7 @@ export class DshSidebar implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.resolverExtraData.title == 'Departement') {
-      this._store.select(DepartementState.getAll)
-        .pipe(takeUntil(this.Destroy$))
-        .subscribe(result => this.resolverExtraData.datasource = result);
+      this.getHumanResourceState();
     }
   }
 
@@ -83,5 +86,19 @@ export class DshSidebar implements OnInit, OnDestroy {
 
   handleClickSetting() {
     this._router.navigateByUrl(this._settingUrl);
+  }
+
+  private getHumanResourceState() {
+    this._store.select(DepartementState.getAll)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.resolverExtraData.datasource = result);
+
+    this._store.select(CompanySettingState.getSingle)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.resolverExtraData.company_setting = result);
+
+    this._store.select(EmployeeState.getAll)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.resolverExtraData.employee_count = result.length);
   }
 }

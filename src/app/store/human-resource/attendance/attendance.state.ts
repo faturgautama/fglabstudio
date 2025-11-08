@@ -59,9 +59,9 @@ export class AttendanceState implements NgxsOnInit {
                     const minutes = diffMinutes % 60;
 
                     // Format hasil keterlambatan
-                    if (hours > 0 && minutes > 0) return `Terlambat ${hours} jam ${minutes} menit`;
-                    if (hours > 0) return `Terlambat ${hours} jam`;
-                    return `Terlambat ${minutes} menit`;
+                    if (hours > 0 && minutes > 0) return `${hours} jam ${minutes} menit`;
+                    if (hours > 0) return `${hours} jam`;
+                    return `${minutes} menit`;
                 };
 
                 // 🔹 Tambahkan field description ke setiap record
