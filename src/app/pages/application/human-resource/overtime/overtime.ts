@@ -15,7 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { TextareaModule } from 'primeng/textarea';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
@@ -92,38 +92,33 @@ export class Overtime implements OnInit, OnDestroy {
             {
                 id: 'date',
                 title: 'Tanggal',
-                type: DynamicTableModel.IColumnType.DATE,
-                width: '150px'
-            },
-            {
-                id: 'start_time',
-                title: 'Jam Mulai',
-                type: DynamicTableModel.IColumnType.TEXT,
-                width: '120px'
-            },
-            {
-                id: 'end_time',
-                title: 'Jam Akhir',
-                type: DynamicTableModel.IColumnType.TEXT,
-                width: '120px'
+                type: DynamicTableModel.IColumnType.TEXTWITHDESCRIPTION,
+                width: '150px',
+                description: 'time'
             },
             {
                 id: 'total_hours',
                 title: 'Total Jam',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '100px'
+                width: '150px'
             },
             {
                 id: 'overtime_type',
                 title: 'Tipe Lembur',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'status',
                 title: 'Status',
-                type: DynamicTableModel.IColumnType.TEXT,
+                type: DynamicTableModel.IColumnType.BADGE,
                 width: '150px'
+            },
+            {
+                id: 'created_at',
+                title: 'Waktu Entry',
+                type: DynamicTableModel.IColumnType.DATETIME,
+                width: '200px'
             },
         ],
         datasource: [],
@@ -171,7 +166,14 @@ export class Overtime implements OnInit, OnDestroy {
             .select(OvertimeState.getAll)
             .pipe(takeUntil(this.Destroy$))
             .subscribe((result) => {
-                this.TableProps.datasource = result;
+                this.TableProps.datasource = result.map((item: any) => {
+                    return {
+                        ...item,
+                        overtime_type: item.overtime_type.replace('-', ' ').toUpperCase(),
+                        date: formatDate(item.date, 'dd-MM-yyyy', 'EN'),
+                        time: `${item.start_time} - ${item.end_time}`,
+                    }
+                });
             });
 
         // Setup auto-calculate total_hours

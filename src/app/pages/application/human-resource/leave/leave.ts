@@ -98,25 +98,31 @@ export class Leave implements OnInit, OnDestroy {
                 id: 'start_date',
                 title: 'Tanggal Mulai',
                 type: DynamicTableModel.IColumnType.DATE,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'end_date',
                 title: 'Tanggal Akhir',
                 type: DynamicTableModel.IColumnType.DATE,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'total_days',
                 title: 'Total Hari',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '100px'
+                width: '120px'
             },
             {
                 id: 'status',
                 title: 'Status',
-                type: DynamicTableModel.IColumnType.TEXT,
+                type: DynamicTableModel.IColumnType.BADGE,
                 width: '150px'
+            },
+            {
+                id: 'created_at',
+                title: 'Waktu Entry',
+                type: DynamicTableModel.IColumnType.DATETIME,
+                width: '200px'
             },
         ],
         datasource: [],

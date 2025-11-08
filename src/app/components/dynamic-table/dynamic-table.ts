@@ -131,6 +131,20 @@ export class DynamicTable implements OnInit, OnDestroy {
     this.onFilter.emit(args);
   }
 
+  handleFormatBadgeClass(value: string) {
+    let class_name = 'bg-red-200 text-red-800';
+
+    if (value === 'approved') {
+      class_name = 'bg-green-200 text-green-800';
+    } else if (value === 'rejected' || value === 'cancelled') {
+      class_name = 'bg-red-200 text-red-800';
+    } else if (value === 'pending') {
+      class_name = 'bg-yellow-200 text-yellow-800';
+    };
+
+    return class_name;
+  }
+
   handleFormatStringToNumber(data: string): number {
     return parseFloat(data);
   }
