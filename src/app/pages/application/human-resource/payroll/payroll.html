@@ -1,0 +1,322 @@
+<app-dsh-base-layout>
+    @if (_pageState() === 'list') {
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+            (onSort)="handleSort($event)">
+        </app-dynamic-table>
+    </div>
+    } @else if (_pageState() === 'detail') {
+    <div class="grid w-full gap-5 p-5">
+        <!-- Header -->
+        <div class="flex flex-row justify-between items-center bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col">
+                <p class="text-lg font-semibold text-gray-700">Detail Payroll</p>
+                <p class="text-sm text-gray-500">Lihat dan edit detail pembayaran karyawan</p>
+            </div>
+            <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left" (onClick)="handleBackToList()"
+                styleClass="p-button-sm">
+            </p-button>
+        </div>
+
+        <!-- Detail Content -->
+        <div class="grid w-full gap-5">
+            <!-- Employee Info -->
+            <div class="bg-white p-5 rounded-lg shadow-sm">
+                <div class="flex flex-col gap-3">
+                    <p class="text-base font-semibold text-gray-700">Informasi Karyawan</p>
+                    @if (_selectedPayroll(); as payroll) {
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Kode Karyawan</p>
+                            <p class="text-sm font-semibold text-gray-700">{{ payroll.employees?.employee_code || '-' }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Nama Karyawan</p>
+                            <p class="text-sm font-semibold text-gray-700">{{ payroll.employees?.full_name || '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Bulan Payroll</p>
+                            <p class="text-sm font-semibold text-gray-700">{{ payroll.month | date:'MMMM yyyy' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-medium">Status Pembayaran</p>
+                            <p class="text-sm font-semibold"
+                                [ngClass]="payroll.payment_status === 'paid' ? 'text-green-600' : 'text-yellow-600'">
+                                {{ payroll.payment_status.toUpperCase() }}
+                            </p>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Payroll Breakdown -->
+            <div class="bg-white p-5 rounded-lg shadow-sm" [formGroup]="PayrollDetailForm">
+                <div class="flex flex-col gap-5">
+                    <p class="text-base font-semibold text-gray-700 pb-3 border-b border-gray-300">Rincian Gaji</p>
+
+                    <!-- Income Section -->
+                    <div class="flex flex-col gap-3">
+                        <p class="text-sm font-semibold text-gray-700">Penghasilan</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-gray-600 font-medium">Gaji Pokok</label>
+                                <p-input-number size="small" readonly class="w-full"
+                                    formControlName="base_salary"></p-input-number>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-gray-600 font-medium">Tunjangan Lembur</label>
+                                <p-input-number size="small" readonly class="w-full"
+                                    formControlName="overtime_pay"></p-input-number>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-divider></p-divider>
+
+                    <!-- Additional Allowances Section -->
+                    <div class="flex flex-col gap-3">
+                        <div class="flex flex-row justify-between items-center">
+                            <p class="text-sm font-semibold text-gray-700">Tunjangan Tambahan</p>
+                            <p-button severity="info" label="Tambah" icon="pi pi-plus" (onClick)="addAllowance()"
+                                styleClass="p-button-sm p-button-text">
+                            </p-button>
+                        </div>
+
+                        @if (additionalAllowancesArray.length > 0) {
+                        <div class="flex flex-col gap-2">
+                            @for (allowance of additionalAllowancesArray.controls; let i = $index; track i) {
+                            <div [formGroup]="$any(allowance)"
+                                class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end border-b border-gray-200 pb-3">
+                                <div class="md:col-span-6">
+                                    <label class="text-xs text-gray-600 font-medium">Nama Tunjangan</label>
+                                    <input formControlName="name" pInputText placeholder="Contoh: Tunjangan Makan"
+                                        class="p-inputtext-sm w-full">
+                                    @if (allowance.get('name')?.touched && allowance.get('name')?.invalid) {
+                                    <span class="text-xs text-red-500 mt-1">Nama harus diisi</span>
+                                    }
+                                </div>
+                                <div class="md:col-span-4">
+                                    <label class="text-xs text-gray-600 font-medium">Jumlah</label>
+                                    <p-input-number size="small" class="w-full"
+                                        formControlName="amount"></p-input-number>
+                                    @if (allowance.get('amount')?.touched && allowance.get('amount')?.invalid) {
+                                    <span class="text-xs text-red-500 mt-1">Jumlah harus valid</span>
+                                    }
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p-button severity="danger" icon="pi pi-trash" (onClick)="removeAllowance(i)"
+                                        styleClass="p-button-sm p-button-text w-full">
+                                    </p-button>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        } @else {
+                        <p class="text-sm text-gray-500 italic">Belum ada tunjangan tambahan</p>
+                        }
+
+                        <div class="flex flex-row justify-between pt-2 border-t border-gray-300">
+                            <span class="text-sm font-medium text-gray-700">Total Tunjangan Tambahan:</span>
+                            <span class="text-sm font-bold text-gray-900">
+                                {{ PayrollDetailForm.get('total_allowances')?.value | currency:'Rp. '}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <p-divider></p-divider>
+
+                    <!-- Deductions Section -->
+                    <div class="flex flex-col gap-3">
+                        <p class="text-sm font-semibold text-gray-700">Potongan</p>
+
+                        <!-- BPJS Deduction -->
+                        <div class="flex flex-col gap-2">
+                            <p class="text-xs font-medium text-gray-600">BPJS</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pl-4">
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs text-gray-600">BPJS Kesehatan</label>
+                                    <p-input-number size="small" readonly class="w-full"
+                                        formControlName="bpjs_kesehatan_deduction"></p-input-number>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs text-gray-600">BPJS Ketenagakerjaan</label>
+                                    <p-input-number size="small" readonly class="w-full"
+                                        formControlName="bpjs_ketenagakerjaan_deduction"></p-input-number>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs text-gray-600">BPJS Pensiun</label>
+                                    <p-input-number size="small" readonly class="w-full"
+                                        formControlName="bpjs_pensiun_deduction"></p-input-number>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Other Fixed Deductions -->
+                        <div class="flex flex-col gap-2">
+                            <p class="text-xs font-medium text-gray-600">Potongan Lainnya</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pl-4">
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs text-gray-600">Cuti Tidak Bayar</label>
+                                    <p-input-number size="small" readonly class="w-full"
+                                        formControlName="unpaid_leave_deduction"></p-input-number>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-xs text-gray-600">Pajak</label>
+                                    <p-input-number size="small" readonly class="w-full"
+                                        formControlName="tax_deduction"></p-input-number>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-divider></p-divider>
+
+                    <!-- Additional Deductions Section -->
+                    <div class="flex flex-col gap-3">
+                        <div class="flex flex-row justify-between items-center">
+                            <p class="text-sm font-semibold text-gray-700">Potongan Tambahan</p>
+                            <p-button severity="danger" label="Tambah" icon="pi pi-plus" (onClick)="addDeduction()"
+                                styleClass="p-button-sm p-button-text">
+                            </p-button>
+                        </div>
+
+                        @if (additionalDeductionsArray.length > 0) {
+                        <div class="flex flex-col gap-2">
+                            @for (deduction of additionalDeductionsArray.controls; let i = $index; track i) {
+                            <div [formGroup]="$any(deduction)"
+                                class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end border-b border-gray-200 pb-3">
+                                <div class="md:col-span-6">
+                                    <label class="text-xs text-gray-600 font-medium">Nama Potongan</label>
+                                    <input formControlName="name" pInputText placeholder="Contoh: Potongan Utang"
+                                        class="p-inputtext-sm w-full">
+                                    @if (deduction.get('name')?.touched && deduction.get('name')?.invalid) {
+                                    <span class="text-xs text-red-500 mt-1">Nama harus diisi</span>
+                                    }
+                                </div>
+                                <div class="md:col-span-4">
+                                    <label class="text-xs text-gray-600 font-medium">Jumlah</label>
+                                    <p-input-number size="small" class="w-full"
+                                        formControlName="amount"></p-input-number>
+                                    @if (deduction.get('amount')?.touched && deduction.get('amount')?.invalid) {
+                                    <span class="text-xs text-red-500 mt-1">Jumlah harus valid</span>
+                                    }
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p-button severity="danger" icon="pi pi-trash" (onClick)="removeDeduction(i)"
+                                        styleClass="p-button-sm p-button-text w-full">
+                                    </p-button>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        } @else {
+                        <p class="text-sm text-gray-500 italic">Belum ada potongan tambahan</p>
+                        }
+
+                        <div class="flex flex-row justify-between pt-2 border-t border-gray-300">
+                            <span class="text-sm font-medium text-gray-700">Total Potongan Tambahan:</span>
+                            <span class="text-sm font-bold text-gray-900">
+                                {{ PayrollDetailForm.get('total_deduction')?.value | currency:'Rp. '}}
+                            </span>
+                        </div>
+                    </div>
+
+                    <p-divider></p-divider>
+
+                    <!-- Summary Section -->
+                    <div class="flex flex-col gap-3 p-4 border border-gray-300 rounded-lg">
+                        <div class="flex flex-row justify-between items-center">
+                            <span class="text-sm font-semibold text-gray-700">Total Penghasilan:</span>
+                            <span class="text-base font-bold text-gray-900">{{
+                                (PayrollDetailForm.get('base_salary')?.value || 0) +
+                                (PayrollDetailForm.get('overtime_pay')?.value || 0) +
+                                (PayrollDetailForm.get('total_allowances')?.value || 0) |
+                                currency:'Rp. ' }}</span>
+                        </div>
+                        <div class="flex flex-row justify-between items-center">
+                            <span class="text-sm font-semibold text-gray-700">Total Potongan:</span>
+                            <span class="text-base font-bold text-gray-900">
+                                {{ PayrollDetailForm.get('total_deduction')?.value |
+                                currency:'Rp. ' }}</span>
+                        </div>
+                        <div class="border-t border-gray-300 pt-3">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs text-gray-600 font-medium">GAJI BERSIH (NET SALARY)</label>
+                                <p-input-number size="small" readonly class="w-full" formControlName="net_salary">
+                                </p-input-number>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-row justify-end gap-3">
+                <p-button severity="secondary" label="Batal" icon="pi pi-times" (onClick)="handleBackToList()"
+                    styleClass="p-button-sm">
+                </p-button>
+                <p-button severity="success" label="Simpan" icon="pi pi-check" (onClick)="handleSavePayrollDetail()"
+                    styleClass="p-button-sm" [disabled]="PayrollDetailForm.invalid">
+                </p-button>
+            </div>
+        </div>
+    </div>
+    } @else if (_pageState() === 'generate') {
+    <div class="grid w-full gap-5 p-5">
+        <!-- Header -->
+        <div class="flex flex-row justify-between items-center bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col">
+                <p class="text-lg font-semibold text-gray-700">Generate Payroll</p>
+                <p class="text-sm text-gray-500">Buat data payroll untuk semua karyawan aktif</p>
+            </div>
+            <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left" (onClick)="handleBackToList()"
+                styleClass="p-button-sm">
+            </p-button>
+        </div>
+
+        <!-- Generate Form -->
+        <div class="bg-white p-5 rounded-lg shadow-sm" [formGroup]="GenerateForm">
+            <div class="flex flex-col gap-5">
+                <p class="text-base font-semibold text-gray-700 pb-3 border-b border-gray-300">Pilih Bulan</p>
+
+                <div class="flex flex-col gap-1 max-w-md">
+                    <label class="text-sm text-gray-700 font-medium">
+                        Bulan Payroll <span class="text-red-500">*</span>
+                    </label>
+                    <p-datepicker formControlName="month" view="month" dateFormat="yy-mm" placeholder="Pilih Bulan">
+                    </p-datepicker>
+                    @if (GenerateForm.get('month')?.touched && GenerateForm.get('month')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                        Bulan payroll harus dipilih
+                    </span>
+                    }
+                </div>
+
+                <p-divider></p-divider>
+
+                <!-- Warning Message -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                    <p class="text-sm text-yellow-700">
+                        <strong>Peringatan:</strong> Proses generate payroll akan membuat data payroll baru untuk semua
+                        karyawan aktif di bulan yang dipilih.
+                        Pastikan semua data lembur, cuti, dan pengaturan HR sudah benar sebelum melanjutkan.
+                    </p>
+                </div>
+
+                <div class="flex flex-row justify-end gap-3">
+                    <p-button severity="secondary" label="Batal" icon="pi pi-times" (onClick)="handleBackToList()"
+                        styleClass="p-button-sm">
+                    </p-button>
+                    <p-button severity="warn" label="Generate Payroll" icon="pi pi-refresh"
+                        (onClick)="handleGeneratePayroll()" [loading]="_isGenerating()" styleClass="p-button-sm"
+                        [disabled]="GenerateForm.invalid || _isGenerating()">
+                    </p-button>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</app-dsh-base-layout>

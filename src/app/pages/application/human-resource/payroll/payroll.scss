@@ -1,0 +1,137 @@
+// Payroll Component Styles
+
+// Form Styles
+:host ::ng-deep {
+    .p-inputtext-sm {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .p-inputnumber {
+        width: 100%;
+    }
+
+    .p-inputnumber-input {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    // Readonly input styling
+    input:disabled,
+    input[readonly] {
+        background-color: #f3f4f6 !important;
+        color: #6b7280;
+        cursor: not-allowed;
+    }
+
+    // Currency input background
+    .bg-red-50 {
+        background-color: #fef2f2;
+    }
+
+    .bg-green-50 {
+        background-color: #f0fdf4;
+    }
+
+    .bg-yellow-50 {
+        background-color: #fffbeb;
+    }
+
+    // Badge styling
+    .p-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+    }
+
+    // Dialog styling
+    .p-dialog-header {
+        padding: 1.25rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .p-dialog-content {
+        padding: 1.25rem;
+    }
+
+    // Tab styling
+    .p-tabview {
+        .p-tabview-nav {
+            background-color: #f9fafb;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .p-tabview-panels {
+            background-color: #ffffff;
+        }
+    }
+
+    // Card styling
+    .p-card {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+    }
+
+    // Divider styling
+    .p-divider {
+        margin: 1rem 0;
+        border-color: #e5e7eb;
+    }
+
+    // Table styling
+    .p-datatable {
+        .p-datatable-thead>tr>th {
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 600;
+            border-color: #e5e7eb;
+        }
+
+        .p-datatable-tbody>tr {
+            border-color: #e5e7eb;
+
+            &:hover {
+                background-color: #f9fafb;
+            }
+        }
+    }
+
+    // Button styling
+    .p-button {
+        font-size: 0.875rem;
+
+        &.p-button-sm {
+            padding: 0.5rem 1rem;
+        }
+    }
+
+    // Status badge colors
+    .status-pending {
+        background-color: #fef3c7;
+        color: #78350f;
+    }
+
+    .status-paid {
+        background-color: #dcfce7;
+        color: #14532d;
+    }
+
+    .status-rejected {
+        background-color: #fee2e2;
+        color: #7f1d1d;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    :host ::ng-deep {
+        .grid {
+            &.grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+
+            &.grid-cols-4 {
+                grid-template-columns: 1fr 1fr !important;
+            }
+        }
+    }
+}

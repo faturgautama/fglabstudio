@@ -86,5 +86,14 @@ export const humanResourceRoutes: Routes = [
             title: 'Pengaturan Perusahaan',
             description: 'Manage dan atur data pengaturan perusahaan'
         }
+    },
+    {
+        path: 'payroll',
+        loadComponent: async () => (await import('./payroll/payroll')).Payroll,
+        data: {
+            icon: 'pi pi-money-bill',
+            title: 'Payroll',
+            description: 'Manage dan atur semua data payroll karyawan'
+        }
     }
 ];

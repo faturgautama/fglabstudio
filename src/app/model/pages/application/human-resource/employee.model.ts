@@ -198,6 +198,7 @@ export namespace EmployeeModel {
 
     export interface IPayroll extends IBaseModel {
         employee_id: string;
+        employees?: IEmployee;
         month: string;
         base_salary: number;
         overtime_pay?: number;

@@ -6,6 +6,7 @@ import { ShiftState } from "./shift";
 import { CompanySettingState } from "./company-setting";
 import { LeaveState } from "./leave";
 import { OvertimeState } from "./overtime";
+import { PayrollState } from "./payroll";
 
 export const HR_APP_STATE = [
     DepartementState,
@@ -15,5 +16,6 @@ export const HR_APP_STATE = [
     AttendanceState,
     CompanySettingState,
     LeaveState,
-    OvertimeState
+    OvertimeState,
+    PayrollState
 ]
