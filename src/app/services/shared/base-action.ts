@@ -3,6 +3,7 @@ import { from, catchError, throwError } from 'rxjs';
 import { UtilityService } from './utility';
 import Dexie from 'dexie';
 import { DatabaseService } from '../../app.database';
+import { formatDate } from '@angular/common';
 
 export abstract class BaseActionService<T extends { id?: number; is_active?: boolean }> {
     protected _utilityService = inject(UtilityService);
@@ -120,9 +121,17 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
                     if (filter[key]) {
                         filtered = filtered.filter((item: T) => {
                             const value = item[key as keyof T];
-                            if (typeof value === 'string') {
+
+                            if (filter[key] instanceof Date) {
+                                const filterValue = formatDate(filter[key], 'yyyy-MM-dd', 'EN');
+                                const values = formatDate(new Date(value as any), 'yyyy-MM-dd', 'EN');
+                                return new Date(values as any).getTime() == new Date(filterValue)?.getTime();
+                            };
+
+                            if (typeof value === 'string' && typeof filter[key] === 'string') {
                                 return value.toLowerCase().includes(filter[key]?.toLowerCase() || '');
-                            }
+                            };
+
                             return value == filter[key];
                         });
                     }
