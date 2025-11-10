@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/pages/authentication/authentication';
 import { TranslatePipe } from '@ngx-translate/core';
 import { UpperCasePipe } from '@angular/common';
@@ -18,15 +18,22 @@ import { MessageService } from 'primeng/api';
   templateUrl: './your-application.html',
   styleUrl: './your-application.scss'
 })
-export class YourApplication implements OnInit {
+export class YourApplication implements AfterViewInit {
 
   _router = inject(Router);
   _authenticationService = inject(AuthenticationService);
   _databaseService = inject(DatabaseService);
   _messageService = inject(MessageService);
-  user = this._authenticationService._userData;
+  user: any;
 
   ngOnInit(): void {
+    this._authenticationService._userData.subscribe(result => this.user = result);
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+
+    }, 100);
   }
 
   handleClickApps(url: string) {
@@ -41,7 +48,11 @@ export class YourApplication implements OnInit {
           this._messageService.add({ severity: 'success', summary: 'Success', detail: 'Sign Out Successfully' });
           await this._databaseService.switchToUserDatabase(result.data.id);
           localStorage.clear();
-          this._router.navigateByUrl("/login");
+          this._authenticationService._userData.next(null);
+
+          setTimeout(() => {
+            this._router.navigateByUrl("/login");
+          }, 100);
         }
       });
   }

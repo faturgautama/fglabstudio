@@ -90,25 +90,25 @@ export class Payroll implements OnInit, OnDestroy {
                 id: 'base_salary',
                 title: 'Gaji Pokok',
                 type: DynamicTableModel.IColumnType.CURRENCY,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'overtime_pay',
                 title: 'Lembur',
                 type: DynamicTableModel.IColumnType.CURRENCY,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'deduction',
                 title: 'Potongan',
                 type: DynamicTableModel.IColumnType.CURRENCY,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'net_salary',
                 title: 'Gaji Bersih',
                 type: DynamicTableModel.IColumnType.CURRENCY,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'payment_status',
@@ -164,18 +164,18 @@ export class Payroll implements OnInit, OnDestroy {
     });
 
     PayrollDetailForm = this._formBuilder.group({
-        base_salary: [{ value: 0, disabled: true }],
-        overtime_pay: [{ value: 0, disabled: true }],
-        bpjs_kesehatan_deduction: [{ value: 0, disabled: true }],
-        bpjs_ketenagakerjaan_deduction: [{ value: 0, disabled: true }],
-        bpjs_pensiun_deduction: [{ value: 0, disabled: true }],
-        unpaid_leave_deduction: [{ value: 0, disabled: true }],
-        tax_deduction: [{ value: 0, disabled: true }],
+        base_salary: [0, [Validators.required]],
+        overtime_pay: [0, [Validators.required]],
+        bpjs_kesehatan_deduction: [0, [Validators.required]],
+        bpjs_ketenagakerjaan_deduction: [0, [Validators.required]],
+        bpjs_pensiun_deduction: [0, [Validators.required]],
+        unpaid_leave_deduction: [0, [Validators.required]],
+        tax_deduction: [0, [Validators.required]],
         additional_allowances: this._formBuilder.array([]),
         additional_deductions: this._formBuilder.array([]),
-        total_allowances: [{ value: 0, disabled: true }],
-        total_deduction: [{ value: 0, disabled: true }],
-        net_salary: [{ value: 0, disabled: true }]
+        total_allowances: [0, [Validators.required]],
+        total_deduction: [0, [Validators.required]],
+        net_salary: [0, [Validators.required]]
     });
 
     ngOnInit(): void {
@@ -276,25 +276,24 @@ export class Payroll implements OnInit, OnDestroy {
                 payroll.month
             );
 
+            console.log("breakdown =>", breakdown);
+
             // Load breakdown data termasuk BPJS terpisah
             this.PayrollDetailForm.patchValue({
-                base_salary: payroll.base_salary,
-                overtime_pay: payroll.overtime_pay,
+                base_salary: breakdown.baseSalary,
+                overtime_pay: breakdown.overtimePay,
                 bpjs_kesehatan_deduction: breakdown.bpjsKesehatanDeduction,
                 bpjs_ketenagakerjaan_deduction: breakdown.bpjsKetenagakerjaanDeduction,
                 bpjs_pensiun_deduction: breakdown.bpjsPensiunDeduction,
                 unpaid_leave_deduction: breakdown.unpaidLeaveDeduction,
                 tax_deduction: breakdown.taxDeduction,
-                net_salary: payroll.net_salary
+                net_salary: breakdown.netSalary,
+                total_deduction: breakdown.totalDeduction,
+                total_allowances: breakdown.manualAllowances,
             });
+
         } catch (error) {
             console.error('Error loading payroll breakdown:', error);
-            // Fallback ke nilai dari payroll jika ada error
-            this.PayrollDetailForm.patchValue({
-                base_salary: payroll.base_salary,
-                overtime_pay: payroll.overtime_pay,
-                net_salary: payroll.net_salary
-            });
         }
 
         // Load additional allowances
@@ -397,6 +396,7 @@ export class Payroll implements OnInit, OnDestroy {
 
         // Update form values
         this.PayrollDetailForm.patchValue({
+            ...this.PayrollDetailForm.value,
             total_allowances: totalAllowances,
             total_deduction: totalDeduction,
             net_salary: Math.max(0, netSalary)
@@ -438,8 +438,9 @@ export class Payroll implements OnInit, OnDestroy {
         if (selected && this.PayrollDetailForm.valid) {
             const formValue = this.PayrollDetailForm.value;
 
-            const updated: EmployeeModel.IPayroll = {
+            const updated: any = {
                 ...selected,
+                ...this.PayrollDetailForm.value,
                 additional_allowances: (formValue.additional_allowances || []) as { name: string; amount: number }[],
                 additional_deductions: (formValue.additional_deductions || []) as { name: string; amount: number }[],
                 deduction: formValue.total_deduction || 0,
@@ -453,14 +454,18 @@ export class Payroll implements OnInit, OnDestroy {
                 bpjs_pensiun: formValue.bpjs_pensiun_deduction || 0
             };
 
-            this._store.dispatch(new PayrollAction.UpdatePayroll(updated)).subscribe(() => {
-                this._messageService.add({
-                    severity: 'success',
-                    summary: 'Berhasil!',
-                    detail: 'Payroll detail berhasil disimpan'
-                });
-                this.handleBackToList();
-            });
+            const { employees, bpjs_breakdown, ...payload } = updated;
+
+            console.log("payload update =>", payload);
+
+            // this._store.dispatch(new PayrollAction.UpdatePayroll(updated)).subscribe(() => {
+            //     this._messageService.add({
+            //         severity: 'success',
+            //         summary: 'Berhasil!',
+            //         detail: 'Payroll detail berhasil disimpan'
+            //     });
+            //     this.handleBackToList();
+            // });
         }
     }
 

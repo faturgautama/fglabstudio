@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class AuthenticationService {
 
   _http = inject(HttpClient);
 
-  _userData = JSON.parse(localStorage.getItem("_CXUSER_") as string);
+  _userData = new BehaviorSubject<any>(JSON.parse(localStorage.getItem("_CXUSER_") as string));
 
   signIn(email: string, password: string) {
     const payload = {
@@ -30,8 +30,8 @@ export class AuthenticationService {
     ).pipe(
       tap((result: any) => {
         if (result['user']) {
-          this._userData = result['user'];
           localStorage.setItem("_CXUSER_", JSON.stringify(result));
+          this._userData.next(result);
         }
       })
     )

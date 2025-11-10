@@ -80,7 +80,7 @@ export class DatabaseService {
      * ✅ Ganti database aktif sesuai user login dengan proper locking
      */
     async switchToUserDatabase(userId: string): Promise<void> {
-        const newDbName = `CodeByXerenityDatabase_${userId}`;
+        const newDbName = `CodeByXerenityDatabase`;
 
         if (this.currentDbName === newDbName) return;
 

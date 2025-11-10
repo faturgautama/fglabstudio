@@ -1,5 +1,5 @@
 import { UpperCasePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -30,7 +30,7 @@ import { from } from 'rxjs';
   templateUrl: './authentication.html',
   styleUrl: './authentication.scss'
 })
-export class Authentication {
+export class Authentication implements OnInit {
 
   databaseService = inject(DatabaseService);
 
@@ -67,12 +67,17 @@ export class Authentication {
     password: ['', [Validators.required]],
   });
 
+  ngOnInit(): void {
+    const isLoggedIn = this._authenticationService._userData;
+    if (isLoggedIn && isLoggedIn.value) {
+      this._router.navigateByUrl('/your-apps');
+    }
+  }
+
   handleLogin(form: any) {
     this._authenticationService
       .signIn(form.email, form.password)
       .subscribe(async (result: any) => { // ✅ Tambah async
-        console.log(result);
-
         if (result.user) {
           // ✅ Tunggu switching selesai
           await this.databaseService.switchToUserDatabase(result.user.id);

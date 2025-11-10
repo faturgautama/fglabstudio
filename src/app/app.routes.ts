@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Home } from './pages/home/home';
 import { humanResourceResolver } from './pages/application/human-resource/human-resource.resolver';
+import { AuthGuard } from './middleware/authentication.guard';
 
 export const routes: Routes = [
     {
@@ -16,6 +17,7 @@ export const routes: Routes = [
     },
     {
         path: 'your-apps',
+        canActivate: [AuthGuard],
         loadComponent: async () => (await import('../app/pages/application/your-application/your-application')).YourApplication,
         resolve: {
             resolver: humanResourceResolver
@@ -23,6 +25,7 @@ export const routes: Routes = [
     },
     {
         path: 'people',
+        canActivate: [AuthGuard],
         loadChildren: async () => (await import('../app/pages/application/human-resource/human-resource.routes')).humanResourceRoutes,
         resolve: {
             resolver: humanResourceResolver
