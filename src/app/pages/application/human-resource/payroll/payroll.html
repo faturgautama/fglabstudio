@@ -86,9 +86,9 @@
                         </div>
 
                         @if (additionalAllowancesArray.length > 0) {
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-2" formArrayName="additional_allowances">
                             @for (allowance of additionalAllowancesArray.controls; let i = $index; track i) {
-                            <div [formGroup]="$any(allowance)"
+                            <div [formGroupName]="i"
                                 class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end border-b border-gray-200 pb-3">
                                 <div class="md:col-span-6">
                                     <label class="text-xs text-gray-600 font-medium">Nama Tunjangan</label>
@@ -184,22 +184,26 @@
                         </div>
 
                         @if (additionalDeductionsArray.length > 0) {
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-2" formArrayName="additional_deductions">
                             @for (deduction of additionalDeductionsArray.controls; let i = $index; track i) {
-                            <div [formGroup]="$any(deduction)"
+                            <div [formGroupName]="i"
                                 class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end border-b border-gray-200 pb-3">
                                 <div class="md:col-span-6">
                                     <label class="text-xs text-gray-600 font-medium">Nama Potongan</label>
+
                                     <input formControlName="name" pInputText placeholder="Contoh: Potongan Utang"
                                         class="p-inputtext-sm w-full">
+
                                     @if (deduction.get('name')?.touched && deduction.get('name')?.invalid) {
                                     <span class="text-xs text-red-500 mt-1">Nama harus diisi</span>
                                     }
                                 </div>
                                 <div class="md:col-span-4">
                                     <label class="text-xs text-gray-600 font-medium">Jumlah</label>
-                                    <p-input-number size="small" class="w-full"
-                                        formControlName="amount"></p-input-number>
+
+                                    <p-input-number size="small" class="w-full" formControlName="amount">
+                                    </p-input-number>
+
                                     @if (deduction.get('amount')?.touched && deduction.get('amount')?.invalid) {
                                     <span class="text-xs text-red-500 mt-1">Jumlah harus valid</span>
                                     }
@@ -215,6 +219,8 @@
                         } @else {
                         <p class="text-sm text-gray-500 italic">Belum ada potongan tambahan</p>
                         }
+
+                        <pre>{{ additionalAllowancesArray.value | json }}</pre>
 
                         <div class="flex flex-row justify-between pt-2 border-t border-gray-300">
                             <span class="text-sm font-medium text-gray-700">Total Potongan Tambahan:</span>
