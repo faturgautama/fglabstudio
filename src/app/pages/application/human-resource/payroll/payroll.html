@@ -92,8 +92,11 @@
                                 class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end border-b border-gray-200 pb-3">
                                 <div class="md:col-span-6">
                                     <label class="text-xs text-gray-600 font-medium">Nama Tunjangan</label>
-                                    <input formControlName="name" pInputText placeholder="Contoh: Tunjangan Makan"
-                                        class="p-inputtext-sm w-full">
+
+                                    <input type="text" formControlName="name" pInputText
+                                        placeholder="Contoh: Tunjangan Makan" class="w-full"
+                                        (click)="$event.stopPropagation()">
+
                                     @if (allowance.get('name')?.touched && allowance.get('name')?.invalid) {
                                     <span class="text-xs text-red-500 mt-1">Nama harus diisi</span>
                                     }

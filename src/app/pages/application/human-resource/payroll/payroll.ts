@@ -416,6 +416,8 @@ export class Payroll implements OnInit, OnDestroy {
             name: ['', Validators.required],
             amount: [0, [Validators.required, Validators.min(0)]]
         }));
+
+        console.log('Form Array:', this.additionalAllowancesArray.value);
     }
 
     removeAllowance(index: number) {
