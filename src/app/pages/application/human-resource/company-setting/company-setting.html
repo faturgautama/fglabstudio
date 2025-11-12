@@ -36,6 +36,67 @@
                         }
                     </div>
 
+                    <!-- No. Telp Perusahaan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            No. Telp Perusahaan <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="phone_number" pInputText placeholder="Masukkan no telepon perusahaan"
+                            class="p-inputtext-sm w-full">
+
+                        @if (Form.get('phone_number')?.touched && Form.get('phone_number')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            No. Telp Perusahaan tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- No. Fax Perusahaan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            No. Fax Perusahaan <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="fax_number" pInputText placeholder="Masukkan no fax perusahaan"
+                            class="p-inputtext-sm w-full">
+                        @if (Form.get('fax_number')?.touched && Form.get('fax_number')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            No. Fax Perusahaan tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Alamat Perusahaan -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            NPWP Perusahaan
+                        </label>
+
+                        <input formControlName="tax_number" pInputText placeholder="Masukkan npwp perusahaan"
+                            class="p-inputtext-sm w-full">
+
+                        @if (Form.get('tax_number')?.touched && Form.get('tax_number')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            NPWP Perusahaan tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Alamat Perusahaan -->
+                    <div class="flex flex-col gap-1 col-span-2">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Alamat Perusahaan <span class="text-red-500">*</span>
+                        </label>
+
+                        <textarea formControlName="address" pInputTextarea placeholder="Masukkan alamat perusahaan"
+                            class="p-inputtext-sm w-full" rows="3"></textarea>
+
+                        @if (Form.get('company_name')?.touched && Form.get('company_name')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded">
+                            Nama Perusahaan tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
                     <!-- Tanggal Berlaku -->
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">

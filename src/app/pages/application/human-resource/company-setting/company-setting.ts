@@ -3,7 +3,6 @@ import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Va
 import { Store } from '@ngxs/store';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
 import { EmployeeConstants } from '../../../../model/pages/application/human-resource/employee.constants';
 import { DshBaseLayout } from '../../../../components/dashboard/dsh-base-layout/dsh-base-layout';
 import { CompanySettingAction, CompanySettingState } from '../../../../store/human-resource/company-setting';
@@ -70,6 +69,10 @@ export class CompanySetting implements OnInit, OnDestroy {
   Form = this._formBuilder.group({
     id: ['', []],
     company_name: ['', [Validators.required]],
+    address: ['', [Validators.required]],
+    phone_number: ['', [Validators.required]],
+    fax_number: ['', [Validators.required]],
+    tax_number: ['', []],
     effective_date: ['', [Validators.required]],
     is_active: [true, []],
     overtime_rate_per_hour: [0, [Validators.required]],

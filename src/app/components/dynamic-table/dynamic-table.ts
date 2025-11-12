@@ -145,7 +145,7 @@ export class DynamicTable implements OnInit, OnDestroy {
   handleFormatBadgeClass(value: string) {
     let class_name = 'bg-red-200 text-red-800';
 
-    if (value === 'approved') {
+    if (value === 'approved' || value.toLowerCase() === 'paid') {
       class_name = 'bg-green-200 text-green-800';
     } else if (value === 'rejected' || value === 'cancelled') {
       class_name = 'bg-red-200 text-red-800';

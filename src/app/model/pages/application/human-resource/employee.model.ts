@@ -8,6 +8,10 @@ export namespace EmployeeModel {
     export interface IHumanResourceSetting extends IBaseModel {
         // Informasi Umum
         company_name: string;
+        address: string;
+        phone_number: string;
+        fax_number: string;
+        tax_number: string;
         effective_date: Date;
         is_active: boolean;
 
