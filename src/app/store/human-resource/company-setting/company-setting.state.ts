@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { CompanySettingAction } from "./company-setting.action";
-import { tap } from "rxjs";
+import { switchMap, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { CompanySettingService } from "../../../services/pages/application/human-resource/company-setting.service";
 
@@ -83,10 +83,7 @@ export class CompanySettingState implements NgxsOnInit {
         return this._companySettingService
             .add(payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new CompanySettingAction.GetCompanySetting());
-                })
+                switchMap(() => ctx.dispatch(new CompanySettingAction.GetCompanySetting()))
             )
     }
 
@@ -95,10 +92,7 @@ export class CompanySettingState implements NgxsOnInit {
         return this._companySettingService
             .update(payload.payload.id, payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new CompanySettingAction.GetCompanySetting());
-                })
+                switchMap(() => ctx.dispatch(new CompanySettingAction.GetCompanySetting()))
             )
     }
 
@@ -107,10 +101,7 @@ export class CompanySettingState implements NgxsOnInit {
         return this._companySettingService
             .delete(payload.id)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new CompanySettingAction.GetCompanySetting());
-                })
+                switchMap(() => ctx.dispatch(new CompanySettingAction.GetCompanySetting()))
             )
     }
 }

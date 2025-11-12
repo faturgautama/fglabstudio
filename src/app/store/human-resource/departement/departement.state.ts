@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { DepartementAction } from "./departement.action";
-import { tap } from "rxjs";
+import { switchMap, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { DepartmentService } from "../../../services/pages/application/human-resource/departement.service";
 
@@ -68,10 +68,7 @@ export class DepartementState implements NgxsOnInit {
         return this._departementService
             .add(payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new DepartementAction.GetDepartement());
-                })
+                switchMap(() => ctx.dispatch(new DepartementAction.GetDepartement()))
             )
     }
 
@@ -80,10 +77,7 @@ export class DepartementState implements NgxsOnInit {
         return this._departementService
             .update(payload.payload.id, payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new DepartementAction.GetDepartement());
-                })
+                switchMap(() => ctx.dispatch(new DepartementAction.GetDepartement()))
             )
     }
 
@@ -92,10 +86,7 @@ export class DepartementState implements NgxsOnInit {
         return this._departementService
             .delete(payload.id)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new DepartementAction.GetDepartement());
-                })
+                switchMap(() => ctx.dispatch(new DepartementAction.GetDepartement()))
             )
     }
 }

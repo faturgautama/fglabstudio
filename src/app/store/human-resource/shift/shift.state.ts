@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { ShiftAction } from "./shift.action";
-import { from, tap } from "rxjs";
+import { switchMap, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { ShiftService } from "../../../services/pages/application/human-resource/shift.service";
 
@@ -67,10 +67,7 @@ export class ShiftState implements NgxsOnInit {
         return this._shiftService
             .add(payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new ShiftAction.GetShift());
-                })
+                switchMap(() => ctx.dispatch(new ShiftAction.GetShift()))
             )
     }
 
@@ -79,10 +76,7 @@ export class ShiftState implements NgxsOnInit {
         return this._shiftService
             .update(payload.payload.id, payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new ShiftAction.GetShift());
-                })
+                switchMap(() => ctx.dispatch(new ShiftAction.GetShift()))
             )
     }
 
@@ -91,10 +85,7 @@ export class ShiftState implements NgxsOnInit {
         return this._shiftService
             .delete(payload.id)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new ShiftAction.GetShift());
-                })
+                switchMap(() => ctx.dispatch(new ShiftAction.GetShift()))
             )
     }
 }

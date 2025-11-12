@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { EmployeeAction } from "./employee.action";
-import { tap, catchError } from "rxjs";
+import { tap, catchError, switchMap } from "rxjs";
 import { of } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { EmployeeService } from "../../../services/pages/application/human-resource/employee.service";
@@ -129,23 +129,7 @@ export class EmployeeState implements NgxsOnInit {
         return this._employeeService
             .add(payload.payload)
             .pipe(
-                tap((result) => {
-                    ctx.setState({
-                        ...state,
-                        loading: false,
-                        error: null
-                    });
-                    ctx.dispatch(new EmployeeAction.GetEmployee());
-                }),
-                catchError((err: any) => {
-                    console.error('❌ Error adding employee:', err);
-                    ctx.setState({
-                        ...state,
-                        loading: false,
-                        error: err?.message || 'Gagal menambah data karyawan'
-                    });
-                    return of(null);
-                })
+                switchMap(() => ctx.dispatch(new EmployeeAction.GetEmployee()))
             )
     }
 
@@ -161,23 +145,7 @@ export class EmployeeState implements NgxsOnInit {
         return this._employeeService
             .update(payload.payload.id, payload.payload)
             .pipe(
-                tap((result) => {
-                    ctx.setState({
-                        ...state,
-                        loading: false,
-                        error: null
-                    });
-                    ctx.dispatch(new EmployeeAction.GetEmployee());
-                }),
-                catchError((err: any) => {
-                    console.error('❌ Error updating employee:', err);
-                    ctx.setState({
-                        ...state,
-                        loading: false,
-                        error: err?.message || 'Gagal mengubah data karyawan'
-                    });
-                    return of(null);
-                })
+                switchMap(() => ctx.dispatch(new EmployeeAction.GetEmployee()))
             )
     }
 
@@ -193,23 +161,7 @@ export class EmployeeState implements NgxsOnInit {
         return this._employeeService
             .delete(payload.id)
             .pipe(
-                tap((result) => {
-                    ctx.setState({
-                        ...state,
-                        loading: false,
-                        error: null
-                    });
-                    ctx.dispatch(new EmployeeAction.GetEmployee());
-                }),
-                catchError((err: any) => {
-                    console.error('❌ Error deleting employee:', err);
-                    ctx.setState({
-                        ...state,
-                        loading: false,
-                        error: err?.message || 'Gagal menghapus data karyawan'
-                    });
-                    return of(null);
-                })
+                switchMap(() => ctx.dispatch(new EmployeeAction.GetEmployee()))
             )
     }
 }

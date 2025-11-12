@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { AttendanceAction } from "./attendance.action";
-import { tap } from "rxjs";
+import { switchMap, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { AttendanceService } from "../../../services/pages/application/human-resource/attendance.service";
 
@@ -100,10 +100,7 @@ export class AttendanceState implements NgxsOnInit {
         return this._attendanceService
             .add(payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new AttendanceAction.GetAttendance());
-                })
+                switchMap(() => ctx.dispatch(new AttendanceAction.GetAttendance()))
             )
     }
 
@@ -112,10 +109,7 @@ export class AttendanceState implements NgxsOnInit {
         return this._attendanceService
             .bulkAdd(payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new AttendanceAction.GetAttendance());
-                })
+                switchMap(() => ctx.dispatch(new AttendanceAction.GetAttendance()))
             )
     }
 
@@ -126,10 +120,7 @@ export class AttendanceState implements NgxsOnInit {
         return this._attendanceService
             .update(payload.payload.id, payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new AttendanceAction.GetAttendance());
-                })
+                switchMap(() => ctx.dispatch(new AttendanceAction.GetAttendance()))
             )
     }
 
@@ -138,10 +129,7 @@ export class AttendanceState implements NgxsOnInit {
         return this._attendanceService
             .delete(payload.id)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new AttendanceAction.GetAttendance());
-                })
+                switchMap(() => ctx.dispatch(new AttendanceAction.GetAttendance()))
             )
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { PayrollAction } from "./payroll.action";
-import { tap } from "rxjs";
+import { switchMap, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { PayrollService } from "../../../services/pages/application/human-resource/payroll.service";
 
@@ -48,61 +48,65 @@ export class PayrollState implements NgxsOnInit {
     @Action(PayrollAction.GetPayroll)
     getPayroll(ctx: StateContext<PayrollStateModel>, payload: any) {
         ctx.setState({ ...ctx.getState(), loading: true });
-        return this._payrollService.getAll(payload.filter, payload.sort).pipe(
-            tap((result) => {
-                ctx.setState({ ...ctx.getState(), data: result, loading: false });
-            })
-        );
+        return this._payrollService
+            .getAll(payload.filter, payload.sort)
+            .pipe(
+                tap((result) => {
+                    ctx.setState({ ...ctx.getState(), data: result, loading: false });
+                })
+            );
     }
 
     @Action(PayrollAction.GetPayrollDetail)
     getDetail(ctx: StateContext<PayrollStateModel>, payload: any) {
         ctx.setState({ ...ctx.getState(), loading: true });
-        return this._payrollService.getById(payload.id).pipe(
-            tap((result) => {
-                ctx.setState({ ...ctx.getState(), detail: result, loading: false });
-            })
-        );
+        return this._payrollService
+            .getById(payload.id)
+            .pipe(
+                tap((result) => {
+                    ctx.setState({ ...ctx.getState(), detail: result, loading: false });
+                })
+            );
     }
 
     @Action(PayrollAction.AddPayroll)
     add(ctx: StateContext<PayrollStateModel>, payload: any) {
         ctx.setState({ ...ctx.getState(), loading: true });
-        return this._payrollService.add(payload.payload).pipe(
-            tap(() => {
-                ctx.dispatch(new PayrollAction.GetPayroll());
-            })
-        );
+        return this._payrollService
+            .add(payload.payload)
+            .pipe(
+                switchMap(() => ctx.dispatch(new PayrollAction.GetPayroll()))
+            );
     }
 
     @Action(PayrollAction.UpdatePayroll)
     update(ctx: StateContext<PayrollStateModel>, payload: any) {
         ctx.setState({ ...ctx.getState(), loading: true });
-        return this._payrollService.update(payload.payload.id, payload.payload).pipe(
-            tap(() => {
-                ctx.dispatch(new PayrollAction.GetPayroll());
-            })
-        );
+        return this._payrollService
+            .update(payload.payload.id, payload.payload)
+            .pipe(
+                switchMap(() => ctx.dispatch(new PayrollAction.GetPayroll()))
+            );
     }
 
     @Action(PayrollAction.DeletePayroll)
     delete(ctx: StateContext<PayrollStateModel>, payload: any) {
         ctx.setState({ ...ctx.getState(), loading: true });
-        return this._payrollService.delete(payload.id).pipe(
-            tap(() => {
-                ctx.dispatch(new PayrollAction.GetPayroll());
-            })
-        );
+        return this._payrollService
+            .delete(payload.id)
+            .pipe(
+                switchMap(() => ctx.dispatch(new PayrollAction.GetPayroll()))
+            );
     }
 
     @Action(PayrollAction.GeneratePayroll)
     generate(ctx: StateContext<PayrollStateModel>, payload: any) {
         ctx.setState({ ...ctx.getState(), loading: true });
-        return this._payrollService.generatePayrollForAllEmployees(payload.month).pipe(
-            tap(() => {
-                ctx.dispatch(new PayrollAction.GetPayroll());
-            })
-        );
+        return this._payrollService
+            .generatePayrollForAllEmployees(payload.month)
+            .pipe(
+                switchMap(() => ctx.dispatch(new PayrollAction.GetPayroll()))
+            );
     }
 
 }

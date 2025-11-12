@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { OvertimeAction } from "./overtime.action";
-import { tap } from "rxjs";
+import { switchMap, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { OvertimeService } from "../../../services/pages/application/human-resource/overtime.service";
 
@@ -71,10 +71,7 @@ export class OvertimeState implements NgxsOnInit {
         return this._overtimeService
             .add(payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new OvertimeAction.GetOvertime());
-                })
+                switchMap(() => ctx.dispatch(new OvertimeAction.GetOvertime()))
             )
     }
 
@@ -83,10 +80,7 @@ export class OvertimeState implements NgxsOnInit {
         return this._overtimeService
             .update(payload.payload.id, payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new OvertimeAction.GetOvertime());
-                })
+                switchMap(() => ctx.dispatch(new OvertimeAction.GetOvertime()))
             )
     }
 
@@ -95,10 +89,7 @@ export class OvertimeState implements NgxsOnInit {
         return this._overtimeService
             .update(payload.id, { status: payload.status })
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new OvertimeAction.GetOvertime());
-                })
+                switchMap(() => ctx.dispatch(new OvertimeAction.GetOvertime()))
             )
     }
 
@@ -107,10 +98,7 @@ export class OvertimeState implements NgxsOnInit {
         return this._overtimeService
             .delete(payload.id)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new OvertimeAction.GetOvertime());
-                })
+                switchMap(() => ctx.dispatch(new OvertimeAction.GetOvertime()))
             )
     }
 }

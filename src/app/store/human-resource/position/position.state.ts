@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { PositionAction } from "./position.action";
-import { tap } from "rxjs";
+import { switchMap, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { PositionService } from "../../../services/pages/application/human-resource/position.service";
 
@@ -68,10 +68,7 @@ export class PositionState implements NgxsOnInit {
         return this._positionService
             .add(payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new PositionAction.GetPosition());
-                })
+                switchMap(() => ctx.dispatch(new PositionAction.GetPosition()))
             )
     }
 
@@ -80,10 +77,7 @@ export class PositionState implements NgxsOnInit {
         return this._positionService
             .update(payload.payload.id, payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new PositionAction.GetPosition());
-                })
+                switchMap(() => ctx.dispatch(new PositionAction.GetPosition()))
             )
     }
 
@@ -92,10 +86,7 @@ export class PositionState implements NgxsOnInit {
         return this._positionService
             .delete(payload.id)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new PositionAction.GetPosition());
-                })
+                switchMap(() => ctx.dispatch(new PositionAction.GetPosition()))
             )
     }
 }

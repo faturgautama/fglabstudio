@@ -276,8 +276,6 @@ export class Payroll implements OnInit, OnDestroy {
                 payroll.month
             );
 
-            console.log("breakdown =>", breakdown);
-
             // Load breakdown data termasuk BPJS terpisah
             this.PayrollDetailForm.patchValue({
                 base_salary: breakdown.baseSalary,
@@ -302,10 +300,17 @@ export class Payroll implements OnInit, OnDestroy {
 
         if (payroll.additional_allowances && payroll.additional_allowances.length > 0) {
             payroll.additional_allowances.forEach((allowance) => {
-                allowancesArray.push(this._formBuilder.group({
+                const allowanceGroup = this._formBuilder.group({
                     name: [allowance.name || '', Validators.required],
                     amount: [allowance.amount || 0, [Validators.required, Validators.min(0)]]
-                }));
+                });
+
+                // Subscribe to value changes for each loaded allowance
+                allowanceGroup.valueChanges.pipe(takeUntil(this.Destroy$)).subscribe(() => {
+                    this._calculateNetSalary();
+                });
+
+                allowancesArray.push(allowanceGroup);
             });
         }
 
@@ -315,19 +320,22 @@ export class Payroll implements OnInit, OnDestroy {
 
         if (payroll.additional_deductions && payroll.additional_deductions.length > 0) {
             payroll.additional_deductions.forEach((deduction) => {
-                deductionsArray.push(this._formBuilder.group({
+                const deductionGroup = this._formBuilder.group({
                     name: [deduction.name || '', Validators.required],
                     amount: [deduction.amount || 0, [Validators.required, Validators.min(0)]]
-                }));
+                });
+
+                // Subscribe to value changes for each loaded deduction
+                deductionGroup.valueChanges.pipe(takeUntil(this.Destroy$)).subscribe(() => {
+                    this._calculateNetSalary();
+                });
+
+                deductionsArray.push(deductionGroup);
             });
         }
 
-        // Trigger calculation
+        // Trigger initial calculation
         this._calculateNetSalary();
-
-        // Subscribe to changes
-        allowancesArray.valueChanges.pipe(takeUntil(this.Destroy$)).subscribe(() => this._calculateNetSalary());
-        deductionsArray.valueChanges.pipe(takeUntil(this.Destroy$)).subscribe(() => this._calculateNetSalary());
     }
 
     handleGeneratePayroll() {
@@ -396,7 +404,6 @@ export class Payroll implements OnInit, OnDestroy {
 
         // Update form values
         this.PayrollDetailForm.patchValue({
-            ...this.PayrollDetailForm.value,
             total_allowances: totalAllowances,
             total_deduction: totalDeduction,
             net_salary: Math.max(0, netSalary)
@@ -412,27 +419,43 @@ export class Payroll implements OnInit, OnDestroy {
     }
 
     addAllowance() {
-        this.additionalAllowancesArray.push(this._formBuilder.group({
+        const newAllowance = this._formBuilder.group({
             name: ['', Validators.required],
             amount: [0, [Validators.required, Validators.min(0)]]
-        }));
+        });
 
-        console.log('Form Array:', this.additionalAllowancesArray.value);
+        // Subscribe to value changes for the new form group
+        newAllowance.valueChanges.pipe(takeUntil(this.Destroy$)).subscribe(() => {
+            this._calculateNetSalary();
+        });
+
+        this.additionalAllowancesArray.push(newAllowance);
+        this._calculateNetSalary(); // Recalculate immediately
     }
 
     removeAllowance(index: number) {
         this.additionalAllowancesArray.removeAt(index);
+        this._calculateNetSalary(); // Recalculate after removal
     }
 
     addDeduction() {
-        this.additionalDeductionsArray.push(this._formBuilder.group({
+        const newDeduction = this._formBuilder.group({
             name: ['', Validators.required],
             amount: [0, [Validators.required, Validators.min(0)]]
-        }));
+        });
+
+        // Subscribe to value changes for the new form group
+        newDeduction.valueChanges.pipe(takeUntil(this.Destroy$)).subscribe(() => {
+            this._calculateNetSalary();
+        });
+
+        this.additionalDeductionsArray.push(newDeduction);
+        this._calculateNetSalary(); // Recalculate immediately
     }
 
     removeDeduction(index: number) {
         this.additionalDeductionsArray.removeAt(index);
+        this._calculateNetSalary(); // Recalculate after removal
     }
 
     handleSavePayrollDetail() {
@@ -458,18 +481,15 @@ export class Payroll implements OnInit, OnDestroy {
 
             const { employees, bpjs_breakdown, ...payload } = updated;
 
-            console.log("payload update =>", payload);
-
-            // this._store.dispatch(new PayrollAction.UpdatePayroll(updated)).subscribe(() => {
-            //     this._messageService.add({
-            //         severity: 'success',
-            //         summary: 'Berhasil!',
-            //         detail: 'Payroll detail berhasil disimpan'
-            //     });
-            //     this.handleBackToList();
-            // });
+            this._store.dispatch(new PayrollAction.UpdatePayroll(payload)).subscribe(() => {
+                this._messageService.add({
+                    severity: 'success',
+                    summary: 'Berhasil!',
+                    detail: 'Payroll detail berhasil disimpan'
+                });
+                this.handleBackToList();
+            });
         }
     }
 
 }
-

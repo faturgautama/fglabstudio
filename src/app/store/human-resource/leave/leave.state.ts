@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { LeaveAction } from "./leave.action";
-import { tap } from "rxjs";
+import { switchMap, tap } from "rxjs";
 import { EmployeeModel } from "../../../model/pages/application/human-resource/employee.model";
 import { LeaveService } from "../../../services/pages/application/human-resource/leave.service";
 
@@ -71,10 +71,7 @@ export class LeaveState implements NgxsOnInit {
         return this._leaveService
             .add(payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new LeaveAction.GetLeave());
-                })
+                switchMap(() => ctx.dispatch(new LeaveAction.GetLeave()))
             )
     }
 
@@ -83,10 +80,7 @@ export class LeaveState implements NgxsOnInit {
         return this._leaveService
             .update(payload.payload.id, payload.payload)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new LeaveAction.GetLeave());
-                })
+                switchMap(() => ctx.dispatch(new LeaveAction.GetLeave()))
             )
     }
 
@@ -95,10 +89,7 @@ export class LeaveState implements NgxsOnInit {
         return this._leaveService
             .update(payload.id, { status: payload.status })
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new LeaveAction.GetLeave());
-                })
+                switchMap(() => ctx.dispatch(new LeaveAction.GetLeave()))
             )
     }
 
@@ -107,10 +98,7 @@ export class LeaveState implements NgxsOnInit {
         return this._leaveService
             .delete(payload.id)
             .pipe(
-                tap((result) => {
-                    const state = ctx.getState();
-                    ctx.dispatch(new LeaveAction.GetLeave());
-                })
+                switchMap(() => ctx.dispatch(new LeaveAction.GetLeave()))
             )
     }
 }
