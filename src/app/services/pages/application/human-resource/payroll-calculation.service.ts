@@ -42,8 +42,6 @@ export class PayrollCalculationService {
         const hrSettings = await (this.databaseService.db.hr_setting as any).toArray();
         const hrSetting = hrSettings.find((setting: any) => setting.is_active === true);
 
-        console.log("hrSetting =>", hrSetting);
-
         const overtimes = await (this.databaseService.db.overtime as any)
             .where('employee_id').equals(empId).toArray();
 
@@ -190,8 +188,6 @@ export class PayrollCalculationService {
                 .toArray();
 
             const filteredEmployees = employees.filter((employee: any) => employee.is_active === true);
-
-            console.log("filteredEmployees =>", filteredEmployees);
 
             const payrolls: EmployeeModel.IPayroll[] = [];
 
