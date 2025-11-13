@@ -99,5 +99,14 @@ export const humanResourceRoutes: Routes = [
     {
         path: 'payslip/:id',
         loadComponent: () => import('./payroll/payslip-print/payslip-print').then(m => m.PayslipPrint)
-    }
+    },
+    {
+        path: 'schedule',
+        loadComponent: async () => (await import('./schedule/schedule')).Schedule,
+        data: {
+            icon: 'pi pi-calendar',
+            title: 'Schedule',
+            description: 'Lihat schedule cuti karyawan'
+        }
+    },
 ];
