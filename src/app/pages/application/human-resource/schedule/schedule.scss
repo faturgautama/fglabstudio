@@ -2,7 +2,7 @@
 .time-off-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: calc(100vh - 11.5rem);
     background-color: #ffffff;
     overflow: hidden;
 }
@@ -138,6 +138,14 @@
         text-align: center;
         color: #9ca3af;
         font-size: 0.875rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        p {
+            margin: 0;
+        }
     }
 }
 
@@ -154,8 +162,16 @@
     .calendar-nav {
         display: flex;
         gap: 0.5rem;
+        align-items: center;
         padding: 1rem;
         border-bottom: 1px solid #e5e7eb;
+
+        .current-month {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0.5rem;
+        }
     }
 
     .calendar-header {
@@ -224,6 +240,21 @@
         flex: 1;
         overflow-y: auto;
         overflow-x: auto;
+        position: relative;
+    }
+
+    .empty-calendar-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        color: #9ca3af;
+
+        p {
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
     }
 
     .timeline-row {
@@ -275,6 +306,7 @@
             &:hover {
                 transform: translateY(-50%) scale(1.02);
                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+                z-index: 5;
             }
 
             .leave-label {
@@ -286,15 +318,20 @@
                 text-overflow: ellipsis;
             }
 
-            // Leave type colors
-            &.time-off {
+            // Leave type colors based on leave_type from ILeavePolicy
+            &.annual {
                 background-color: #3b82f6;
                 border-left: 4px solid #1e40af;
             }
 
-            &.holiday {
-                background-color: #10b981;
-                border-left: 4px solid #047857;
+            &.maternity {
+                background-color: #ec4899;
+                border-left: 4px solid #be185d;
+            }
+
+            &.paternity {
+                background-color: #8b5cf6;
+                border-left: 4px solid #6d28d9;
             }
 
             &.sick {
@@ -302,10 +339,38 @@
                 border-left: 4px solid #b91c1c;
             }
 
-            &.vacation {
-                background-color: #8b5cf6;
-                border-left: 4px solid #6d28d9;
+            &.unpaid {
+                background-color: #f59e0b;
+                border-left: 4px solid #d97706;
             }
+
+            &.other {
+                background-color: #10b981;
+                border-left: 4px solid #047857;
+            }
+        }
+    }
+}
+
+// ============================================
+// Dialog Styles
+// ============================================
+.dialog-content {
+    padding: 1rem 0;
+
+    .field {
+        margin-bottom: 1.5rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.875rem;
         }
     }
 }
@@ -346,6 +411,15 @@
     .employee-sidebar {
         width: 200px;
     }
+
+    .calendar-day-header {
+        min-width: 40px !important;
+        padding: 0.5rem 0.25rem;
+    }
+
+    .timeline-row .day-cell {
+        min-width: 40px !important;
+    }
 }
 
 // ============================================
@@ -360,18 +434,41 @@
         }
     }
 
-    .p-avatar {
-        width: 40px;
-        height: 40px;
-    }
-
     .p-input-icon-left>input {
         padding-left: 2.5rem;
     }
 
     .p-dialog {
-        .dialog-content {
-            padding: 1rem 0;
+        .p-dialog-header {
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .p-dialog-content {
+            padding: 1.5rem;
+        }
+
+        .p-dialog-footer {
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem 1.5rem;
+        }
+    }
+
+    .p-dropdown,
+    .p-calendar {
+        width: 100%;
+    }
+
+    .p-inputtext,
+    .p-inputtextarea {
+        width: 100%;
+    }
+
+    // Tooltip styling
+    .p-tooltip {
+        .p-tooltip-text {
+            font-size: 0.875rem;
+            padding: 0.5rem 0.75rem;
         }
     }
 }
@@ -398,4 +495,11 @@
     &:hover {
         background: #94a3b8;
     }
+}
+
+// ============================================
+// Utility Classes
+// ============================================
+.w-full {
+    width: 100%;
 }

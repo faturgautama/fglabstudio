@@ -1,24 +1,11 @@
 <app-dsh-base-layout>
-    <div class="time-off-container rounded-lg p-5">
-        <!-- Header -->
-        <div class="time-off-header">
-            <div class="header-left">
-                <h1 class="page-title">Time off</h1>
-            </div>
-            <div class="header-right">
-                <p-button label="Assign to.." icon="pi pi-user-plus" severity="secondary" (onClick)="openAssignDialog()"
-                    styleClass="p-button-sm">
-                </p-button>
-                <p-button label="Create time-off" icon="pi pi-plus" severity="primary" (onClick)="openCreateDialog()"
-                    styleClass="p-button-sm">
-                </p-button>
-            </div>
-        </div>
+    <p-toast></p-toast>
 
+    <div class="time-off-container rounded-lg p-3">
         <!-- Department Tabs -->
         <div class="department-tabs">
             @for (dept of departments(); track dept.id) {
-            <button class="tab-button" [class.active]="selectedDepartment() === dept.id"
+            <button class="tab-button" [class.active]="selectedDepartmentId() === dept.id"
                 (click)="onDepartmentChange(dept.id)">
                 {{ dept.title }}
             </button>
@@ -29,13 +16,13 @@
         <div class="time-off-content">
             <!-- Left Sidebar: Employee List -->
             <div class="employee-sidebar">
-                <!-- Search -->
+                <!-- Search with PrimeNG -->
                 <div class="search-box">
-                    <span class="p-input-icon-left w-full">
-                        <i class="pi pi-search"></i>
-                        <input type="text" pInputText placeholder="Search employee.." [(ngModel)]="searchQuery"
-                            (ngModelChange)="onSearch($event)" class="w-full">
-                    </span>
+                    <p-iconfield>
+                        <p-inputicon class="pi pi-search" />
+                        <input type="text" pInputText placeholder="Search employee.." [value]="searchQuery()"
+                            (input)="onSearch($any($event.target).value)" class="w-full">
+                    </p-iconfield>
                 </div>
 
                 <!-- Employee List -->
@@ -44,13 +31,14 @@
                     <div class="employee-item">
                         <div class="employee-info">
                             <p class="employee-name">{{ employee.full_name }}</p>
-                            <p class="employee-position">{{ employee.position.title }}</p>
+                            <p class="employee-position">{{ employee.position?.title || 'No Position' }}</p>
                         </div>
                     </div>
                     }
 
                     @if (filteredEmployees().length === 0) {
                     <div class="empty-state">
+                        <i class="pi pi-users" style="font-size: 2rem; color: #cbd5e1;"></i>
                         <p>No employees found</p>
                     </div>
                     }
@@ -64,6 +52,9 @@
                     <p-button icon="pi pi-chevron-left" severity="secondary" (onClick)="previousMonth()"
                         styleClass="p-button-text p-button-sm">
                     </p-button>
+                    <span class="current-month">
+                        {{ currentDate() | date: 'MMMM yyyy' }}
+                    </span>
                     <p-button label="Today" severity="secondary" (onClick)="goToToday()" styleClass="p-button-sm">
                     </p-button>
                     <p-button icon="pi pi-chevron-right" severity="secondary" (onClick)="nextMonth()"
@@ -73,7 +64,7 @@
 
                 <!-- Calendar Header (Days) -->
                 <div class="calendar-header">
-                    @for (day of visibleDays(); track day.date) {
+                    @for (day of visibleDays(); track $index) {
                     <div class="calendar-day-header" [class.today]="day.isToday" [class.weekend]="day.isWeekend">
 
                         <!-- Month separator -->
@@ -97,7 +88,7 @@
                     @for (employee of filteredEmployees(); track employee.id; let rowIndex = $index) {
                     <div class="timeline-row">
                         <!-- Day cells background -->
-                        @for (day of visibleDays(); track day.date) {
+                        @for (day of visibleDays(); track $index) {
                         <div class="day-cell" [class.today]="day.isToday" [class.weekend]="day.isWeekend">
                         </div>
                         }
@@ -106,13 +97,12 @@
                         <div class="entries-overlay">
                             @for (position of timeOffPositions(); track position.entry.id) {
                             @if (position.rowIndex === rowIndex) {
-                            <div class="leave-entry" [class.time-off]="position.entry.leave_policy_id === 'time-off'"
-                                [class.holiday]="position.entry.leave_policy_id === 'holiday'"
-                                [class.sick]="position.entry.leave_policy_id === 'sick'"
-                                [class.vacation]="position.entry.leave_policy_id === 'vacation'"
-                                [style.left.%]="position.left" [style.width.%]="position.width">
+                            <div class="leave-entry" [ngClass]="getLeaveTypeClass(position.entry.leave_policy_id)"
+                                [style.left.%]="position.left" [style.width.%]="position.width"
+                                [pTooltip]="getLeaveTypeName(position.entry.leave_policy_id) + ' (' + position.entry.total_days + ' days)'"
+                                tooltipPosition="top">
                                 <span class="leave-label">
-                                    {{ getLeaveTypeName(position.entry.type) }}
+                                    {{ getLeaveTypeName(position.entry.leave_policy_id) }}
                                 </span>
                             </div>
                             }
@@ -120,40 +110,15 @@
                         </div>
                     </div>
                     }
+
+                    @if (filteredEmployees().length === 0) {
+                    <div class="empty-calendar-state">
+                        <i class="pi pi-calendar" style="font-size: 3rem; color: #cbd5e1;"></i>
+                        <p>No employees to display</p>
+                    </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Create Time-off Dialog -->
-    <p-dialog [(visible)]="showCreateDialog" [modal]="true" [style]="{width: '500px'}" header="Create Time-off">
-
-        <div class="dialog-content">
-            <p>Create time-off dialog content goes here...</p>
-            <!-- Add form fields here -->
-        </div>
-
-        <ng-template pTemplate="footer">
-            <p-button label="Cancel" severity="secondary" (onClick)="closeDialogs()">
-            </p-button>
-            <p-button label="Create" severity="primary" (onClick)="closeDialogs()">
-            </p-button>
-        </ng-template>
-    </p-dialog>
-
-    <!-- Assign Dialog -->
-    <p-dialog [(visible)]="showAssignDialog" [modal]="true" [style]="{width: '500px'}" header="Assign Time-off">
-
-        <div class="dialog-content">
-            <p>Assign time-off dialog content goes here...</p>
-            <!-- Add form fields here -->
-        </div>
-
-        <ng-template pTemplate="footer">
-            <p-button label="Cancel" severity="secondary" (onClick)="closeDialogs()">
-            </p-button>
-            <p-button label="Assign" severity="primary" (onClick)="closeDialogs()">
-            </p-button>
-        </ng-template>
-    </p-dialog>
 </app-dsh-base-layout>

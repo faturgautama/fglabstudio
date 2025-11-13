@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngxs/store';
 import {
@@ -11,35 +11,70 @@ import {
   isToday,
   isWeekend,
   addMonths,
-  subMonths
+  subMonths,
+  differenceInDays
 } from 'date-fns';
 
 // PrimeNG Imports
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { TabsModule } from 'primeng/tabs';
 import { DialogModule } from 'primeng/dialog';
-import { AvatarModule } from 'primeng/avatar';
+import { SelectModule } from 'primeng/select';
+import { DatePickerModule } from 'primeng/datepicker';
+import { TextareaModule } from 'primeng/textarea';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { TabsModule } from 'primeng/tabs';
 
 // Models & Services
 import { EmployeeAction, EmployeeState } from '../../../../store/human-resource/employee';
 import { LeaveAction, LeaveState } from '../../../../store/human-resource/leave';
+import { DepartementAction, DepartementState } from '../../../../store/human-resource/departement';
+import { CompanySettingState } from '../../../../store/human-resource/company-setting';
 import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
 import { DshBaseLayout } from "../../../../components/dashboard/dsh-base-layout/dsh-base-layout";
+import { TooltipModule } from 'primeng/tooltip';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+
+interface DayInfo {
+  date: Date;
+  isToday: boolean;
+  isWeekend: boolean;
+  dayName: string;
+  dayNumber: number;
+  month: string;
+  year: number;
+}
+
+interface TimeOffPosition {
+  entry: EmployeeModel.ILeave;
+  left: number;
+  width: number;
+  rowIndex: number;
+}
 
 @Component({
-  selector: 'app-time-off',
+  selector: 'app-schedule',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ButtonModule,
     InputTextModule,
-    TabsModule,
     DialogModule,
-    AvatarModule,
-    DshBaseLayout
+    SelectModule,
+    DatePickerModule,
+    TextareaModule,
+    ToastModule,
+    TabsModule,
+    DshBaseLayout,
+    TooltipModule,
+    IconFieldModule,
+    InputIconModule
   ],
+  providers: [MessageService],
   templateUrl: './schedule.html',
   styleUrl: './schedule.scss'
 })
@@ -47,10 +82,14 @@ export class Schedule implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  // Forms
+  createLeaveForm!: FormGroup;
+  assignLeaveForm!: FormGroup;
+
   // Signals
   currentDate = signal(new Date());
   searchQuery = signal('');
-  selectedDepartment = signal('all');
+  selectedDepartmentId = signal<string>('all');
   showCreateDialog = signal(false);
   showAssignDialog = signal(false);
 
@@ -58,6 +97,29 @@ export class Schedule implements OnInit, OnDestroy {
   employees = signal<any[]>([]);
   timeOffEntries = signal<EmployeeModel.ILeave[]>([]);
   departments = signal<EmployeeModel.IDepartment[]>([]);
+  leavePolicies = signal<EmployeeModel.ILeavePolicy[]>([]);
+
+  // Dropdown options
+  employeeOptions = computed(() => {
+    return this.employees().map(emp => ({
+      label: emp.full_name,
+      value: emp.id
+    }));
+  });
+
+  leavePolicyOptions = computed(() => {
+    return this.leavePolicies().map(policy => ({
+      label: policy.title,
+      value: policy.id || policy.code
+    }));
+  });
+
+  statusOptions = [
+    { label: 'Pending', value: 'pending' },
+    { label: 'Approved', value: 'approved' },
+    { label: 'Rejected', value: 'rejected' },
+    { label: 'Cancelled', value: 'cancelled' }
+  ];
 
   // Computed signals
   visibleDays = computed(() => {
@@ -78,14 +140,17 @@ export class Schedule implements OnInit, OnDestroy {
 
   filteredEmployees = computed(() => {
     const query = this.searchQuery().toLowerCase();
-    const dept = this.selectedDepartment();
+    const deptId = this.selectedDepartmentId();
 
     return this.employees().filter(emp => {
+      // Filter by search query
       const matchQuery = !query ||
-        emp.full_name.toLowerCase().includes(query) ||
-        emp.position.title.toLowerCase().includes(query);
+        emp.full_name?.toLowerCase().includes(query) ||
+        emp.position?.title?.toLowerCase().includes(query) ||
+        emp.employee_code?.toLowerCase().includes(query);
 
-      const matchDept = dept === 'all' || emp.department.title === dept;
+      // Filter by department
+      const matchDept = deptId === 'all' || emp.department_id === deptId;
 
       return matchQuery && matchDept;
     });
@@ -104,24 +169,28 @@ export class Schedule implements OnInit, OnDestroy {
     const totalDays = days.length;
 
     return entries
+      .filter(entry => !entry.is_delete && entry.status === 'approved')
       .filter(entry => {
-        // Filter entries that overlap with visible date range
-        return entry.start_date <= endDate && entry.end_date >= startDate;
+        const entryStart = new Date(entry.start_date);
+        const entryEnd = new Date(entry.end_date);
+        return entryStart <= endDate && entryEnd >= startDate;
       })
       .map(entry => {
+
         console.log("Processing entry:", entry);
 
-        // Find employee row index
-        const rowIndex = employees.findIndex(emp => emp.id === entry.employee_id);
+        const rowIndex = employees.findIndex(emp => emp.id?.toString() === entry.employee_id?.toString());
 
         if (rowIndex === -1) return null;
 
-        // Calculate position
-        const entryStart = entry.start_date < startDate ? startDate : entry.start_date;
-        const entryEnd = entry.end_date > endDate ? endDate : entry.end_date;
+        const entryStart = new Date(entry.start_date);
+        const entryEnd = new Date(entry.end_date);
 
-        const daysFromStart = Math.floor((entryStart.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-        const entryDuration = Math.floor((entryEnd.getTime() - entryStart.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+        const visibleStart = entryStart < startDate ? startDate : entryStart;
+        const visibleEnd = entryEnd > endDate ? endDate : entryEnd;
+
+        const daysFromStart = differenceInDays(visibleStart, startDate);
+        const entryDuration = differenceInDays(visibleEnd, visibleStart) + 1;
 
         const left = (daysFromStart / totalDays) * 100;
         const width = (entryDuration / totalDays) * 100;
@@ -131,30 +200,58 @@ export class Schedule implements OnInit, OnDestroy {
           left,
           width,
           rowIndex
-        } as any;
+        };
       })
-      .filter(pos => pos !== null) as any[];
+      .filter((pos) => pos !== null);
   });
 
-  constructor(private store: Store) { }
+  constructor(
+    private store: Store,
+    private fb: FormBuilder,
+    private messageService: MessageService
+  ) {
+    this.initForms();
+  }
 
   ngOnInit(): void {
     // Load data from store
     this.store
       .select(EmployeeState.getAll)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(employees => this.employees.set(employees));
-
-    console.log("Employees:", this.employees());
+      .subscribe(employees => {
+        this.employees.set(employees);
+      });
 
     this.store
       .select(LeaveState.getAll)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(entries => this.timeOffEntries.set(entries));
+      .subscribe(entries => {
+        this.timeOffEntries.set(entries);
+      });
+
+    this.store
+      .select(DepartementState.getAll)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(departments => {
+        const allDept = { id: 'all', title: 'All Departments', is_active: true, code: 'ALL', created_at: new Date() };
+        this.departments.set([allDept, ...departments.filter(d => d.is_active)]);
+      });
+
+    this.store
+      .select(CompanySettingState.getLeavePolicies)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(policies => {
+        if (policies) {
+          this.leavePolicies.set(policies.filter(p => p.is_active));
+        }
+      });
 
     // Dispatch initial load
     this.store.dispatch(new EmployeeAction.GetEmployee());
     this.store.dispatch(new LeaveAction.GetLeave());
+    this.store.dispatch(new DepartementAction.GetDepartement());
+
+    console.log("time off =>", this.timeOffPositions())
   }
 
   ngOnDestroy(): void {
@@ -162,65 +259,71 @@ export class Schedule implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  initForms(): void {
+    this.createLeaveForm = this.fb.group({
+      leave_policy_id: ['', Validators.required],
+      start_date: [new Date(), Validators.required],
+      end_date: [new Date(), Validators.required],
+      reason: [''],
+      status: ['pending']
+    });
+
+    this.assignLeaveForm = this.fb.group({
+      employee_id: ['', Validators.required],
+      leave_policy_id: ['', Validators.required],
+      start_date: [new Date(), Validators.required],
+      end_date: [new Date(), Validators.required],
+      reason: [''],
+      status: ['approved']
+    });
+  }
+
   // Navigation methods
-  previousMonth() {
+  previousMonth(): void {
     this.currentDate.set(subMonths(this.currentDate(), 1));
   }
 
-  nextMonth() {
+  nextMonth(): void {
     this.currentDate.set(addMonths(this.currentDate(), 1));
   }
 
-  goToToday() {
+  goToToday(): void {
     this.currentDate.set(new Date());
   }
 
   // Filter methods
-  onDepartmentChange(deptId: string) {
-    this.selectedDepartment.set(deptId);
+  onDepartmentChange(deptId: string): void {
+    this.selectedDepartmentId.set(deptId);
   }
 
-  onSearch(query: string) {
+  onSearch(query: string): void {
     this.searchQuery.set(query);
   }
 
-  // Dialog methods
-  openCreateDialog() {
-    this.showCreateDialog.set(true);
-  }
-
-  openAssignDialog() {
-    this.showAssignDialog.set(true);
-  }
-
-  closeDialogs() {
-    this.showCreateDialog.set(false);
-    this.showAssignDialog.set(false);
-  }
-
-  // Create time-off
-  onCreateTimeOff(data: any) {
-    console.log('Creating time-off:', data);
-  }
-
   // Helper methods
-  getLeaveTypeColor(type: string): string {
+  getLeaveTypeColor(policyId: string): string {
+    const policy = this.leavePolicies().find(p => p.id === policyId || p.code === policyId);
+    if (!policy) return '#6B7280';
+
     const colors: Record<string, string> = {
-      'time-off': '#3B82F6',      // Blue
-      'holiday': '#10B981',       // Green
-      'sick': '#EF4444',          // Red
-      'vacation': '#8B5CF6'       // Purple
+      'annual': '#3B82F6',
+      'maternity': '#EC4899',
+      'paternity': '#8B5CF6',
+      'sick': '#EF4444',
+      'unpaid': '#F59E0B',
+      'other': '#10B981'
     };
-    return colors[type] || '#6B7280';
+    return colors[policy.leave_type] || '#6B7280';
   }
 
-  getLeaveTypeName(type: string): string {
-    const names: Record<string, string> = {
-      'time-off': 'Time-off',
-      'holiday': 'Holiday',
-      'sick': 'Sick',
-      'vacation': 'Vacation'
-    };
-    return names[type] || type;
+  getLeaveTypeName(policyId: string): string {
+    const policy = this.leavePolicies().find(p => p.id === policyId || p.code === policyId);
+    return policy?.title || 'Time-off';
+  }
+
+  getLeaveTypeClass(policyId: string): string {
+    const policy = this.leavePolicies().find(p => p.id === policyId || p.code === policyId);
+    if (!policy) return 'other';
+    return policy.leave_type;
   }
 }
