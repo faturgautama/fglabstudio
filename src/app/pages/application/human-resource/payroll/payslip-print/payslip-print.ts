@@ -92,8 +92,6 @@ export class PayslipPrint implements OnInit, OnDestroy {
             }
           };
 
-          console.log('Loaded payroll data:', payroll);
-
           // Load department and position names
           if (payroll.employees?.department_id) {
             this._loadDepartmentName(payroll.employees.department_id);
@@ -118,8 +116,6 @@ export class PayslipPrint implements OnInit, OnDestroy {
       .pipe(takeUntil(this.Destroy$))
       .subscribe(departments => {
         const department = departments.find(d => d.id === departmentId);
-        console.log('departments:', departments);
-        console.log('Found department:', department);
         this._departmentName.set(department?.title || '-');
       });
   }
