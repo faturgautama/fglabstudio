@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from '../../../../app.database';
 import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
 import { BaseActionService } from '../../../shared/base-action';
-import { from, switchMap, tap } from 'rxjs';
+import { from } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AttendanceService extends BaseActionService<EmployeeModel.IAttendance> {

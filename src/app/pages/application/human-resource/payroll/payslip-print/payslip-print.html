@@ -1,1 +1,192 @@
-<p>payslip-print works!</p>
+<!-- <div class="payslip-container">
+    @if (_payrollData(); as payroll) {
+    <div class="payslip-wrapper">
+        <div class="payslip-header">
+            <div class="company-info">
+                <h1 class="company-name">{{ _hrSetting()?.company_name || 'PT. COMPANY NAME' }}</h1>
+                <p class="company-address">{{ _hrSetting()?.address || 'Company Address' }}</p>
+                <div class="company-contact">
+                    <span>Telp: {{ _hrSetting()?.phone_number || '-' }}</span>
+                    @if (_hrSetting()?.fax_number) {
+                    <span class="ml-4">Fax: {{ _hrSetting()?.fax_number }}</span>
+                    }
+                </div>
+                @if (_hrSetting()?.tax_number) {
+                <p class="company-tax">NPWP: {{ _hrSetting()?.tax_number }}</p>
+                }
+            </div>
+            <div class="payslip-title">
+                <h2>SLIP GAJI</h2>
+                <p class="period">Periode: {{ payroll.month | date:'MMMM yyyy' }}</p>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="employee-section">
+            <h3 class="section-title">Informasi Karyawan</h3>
+            <div class="info-grid">
+                <div class="info-row">
+                    <span class="info-label">Kode Karyawan:</span>
+                    <span class="info-value">{{ payroll.employees?.employee_code || '-' }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nama Lengkap:</span>
+                    <span class="info-value">{{ payroll.employees?.full_name || '-' }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Departemen:</span>
+                    <span class="info-value">{{ _departmentName() || '-' }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Posisi:</span>
+                    <span class="info-value">{{ _positionName() || '-' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="salary-section">
+            <div class="salary-columns">
+                <div class="salary-column">
+                    <h3 class="section-title">Penghasilan</h3>
+                    <table class="salary-table">
+                        <tbody>
+                            <tr>
+                                <td class="item-label">Gaji Pokok</td>
+                                <td class="item-value">{{ payroll.base_salary | currency:'Rp. ':'symbol':'1.0-0' }}</td>
+                            </tr>
+                            @if (payroll.overtime_pay && payroll.overtime_pay > 0) {
+                            <tr>
+                                <td class="item-label">Tunjangan Lembur</td>
+                                <td class="item-value">{{ payroll.overtime_pay | currency:'Rp. ':'symbol':'1.0-0' }}
+                                </td>
+                            </tr>
+                            }
+                            @if (payroll.additional_allowances && payroll.additional_allowances.length > 0) {
+                            @for (allowance of payroll.additional_allowances; track $index) {
+                            <tr>
+                                <td class="item-label">{{ allowance.name }}</td>
+                                <td class="item-value">{{ allowance.amount | currency:'Rp. ':'symbol':'1.0-0' }}</td>
+                            </tr>
+                            }
+                            }
+                            <tr class="subtotal-row">
+                                <td class="subtotal-label">Total Penghasilan</td>
+                                <td class="subtotal-value">{{ _totalIncome() | currency:'Rp. ':'symbol':'1.0-0' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="salary-column">
+                    <h3 class="section-title">Potongan</h3>
+                    <table class="salary-table">
+                        <tbody>
+                            @if (_breakdown()?.bpjsKesehatanDeduction && _breakdown()!.bpjsKesehatanDeduction > 0) {
+                            <tr>
+                                <td class="item-label">BPJS Kesehatan</td>
+                                <td class="item-value">{{ _breakdown()?.bpjsKesehatanDeduction | currency:'Rp.
+                                    ':'symbol':'1.0-0' }}</td>
+                            </tr>
+                            }
+                            @if (_breakdown()?.bpjsKetenagakerjaanDeduction &&
+                            _breakdown()!.bpjsKetenagakerjaanDeduction > 0) {
+                            <tr>
+                                <td class="item-label">BPJS Ketenagakerjaan</td>
+                                <td class="item-value">{{ _breakdown()?.bpjsKetenagakerjaanDeduction | currency:'Rp.
+                                    ':'symbol':'1.0-0' }}</td>
+                            </tr>
+                            }
+                            @if (_breakdown()?.bpjsPensiunDeduction && _breakdown()!.bpjsPensiunDeduction > 0) {
+                            <tr>
+                                <td class="item-label">BPJS Pensiun</td>
+                                <td class="item-value">{{ _breakdown()?.bpjsPensiunDeduction | currency:'Rp.
+                                    ':'symbol':'1.0-0' }}</td>
+                            </tr>
+                            }
+                            @if (_breakdown()?.unpaidLeaveDeduction && _breakdown()!.unpaidLeaveDeduction > 0) {
+                            <tr>
+                                <td class="item-label">Cuti Tidak Bayar</td>
+                                <td class="item-value">{{ _breakdown()?.unpaidLeaveDeduction | currency:'Rp.
+                                    ':'symbol':'1.0-0' }}</td>
+                            </tr>
+                            }
+                            @if (_breakdown()?.taxDeduction && _breakdown()!.taxDeduction > 0) {
+                            <tr>
+                                <td class="item-label">Pajak (PPh 21)</td>
+                                <td class="item-value">{{ _breakdown()?.taxDeduction | currency:'Rp. ':'symbol':'1.0-0'
+                                    }}</td>
+                            </tr>
+                            }
+                            @if (payroll.additional_deductions && payroll.additional_deductions.length > 0) {
+                            @for (deduction of payroll.additional_deductions; track $index) {
+                            <tr>
+                                <td class="item-label">{{ deduction.name }}</td>
+                                <td class="item-value">{{ deduction.amount | currency:'Rp. ':'symbol':'1.0-0' }}</td>
+                            </tr>
+                            }
+                            }
+                            <tr class="subtotal-row">
+                                <td class="subtotal-label">Total Potongan</td>
+                                <td class="subtotal-value">{{ payroll.deduction | currency:'Rp. ':'symbol':'1.0-0' }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider-thick"></div>
+
+        <div class="net-salary-section">
+            <div class="net-salary-row">
+                <span class="net-salary-label">GAJI BERSIH (Take Home Pay)</span>
+                <span class="net-salary-value">{{ payroll.net_salary | currency:'Rp. ':'symbol':'1.0-0' }}</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="payment-status-section">
+            <div class="status-badge" [class.status-paid]="payroll.payment_status === 'paid'"
+                [class.status-pending]="payroll.payment_status === 'pending'">
+                Status: {{ payroll.payment_status === 'paid' ? 'SUDAH DIBAYAR' : 'BELUM DIBAYAR' }}
+            </div>
+        </div>
+
+        <div class="payslip-footer">
+            <div class="signature-section">
+                <div class="signature-box">
+                    <p class="signature-title">Disetujui Oleh,</p>
+                    <div class="signature-space"></div>
+                    <p class="signature-name">HRD Manager</p>
+                </div>
+                <div class="signature-box">
+                    <p class="signature-title">Diterima Oleh,</p>
+                    <div class="signature-space"></div>
+                    <p class="signature-name">{{ payroll.employees?.full_name }}</p>
+                </div>
+            </div>
+            <div class="print-info">
+                <p>Dicetak pada: {{ _printDate() | date:'dd MMMM yyyy HH:mm' }}</p>
+                <p class="print-note">Dokumen ini adalah salinan resmi slip gaji dan sah tanpa tanda tangan basah</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-buttons no-print">
+        <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left" (onClick)="handleBack()"
+            styleClass="p-button-sm"></p-button>
+        <p-button severity="primary" label="Cetak / Print" icon="pi pi-print" (onClick)="handlePrint()"
+            styleClass="p-button-sm"></p-button>
+    </div>
+    } @else {
+    <div class="loading-state">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p>Memuat data payslip...</p>
+    </div>
+    }
+</div> -->

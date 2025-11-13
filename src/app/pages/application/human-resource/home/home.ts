@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { DshBaseLayout } from "../../../../components/dashboard/dsh-base-layout/dsh-base-layout";
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
@@ -6,6 +6,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { AvatarModule } from 'primeng/avatar';
 import { DynamicTable } from '../../../../components/dynamic-table/dynamic-table';
 import { DynamicTableModel } from '../../../../model/components/dynamic-table.model';
+import { DashboardService } from '../../../../services/pages/application/human-resource/dashboard.service';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,9 @@ import { DynamicTableModel } from '../../../../model/components/dynamic-table.mo
   styleUrl: './home.scss'
 })
 export class Home implements OnInit {
+
+  private _dashboardService = inject(DashboardService)
+
   Counting = {
     total_employee: 100,
     total_payroll: 120000000,
@@ -34,57 +38,58 @@ export class Home implements OnInit {
     options: null as any
   };
 
-  MonthlyInfo = [
-    {
-      id: 1,
-      full_name: 'Lalisa Manobal',
-      birthday: new Date('2025-10-10')
-    },
-    {
-      id: 2,
-      full_name: 'Kim Jisoo',
-      birthday: new Date('2025-10-18')
-    },
-    {
-      id: 3,
-      full_name: 'Park Rose',
-      birthday: new Date('2025-10-25')
-    },
-  ];
+  MonthlyInfo: any[] = [];
 
   TableProps: DynamicTableModel.ITable = {
     id: 'employee',
     title: 'Daftar Karyawan',
-    description: 'Daftar karyawan aktif perusahaan',
+    description: 'Daftar lengkap seluruh karyawan perusahaan',
     column: [
+      {
+        id: 'employee_code',
+        title: 'Kode Karyawan',
+        type: DynamicTableModel.IColumnType.TEXT,
+        width: '200px'
+      },
       {
         id: 'full_name',
         title: 'Nama Lengkap',
-        type: DynamicTableModel.IColumnType.TEXT,
-        width: '200px'
+        type: DynamicTableModel.IColumnType.TEXTWITHDESCRIPTION,
+        description: 'email'
       },
       {
-        id: 'departement',
+        id: 'phone_number',
+        title: 'Nomor Telepon',
+        type: DynamicTableModel.IColumnType.TEXT,
+        width: '180px'
+      },
+      {
+        id: 'position.title',
+        title: 'Posisi',
+        type: DynamicTableModel.IColumnType.TEXT,
+      },
+      {
+        id: 'department.title',
         title: 'Departemen',
-        type: DynamicTableModel.IColumnType.BADGE,
-        width: '200px'
-      },
-      {
-        id: 'gender',
-        title: 'Gender',
-        type: DynamicTableModel.IColumnType.TEXT,
-        width: '200px'
+        type: DynamicTableModel.IColumnType.BUTTON_ICON,
+        button_icon: {
+          title: 'department.title',
+          icon_class: 'pi pi-circle-fill',
+          icon_color: 'department.color',
+          use_parsing_func: false,
+        },
+        width: '180px'
       },
       {
         id: 'employment_status',
         title: 'Status Kepegawaian',
         type: DynamicTableModel.IColumnType.TEXT,
-        width: '200px'
+        width: '250px'
       },
       {
-        id: 'work_status',
-        title: 'Status Kerja',
-        type: DynamicTableModel.IColumnType.TEXT,
+        id: 'created_at',
+        title: 'Waktu Entry',
+        type: DynamicTableModel.IColumnType.DATETIME,
         width: '200px'
       },
     ],
@@ -97,22 +102,37 @@ export class Home implements OnInit {
         value: ''
       },
       {
-        id: 'departement',
-        title: 'Departement',
-        type: DynamicTableModel.IColumnType.DROPDOWN,
+        id: 'employee_code',
+        title: 'Kode Karyawan',
+        type: DynamicTableModel.IColumnType.TEXT,
         value: ''
       },
       {
-        id: 'employment_status',
-        title: 'Status Kepegawaian',
+        id: 'department_id',
+        title: 'Departemen',
         type: DynamicTableModel.IColumnType.DROPDOWN,
-        value: ''
+        value: '',
+        select_props: {
+          datasource: [],
+          name: 'title',
+          value: 'id'
+        }
       },
       {
         id: 'work_status',
         title: 'Status Kerja',
         type: DynamicTableModel.IColumnType.DROPDOWN,
-        value: ''
+        value: '',
+        select_props: {
+          datasource: [
+            { id: 'active', title: 'Active' },
+            { id: 'resigned', title: 'Resigned' },
+            { id: 'suspended', title: 'Suspended' },
+            { id: 'on-leave', title: 'On Leave' }
+          ],
+          name: 'title',
+          value: 'id'
+        }
       },
     ],
     sort: [
@@ -122,105 +142,107 @@ export class Home implements OnInit {
         value: ''
       },
       {
-        id: 'departement',
-        title: 'Departement',
-        value: ''
-      },
-      {
-        id: 'employment_status',
-        title: 'Status Kepegawaian',
-        value: ''
-      },
-      {
-        id: 'work_status',
-        title: 'Status Kerja',
+        id: 'employee_code',
+        title: 'Kode Karyawan',
         value: ''
       },
     ],
+    toolbar: [
+      { id: 'detail', icon: 'pi pi-info', title: 'Detail' },
+      { id: 'delete', icon: 'pi pi-trash', title: 'Hapus' },
+    ],
     paging: true,
+    custom_button: [
+      { id: 'add', title: 'Tambah', icon: 'pi pi-plus' }
+    ]
   };
 
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initChart();
+
+    this._dashboardService.getEmployeeCount().subscribe((count) => {
+      this.Counting.total_employee = count;
+      this.cd.markForCheck();
+    });
+
+    this._dashboardService.getDepartmentCount().subscribe((count) => {
+      this.Counting.total_departement = count;
+      this.cd.markForCheck();
+    });
+
+    this._dashboardService._totalPayroll.subscribe((result) => {
+      this.Counting.total_payroll = result;
+      this.cd.detectChanges();
+    });
+
+    this._dashboardService._birthdayEmployees.subscribe((result) => {
+      this.MonthlyInfo = result;
+      this.cd.detectChanges();
+    });
+
+    this._dashboardService._employeeDatasource.subscribe((result) => {
+      this.TableProps.datasource = result;
+      console.log(this.TableProps.datasource);
+    });
+
   }
 
   private initChart() {
-    const getColorFromClass = (className: string) => {
-      const el = document.createElement('div');
-      el.className = className;
-      document.body.appendChild(el);
-      const color = getComputedStyle(el).backgroundColor;
-      document.body.removeChild(el);
-      return color;
-    };
+    this._dashboardService
+      .getWorkingTimes('2025-11-01', '2025-11-10')
+      .subscribe((result) => {
+        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--p-text-color');
+        const textColorSecondary = getComputedStyle(document.documentElement).getPropertyValue('--p-text-muted-color');
+        const surfaceBorder = getComputedStyle(document.documentElement).getPropertyValue('--p-content-border-color');
 
-    const textColor = getComputedStyle(document.documentElement).getPropertyValue('--p-text-color');
-    const textColorSecondary = getComputedStyle(document.documentElement).getPropertyValue('--p-text-muted-color');
-    const surfaceBorder = getComputedStyle(document.documentElement).getPropertyValue('--p-content-border-color');
+        this.WorkHoursChart.datasource = result;
 
-    this.WorkHoursChart.datasource = {
-      labels: ['10 Oct', '11 Oct', '12 Oct', '13 Oct', '14 Oct', '15 Oct', '16 Oct', '17 Oct'],
-      datasets: [
-        {
-          type: 'bar',
-          label: 'Jam Kerja',
-          backgroundColor: getColorFromClass('bg-sky-600'),
-          data: [36, 36, 0, 36, 36, 24, 34, 36]
-        },
-        {
-          type: 'bar',
-          label: 'Overtime',
-          backgroundColor: getColorFromClass('bg-fuchsia-200'),
-          data: [2, 3, 8, 0, 4, 8, 1, 3]
-        },
-      ]
-    };
+        this.WorkHoursChart.options = {
+          maintainAspectRatio: false,
+          aspectRatio: 0.8,
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            },
+            legend: {
 
-    this.WorkHoursChart.options = {
-      maintainAspectRatio: false,
-      aspectRatio: 0.8,
-      plugins: {
-        tooltip: {
-          mode: 'index',
-          intersect: false
-        },
-        legend: {
-
-          labels: {
-            color: textColor
-          }
-        }
-      },
-      scales: {
-        x: {
-          stacked: true,
-          ticks: {
-            color: textColorSecondary
+              labels: {
+                color: textColor
+              }
+            }
           },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
+          scales: {
+            x: {
+              stacked: true,
+              ticks: {
+                color: textColorSecondary
+              },
+              grid: {
+                color: surfaceBorder,
+                drawBorder: false
+              }
+            },
+            y: {
+              stacked: true,
+              ticks: {
+                color: textColorSecondary
+              },
+              grid: {
+                color: surfaceBorder,
+                drawBorder: false
+              }
+            }
           }
-        },
-        y: {
-          stacked: true,
-          ticks: {
-            color: textColorSecondary
-          },
-          grid: {
-            color: surfaceBorder,
-            drawBorder: false
-          }
-        }
-      }
-    };
+        };
 
-    this.cd.markForCheck();
-  }
+        this.cd.markForCheck();
 
-  handleFakeEmployee() {
+      })
+
+
 
   }
 }
