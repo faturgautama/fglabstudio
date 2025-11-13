@@ -95,5 +95,9 @@ export const humanResourceRoutes: Routes = [
             title: 'Payroll',
             description: 'Manage dan atur semua data payroll karyawan'
         }
+    },
+    {
+        path: 'payslip/:id',
+        loadComponent: () => import('./payroll/payslip-print/payslip-print').then(m => m.PayslipPrint)
     }
 ];

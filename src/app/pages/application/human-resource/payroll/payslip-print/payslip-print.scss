@@ -1,0 +1,619 @@
+// Payslip Print Styles
+// Optimized for A4 size print and screen display
+
+// Main Container
+.payslip-container {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    padding: 2rem;
+
+    @media print {
+        background-color: white;
+        padding: 0;
+        min-height: auto;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+}
+
+// Payslip Wrapper (A4 Size)
+.payslip-wrapper {
+    max-width: 21cm; // A4 width
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
+    @media print {
+        box-shadow: none;
+        border-radius: 0;
+        padding: 1cm;
+        max-width: 100%;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.5rem;
+    }
+}
+
+// ============================================
+// Header Section
+// ============================================
+.payslip-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    @media print {
+        margin-bottom: 1.5rem;
+    }
+
+    .company-info {
+        margin-bottom: 1.5rem;
+
+        .company-name {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0 0 0.5rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+            @media print {
+                font-size: 1.5rem;
+            }
+
+            @media (max-width: 768px) {
+                font-size: 1.5rem;
+            }
+        }
+
+        .company-address {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin: 0.25rem 0;
+            line-height: 1.5;
+        }
+
+        .company-contact {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin: 0.25rem 0;
+
+            .ml-4 {
+                margin-left: 1rem;
+            }
+        }
+
+        .company-tax {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin: 0.25rem 0;
+            font-weight: 600;
+        }
+    }
+
+    .payslip-title {
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+
+            @media print {
+                font-size: 1.25rem;
+            }
+
+            @media (max-width: 768px) {
+                font-size: 1.25rem;
+            }
+        }
+
+        .period {
+            font-size: 1rem;
+            color: #4b5563;
+            margin: 0.5rem 0 0 0;
+            font-weight: 600;
+
+            @media (max-width: 768px) {
+                font-size: 0.875rem;
+            }
+        }
+    }
+}
+
+// ============================================
+// Dividers
+// ============================================
+.divider {
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 1.5rem 0;
+
+    @media print {
+        margin: 1rem 0;
+    }
+}
+
+.divider-thick {
+    height: 2px;
+    background-color: #1f2937;
+    margin: 1.5rem 0;
+
+    @media print {
+        margin: 1rem 0;
+    }
+}
+
+// ============================================
+// Employee Section
+// ============================================
+.employee-section {
+    margin-bottom: 1.5rem;
+
+    @media print {
+        margin-bottom: 1rem;
+    }
+
+    .section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0 0 1rem 0;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .info-row {
+        display: flex;
+        padding: 0.5rem;
+        background-color: #f9fafb;
+        border-radius: 4px;
+
+        .info-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 600;
+            min-width: 140px;
+
+            @media (max-width: 768px) {
+                min-width: 120px;
+            }
+        }
+
+        .info-value {
+            font-size: 0.875rem;
+            color: #111827;
+            font-weight: 500;
+        }
+    }
+}
+
+// ============================================
+// Salary Section (Income & Deduction)
+// ============================================
+.salary-section {
+    margin-bottom: 1.5rem;
+
+    @media print {
+        margin-bottom: 1rem;
+    }
+
+    .salary-columns {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+
+        @media print {
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
+
+    .salary-column {
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0 0 1rem 0;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    .salary-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        tr {
+            border-bottom: 1px solid #f3f4f6;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        td {
+            padding: 0.75rem 0.5rem;
+            font-size: 0.875rem;
+
+            @media (max-width: 768px) {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+
+        .item-label {
+            color: #4b5563;
+        }
+
+        .item-value {
+            color: #111827;
+            text-align: right;
+            font-weight: 500;
+            font-family: 'Courier New', monospace;
+        }
+
+        .subtotal-row {
+            border-top: 2px solid #e5e7eb;
+            background-color: #f9fafb;
+
+            .subtotal-label {
+                font-size: 0.9375rem;
+                color: #1f2937;
+                font-weight: 700;
+                padding: 1rem 0.5rem;
+            }
+
+            .subtotal-value {
+                font-size: 0.9375rem;
+                color: #1f2937;
+                font-weight: 700;
+                text-align: right;
+                padding: 1rem 0.5rem;
+                font-family: 'Courier New', monospace;
+            }
+        }
+    }
+}
+
+// ============================================
+// Net Salary Section
+// ============================================
+.net-salary-section {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+
+    @media print {
+        background: #1f2937 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+
+    .net-salary-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        .net-salary-label {
+            font-size: 1.125rem;
+            color: white;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+
+            @media (max-width: 768px) {
+                font-size: 1rem;
+            }
+        }
+
+        .net-salary-value {
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+
+            @media (max-width: 768px) {
+                font-size: 1.25rem;
+            }
+        }
+    }
+}
+
+// ============================================
+// Payment Status
+// ============================================
+.payment-status-section {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    @media print {
+        margin-bottom: 1.5rem;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        border-radius: 24px;
+        font-size: 0.875rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+
+        @media (max-width: 768px) {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+        }
+
+        &.status-paid {
+            background-color: #dcfce7;
+            color: #14532d;
+            border: 2px solid #22c55e;
+
+            @media print {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        &.status-pending {
+            background-color: #fef3c7;
+            color: #78350f;
+            border: 2px solid #eab308;
+
+            @media print {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    }
+}
+
+// ============================================
+// Footer (Signature & Print Info)
+// ============================================
+.payslip-footer {
+    margin-top: 3rem;
+
+    @media print {
+        margin-top: 2rem;
+    }
+
+    .signature-section {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem;
+        margin-bottom: 2rem;
+
+        @media print {
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .signature-box {
+            text-align: center;
+
+            .signature-title {
+                font-size: 0.875rem;
+                color: #6b7280;
+                margin: 0 0 1rem 0;
+                font-weight: 600;
+            }
+
+            .signature-space {
+                height: 80px;
+                border-bottom: 1px solid #1f2937;
+                margin: 0 auto 0.5rem;
+                max-width: 200px;
+
+                @media (max-width: 768px) {
+                    height: 60px;
+                }
+            }
+
+            .signature-name {
+                font-size: 0.875rem;
+                color: #1f2937;
+                font-weight: 600;
+                margin: 0;
+            }
+        }
+    }
+
+    .print-info {
+        text-align: center;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 1rem;
+
+        p {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin: 0.25rem 0;
+            line-height: 1.5;
+        }
+
+        .print-note {
+            font-style: italic;
+            color: #6b7280;
+        }
+    }
+}
+
+// ============================================
+// Action Buttons
+// ============================================
+.action-buttons {
+    max-width: 21cm;
+    margin: 2rem auto 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 0 2rem;
+
+    @media (max-width: 768px) {
+        padding: 0 1rem;
+        flex-direction: column-reverse;
+    }
+}
+
+// ============================================
+// Loading State
+// ============================================
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    color: #6b7280;
+
+    p {
+        margin-top: 1rem;
+        font-size: 1rem;
+    }
+}
+
+// ============================================
+// Print Styles
+// ============================================
+@media print {
+
+    // Hide elements that shouldn't print
+    .no-print {
+        display: none !important;
+    }
+
+    // Page setup
+    @page {
+        size: A4;
+        margin: 1cm;
+    }
+
+    // Reset container
+    .payslip-container {
+        margin: 0;
+        padding: 0;
+        background: white;
+    }
+
+    // Optimize payslip wrapper
+    .payslip-wrapper {
+        max-width: 100%;
+        page-break-after: avoid;
+        box-shadow: none;
+    }
+
+    // Ensure colors print correctly
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    // Avoid page breaks inside elements
+    .employee-section,
+    .salary-section,
+    .net-salary-section,
+    .payment-status-section,
+    .payslip-footer {
+        page-break-inside: avoid;
+    }
+
+    // Optimize font sizes for print
+    .company-name {
+        font-size: 1.5rem !important;
+    }
+
+    .payslip-title h2 {
+        font-size: 1.25rem !important;
+    }
+
+    // Ensure table doesn't break
+    .salary-table {
+        page-break-inside: avoid;
+    }
+}
+
+// ============================================
+// PrimeNG Button Overrides
+// ============================================
+:host ::ng-deep {
+    .p-button {
+        font-size: 0.875rem;
+
+        &.p-button-sm {
+            padding: 0.5rem 1rem;
+        }
+
+        @media (max-width: 768px) {
+            width: 100%;
+        }
+    }
+}
+
+// ============================================
+// Utility Classes
+// ============================================
+.ml-4 {
+    margin-left: 1rem;
+}
+
+// Text colors
+.text-green-600 {
+    color: #16a34a;
+}
+
+.text-yellow-600 {
+    color: #ca8a04;
+}
+
+.text-red-600 {
+    color: #dc2626;
+}
+
+// Background colors (for print)
+.bg-green-50 {
+    background-color: #f0fdf4;
+}
+
+.bg-yellow-50 {
+    background-color: #fefce8;
+}
+
+.bg-red-50 {
+    background-color: #fef2f2;
+}

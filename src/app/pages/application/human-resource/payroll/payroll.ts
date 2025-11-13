@@ -20,6 +20,7 @@ import { TabsModule } from 'primeng/tabs';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { PayrollCalculationService, PayrollBreakdown } from '../../../../services/pages/application/human-resource/payroll-calculation.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-payroll',
@@ -46,6 +47,7 @@ import { PayrollCalculationService, PayrollBreakdown } from '../../../../service
 })
 export class Payroll implements OnInit, OnDestroy {
 
+    _router = inject(Router);
     _store = inject(Store);
     _formBuilder = inject(FormBuilder);
     _messageService = inject(MessageService);
@@ -492,4 +494,10 @@ export class Payroll implements OnInit, OnDestroy {
         }
     }
 
+    handlePrintPayslip() {
+        const selected = this._selectedPayroll();
+        if (selected?.id) {
+            this._router.navigate(['/people/payslip', selected.id]);
+        }
+    }
 }
