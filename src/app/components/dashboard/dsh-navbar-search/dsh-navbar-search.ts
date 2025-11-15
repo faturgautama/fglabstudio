@@ -13,13 +13,12 @@ import { Router } from '@angular/router';
 import { EmployeeState } from '../../../store/human-resource/employee';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { PayrollState } from '../../../store/human-resource/payroll';
-import { CommonModule, NgFor, TitleCasePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dsh-navbar-search',
   imports: [
     CommonModule,
-    TitleCasePipe,
     IconFieldModule,
     InputIconModule,
     InputTextModule,
