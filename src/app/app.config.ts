@@ -1,4 +1,4 @@
-import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
@@ -11,6 +11,7 @@ import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
 import { STATE } from './store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { definePreset } from '@primeuix/themes';
+import { provideServiceWorker } from '@angular/service-worker';
 
 const myPreset = definePreset(Aura, {
     darkModeSelector: 'my-app-dark',
@@ -60,6 +61,9 @@ export const appConfig: ApplicationConfig = {
             translate.use(translate.getBrowserLang() || "en");
         }),
         MessageService,
-        ConfirmationService,
+        ConfirmationService, provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
     ]
 };

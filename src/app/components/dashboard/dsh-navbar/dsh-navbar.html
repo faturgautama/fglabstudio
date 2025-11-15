@@ -2,7 +2,8 @@
     <div class="flex w-4/12">
         <p-iconfield styleClass="w-full">
             <p-inputicon class="pi pi-search" />
-            <input type="text" pInputText placeholder="Search" class="p-inputtext-sm w-full" />
+            <input type="text" pInputText placeholder="Search" class="p-inputtext-sm w-full" readonly
+                (click)="openSearchModal()" />
         </p-iconfield>
     </div>
 
@@ -31,3 +32,5 @@
         </div>
     </div>
 </div>
+
+<app-dsh-navbar-search #navbarSearchModal></app-dsh-navbar-search>
