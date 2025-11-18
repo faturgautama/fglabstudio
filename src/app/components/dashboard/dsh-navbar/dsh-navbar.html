@@ -9,11 +9,13 @@
 
     <div class="flex items-center gap-5">
         <p-button styleClass="p-button-sm" [rounded]="false" icon="pi pi-cloud-download" [outlined]="true"
-            severity="secondary" [pTooltip]="'Download Database'" tooltipStyleClass="text-sm" tooltipPosition="bottom">
+            severity="secondary" [pTooltip]="'Download Database'" tooltipStyleClass="text-sm" tooltipPosition="bottom"
+            (onClick)="handleDownloadDatabase()">
         </p-button>
 
         <p-button styleClass="p-button-sm mr-2" [rounded]="false" icon="pi pi-external-link" [outlined]="true"
-            severity="secondary" [pTooltip]="'Apps Lainnya'" tooltipStyleClass="text-sm" tooltipPosition="bottom">
+            severity="secondary" [pTooltip]="'Apps Lainnya'" tooltipStyleClass="text-sm" tooltipPosition="bottom"
+            (onClick)="handleNavigateToYourApps()">
         </p-button>
 
         <div class="flex flex-row items-center gap-3 pl-6 border-l border-y-0 border-r-0 border-solid border-gray-200">

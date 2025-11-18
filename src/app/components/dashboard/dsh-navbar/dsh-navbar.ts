@@ -29,8 +29,14 @@ export class DshNavbar {
   constructor() { }
 
   openSearchModal() {
-    console.log(this.navbarSearchModal)
     this.navbarSearchModal._showModal = true;
   }
 
+  handleDownloadDatabase() {
+    this.navbarSearchModal._router.navigate(['/your-apps']);
+  }
+
+  handleNavigateToYourApps() {
+    window.location.href = '/your-apps';
+  }
 }

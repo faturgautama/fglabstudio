@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../services/pages/authentication/authentication';
 import { TranslatePipe } from '@ngx-translate/core';
 import { UpperCasePipe } from '@angular/common';
@@ -24,10 +24,18 @@ export class YourApplication implements AfterViewInit {
   _authenticationService = inject(AuthenticationService);
   _databaseService = inject(DatabaseService);
   _messageService = inject(MessageService);
+  _cdr = inject(ChangeDetectorRef);
+
   user: any;
 
   ngOnInit(): void {
-    this._authenticationService._userData.subscribe(result => this.user = result);
+    this._authenticationService
+      ._userData
+      .subscribe((result) => {
+        console.log("user data =>", result);
+        this.user = result;
+        this._cdr.detectChanges();
+      });
   }
 
   ngAfterViewInit(): void {
