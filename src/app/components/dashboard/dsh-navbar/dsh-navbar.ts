@@ -6,6 +6,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import { DshNavbarSearch } from '../dsh-navbar-search/dsh-navbar-search';
+import { DshNavbarDbAction } from "../dsh-navbar-db-action/dsh-navbar-db-action";
 
 @Component({
   selector: 'app-dsh-navbar',
@@ -17,6 +18,7 @@ import { DshNavbarSearch } from '../dsh-navbar-search/dsh-navbar-search';
     FormsModule,
     TooltipModule,
     DshNavbarSearch,
+    DshNavbarDbAction
   ],
   standalone: true,
   templateUrl: './dsh-navbar.html',
@@ -26,6 +28,8 @@ export class DshNavbar {
 
   @ViewChild('navbarSearchModal') navbarSearchModal!: DshNavbarSearch;
 
+  @ViewChild('navbarDbAction') navbarDbAction!: DshNavbarDbAction;
+
   constructor() { }
 
   openSearchModal() {
@@ -33,7 +37,7 @@ export class DshNavbar {
   }
 
   handleDownloadDatabase() {
-    this.navbarSearchModal._router.navigate(['/your-apps']);
+    this.navbarDbAction._showModal = true;
   }
 
   handleNavigateToYourApps() {
