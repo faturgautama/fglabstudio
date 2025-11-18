@@ -44,6 +44,7 @@
     "chart.js": "^4.5.1",
     "date-fns": "^3.6.0",
     "dexie": "^4.2.1",
+    "dexie-export-import": "^4.1.4",
     "dotenv": "^17.2.3",
     "papaparse": "^5.5.3",
     "postcss": "^8.5.6",

@@ -1,3 +1,5 @@
+<p-toast></p-toast>
+
 <p-dialog [showHeader]="false" [modal]="true" [(visible)]="_showModal" [style]="{ width: '40rem' }"
     [maximizable]="false" [draggable]="false" [resizable]="false" position="top">
     <div class="grid w-full gap-0 pt-5">
@@ -8,7 +10,7 @@
                 Download / Upload Database
             </h2>
 
-            <span class="pi pi-times-circle cursor-pointer" (click)="_showModal = false"></span>
+            <span class="pi pi-times-circle cursor-pointer" (click)="closeModal()"></span>
         </div>
 
         <!-- Upload -->
@@ -17,16 +19,43 @@
                 Upload Database Dari Salinan File
             </p>
 
-            <div class="grid gap-3 p-5 h-[10rem] border-dashed border-2 border-gray-300 rounded-lg bg-gray-100">
+            <!-- File Selection Area -->
+            <div class="grid gap-3 p-5 h-[10rem] border-dashed border-2 border-gray-300 rounded-lg bg-gray-100"
+                [class.border-blue-500]="selectedFile" [class.bg-blue-50]="selectedFile">
                 <div class="flex flex-col gap-2 w-full h-full items-center justify-center cursor-pointer"
-                    (click)="UploadFileDb.click()">
+                    (click)="UploadFileDb.click()" *ngIf="!selectedFile">
                     <i class="pi pi-upload text-gray-500"></i>
                     <p class="text-gray-500 font-bold text-lg">
                         Pilih File Disini
                     </p>
+                    <p class="text-gray-400 text-xs">
+                        Format: JSON
+                    </p>
                 </div>
 
-                <input #UploadFileDb type="file" accept="application/json" hidden>
+                <!-- Selected File Display -->
+                <div class="flex flex-col gap-2 w-full h-full items-center justify-center" *ngIf="selectedFile">
+                    <i class="pi pi-file text-blue-500 text-3xl"></i>
+                    <p class="text-gray-700 font-medium text-sm text-center px-4">
+                        {{ selectedFile.name }}
+                    </p>
+                    <p class="text-gray-400 text-xs">
+                        {{ (selectedFile.size / 1024).toFixed(2) }} KB
+                    </p>
+                    <button type="button"
+                        class="pi pi-times text-gray-400 hover:text-red-500 cursor-pointer text-sm mt-1"
+                        (click)="clearSelectedFile(); $event.stopPropagation()">
+                    </button>
+                </div>
+
+                <input #UploadFileDb type="file" accept="application/json" (change)="onFileSelected($event)" hidden>
+            </div>
+
+            <!-- Upload Button -->
+            <div class="grid gap-3" *ngIf="selectedFile">
+                <p-button severity="success" label="Upload Database" icon="pi pi-cloud-upload" size="small"
+                    styleClass="w-full" [loading]="isUploading" [disabled]="isUploading" (onClick)="uploadDatabase()">
+                </p-button>
             </div>
         </div>
 
@@ -39,7 +68,8 @@
 
             <div class="grid gap-3">
                 <p-button severity="info" label="Download database saya" icon="pi pi-download" size="small"
-                    styleClass="w-full">
+                    styleClass="w-full" [loading]="isDownloading" [disabled]="isDownloading"
+                    (onClick)="downloadDatabase()">
                 </p-button>
             </div>
         </div>
