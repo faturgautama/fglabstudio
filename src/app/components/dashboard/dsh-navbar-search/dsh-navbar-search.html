@@ -13,14 +13,15 @@
 
         <!-- Input -->
         <div class="grid gap-5">
-            <input type="text" pInputText placeholder="Cari sesuatu disini..." class="p-inputtext-sm w-full" />
+            <input #SearchInput type="text" pInputText placeholder="Cari sesuatu disini..."
+                class="p-inputtext-sm w-full" (keyup)="handleSearch($event)" />
 
             <div class="flex flex-col gap-2 w-full">
                 <p class="text-sm text-gray-500">
                     Aku sedang mencari...
                 </p>
                 <p-selectbutton [options]="searchByOptions" [(ngModel)]="searchBy" optionLabel="title" optionValue="id"
-                    size="small">
+                    size="small" (onChange)="handleChangeSelectType($event)">
                     <ng-template #item let-item>
                         <i [class]="item.icon" style="font-size: 14px;"></i>
                         <p class="text-sm text-gray-700 font-medium">{{ item.title }}</p>
@@ -30,16 +31,18 @@
         </div>
 
         <!-- Condition Rendering -->
-        <div class="grid mt-5 p-3 bg-gray-100 rounded-lg">
+        <div class="grid my-5 p-3 bg-gray-100 rounded-lg">
             @if (searchBy == "employee") {
             <div class="flex flex-col gap-2 w-full" dta-aos="fade-right" data-aos-duration="1300">
                 <div class="flex flex-col gap-3 w-full max-h-96 overflow-y-auto" data-aos="fade-right"
                     data-aos-duration="1300">
+                    @if (employeeDatasource.length) {
                     <div *ngFor="let employee of employeeDatasource"
-                        class="group flex flex-row items-center gap-3 p-3 bg-white rounded-md hover:bg-sky-100 cursor-pointer">
+                        class="group flex flex-row items-center gap-3 p-3 bg-white rounded-md hover:bg-sky-100 cursor-pointer"
+                        (click)="handleNavigate(searchBy, employee.id)">
 
                         <div class="flex w-full justify-between items-center">
-                            <p class="text-base text-gray-700 font-medium">
+                            <p class="text-sm text-gray-700 font-medium">
                                 {{ employee.full_name }} -
                                 <span class="text-xs text-gray-700 font-normal">
                                     {{ employee.position.description}}
@@ -61,13 +64,110 @@
                             </div>
                         </div>
                     </div>
+                    } @else {
+                    <p class="text-sm text-gray-500">
+                        Data karyawan tidak ditemukan.
+                    </p>
+                    }
+
                 </div>
             </div>
             } @else if (searchBy == "payroll") {
             <!-- payroll case: add content here -->
+            <div class="flex flex-col gap-2 w-full" dta-aos="fade-right" data-aos-duration="1300">
+                <div class="flex flex-col gap-3 w-full max-h-96 overflow-y-auto" data-aos="fade-right"
+                    data-aos-duration="1300">
+                    @if (payrollDatasource.length) {
+                    <div *ngFor="let payroll of payrollDatasource"
+                        class="group flex flex-row items-center gap-3 p-3 bg-white rounded-md hover:bg-sky-100 cursor-pointer"
+                        (click)="handleNavigate(searchBy, payroll.id)">
+
+                        <div class="flex w-full justify-between items-center">
+                            <p class="text-sm text-gray-700 font-medium">
+                                {{ payroll.employees.full_name }} -
+                                <span class="text-xs text-gray-700 font-normal">
+                                    {{ payroll.month}}
+                                </span>
+                            </p>
+
+                            <div id="choose"
+                                class="flex flex-row items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <p class="text-xs text-gray-600 font-normal">
+                                    Pilih
+                                </p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-corner-down-left-icon lucide-corner-down-left">
+                                    <path d="M20 4v7a4 4 0 0 1-4 4H4" />
+                                    <path d="m9 10-5 5 5 5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    } @else {
+                    <p class="text-sm text-gray-500">
+                        Data payroll tidak ditemukan.
+                    </p>
+                    }
+
+                </div>
+            </div>
             } @else {
             <!-- default case: add content here -->
+            <div class="flex flex-col gap-2 w-full" dta-aos="fade-right" data-aos-duration="1300">
+                <div class="flex flex-col gap-3 w-full max-h-96 overflow-y-auto" data-aos="fade-right"
+                    data-aos-duration="1300">
+                    @if (menuDatasource.length) {
+                    <div *ngFor="let menu of menuDatasource"
+                        class="group flex flex-row items-center gap-3 p-3 bg-white rounded-md hover:bg-sky-100 cursor-pointer"
+                        (click)="handleNavigate(searchBy, menu.path)">
+
+                        <div class="flex w-full justify-between items-center">
+                            <p class="text-sm text-gray-700 font-medium">
+                                <span>
+                                    <i [class]="menu.icon" style="font-size: 12px;"></i>
+                                </span>
+                                {{ menu.title }}
+                            </p>
+
+                            <div id="choose"
+                                class="flex flex-row items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <p class="text-xs text-gray-600 font-normal">
+                                    Pilih
+                                </p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-corner-down-left-icon lucide-corner-down-left">
+                                    <path d="M20 4v7a4 4 0 0 1-4 4H4" />
+                                    <path d="m9 10-5 5 5 5" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    } @else {
+                    <p class="text-sm text-gray-500">
+                        Data menu tidak ditemukan.
+                    </p>
+                    }
+                </div>
+            </div>
             }
+        </div>
+
+        <!-- Footer -->
+        <div class="flex flex-col gap-3 w-full mt-3 pt-3 border-t border-b-0 border-x-0 border-gray-200 border-solid">
+            <p class="text-sm text-gray-500">
+                Buat Baru
+            </p>
+
+            <div class="flex flex-row gap-3">
+                <p-button severity="secondary" label="Buat Karyawan Baru" icon="pi pi-plus" size="small"></p-button>
+
+                <p-button severity="secondary" label="Buat Payroll Baru" icon="pi pi-plus" size="small"></p-button>
+            </div>
+
         </div>
     </div>
 </p-dialog>
