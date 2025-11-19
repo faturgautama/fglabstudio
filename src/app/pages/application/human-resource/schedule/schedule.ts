@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -81,6 +81,10 @@ interface TimeOffPosition {
 export class Schedule implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
+
+  // ViewChild references for scroll sync
+  @ViewChild('calendarBody') calendarBody!: ElementRef<HTMLDivElement>;
+  @ViewChild('headerWrapper') headerWrapper!: ElementRef<HTMLDivElement>;
 
   // Forms
   createLeaveForm!: FormGroup;
@@ -327,7 +331,6 @@ export class Schedule implements OnInit, OnDestroy {
     return policy.leave_type;
   }
 
-  // FIX: Add method to generate tooltip text
   getLeaveTooltip(entry: EmployeeModel.ILeave): string {
     const policyName = this.getLeaveTypeName(entry.leave_policy_id);
     const totalDays = entry.total_days || 0;
@@ -337,4 +340,12 @@ export class Schedule implements OnInit, OnDestroy {
     return `${policyName} (${totalDays} day${totalDays > 1 ? 's' : ''})
 ${startDate} - ${endDate}`;
   }
-}
+
+  // Sync horizontal scroll between header and body
+  onCalendarScroll(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (this.headerWrapper?.nativeElement) {
+      this.headerWrapper.nativeElement.scrollLeft = target.scrollLeft;
+    }
+  }
+} 

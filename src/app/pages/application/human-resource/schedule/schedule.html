@@ -28,7 +28,7 @@
                 <!-- Employee List -->
                 <div class="employee-list">
                     @for (employee of filteredEmployees(); track employee.id) {
-                    <div class="employee-item">
+                    <div class="employee-row">
                         <div class="employee-info">
                             <p class="employee-name">{{ employee.full_name }}</p>
                             <p class="employee-position">{{ employee.position?.title || 'No Position' }}</p>
@@ -62,29 +62,31 @@
                     </p-button>
                 </div>
 
-                <!-- Calendar Header (Days) -->
-                <div class="calendar-header">
-                    @for (day of visibleDays(); track $index) {
-                    <div class="calendar-day-header" [class.today]="day.isToday" [class.weekend]="day.isWeekend">
+                <!-- Calendar Header (Days) - Wrapper for horizontal scroll -->
+                <div class="calendar-header-wrapper" #headerWrapper>
+                    <div class="calendar-header">
+                        @for (day of visibleDays(); track $index) {
+                        <div class="calendar-day-header" [class.today]="day.isToday" [class.weekend]="day.isWeekend">
 
-                        <!-- Month separator -->
-                        @if ($index === 0 || day.dayNumber === 1) {
-                        <div class="month-label">{{ day.month }}</div>
-                        }
+                            <!-- Month separator -->
+                            @if ($index === 0 || day.dayNumber === 1) {
+                            <div class="month-label">{{ day.month }}</div>
+                            }
 
-                        <!-- Day number -->
-                        <div class="day-number">{{ day.dayNumber }}</div>
+                            <!-- Day number -->
+                            <div class="day-number">{{ day.dayNumber }}</div>
 
-                        <!-- Today marker -->
-                        @if (day.isToday) {
-                        <div class="today-badge">Today</div>
+                            <!-- Today marker -->
+                            @if (day.isToday) {
+                            <div class="today-badge">Today</div>
+                            }
+                        </div>
                         }
                     </div>
-                    }
                 </div>
 
                 <!-- Calendar Body (Timeline Rows) -->
-                <div class="calendar-body">
+                <div class="calendar-body" #calendarBody (scroll)="onCalendarScroll($event)">
                     @for (employee of filteredEmployees(); track employee.id; let rowIndex = $index) {
                     <div class="timeline-row">
                         <!-- Day cells background -->
