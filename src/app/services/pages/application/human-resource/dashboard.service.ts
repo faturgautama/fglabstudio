@@ -25,7 +25,7 @@ export class DashboardService {
           for (const employee of filtered) {
             const birthday = employee.birth_date ? new Date(employee.birth_date) : null;
 
-            if (birthday && (birthday?.getMonth() === new Date().getMonth())) {
+            if (birthday && (birthday?.getMonth() === new Date().getMonth()) && (birthday?.getDate() > new Date().getDate())) {
               birthday_employees.push({
                 id: employee.id,
                 full_name: employee.full_name,

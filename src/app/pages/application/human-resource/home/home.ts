@@ -7,6 +7,9 @@ import { AvatarModule } from 'primeng/avatar';
 import { DynamicTable } from '../../../../components/dynamic-table/dynamic-table';
 import { DynamicTableModel } from '../../../../model/components/dynamic-table.model';
 import { DashboardService } from '../../../../services/pages/application/human-resource/dashboard.service';
+import { Store } from '@ngxs/store';
+import { EmployeeState } from '../../../../store/human-resource/employee';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +28,8 @@ import { DashboardService } from '../../../../services/pages/application/human-r
 })
 export class Home implements OnInit {
 
-  private _dashboardService = inject(DashboardService)
+  private _dashboardService = inject(DashboardService);
+  private _store = inject(Store);
 
   Counting = {
     total_employee: 100,
@@ -157,36 +161,34 @@ export class Home implements OnInit {
     ]
   };
 
-  constructor(private cd: ChangeDetectorRef) { }
-
   ngOnInit(): void {
     this.initChart();
 
     this._dashboardService.getEmployeeCount().subscribe((count) => {
       this.Counting.total_employee = count;
-      this.cd.markForCheck();
     });
 
     this._dashboardService.getDepartmentCount().subscribe((count) => {
       this.Counting.total_departement = count;
-      this.cd.markForCheck();
     });
 
     this._dashboardService._totalPayroll.subscribe((result) => {
       this.Counting.total_payroll = result;
-      this.cd.detectChanges();
     });
 
     this._dashboardService._birthdayEmployees.subscribe((result) => {
       this.MonthlyInfo = result;
-      this.cd.detectChanges();
     });
 
-    this._dashboardService._employeeDatasource.subscribe((result) => {
-      this.TableProps.datasource = result;
-      console.log(this.TableProps.datasource);
-    });
-
+    this._store
+      .select(EmployeeState.getAll)
+      .pipe(tap((result) => console.log(result)))
+      .subscribe(result => this.TableProps.datasource = result.map((item: any) => {
+        return {
+          ...item,
+          employment_status: item.employment_status ? (<String>item.employment_status).toUpperCase() : null
+        }
+      }));
   }
 
   private initChart() {
@@ -237,12 +239,6 @@ export class Home implements OnInit {
             }
           }
         };
-
-        this.cd.markForCheck();
-
-      })
-
-
-
+      });
   }
 }

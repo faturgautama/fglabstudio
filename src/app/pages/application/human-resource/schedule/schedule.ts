@@ -326,4 +326,15 @@ export class Schedule implements OnInit, OnDestroy {
     if (!policy) return 'other';
     return policy.leave_type;
   }
+
+  // FIX: Add method to generate tooltip text
+  getLeaveTooltip(entry: EmployeeModel.ILeave): string {
+    const policyName = this.getLeaveTypeName(entry.leave_policy_id);
+    const totalDays = entry.total_days || 0;
+    const startDate = format(new Date(entry.start_date), 'MMM dd, yyyy');
+    const endDate = format(new Date(entry.end_date), 'MMM dd, yyyy');
+
+    return `${policyName} (${totalDays} day${totalDays > 1 ? 's' : ''})
+${startDate} - ${endDate}`;
+  }
 }

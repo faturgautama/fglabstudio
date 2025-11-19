@@ -99,10 +99,10 @@
                             @if (position.rowIndex === rowIndex) {
                             <div class="leave-entry" [ngClass]="getLeaveTypeClass(position.entry.leave_policy_id)"
                                 [style.left.%]="position.left" [style.width.%]="position.width"
-                                [pTooltip]="getLeaveTypeName(position.entry.leave_policy_id) + ' (' + position.entry.total_days + ' days)'"
-                                tooltipPosition="top">
+                                [pTooltip]="getLeaveTooltip(position.entry)" tooltipPosition="top" [escape]="false">
                                 <span class="leave-label">
-                                    {{ getLeaveTypeName(position.entry.leave_policy_id) }}
+                                    {{ getLeaveTypeName(position.entry.leave_policy_id) }} ({{ position.entry.total_days
+                                    }}d)
                                 </span>
                             </div>
                             }
