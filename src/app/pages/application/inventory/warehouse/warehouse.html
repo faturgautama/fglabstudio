@@ -1,0 +1,106 @@
+<app-dsh-base-layout>
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+            (onSort)="handleSort($event)">
+        </app-dynamic-table>
+
+        <p-dialog appendTo="body" [(visible)]="_modalToggler" [style]="{ width: '40rem' }"
+            [header]="_formState == 'insert' ? 'Tambah Gudang' : 'Ubah Gudang'" [maximizable]="false"
+            [resizable]="false" [draggable]="false" [modal]="true">
+
+            <div class="flex flex-col w-full mb-7 gap-5" [formGroup]="Form">
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Kode -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">
+                            Kode Gudang
+                            <span class="text-xs text-red-500">*</span>
+                        </p>
+                        <input formControlName="code" pInputText placeholder="Masukkan kode gudang"
+                            class="p-inputtext-sm w-full">
+
+                        @if (Form.get('code')?.touched && Form.get('code')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                            Kode Gudang tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Nama -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">
+                            Nama Gudang
+                            <span class="text-xs text-red-500">*</span>
+                        </p>
+                        <input formControlName="name" pInputText placeholder="Masukkan nama gudang"
+                            class="p-inputtext-sm w-full">
+
+                        @if (Form.get('name')?.touched && Form.get('name')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                            Nama Gudang tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Manager -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Nama Manager</p>
+                        <input formControlName="manager_name" pInputText placeholder="Masukkan nama manager"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Telepon</p>
+                        <input formControlName="phone" pInputText placeholder="Masukkan telepon"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- City -->
+                    <div class="flex flex-col gap-1 w-full col-span-2">
+                        <p class="text-sm text-gray-700 font-medium">Kota</p>
+                        <input formControlName="city" pInputText placeholder="Masukkan kota"
+                            class="p-inputtext-sm w-full">
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">Alamat</p>
+                    <textarea formControlName="address" pInputTextarea rows="3" class="p-inputtext-sm"
+                        placeholder="Masukkan alamat lengkap"></textarea>
+                </div>
+
+                <div class="flex gap-4">
+                    <!-- Default -->
+                    <div class="flex items-center gap-2">
+                        <p-checkbox formControlName="is_default" [binary]="true" inputId="is_default" />
+                        <label for="is_default" class="text-sm text-gray-700 font-medium">Gudang Default</label>
+                    </div>
+
+                    <!-- Status Aktif -->
+                    <div class="flex items-center gap-2">
+                        <p-checkbox formControlName="is_active" [binary]="true" inputId="is_active" />
+                        <label for="is_active" class="text-sm text-gray-700 font-medium">Gudang Aktif</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex w-full justify-end items-center gap-3">
+                <p-button severity="secondary" label="Tutup" styleClass="p-button-sm" (onClick)="_modalToggler = false">
+                </p-button>
+
+                @if (_formState == 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave(Form.value)">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                }
+            </div>
+        </p-dialog>
+    </div>
+</app-dsh-base-layout>

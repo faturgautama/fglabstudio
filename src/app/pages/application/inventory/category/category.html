@@ -1,0 +1,61 @@
+<app-dsh-base-layout>
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+            (onSort)="handleSort($event)">
+        </app-dynamic-table>
+
+        <p-dialog appendTo="body" [(visible)]="_modalToggler" [style]="{ width: '30rem' }"
+            [header]="_formState == 'insert' ? 'Tambah Kategori' : 'Ubah Kategori'" [maximizable]="false"
+            [resizable]="false" [draggable]="false" [modal]="true">
+
+            <div class="flex flex-col w-full mb-7 gap-5" [formGroup]="Form">
+                <!-- Nama -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Nama Kategori
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+                    <input formControlName="name" pInputText placeholder="Masukkan nama kategori"
+                        class="p-inputtext-sm w-full">
+
+                    @if (Form.get('name')?.touched && Form.get('name')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Nama Kategori tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Deskripsi -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Deskripsi
+                    </p>
+                    <textarea formControlName="description" pInputTextarea rows="3" class="p-inputtext-sm"
+                        placeholder="Masukkan deskripsi kategori"></textarea>
+                </div>
+
+                <!-- Status Aktif -->
+                <div class="flex items-center gap-2">
+                    <p-checkbox formControlName="is_active" [binary]="true" inputId="is_active" />
+                    <label for="is_active" class="text-sm text-gray-700 font-medium">Kategori Aktif</label>
+                </div>
+            </div>
+
+            <div class="flex w-full justify-end items-center gap-3">
+                <p-button severity="secondary" label="Tutup" styleClass="p-button-sm" (onClick)="_modalToggler = false">
+                </p-button>
+
+                @if (_formState == 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave(Form.value)">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                }
+            </div>
+        </p-dialog>
+    </div>
+</app-dsh-base-layout>

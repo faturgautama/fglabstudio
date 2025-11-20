@@ -1,0 +1,467 @@
+<app-dsh-base-layout>
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+            (onSort)="handleSort($event)">
+        </app-dynamic-table>
+
+        <p-dialog appendTo="body" [(visible)]="_modalToggler" [style]="{ width: '70rem', maxHeight: '90vh' }"
+            [header]="_formState == 'insert' ? 'Tambah Produk' : 'Ubah Produk'" [maximizable]="false"
+            [resizable]="false" [draggable]="false" [modal]="true">
+
+            <div class="flex flex-col w-full mb-7 gap-5 overflow-y-auto" style="max-height: 70vh;" [formGroup]="Form">
+
+                <!-- Section 1: Informasi Dasar -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Informasi Dasar</p>
+                        <p class="text-sm text-gray-500">Data identitas dan informasi dasar produk</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- SKU -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">
+                                SKU <span class="text-xs text-red-500">*</span>
+                            </p>
+                            <input formControlName="sku" pInputText placeholder="Auto generate"
+                                class="p-inputtext-sm w-full" [readonly]="true">
+                        </div>
+
+                        <!-- Barcode -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Barcode</p>
+                            <input formControlName="barcode" pInputText placeholder="Masukkan barcode"
+                                class="p-inputtext-sm w-full">
+                        </div>
+
+                        <!-- Category -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Kategori</p>
+                            <p-select [options]="_categories" formControlName="category_id" optionLabel="name"
+                                optionValue="id" placeholder="Pilih kategori" size="small" class="w-full"
+                                appendTo="body">
+                            </p-select>
+                        </div>
+
+                        <!-- Nama Produk -->
+                        <div class="flex flex-col gap-1 w-full col-span-3">
+                            <p class="text-sm text-gray-700 font-medium">
+                                Nama Produk <span class="text-xs text-red-500">*</span>
+                            </p>
+                            <input formControlName="name" pInputText placeholder="Masukkan nama produk"
+                                class="p-inputtext-sm w-full">
+                            @if (Form.get('name')?.touched && Form.get('name')?.invalid) {
+                            <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                                Nama Produk tidak boleh kosong
+                            </span>
+                            }
+                        </div>
+
+                        <!-- Description -->
+                        <div class="flex flex-col gap-1 w-full col-span-3">
+                            <p class="text-sm text-gray-700 font-medium">Deskripsi</p>
+                            <textarea formControlName="description" pInputTextarea rows="2" class="p-inputtext-sm"
+                                placeholder="Masukkan deskripsi produk"></textarea>
+                        </div>
+
+                        <!-- Brand -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Brand</p>
+                            <input formControlName="brand" pInputText placeholder="Masukkan brand"
+                                class="p-inputtext-sm w-full">
+                        </div>
+
+                        <!-- Manufacturer -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Manufacturer</p>
+                            <input formControlName="manufacturer" pInputText placeholder="Masukkan manufacturer"
+                                class="p-inputtext-sm w-full">
+                        </div>
+
+                        <!-- Model Number -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Model Number</p>
+                            <input formControlName="model_number" pInputText placeholder="Masukkan model number"
+                                class="p-inputtext-sm w-full">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Unit & Dimensi -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Unit & Dimensi</p>
+                        <p class="text-sm text-gray-500">Informasi satuan dan dimensi produk</p>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-4">
+                        <!-- Unit -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">
+                                Satuan <span class="text-xs text-red-500">*</span>
+                            </p>
+                            <input formControlName="unit" pInputText placeholder="e.g. PCS, KG, BOX"
+                                class="p-inputtext-sm w-full">
+                        </div>
+
+                        <!-- Unit Weight -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Berat Satuan (kg)</p>
+                            <p-inputNumber formControlName="unit_weight" [min]="0" [minFractionDigits]="2"
+                                placeholder="0.00" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Unit Volume -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Volume Satuan (m³)</p>
+                            <p-inputNumber formControlName="unit_volume" [min]="0" [minFractionDigits]="2"
+                                placeholder="0.00" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Warehouse Location -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Lokasi Gudang</p>
+                            <input formControlName="warehouse_location" pInputText placeholder="e.g. Rak A-1"
+                                class="p-inputtext-sm w-full">
+                        </div>
+
+                        <!-- Length -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Panjang (cm)</p>
+                            <p-inputNumber formControlName="length_cm" [min]="0" [minFractionDigits]="2"
+                                placeholder="0.00" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Width -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Lebar (cm)</p>
+                            <p-inputNumber formControlName="width_cm" [min]="0" [minFractionDigits]="2"
+                                placeholder="0.00" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Height -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Tinggi (cm)</p>
+                            <p-inputNumber formControlName="height_cm" [min]="0" [minFractionDigits]="2"
+                                placeholder="0.00" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Weight -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Berat (kg)</p>
+                            <p-inputNumber formControlName="weight_kg" [min]="0" [minFractionDigits]="2"
+                                placeholder="0.00" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Stok -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Manajemen Stok</p>
+                        <p class="text-sm text-gray-500">Informasi stok dan reorder point</p>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-4">
+                        <!-- Current Stock -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">
+                                Stok Saat Ini <span class="text-xs text-red-500">*</span>
+                            </p>
+                            <p-inputNumber formControlName="current_stock" [min]="0" placeholder="0"
+                                styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Min Stock -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">
+                                Stok Minimum <span class="text-xs text-red-500">*</span>
+                            </p>
+                            <p-inputNumber formControlName="min_stock" [min]="0" placeholder="0"
+                                styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Max Stock -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Stok Maximum</p>
+                            <p-inputNumber formControlName="max_stock" [min]="0" placeholder="0"
+                                styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Reorder Point -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Reorder Point</p>
+                            <p-inputNumber formControlName="reorder_point" [min]="0" placeholder="0"
+                                styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Harga -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Harga & Biaya</p>
+                        <p class="text-sm text-gray-500">Informasi harga jual, beli, dan margin</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- Purchase Price -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">
+                                Harga Beli <span class="text-xs text-red-500">*</span>
+                            </p>
+                            <p-inputNumber formControlName="purchase_price" mode="currency" currency="IDR"
+                                locale="id-ID" [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Selling Price -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">
+                                Harga Jual <span class="text-xs text-red-500">*</span>
+                            </p>
+                            <p-inputNumber formControlName="selling_price" mode="currency" currency="IDR" locale="id-ID"
+                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Wholesale Price -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Harga Grosir</p>
+                            <p-inputNumber formControlName="wholesale_price" mode="currency" currency="IDR"
+                                locale="id-ID" [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Margin Percentage -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Margin (%)</p>
+                            <p-inputNumber formControlName="margin_percentage" [min]="0" [max]="100" suffix="%"
+                                placeholder="0" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- COGS -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">COGS</p>
+                            <p-inputNumber formControlName="cogs" mode="currency" currency="IDR" locale="id-ID"
+                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Tax Rate -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Pajak (%)</p>
+                            <p-inputNumber formControlName="tax_rate" [min]="0" [max]="100" suffix="%" placeholder="0"
+                                styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Supplier -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Informasi Supplier</p>
+                        <p class="text-sm text-gray-500">Data supplier dan lead time</p>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4">
+                        <!-- Default Supplier -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Supplier Default</p>
+                            <p-select [options]="_suppliers" formControlName="default_supplier_id" optionLabel="name"
+                                optionValue="id" placeholder="Pilih supplier" size="small" class="w-full"
+                                appendTo="body">
+                            </p-select>
+                        </div>
+
+                        <!-- Supplier SKU -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">SKU Supplier</p>
+                            <input formControlName="supplier_sku" pInputText placeholder="Masukkan SKU supplier"
+                                class="p-inputtext-sm w-full">
+                        </div>
+
+                        <!-- Lead Time -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Lead Time (hari)</p>
+                            <p-inputNumber formControlName="lead_time_days" [min]="0" placeholder="0"
+                                styleClass="p-inputtext-sm w-full">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 6: Tanggal & Tracking -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Tanggal & Tracking</p>
+                        <p class="text-sm text-gray-500">Informasi tanggal produksi dan kadaluarsa</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Manufacturing Date -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Tanggal Produksi</p>
+                            <p-datepicker formControlName="manufacturing_date" placeholder="Pilih tanggal"
+                                styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                            </p-datepicker>
+                        </div>
+
+                        <!-- Expiry Date -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Tanggal Kadaluarsa</p>
+                            <p-datepicker formControlName="expiry_date" placeholder="Pilih tanggal"
+                                styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                            </p-datepicker>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7: Media & SEO -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Media & SEO</p>
+                        <p class="text-sm text-gray-500">Gambar produk dan informasi SEO</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Image URL -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">URL Gambar</p>
+                            <input formControlName="image_url" pInputText placeholder="https://example.com/image.jpg"
+                                class="p-inputtext-sm w-full">
+                        </div>
+
+                        <!-- Slug -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Slug</p>
+                            <input formControlName="slug" pInputText placeholder="product-slug"
+                                class="p-inputtext-sm w-full">
+                        </div>
+
+                        <!-- Meta Description -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Meta Description</p>
+                            <textarea formControlName="meta_description" pInputTextarea rows="2" class="p-inputtext-sm"
+                                placeholder="Masukkan meta description untuk SEO"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 8: Catatan -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Catatan & Instruksi</p>
+                        <p class="text-sm text-gray-500">Catatan tambahan dan instruksi penanganan</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Notes -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Catatan</p>
+                            <textarea formControlName="notes" pInputTextarea rows="2" class="p-inputtext-sm"
+                                placeholder="Masukkan catatan produk"></textarea>
+                        </div>
+
+                        <!-- Handling Notes -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Catatan Penanganan</p>
+                            <textarea formControlName="handling_notes" pInputTextarea rows="2" class="p-inputtext-sm"
+                                placeholder="Masukkan catatan penanganan"></textarea>
+                        </div>
+
+                        <!-- Storage Requirements -->
+                        <div class="flex flex-col gap-1 w-full">
+                            <p class="text-sm text-gray-700 font-medium">Persyaratan Penyimpanan</p>
+                            <textarea formControlName="storage_requirements" pInputTextarea rows="2"
+                                class="p-inputtext-sm" placeholder="Masukkan persyaratan penyimpanan"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 9: Status & Flags -->
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                        <p class="text-base font-semibold text-gray-700">Status & Pengaturan</p>
+                        <p class="text-sm text-gray-500">Pengaturan status dan tracking produk</p>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-4">
+                        <!-- Batch Tracked -->
+                        <div class="flex items-center gap-2">
+                            <p-checkbox formControlName="is_batch_tracked" [binary]="true" inputId="is_batch_tracked" />
+                            <label for="is_batch_tracked" class="text-sm text-gray-700 font-medium">Batch
+                                Tracked</label>
+                        </div>
+
+                        <!-- Serial Tracked -->
+                        <div class="flex items-center gap-2">
+                            <p-checkbox formControlName="is_serial_tracked" [binary]="true"
+                                inputId="is_serial_tracked" />
+                            <label for="is_serial_tracked" class="text-sm text-gray-700 font-medium">Serial
+                                Tracked</label>
+                        </div>
+
+                        <!-- Serialized -->
+                        <div class="flex items-center gap-2">
+                            <p-checkbox formControlName="is_serialized" [binary]="true" inputId="is_serialized" />
+                            <label for="is_serialized" class="text-sm text-gray-700 font-medium">Serialized</label>
+                        </div>
+
+                        <!-- Perishable -->
+                        <div class="flex items-center gap-2">
+                            <p-checkbox formControlName="is_perishable" [binary]="true" inputId="is_perishable" />
+                            <label for="is_perishable" class="text-sm text-gray-700 font-medium">Perishable</label>
+                        </div>
+
+                        <!-- Active -->
+                        <div class="flex items-center gap-2">
+                            <p-checkbox formControlName="is_active" [binary]="true" inputId="is_active" />
+                            <label for="is_active" class="text-sm text-gray-700 font-medium">Aktif</label>
+                        </div>
+
+                        <!-- Sellable -->
+                        <div class="flex items-center gap-2">
+                            <p-checkbox formControlName="is_sellable" [binary]="true" inputId="is_sellable" />
+                            <label for="is_sellable" class="text-sm text-gray-700 font-medium">Dapat Dijual</label>
+                        </div>
+
+                        <!-- Purchasable -->
+                        <div class="flex items-center gap-2">
+                            <p-checkbox formControlName="is_purchasable" [binary]="true" inputId="is_purchasable" />
+                            <label for="is_purchasable" class="text-sm text-gray-700 font-medium">Dapat Dibeli</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex w-full justify-end items-center gap-3 pt-4 border-t border-gray-300">
+                <p-button severity="secondary" label="Tutup" styleClass="p-button-sm" (onClick)="_modalToggler = false">
+                </p-button>
+
+                @if (_formState == 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave(Form.value)">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                }
+            </div>
+        </p-dialog>
+    </div>
+</app-dsh-base-layout>

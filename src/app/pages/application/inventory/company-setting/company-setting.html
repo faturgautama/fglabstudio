@@ -1,0 +1,125 @@
+<app-dsh-base-layout>
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <div class="flex flex-col gap-5" [formGroup]="Form">
+            <div class="flex flex-col gap-2">
+                <h2 class="text-xl font-semibold text-gray-800">Pengaturan Perusahaan</h2>
+                <p class="text-sm text-gray-600">Kelola informasi perusahaan untuk sistem inventory</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Nama Perusahaan -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Nama Perusahaan
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+                    <input formControlName="name" pInputText placeholder="Masukkan nama perusahaan"
+                        class="p-inputtext-sm w-full">
+
+                    @if (Form.get('name')?.touched && Form.get('name')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Nama Perusahaan tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Email -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Email
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+                    <input formControlName="email" pInputText placeholder="Masukkan email" type="email"
+                        class="p-inputtext-sm w-full">
+
+                    @if (Form.get('email')?.touched && Form.get('email')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Email tidak valid
+                    </span>
+                    }
+                </div>
+
+                <!-- Phone -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Telepon
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+                    <input formControlName="phone" pInputText placeholder="Masukkan telepon"
+                        class="p-inputtext-sm w-full">
+
+                    @if (Form.get('phone')?.touched && Form.get('phone')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        Telepon tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Currency -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Mata Uang
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+                    <p-select [options]="CURRENCIES" formControlName="currency" optionLabel="label" optionValue="value"
+                        placeholder="Pilih mata uang" size="small" class="w-full p-inputtext-sm" appendTo="body">
+                    </p-select>
+                </div>
+
+                <!-- SKU Prefix -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        SKU Prefix
+                        <span class="text-xs text-red-500">*</span>
+                    </p>
+                    <input formControlName="sku_prefix" pInputText placeholder="e.g. PRD" class="p-inputtext-sm w-full">
+
+                    @if (Form.get('sku_prefix')?.touched && Form.get('sku_prefix')?.invalid) {
+                    <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                        SKU Prefix tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Logo URL -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">Logo URL</p>
+                    <input formControlName="logo" pInputText placeholder="Masukkan URL logo"
+                        class="p-inputtext-sm w-full">
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="flex flex-col gap-1 w-full">
+                <p class="text-sm text-gray-700 font-medium">
+                    Alamat
+                    <span class="text-xs text-red-500">*</span>
+                </p>
+                <textarea formControlName="address" pInputTextarea rows="3" class="p-inputtext-sm"
+                    placeholder="Masukkan alamat lengkap perusahaan"></textarea>
+
+                @if (Form.get('address')?.touched && Form.get('address')?.invalid) {
+                <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                    Alamat tidak boleh kosong
+                </span>
+                }
+            </div>
+
+            <div class="flex w-full justify-end items-center gap-3 mt-4">
+                <p-button severity="secondary" label="Reset" styleClass="p-button-sm" (onClick)="handleReset()"
+                    [disabled]="_isLoading">
+                </p-button>
+
+                @if (!_isEditMode) {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm"
+                    [disabled]="Form.invalid || _isLoading" (onClick)="handleSave(Form.value)" [loading]="_isLoading">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm"
+                    [disabled]="Form.invalid || _isLoading" (onClick)="handleUpdate(Form.value)" [loading]="_isLoading">
+                </p-button>
+                }
+            </div>
+        </div>
+    </div>
+</app-dsh-base-layout>

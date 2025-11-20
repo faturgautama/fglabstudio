@@ -1,0 +1,216 @@
+<app-dsh-base-layout>
+    @if (_pageState() === 'list') {
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+            (onSort)="handleSort($event)">
+        </app-dynamic-table>
+    </div>
+    } @else if (_pageState() === 'form') {
+    <div class="grid w-full gap-5 p-5">
+        <!-- Header -->
+        <div class="flex flex-row justify-between items-center bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col">
+                <p class="text-lg font-semibold text-gray-700">
+                    {{ _formState === 'insert' ? 'Tambah Stock Opname' : 'Edit Stock Opname' }}
+                </p>
+                <p class="text-sm text-gray-500">
+                    {{ _formState === 'insert' ? 'Buat stock opname baru' : 'Ubah stock opname yang sudah ada' }}
+                </p>
+            </div>
+
+            <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left" (onClick)="handleBackToList()"
+                styleClass="p-button-sm">
+            </p-button>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-white p-5 rounded-lg shadow-sm" [formGroup]="Form">
+            <!-- Section 1: Header Opname -->
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Informasi Stock Opname</p>
+                    <p class="text-sm text-gray-500">Data header stock opname</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- Opname Number -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            No. Opname <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="opname_number" pInputText placeholder="Auto generate"
+                            class="p-inputtext-sm w-full" [readonly]="true">
+                    </div>
+
+                    <!-- Opname Date -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Tanggal <span class="text-red-500">*</span>
+                        </label>
+                        <p-datepicker formControlName="opname_date" placeholder="Pilih tanggal"
+                            styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                        </p-datepicker>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Status <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="STATUS_OPTIONS" formControlName="status" optionLabel="label"
+                            optionValue="value" placeholder="Pilih status" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Warehouse -->
+                    <div class="flex flex-col gap-1 col-span-2">
+                        <label class="text-sm text-gray-700 font-medium">Gudang</label>
+                        <p-select [options]="_warehouses" formControlName="warehouse_id" optionLabel="name"
+                            optionValue="id" placeholder="Pilih gudang" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Load Products Button -->
+                    <div class="flex items-end">
+                        <p-button severity="info" label="Load Produk" icon="pi pi-download"
+                            (onClick)="loadProductsForOpname()" styleClass="p-button-sm w-full"
+                            [disabled]="!Form.get('warehouse_id')?.value">
+                        </p-button>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="flex flex-col gap-1 col-span-3">
+                        <label class="text-sm text-gray-700 font-medium">Catatan</label>
+                        <textarea formControlName="notes" pInputTextarea rows="2" class="p-inputtext-sm"
+                            placeholder="Masukkan catatan"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Items -->
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="flex flex-row justify-between items-center pb-3 border-b border-gray-300">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-base font-semibold text-gray-700">Item Stock Opname</p>
+                        <p class="text-sm text-gray-500">Daftar produk yang dihitung</p>
+                    </div>
+                    <p-button severity="success" label="Tambah Item" icon="pi pi-plus" (onClick)="addItem()"
+                        styleClass="p-button-sm">
+                    </p-button>
+                </div>
+
+                <div formArrayName="items" class="flex flex-col gap-3">
+                    @for (item of items.controls; track $index) {
+                    <div [formGroupName]="$index" class="border border-gray-300 rounded-lg p-4">
+                        <div class="grid grid-cols-6 gap-3">
+                            <!-- Product -->
+                            <div class="flex flex-col gap-1 col-span-2">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Produk <span class="text-red-500">*</span>
+                                </label>
+                                <p-select [options]="_products" formControlName="product_id" optionLabel="name"
+                                    optionValue="id" placeholder="Pilih produk" size="small" class="w-full"
+                                    appendTo="body" [filter]="true">
+                                </p-select>
+                            </div>
+
+                            <!-- System Stock -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Stok Sistem <span class="text-red-500">*</span>
+                                </label>
+                                <p-inputNumber formControlName="system_stock" [min]="0" placeholder="0"
+                                    styleClass="p-inputtext-sm w-full" (onInput)="calculateItemDifference($index)">
+                                </p-inputNumber>
+                            </div>
+
+                            <!-- Physical Stock -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Stok Fisik <span class="text-red-500">*</span>
+                                </label>
+                                <p-inputNumber formControlName="physical_stock" [min]="0" placeholder="0"
+                                    styleClass="p-inputtext-sm w-full" (onInput)="calculateItemDifference($index)">
+                                </p-inputNumber>
+                            </div>
+
+                            <!-- Difference -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">Selisih</label>
+                                <p-inputNumber formControlName="difference" [readonly]="true" placeholder="0"
+                                    styleClass="p-inputtext-sm w-full"
+                                    [ngClass]="{'text-red-600': item.get('difference')?.value < 0, 'text-green-600': item.get('difference')?.value > 0}">
+                                </p-inputNumber>
+                            </div>
+
+                            <!-- Remove Button -->
+                            <div class="flex items-end">
+                                <p-button severity="danger" icon="pi pi-trash" (onClick)="removeItem($index)"
+                                    styleClass="p-button-sm" [outlined]="true">
+                                </p-button>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="flex flex-col gap-1 col-span-6">
+                                <label class="text-sm text-gray-700 font-medium">Catatan Item</label>
+                                <input formControlName="notes" pInputText placeholder="Masukkan catatan"
+                                    class="p-inputtext-sm w-full">
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (items.length === 0) {
+                    <div class="text-center py-8 text-gray-500">
+                        <p>Belum ada item. Klik "Load Produk" atau "Tambah Item" untuk menambahkan produk.</p>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Section 3: Summary -->
+            @if (items.length > 0) {
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Ringkasan</p>
+                    <p class="text-sm text-gray-500">Total produk dan selisih</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-700">Total Produk:</span>
+                        <span class="text-lg font-semibold text-gray-800">
+                            {{ Form.get('total_products')?.value }}
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-700">Total Selisih:</span>
+                        <span class="text-lg font-semibold text-red-600">
+                            {{ Form.get('total_discrepancy')?.value }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            }
+
+            <!-- Action Buttons -->
+            <div class="flex w-full justify-end items-center gap-3 pt-4 border-t border-gray-300">
+                <p-button severity="secondary" label="Batal" styleClass="p-button-sm" (onClick)="handleBackToList()">
+                </p-button>
+
+                @if (_formState === 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave()">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate()">
+                </p-button>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</app-dsh-base-layout>

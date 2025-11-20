@@ -1,0 +1,304 @@
+<app-dsh-base-layout>
+    @if (_pageState() === 'list') {
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+            (onSort)="handleSort($event)">
+        </app-dynamic-table>
+    </div>
+    } @else if (_pageState() === 'form') {
+    <div class="grid w-full gap-5 p-5">
+        <!-- Header -->
+        <div class="flex flex-row justify-between items-center bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col">
+                <p class="text-lg font-semibold text-gray-700">
+                    {{ _formState === 'insert' ? 'Tambah Purchase Order' : 'Edit Purchase Order' }}
+                </p>
+                <p class="text-sm text-gray-500">
+                    {{ _formState === 'insert' ? 'Buat purchase order baru' : 'Ubah purchase order yang sudah ada' }}
+                </p>
+            </div>
+
+            <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left" (onClick)="handleBackToList()"
+                styleClass="p-button-sm">
+            </p-button>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-white p-5 rounded-lg shadow-sm" [formGroup]="Form">
+            <!-- Section 1: Header PO -->
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Informasi Purchase Order</p>
+                    <p class="text-sm text-gray-500">Data header purchase order</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- PO Number -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            No. PO <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="po_number" pInputText placeholder="Auto generate"
+                            class="p-inputtext-sm w-full" [readonly]="true">
+                    </div>
+
+                    <!-- Supplier -->
+                    <div class="flex flex-col gap-1 col-span-2">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Supplier <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="_suppliers" formControlName="supplier_id" optionLabel="name"
+                            optionValue="id" placeholder="Pilih supplier" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Order Date -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Tanggal Order <span class="text-red-500">*</span>
+                        </label>
+                        <p-datepicker formControlName="order_date" placeholder="Pilih tanggal"
+                            styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                        </p-datepicker>
+                    </div>
+
+                    <!-- Expected Date -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Tanggal Diharapkan</label>
+                        <p-datepicker formControlName="expected_date" placeholder="Pilih tanggal"
+                            styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                        </p-datepicker>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Status <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="STATUS_OPTIONS" formControlName="status" optionLabel="label"
+                            optionValue="value" placeholder="Pilih status" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div class="flex flex-col gap-1 col-span-3">
+                        <label class="text-sm text-gray-700 font-medium">Alamat Pengiriman</label>
+                        <textarea formControlName="delivery_address" pInputTextarea rows="2" class="p-inputtext-sm"
+                            placeholder="Masukkan alamat pengiriman"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Items -->
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="flex flex-row justify-between items-center pb-3 border-b border-gray-300">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-base font-semibold text-gray-700">Item Purchase Order</p>
+                        <p class="text-sm text-gray-500">Daftar produk yang dipesan</p>
+                    </div>
+                    <p-button severity="success" label="Tambah Item" icon="pi pi-plus" (onClick)="addItem()"
+                        styleClass="p-button-sm">
+                    </p-button>
+                </div>
+
+                <div formArrayName="items" class="flex flex-col gap-3">
+                    @for (item of items.controls; track $index) {
+                    <div [formGroupName]="$index" class="border border-gray-300 rounded-lg p-4">
+                        <div class="grid grid-cols-6 gap-3">
+                            <!-- Product -->
+                            <div class="flex flex-col gap-1 col-span-2">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Produk <span class="text-red-500">*</span>
+                                </label>
+                                <p-select [options]="_products" formControlName="product_id" optionLabel="name"
+                                    optionValue="id" placeholder="Pilih produk" size="small" class="w-full"
+                                    appendTo="body">
+                                </p-select>
+                            </div>
+
+                            <!-- Qty Ordered -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Qty <span class="text-red-500">*</span>
+                                </label>
+                                <p-inputNumber formControlName="qty_ordered" [min]="1" placeholder="0"
+                                    styleClass="p-inputtext-sm w-full" (onInput)="calculateItemSubtotal($index)">
+                                </p-inputNumber>
+                            </div>
+
+                            <!-- Unit Price -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">
+                                    Harga <span class="text-red-500">*</span>
+                                </label>
+                                <p-inputNumber formControlName="unit_price" mode="currency" currency="IDR"
+                                    locale="id-ID" [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                                    (onInput)="calculateItemSubtotal($index)">
+                                </p-inputNumber>
+                            </div>
+
+                            <!-- Discount % -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">Diskon %</label>
+                                <p-inputNumber formControlName="discount_percentage" [min]="0" [max]="100" suffix="%"
+                                    placeholder="0" styleClass="p-inputtext-sm w-full"
+                                    (onInput)="calculateItemSubtotal($index)">
+                                </p-inputNumber>
+                            </div>
+
+                            <!-- Subtotal -->
+                            <div class="flex flex-col gap-1">
+                                <label class="text-sm text-gray-700 font-medium">Subtotal</label>
+                                <p-inputNumber formControlName="subtotal" mode="currency" currency="IDR" locale="id-ID"
+                                    [readonly]="true" placeholder="0" styleClass="p-inputtext-sm w-full">
+                                </p-inputNumber>
+                            </div>
+
+                            <!-- Remove Button -->
+                            <div class="flex items-end col-span-6">
+                                <p-button severity="danger" label="Hapus Item" icon="pi pi-trash"
+                                    (onClick)="removeItem($index)" styleClass="p-button-sm" [outlined]="true">
+                                </p-button>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                    @if (items.length === 0) {
+                    <div class="text-center py-8 text-gray-500">
+                        <p>Belum ada item. Klik "Tambah Item" untuk menambahkan produk.</p>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Section 3: Totals -->
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Total & Biaya</p>
+                    <p class="text-sm text-gray-500">Perhitungan total dan biaya tambahan</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-3">
+                        <!-- Discount % -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-sm text-gray-700 font-medium">Diskon Global %</label>
+                            <p-inputNumber formControlName="discount_percentage" [min]="0" [max]="100" suffix="%"
+                                placeholder="0" styleClass="p-inputtext-sm w-full" (onInput)="calculateTotals()">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Tax Amount -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-sm text-gray-700 font-medium">Pajak</label>
+                            <p-inputNumber formControlName="tax_amount" mode="currency" currency="IDR" locale="id-ID"
+                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                                (onInput)="calculateTotals()">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Shipping Cost -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-sm text-gray-700 font-medium">Biaya Pengiriman</label>
+                            <p-inputNumber formControlName="shipping_cost" mode="currency" currency="IDR" locale="id-ID"
+                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                                (onInput)="calculateTotals()">
+                            </p-inputNumber>
+                        </div>
+
+                        <!-- Other Costs -->
+                        <div class="flex flex-col gap-1">
+                            <label class="text-sm text-gray-700 font-medium">Biaya Lainnya</label>
+                            <p-inputNumber formControlName="other_costs" mode="currency" currency="IDR" locale="id-ID"
+                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                                (onInput)="calculateTotals()">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3 bg-gray-50 p-4 rounded-lg">
+                        <!-- Subtotal -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-700">Subtotal:</span>
+                            <span class="text-lg font-semibold text-gray-800">
+                                {{ Form.get('subtotal')?.value | currency:'IDR':'symbol':'1.0-0' }}
+                            </span>
+                        </div>
+
+                        <!-- Discount Amount -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-700">Diskon:</span>
+                            <span class="text-lg font-semibold text-red-600">
+                                - {{ Form.get('discount_amount')?.value | currency:'IDR':'symbol':'1.0-0' }}
+                            </span>
+                        </div>
+
+                        <!-- Tax -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-700">Pajak:</span>
+                            <span class="text-lg font-semibold text-gray-800">
+                                {{ Form.get('tax_amount')?.value | currency:'IDR':'symbol':'1.0-0' }}
+                            </span>
+                        </div>
+
+                        <!-- Shipping -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-700">Pengiriman:</span>
+                            <span class="text-lg font-semibold text-gray-800">
+                                {{ Form.get('shipping_cost')?.value | currency:'IDR':'symbol':'1.0-0' }}
+                            </span>
+                        </div>
+
+                        <div class="border-t border-gray-300 my-2"></div>
+
+                        <!-- Total -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-base font-semibold text-gray-700">TOTAL:</span>
+                            <span class="text-2xl font-bold text-blue-600">
+                                {{ Form.get('total_amount')?.value | currency:'IDR':'symbol':'1.0-0' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Notes -->
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Notes -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Catatan</label>
+                        <textarea formControlName="notes" pInputTextarea rows="2" class="p-inputtext-sm"
+                            placeholder="Masukkan catatan untuk supplier"></textarea>
+                    </div>
+
+                    <!-- Internal Notes -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Catatan Internal</label>
+                        <textarea formControlName="internal_notes" pInputTextarea rows="2" class="p-inputtext-sm"
+                            placeholder="Masukkan catatan internal"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex w-full justify-end items-center gap-3 pt-4 border-t border-gray-300">
+                <p-button severity="secondary" label="Batal" styleClass="p-button-sm" (onClick)="handleBackToList()">
+                </p-button>
+
+                @if (_formState === 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave()">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate()">
+                </p-button>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</app-dsh-base-layout>

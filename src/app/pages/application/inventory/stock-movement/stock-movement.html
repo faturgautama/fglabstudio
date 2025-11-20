@@ -1,0 +1,209 @@
+<app-dsh-base-layout>
+    @if (_pageState() === 'list') {
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+            (onSort)="handleSort($event)">
+        </app-dynamic-table>
+    </div>
+    } @else if (_pageState() === 'form') {
+    <div class="grid w-full gap-5 p-5">
+        <!-- Header -->
+        <div class="flex flex-row justify-between items-center bg-white p-5 rounded-lg shadow-sm">
+            <div class="flex flex-col">
+                <p class="text-lg font-semibold text-gray-700">
+                    {{ _formState === 'insert' ? 'Tambah Stock Movement' : 'Edit Stock Movement' }}
+                </p>
+                <p class="text-sm text-gray-500">
+                    {{ _formState === 'insert' ? 'Buat pergerakan stok baru' : 'Ubah pergerakan stok yang sudah ada' }}
+                </p>
+            </div>
+
+            <p-button severity="secondary" label="Kembali" icon="pi pi-arrow-left" (onClick)="handleBackToList()"
+                styleClass="p-button-sm">
+            </p-button>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-white p-5 rounded-lg shadow-sm" [formGroup]="Form">
+            <!-- Section 1: Informasi Dasar -->
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Informasi Movement</p>
+                    <p class="text-sm text-gray-500">Data pergerakan stok</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- Movement Number -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            No. Movement <span class="text-red-500">*</span>
+                        </label>
+                        <input formControlName="movement_number" pInputText placeholder="Auto generate"
+                            class="p-inputtext-sm w-full" [readonly]="true">
+                    </div>
+
+                    <!-- Type -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Tipe Movement <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="MOVEMENT_TYPES" formControlName="type" optionLabel="label"
+                            optionValue="value" placeholder="Pilih tipe" size="small" class="w-full" appendTo="body"
+                            (onChange)="onTypeChange()">
+                        </p-select>
+                    </div>
+
+                    <!-- Movement Date -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Tanggal <span class="text-red-500">*</span>
+                        </label>
+                        <p-datepicker formControlName="movement_date" placeholder="Pilih tanggal"
+                            styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                        </p-datepicker>
+                    </div>
+
+                    <!-- Product -->
+                    <div class="flex flex-col gap-1 col-span-3">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Produk <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="_products" formControlName="product_id" optionLabel="name" optionValue="id"
+                            placeholder="Pilih produk" size="small" class="w-full" appendTo="body" [filter]="true">
+                        </p-select>
+                    </div>
+
+                    <!-- Warehouse From (for OUT and TRANSFER) -->
+                    @if (Form.get('type')?.value === 'OUT' || Form.get('type')?.value === 'TRANSFER') {
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Dari Gudang @if (Form.get('type')?.value === 'TRANSFER') {<span
+                                class="text-red-500">*</span>}
+                        </label>
+                        <p-select [options]="_warehouses" formControlName="warehouse_from" optionLabel="name"
+                            optionValue="id" placeholder="Pilih gudang" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+                    }
+
+                    <!-- Warehouse To (for IN and TRANSFER) -->
+                    @if (Form.get('type')?.value === 'IN' || Form.get('type')?.value === 'TRANSFER') {
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Ke Gudang @if (Form.get('type')?.value === 'TRANSFER') {<span class="text-red-500">*</span>}
+                        </label>
+                        <p-select [options]="_warehouses" formControlName="warehouse_to" optionLabel="name"
+                            optionValue="id" placeholder="Pilih gudang" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+                    }
+
+                    <!-- Quantity -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Quantity <span class="text-red-500">*</span>
+                        </label>
+                        <p-inputNumber formControlName="quantity" [min]="1" placeholder="0"
+                            styleClass="p-inputtext-sm w-full" (onInput)="calculateTotalValue()">
+                        </p-inputNumber>
+                    </div>
+
+                    <!-- Unit Cost -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Harga Satuan</label>
+                        <p-inputNumber formControlName="unit_cost" mode="currency" currency="IDR" locale="id-ID"
+                            [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                            (onInput)="calculateTotalValue()">
+                        </p-inputNumber>
+                    </div>
+
+                    <!-- Total Value -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Total Nilai</label>
+                        <p-inputNumber formControlName="total_value" mode="currency" currency="IDR" locale="id-ID"
+                            [readonly]="true" placeholder="0" styleClass="p-inputtext-sm w-full">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Alasan & Referensi -->
+            <div class="flex flex-col gap-4 mb-5">
+                <div class="flex flex-col gap-1 pb-3 border-b border-gray-300">
+                    <p class="text-base font-semibold text-gray-700">Alasan & Referensi</p>
+                    <p class="text-sm text-gray-500">Informasi alasan dan referensi movement</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Reason -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Alasan</label>
+                        <p-select [options]="REASON_OPTIONS" formControlName="reason" optionLabel="label"
+                            optionValue="value" placeholder="Pilih alasan" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Batch Number -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Batch Number</label>
+                        <input formControlName="batch_number" pInputText placeholder="Masukkan batch number"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Reference Type -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Tipe Referensi</label>
+                        <input formControlName="reference_type" pInputText placeholder="e.g. PO, SO"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Reference ID -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">ID Referensi</label>
+                        <input formControlName="reference_id" pInputText placeholder="Masukkan ID referensi"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Approved By -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">Disetujui Oleh</label>
+                        <input formControlName="approved_by" pInputText placeholder="Masukkan nama"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Reason Detail -->
+                    <div class="flex flex-col gap-1 col-span-2">
+                        <label class="text-sm text-gray-700 font-medium">Detail Alasan</label>
+                        <textarea formControlName="reason_detail" pInputTextarea rows="2" class="p-inputtext-sm"
+                            placeholder="Masukkan detail alasan"></textarea>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="flex flex-col gap-1 col-span-2">
+                        <label class="text-sm text-gray-700 font-medium">Catatan</label>
+                        <textarea formControlName="notes" pInputTextarea rows="2" class="p-inputtext-sm"
+                            placeholder="Masukkan catatan"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex w-full justify-end items-center gap-3 pt-4 border-t border-gray-300">
+                <p-button severity="secondary" label="Batal" styleClass="p-button-sm" (onClick)="handleBackToList()">
+                </p-button>
+
+                @if (_formState === 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave()">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate()">
+                </p-button>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</app-dsh-base-layout>

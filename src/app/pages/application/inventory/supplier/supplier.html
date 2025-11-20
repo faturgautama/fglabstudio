@@ -1,0 +1,177 @@
+<app-dsh-base-layout>
+    <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
+        <app-dynamic-table [props]="TableProps" (onCustomButtonClicked)="handleCustomButtonClicked($event)"
+            (onToolbarClicked)="handleToolbarClicked($event)" (onFilter)="handleFilter($event)"
+            (onSort)="handleSort($event)">
+        </app-dynamic-table>
+
+        <p-dialog appendTo="body" [(visible)]="_modalToggler" [style]="{ width: '50rem' }"
+            [header]="_formState == 'insert' ? 'Tambah Supplier' : 'Ubah Supplier'" [maximizable]="false"
+            [resizable]="false" [draggable]="false" [modal]="true">
+
+            <div class="flex flex-col w-full mb-7 gap-5" [formGroup]="Form">
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Kode -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">
+                            Kode Supplier
+                            <span class="text-xs text-red-500">*</span>
+                        </p>
+                        <input formControlName="code" pInputText placeholder="Auto generate"
+                            class="p-inputtext-sm w-full" [readonly]="true">
+                    </div>
+
+                    <!-- Nama -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">
+                            Nama Supplier
+                            <span class="text-xs text-red-500">*</span>
+                        </p>
+                        <input formControlName="name" pInputText placeholder="Masukkan nama supplier"
+                            class="p-inputtext-sm w-full">
+
+                        @if (Form.get('name')?.touched && Form.get('name')?.invalid) {
+                        <span class="bg-red-100 text-xs text-red-500 font-medium p-2 mt-1 rounded shadow-sm">
+                            Nama Supplier tidak boleh kosong
+                        </span>
+                        }
+                    </div>
+
+                    <!-- Contact Person -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Contact Person</p>
+                        <input formControlName="contact_person" pInputText placeholder="Masukkan contact person"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Telepon</p>
+                        <input formControlName="phone" pInputText placeholder="Masukkan telepon"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Mobile</p>
+                        <input formControlName="mobile" pInputText placeholder="Masukkan mobile"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Email</p>
+                        <input formControlName="email" pInputText placeholder="Masukkan email"
+                            class="p-inputtext-sm w-full" type="email">
+                    </div>
+
+                    <!-- Website -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Website</p>
+                        <input formControlName="website" pInputText placeholder="Masukkan website"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- City -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Kota</p>
+                        <input formControlName="city" pInputText placeholder="Masukkan kota"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Postal Code -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Kode Pos</p>
+                        <input formControlName="postal_code" pInputText placeholder="Masukkan kode pos"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Country -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Negara</p>
+                        <input formControlName="country" pInputText placeholder="Masukkan negara"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Payment Terms -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Payment Terms</p>
+                        <input formControlName="payment_terms" pInputText placeholder="e.g. NET 30"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Payment Method</p>
+                        <input formControlName="payment_method" pInputText placeholder="e.g. Transfer Bank"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Bank Name -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">Nama Bank</p>
+                        <input formControlName="bank_name" pInputText placeholder="Masukkan nama bank"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Bank Account -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">No. Rekening</p>
+                        <input formControlName="bank_account" pInputText placeholder="Masukkan no rekening"
+                            class="p-inputtext-sm w-full">
+                    </div>
+
+                    <!-- Tax ID -->
+                    <div class="flex flex-col gap-1 w-full">
+                        <p class="text-sm text-gray-700 font-medium">NPWP</p>
+                        <input formControlName="tax_id" pInputText placeholder="Masukkan NPWP"
+                            class="p-inputtext-sm w-full">
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">Alamat</p>
+                    <textarea formControlName="address" pInputTextarea rows="2" class="p-inputtext-sm"
+                        placeholder="Masukkan alamat lengkap"></textarea>
+                </div>
+
+                <!-- Notes -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">Catatan</p>
+                    <textarea formControlName="notes" pInputTextarea rows="2" class="p-inputtext-sm"
+                        placeholder="Masukkan catatan"></textarea>
+                </div>
+
+                <div class="flex gap-4">
+                    <!-- PKP -->
+                    <div class="flex items-center gap-2">
+                        <p-checkbox formControlName="is_pkp" [binary]="true" inputId="is_pkp" />
+                        <label for="is_pkp" class="text-sm text-gray-700 font-medium">PKP</label>
+                    </div>
+
+                    <!-- Status Aktif -->
+                    <div class="flex items-center gap-2">
+                        <p-checkbox formControlName="is_active" [binary]="true" inputId="is_active" />
+                        <label for="is_active" class="text-sm text-gray-700 font-medium">Supplier Aktif</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex w-full justify-end items-center gap-3">
+                <p-button severity="secondary" label="Tutup" styleClass="p-button-sm" (onClick)="_modalToggler = false">
+                </p-button>
+
+                @if (_formState == 'insert') {
+                <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleSave(Form.value)">
+                </p-button>
+                } @else {
+                <p-button severity="info" label="Update" styleClass="p-button-sm" [disabled]="Form.invalid"
+                    (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                }
+            </div>
+        </p-dialog>
+    </div>
+</app-dsh-base-layout>
