@@ -2,8 +2,10 @@ import Dexie, { Table } from 'dexie';
 import { EmployeeModel } from './model/pages/application/human-resource/employee.model';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { InventoryModel } from './model/pages/application/inventory/inventory.model';
 
 export class AppDatabase extends Dexie {
+    // HR
     hr_setting!: Table<EmployeeModel.IHumanResourceSetting, number>;
     department!: Table<EmployeeModel.IDepartment, number>;
     position!: Table<EmployeeModel.IPosition, number>;
@@ -14,10 +16,28 @@ export class AppDatabase extends Dexie {
     payroll!: Table<EmployeeModel.IPayroll, number>;
     employees!: Table<EmployeeModel.IEmployee, number>;
 
+    // Inventory
+    inventory_setting!: Table<InventoryModel.Company, number>;
+    categories!: Table<InventoryModel.Category, number>;
+    products!: Table<InventoryModel.Product, number>;
+    stock_cards!: Table<InventoryModel.StockCard, number>;
+    suppliers!: Table<InventoryModel.Supplier, number>;
+    purchase_orders!: Table<InventoryModel.PurchaseOrder, number>;
+    purchase_order_items!: Table<InventoryModel.PurchaseOrderItem, number>;
+    stock_movements!: Table<InventoryModel.StockMovement, number>;
+    warehouses!: Table<InventoryModel.Warehouse, number>;
+    notifications!: Table<InventoryModel.Notification, number>;
+    settings!: Table<InventoryModel.AppSettings, number>;
+    product_batches!: Table<InventoryModel.ProductBatch, number>;
+    product_serials!: Table<InventoryModel.ProductSerial, number>;
+    stock_opnames!: Table<InventoryModel.StockOpname, number>;
+    stock_opname_items!: Table<InventoryModel.StockOpnameItem, number>;
+
     constructor(dbName: string) {
         super(dbName);
 
         this.version(2).stores({
+            // ** HR Tables **
             hr_setting: '++id, company_name, effective_date, is_active',
             department: '++id, code, title, is_active',
             position: '++id, code, title, is_active',
@@ -26,7 +46,24 @@ export class AppDatabase extends Dexie {
             leave: '++id, employee_id, leave_policy_id, start_date, end_date, status',
             overtime: '++id, employee_id, date, start_date, end_date, overtime_type, status',
             payroll: '++id, employee_id, month, base_salary, payment_status',
-            employees: '++id, employee_code, full_name, department_id, position_id, employment_status, work_status, is_active'
+            employees: '++id, employee_code, full_name, department_id, position_id, employment_status, work_status, is_active',
+
+            // ** Inventory Tables **
+            company: 'id',
+            categories: 'id, name',
+            products: 'id, sku, name, category_id, current_stock, min_stock, barcode, brand, is_active',
+            stock_cards: 'id, product_id, transaction_date, type, reference_id',
+            suppliers: 'id, name, code, is_active',
+            purchase_orders: 'id, po_number, supplier_id, status, order_date',
+            purchase_order_items: 'id, purchase_order_id, product_id',
+            stock_movements: 'id, movement_number, product_id, type, movement_date',
+            warehouses: 'id, code, name, is_default, is_active',
+            notifications: 'id, type, priority, is_read, created_at, product_id',
+            settings: 'id, key',
+            product_batches: 'id, product_id, batch_number, expiry_date, is_active',
+            product_serials: 'id, product_id, serial_number, status',
+            stock_opnames: 'id, opname_number, status, opname_date',
+            stock_opname_items: 'id, stock_opname_id, product_id'
         });
     }
 }

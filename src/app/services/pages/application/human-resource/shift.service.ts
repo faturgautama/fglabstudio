@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { DatabaseService } from '../../../../app.database';
 import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
 import { BaseActionService } from '../../../shared/base-action';
-import { from, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ShiftService extends BaseActionService<EmployeeModel.IShift> {

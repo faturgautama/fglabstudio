@@ -72,7 +72,7 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
      * Resolves foreign key references by finding related tables
      * Looks for properties ending with '_id' and fetches the related record
     */
-    private async resolveRelations(record: T): Promise<any> {
+    async resolveRelations(record: T): Promise<any> {
         const enriched: any = { ...record };
         const keys = Object.keys(record) as (keyof T)[];
 
@@ -107,7 +107,7 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
     /**
      * Resolves relations for multiple records
      */
-    private async resolveMultipleRelations(records: T[]): Promise<any[]> {
+    async resolveMultipleRelations(records: T[]): Promise<any[]> {
         return Promise.all(records.map(record => this.resolveRelations(record)));
     }
 
