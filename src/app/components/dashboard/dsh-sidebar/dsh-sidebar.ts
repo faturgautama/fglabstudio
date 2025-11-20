@@ -9,6 +9,8 @@ import { DepartementState } from '../../../store/human-resource/departement';
 import { CompanySettingState } from '../../../store/human-resource/company-setting';
 import { EmployeeModel } from '../../../model/pages/application/human-resource/employee.model';
 import { EmployeeState } from '../../../store/human-resource/employee';
+import { CategoryState } from '../../../store/inventory';
+import { ProductState } from '../../../store/product';
 
 @Component({
   selector: 'app-dsh-sidebar',
@@ -22,6 +24,8 @@ import { EmployeeState } from '../../../store/human-resource/employee';
 export class DshSidebar implements OnInit, OnDestroy {
 
   Destroy$ = new Subject();
+
+  _appName = 'Inventory Management';
 
   _navigationService = inject(Navigation);
 
@@ -58,7 +62,13 @@ export class DshSidebar implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.resolverExtraData.title == 'Departement') {
+      this._appName = 'My People';
       this.getHumanResourceState();
+    };
+
+    if (this.resolverExtraData.title == 'Kategori Produk') {
+      this._appName = 'My Inventory';
+      this.getInventoryState();
     }
   }
 
@@ -100,5 +110,19 @@ export class DshSidebar implements OnInit, OnDestroy {
     this._store.select(EmployeeState.getAll)
       .pipe(takeUntil(this.Destroy$))
       .subscribe(result => this.resolverExtraData.employee_count = result.length);
+  }
+
+  private getInventoryState() {
+    this._store.select(CategoryState.getAll)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.resolverExtraData.datasource = result);
+
+    this._store.select(CompanySettingState.getSingle)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.resolverExtraData.company_setting = result);
+
+    this._store.select(ProductState.getData)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.resolverExtraData.product_count = result.length);
   }
 }

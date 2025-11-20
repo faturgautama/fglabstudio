@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { DshBaseLayout } from "../../../../components/dashboard/dsh-base-layout/dsh-base-layout";
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
