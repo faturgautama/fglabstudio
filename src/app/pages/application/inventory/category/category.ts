@@ -12,6 +12,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SelectModule } from 'primeng/select';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
     selector: 'app-category',
@@ -21,6 +23,8 @@ import { CheckboxModule } from 'primeng/checkbox';
         DynamicTable,
         DialogModule,
         DshBaseLayout,
+        SelectModule,
+        TitleCasePipe,
         TextareaModule,
         InputTextModule,
         CheckboxModule,
@@ -54,6 +58,17 @@ export class Category implements OnInit, OnDestroy {
                 title: 'Deskripsi',
                 type: DynamicTableModel.IColumnType.TEXT,
                 width: '400px'
+            },
+            {
+                id: 'color',
+                title: 'Warna',
+                type: DynamicTableModel.IColumnType.BUTTON_ICON,
+                button_icon: {
+                    title: 'color',
+                    icon_class: 'pi pi-circle-fill',
+                    icon_color: 'color',
+                    use_parsing_func: true,
+                }
             },
             {
                 id: 'is_active',
@@ -107,8 +122,34 @@ export class Category implements OnInit, OnDestroy {
         id: ['', []],
         name: ['', [Validators.required]],
         description: ['', []],
+        color: ['', [Validators.required]],
         is_active: [true, []]
     });
+
+    _colorDatasource = [
+        { id: 'red', value: 'text-red-600' },
+        { id: 'orange', value: 'text-orange-600' },
+        { id: 'amber', value: 'text-amber-600' },
+        { id: 'yellow', value: 'text-yellow-600' },
+        { id: 'lime', value: 'text-lime-600' },
+        { id: 'green', value: 'text-green-600' },
+        { id: 'emerald', value: 'text-emerald-600' },
+        { id: 'teal', value: 'text-teal-600' },
+        { id: 'cyan', value: 'text-cyan-600' },
+        { id: 'sky', value: 'text-sky-600' },
+        { id: 'blue', value: 'text-blue-600' },
+        { id: 'indigo', value: 'text-indigo-600' },
+        { id: 'violet', value: 'text-violet-600' },
+        { id: 'purple', value: 'text-purple-600' },
+        { id: 'fuchsia', value: 'text-fuchsia-600' },
+        { id: 'pink', value: 'text-pink-600' },
+        { id: 'rose', value: 'text-rose-600' },
+        { id: 'slate', value: 'text-slate-600' },
+        { id: 'gray', value: 'text-gray-600' },
+        { id: 'zinc', value: 'text-zinc-600' },
+        { id: 'neutral', value: 'text-neutral-600' },
+        { id: 'stone', value: 'text-stone-600' },
+    ];
 
     ngOnInit(): void {
         this._store

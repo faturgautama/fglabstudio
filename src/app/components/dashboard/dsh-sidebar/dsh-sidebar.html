@@ -95,7 +95,7 @@
             </span>
             @if (toggleSidebar) {
             <p class="text-sm text-gray-700">
-                {{ item.title }}
+                {{ item.title ? item.title : item.name }}
             </p>
             }
         </div>

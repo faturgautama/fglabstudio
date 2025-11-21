@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Navigation } from '../../../services/components/navigation';
 import { ButtonModule } from 'primeng/button';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 import { SidebarModel } from '../../../model/components/dashboard/sidebar.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';

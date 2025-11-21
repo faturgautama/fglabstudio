@@ -16,6 +16,7 @@ export namespace InventoryModel {
         id?: number;
         name: string;
         description?: string;
+        color?: string;
         created_at?: Date;
         is_active?: boolean;
     }

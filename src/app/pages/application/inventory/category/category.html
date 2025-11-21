@@ -35,6 +35,40 @@
                         placeholder="Masukkan deskripsi kategori"></textarea>
                 </div>
 
+                <!-- Color -->
+                <div class="flex flex-col gap-1 w-full">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Warna Kategori
+                    </p>
+                    <p-select [options]="_colorDatasource" formControlName="color" optionLabel="name"
+                        optionValue="value" placeholder="Pilih warna" size="small" class="w-full p-inputtext-sm"
+                        appendTo="body">
+                        <ng-template #selectedItem let-selectedOption>
+                            @if (selectedOption) {
+                            <div class="flex items-center gap-2">
+                                <span>
+                                    <i class="pi pi-circle-fill {{ selectedOption.value }}" style="font-size: 9px;"></i>
+                                </span>
+
+                                <p class="text-gray-700 font-medium text-sm">
+                                    {{ selectedOption.id | titlecase }}
+                                </p>
+                            </div>
+                            }
+                        </ng-template>
+                        <ng-template let-color #item>
+                            <div class="flex items-center gap-2">
+                                <span>
+                                    <i class="pi pi-circle-fill {{ color.value }}" style="font-size: 9px;"></i>
+                                </span>
+                                <p class="text-gray-700 font-medium text-sm">
+                                    {{ color.id | titlecase }}
+                                </p>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                </div>
+
                 <!-- Status Aktif -->
                 <div class="flex items-center gap-2">
                     <p-checkbox formControlName="is_active" [binary]="true" inputId="is_active" />
