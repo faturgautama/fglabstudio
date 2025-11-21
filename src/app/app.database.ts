@@ -17,7 +17,6 @@ export class AppDatabase extends Dexie {
     employees!: Table<EmployeeModel.IEmployee, number>;
 
     // Inventory
-    inventory_setting!: Table<InventoryModel.Company, number>;
     categories!: Table<InventoryModel.Category, number>;
     products!: Table<InventoryModel.Product, number>;
     stock_cards!: Table<InventoryModel.StockCard, number>;
@@ -27,7 +26,7 @@ export class AppDatabase extends Dexie {
     stock_movements!: Table<InventoryModel.StockMovement, number>;
     warehouses!: Table<InventoryModel.Warehouse, number>;
     notifications!: Table<InventoryModel.Notification, number>;
-    settings!: Table<InventoryModel.AppSettings, number>;
+    inventory_setting!: Table<InventoryModel.Company, number>;
     product_batches!: Table<InventoryModel.ProductBatch, number>;
     product_serials!: Table<InventoryModel.ProductSerial, number>;
     stock_opnames!: Table<InventoryModel.StockOpname, number>;
@@ -49,21 +48,20 @@ export class AppDatabase extends Dexie {
             employees: '++id, employee_code, full_name, department_id, position_id, employment_status, work_status, is_active',
 
             // ** Inventory Tables **
-            company: 'id',
-            categories: 'id, name',
-            products: 'id, sku, name, category_id, current_stock, min_stock, barcode, brand, is_active',
-            stock_cards: 'id, product_id, transaction_date, type, reference_id',
-            suppliers: 'id, name, code, is_active',
-            purchase_orders: 'id, po_number, supplier_id, status, order_date',
-            purchase_order_items: 'id, purchase_order_id, product_id',
-            stock_movements: 'id, movement_number, product_id, type, movement_date',
-            warehouses: 'id, code, name, is_default, is_active',
-            notifications: 'id, type, priority, is_read, created_at, product_id',
-            settings: 'id, key',
-            product_batches: 'id, product_id, batch_number, expiry_date, is_active',
-            product_serials: 'id, product_id, serial_number, status',
-            stock_opnames: 'id, opname_number, status, opname_date',
-            stock_opname_items: 'id, stock_opname_id, product_id'
+            categories: '++id, name',
+            products: '++id, sku, name, category_id, current_stock, min_stock, barcode, brand, is_active',
+            stock_cards: '++id, product_id, transaction_date, type, reference_id',
+            suppliers: '++id, name, code, is_active',
+            purchase_orders: '++id, po_number, supplier_id, status, order_date',
+            purchase_order_items: '++id, purchase_order_id, product_id',
+            stock_movements: '++id, movement_number, product_id, type, movement_date',
+            warehouses: '++id, code, name, is_default, is_active',
+            notifications: '++id, type, priority, is_read, created_at, product_id',
+            inventory_setting: '++id, key',
+            product_batches: '++id, product_id, batch_number, expiry_date, is_active',
+            product_serials: '++id, product_id, serial_number, status',
+            stock_opnames: '++id, opname_number, status, opname_date',
+            stock_opname_items: '++id, stock_opname_id, product_id'
         });
     }
 }

@@ -180,6 +180,8 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
             is_active: true,
         };
 
+        console.log("payload =>", payload);
+
         return this.withLoading(async () => await this.table.add(payload as T));
     }
 
