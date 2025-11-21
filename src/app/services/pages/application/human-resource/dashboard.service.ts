@@ -20,7 +20,7 @@ export class DashboardService {
           const filtered = result.filter(employee => employee.is_active);
 
           let totalpayroll = 0;
-          let birthday_employees = [];
+          const birthday_employees = [];
 
           for (const employee of filtered) {
             const birthday = employee.birth_date ? new Date(employee.birth_date) : null;

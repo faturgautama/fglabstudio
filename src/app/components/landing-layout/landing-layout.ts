@@ -23,7 +23,7 @@ export class LandingLayout implements OnInit, OnDestroy {
 
   NavbarMenu: NavbarModel.INavbarMenu[];
 
-  @Output('onClickNavbar') onClickNavbar = new EventEmitter<NavbarModel.INavbarMenu>();
+  @Output() onClickNavbar = new EventEmitter<NavbarModel.INavbarMenu>();
 
   constructor(
     private _navigationService: Navigation

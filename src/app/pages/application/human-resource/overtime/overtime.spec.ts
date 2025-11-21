@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Overtime } from './overtime';
+import { commonTestProviders, commonTestImports } from '../../../../../test-helpers';
 
 describe('Overtime', () => {
     let component: Overtime;
@@ -8,7 +9,7 @@ describe('Overtime', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [Overtime]
+            imports: [Overtime, ...commonTestImports]
         })
             .compileComponents();
 

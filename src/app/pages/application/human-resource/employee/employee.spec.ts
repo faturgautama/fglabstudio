@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Employee } from './employee';
+import { commonTestProviders, commonTestImports } from '../../../../../test-helpers';
 
 describe('Employee', () => {
   let component: Employee;
@@ -8,7 +9,7 @@ describe('Employee', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Employee]
+      imports: [Employee, ...commonTestImports]
     })
     .compileComponents();
 

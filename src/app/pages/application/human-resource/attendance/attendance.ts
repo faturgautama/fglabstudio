@@ -84,7 +84,7 @@ export class Attendance implements OnInit, OnDestroy {
 
   // Import State
   _importPreview: any[] = [];
-  _importErrors: Array<{ row: any; error: string }> = [];
+  _importErrors: { row: any; error: string }[] = [];
   _fingerprintDateFormat: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY-MM-DD' = 'DD/MM/YYYY';
   _uploading = false;
 

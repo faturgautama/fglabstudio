@@ -1,11 +1,12 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { commonTestProviders, commonTestImports } from '../test-helpers';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [App, ...commonTestImports],
       providers: [provideZonelessChangeDetection()]
     }).compileComponents();
   });

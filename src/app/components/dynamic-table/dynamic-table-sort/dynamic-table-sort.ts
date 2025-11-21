@@ -24,9 +24,9 @@ import { SelectModule } from 'primeng/select';
 })
 export class DynamicTableSort implements OnInit {
 
-  @Input('props') props!: DynamicTableModel.ISort[];
+  @Input() props!: DynamicTableModel.ISort[];
 
-  @Output('onSort') onSort = new EventEmitter<any>();
+  @Output() onSort = new EventEmitter<any>();
 
   type = DynamicTableModel.IColumnType;
 

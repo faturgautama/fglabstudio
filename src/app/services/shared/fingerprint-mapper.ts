@@ -87,7 +87,7 @@ export function parseFingerprintRow(
     };
 
     // Create a map of header -> column index
-    const headerIndexMap: { [key: string]: number } = {};
+    const headerIndexMap: Record<string, number> = {};
     headers.forEach((header, index) => {
         headerIndexMap[header] = index;
     });
@@ -211,7 +211,7 @@ export function calculateAttendanceMetrics(
     checkOutTime: string | undefined,
     shiftStartTime: string,
     shiftEndTime: string,
-    breakDuration: number = 0
+    breakDuration = 0
 ): {
     is_late: boolean;
     work_hours: number;
@@ -257,10 +257,10 @@ function timeToMinutes(timeStr: string): number {
  */
 export function validateAttendanceData(data: any[]): {
     valid: any[];
-    invalid: Array<{ row: any; error: string }>;
+    invalid: { row: any; error: string }[];
 } {
     const valid: any[] = [];
-    const invalid: Array<{ row: any; error: string }> = [];
+    const invalid: { row: any; error: string }[] = [];
 
     data.forEach((row, index) => {
         const errors: string[] = [];
@@ -321,7 +321,7 @@ export function validateAttendanceData(data: any[]): {
  * Keeps earliest check-in and latest check-out
  */
 export function mergeDuplicateAttendance(data: any[]): any[] {
-    const merged: { [key: string]: any } = {};
+    const merged: Record<string, any> = {};
 
     data.forEach(record => {
         const key = `${record.employee_code || record.employee_id}_${record.date}`;
@@ -389,7 +389,7 @@ export function downloadTemplate(): void {
 /**
  * Parse CSV text directly (alternative to file upload)
  */
-export function parseCSVText(csvText: string, hasHeader: boolean = true): {
+export function parseCSVText(csvText: string, hasHeader = true): {
     headers: string[];
     data: string[][];
 } {

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { IconTitle } from './icon-title';
+import { commonTestProviders, commonTestImports } from '../../../test-helpers';
 
 describe('IconTitle', () => {
   let component: IconTitle;
@@ -8,7 +9,7 @@ describe('IconTitle', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IconTitle]
+      imports: [IconTitle, ...commonTestImports]
     })
     .compileComponents();
 

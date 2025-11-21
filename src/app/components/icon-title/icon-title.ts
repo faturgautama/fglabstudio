@@ -16,7 +16,7 @@ export class IconTitle implements OnDestroy {
 
   Destroy$ = new Subject();
 
-  @Input('props') props!: { icon: string, title: string, description: string };
+  @Input() props!: { icon: string, title: string, description: string };
 
   constructor(
     private _activatedRoute: ActivatedRoute

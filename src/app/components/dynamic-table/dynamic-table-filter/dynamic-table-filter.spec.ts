@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DynamicTableFilter } from './dynamic-table-filter';
+import { commonTestProviders, commonTestImports } from '../../../../test-helpers';
 
 describe('DynamicTableFilter', () => {
   let component: DynamicTableFilter;
@@ -8,7 +9,7 @@ describe('DynamicTableFilter', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DynamicTableFilter]
+      imports: [DynamicTableFilter, ...commonTestImports]
     })
     .compileComponents();
 

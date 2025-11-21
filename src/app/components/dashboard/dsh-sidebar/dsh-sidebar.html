@@ -31,13 +31,13 @@
                 ? resolverExtraData.company_setting?.company_name
                 : 'Perusahaan Belum Diatur' }}
             </p>
-            @if (_appName == 'My People') {
+            @if (_appName === 'My People') {
             <p class="text-xs text-gray-500">
                 {{ resolverExtraData.employee_count }} Karyawan
             </p>
             }
 
-            @if (_appName == 'My Inventory') {
+            @if (_appName === 'My Inventory') {
             <p class="text-xs text-gray-500">
                 {{ resolverExtraData.product_count }} Produk
             </p>

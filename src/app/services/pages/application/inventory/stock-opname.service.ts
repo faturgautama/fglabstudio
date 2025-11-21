@@ -41,8 +41,8 @@ export class StockOpnameService extends BaseActionService<InventoryModel.StockOp
   ) {
     return this.withLoading(async () => {
       // Calculate totals
-      let total_products = items.length;
-      let total_discrepancy = items.reduce((sum, item) => sum + Math.abs(item.difference), 0);
+      const total_products = items.length;
+      const total_discrepancy = items.reduce((sum, item) => sum + Math.abs(item.difference), 0);
 
       // Add opname
       const opname_data: any = {
@@ -201,7 +201,7 @@ export class StockOpnameService extends BaseActionService<InventoryModel.StockOp
    */
   getProductsForOpname(warehouse_id?: number) {
     return this.withLoading(async () => {
-      let products = await this.databaseService.db.products
+      const products = await this.databaseService.db.products
         .filter(p => p.is_active)
         .toArray();
 

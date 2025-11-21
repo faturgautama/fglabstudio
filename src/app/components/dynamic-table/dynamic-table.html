@@ -117,7 +117,7 @@
                     <td>
                         <div class="flex justify-center w-full gap-3">
                             @for (item of props.toolbar; track $index) {
-                            <p-button [id]="item.id" [severity]="item.id == 'delete' ? 'danger' : 'secondary'"
+                            <p-button [id]="item.id" [severity]="item.id === 'delete' ? 'danger' : 'secondary'"
                                 [icon]="item.icon" [outlined]="true" styleClass="p-button-sm"
                                 (onClick)="handleToolbarClicked(item, rowData)">
                             </p-button>

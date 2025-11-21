@@ -42,8 +42,8 @@ export class CompanySetting implements OnInit, OnDestroy {
 
   Destroy$ = new Subject();
 
-  _isEditMode: boolean = false;
-  _isLoading: boolean = false;
+  _isEditMode = false;
+  _isLoading = false;
 
   // Dropdowns
   TAX_METHODS = EmployeeConstants.TAX_METHODS;

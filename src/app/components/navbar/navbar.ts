@@ -26,7 +26,7 @@ export class Navbar implements OnInit {
 
   activeMenu = "home";
 
-  @Output('onClick') onClick = new EventEmitter<any>();
+  @Output() onClick = new EventEmitter<any>();
 
   constructor(
     private _navigationService: Navigation

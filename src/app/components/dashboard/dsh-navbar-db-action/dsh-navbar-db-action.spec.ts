@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DshNavbarDbAction } from './dsh-navbar-db-action';
+import { commonTestProviders, commonTestImports } from '../../../../test-helpers';
 
 describe('DshNavbarDbAction', () => {
   let component: DshNavbarDbAction;
@@ -8,7 +9,7 @@ describe('DshNavbarDbAction', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DshNavbarDbAction]
+      imports: [DshNavbarDbAction, ...commonTestImports]
     })
     .compileComponents();
 

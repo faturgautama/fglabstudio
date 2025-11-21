@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DynamicTableSort } from './dynamic-table-sort';
+import { commonTestProviders, commonTestImports } from '../../../../test-helpers';
 
 describe('DynamicTableSort', () => {
   let component: DynamicTableSort;
@@ -8,7 +9,7 @@ describe('DynamicTableSort', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DynamicTableSort]
+      imports: [DynamicTableSort, ...commonTestImports]
     })
     .compileComponents();
 

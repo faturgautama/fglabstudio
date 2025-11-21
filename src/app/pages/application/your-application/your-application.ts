@@ -18,7 +18,7 @@ import { MessageService } from 'primeng/api';
   templateUrl: './your-application.html',
   styleUrl: './your-application.scss'
 })
-export class YourApplication implements AfterViewInit {
+export class YourApplication implements AfterViewInit, OnInit {
 
   _router = inject(Router);
   _authenticationService = inject(AuthenticationService);

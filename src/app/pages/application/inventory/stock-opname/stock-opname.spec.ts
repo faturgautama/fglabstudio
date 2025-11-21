@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StockOpname } from './stock-opname';
+import { commonTestProviders, commonTestImports } from '../../../../../test-helpers';
 
 describe('StockOpname', () => {
     let component: StockOpname;
@@ -7,7 +8,7 @@ describe('StockOpname', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [StockOpname]
+            imports: [StockOpname, ...commonTestImports]
         })
             .compileComponents();
 

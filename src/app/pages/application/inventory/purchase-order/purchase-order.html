@@ -6,6 +6,12 @@
             (onSort)="handleSort($event)">
         </app-dynamic-table>
     </div>
+
+    <!-- Receive Dialog -->
+    <app-receive-dialog [(visible)]="_receiveDialogVisible" [poData]="_selectedPOForReceive"
+        (onReceiveComplete)="handleReceiveComplete($event)">
+    </app-receive-dialog>
+
     } @else if (_pageState() === 'form') {
     <div class="grid w-full gap-5 p-5">
         <!-- Header -->

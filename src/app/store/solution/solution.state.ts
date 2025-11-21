@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { State, Action, StateContext, Selector, NgxsOnInit } from "@ngxs/store";
 import { tap } from "rxjs";
 import { CardServiceModel } from "../../model/components/card-service.model";
@@ -18,11 +18,9 @@ export interface SolutionStateModel {
 @Injectable()
 export class SolutionState implements NgxsOnInit {
 
-    constructor(
-        private _serviceSolutionService: ServiceSolution
-    ) { }
+    private _serviceSolutionService = inject(ServiceSolution);
 
-    ngxsOnInit(ctx: StateContext<any>): void {
+    ngxsOnInit(ctx: StateContext<SolutionStateModel>): void {
         ctx.dispatch(new SolutionAction.GetSolution());
     }
 

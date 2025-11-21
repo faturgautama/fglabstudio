@@ -24,9 +24,9 @@ import { ButtonModule } from "primeng/button";
 })
 export class DynamicTableFilter implements OnInit {
 
-  @Input('props') props!: DynamicTableModel.IFilter[];
+  @Input() props!: DynamicTableModel.IFilter[];
 
-  @Output('onFilter') onFilter = new EventEmitter<any>();
+  @Output() onFilter = new EventEmitter<any>();
 
   type = DynamicTableModel.IColumnType;
 

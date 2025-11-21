@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Shift } from './shift';
+import { commonTestProviders, commonTestImports } from '../../../../../test-helpers';
 
 describe('Shift', () => {
   let component: Shift;
@@ -8,7 +9,7 @@ describe('Shift', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Shift]
+      imports: [Shift, ...commonTestImports]
     })
     .compileComponents();
 

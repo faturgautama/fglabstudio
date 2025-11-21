@@ -39,7 +39,7 @@ export namespace PurchaseOrderAction {
         static readonly type = '[Inventory PO] Receive';
         constructor(
             public po_id: string,
-            public items: Array<{ id: string; qty_received: number; batch_number?: string; expiry_date?: Date }>
+            public items: { id: string; qty_received: number; batch_number?: string; expiry_date?: Date }[]
         ) { }
     }
 

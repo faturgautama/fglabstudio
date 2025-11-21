@@ -15,7 +15,7 @@ import { Button } from "primeng/button";
 })
 export class CardService {
 
-  @Input('props') props!: CardServiceModel.ICardService;
+  @Input() props!: CardServiceModel.ICardService;
 
   constructor() { }
 

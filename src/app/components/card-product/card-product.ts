@@ -17,7 +17,7 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class CardProduct {
 
-  @Input('props') props!: CardProductModel.ICardProduct;
+  @Input() props!: CardProductModel.ICardProduct;
 
   constructor() { }
 } 

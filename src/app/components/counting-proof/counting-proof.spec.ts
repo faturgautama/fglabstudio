@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CountingProof } from './counting-proof';
+import { commonTestProviders, commonTestImports } from '../../../test-helpers';
 
 describe('CountingProof', () => {
   let component: CountingProof;
@@ -8,7 +9,7 @@ describe('CountingProof', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CountingProof]
+      imports: [CountingProof, ...commonTestImports]
     })
     .compileComponents();
 

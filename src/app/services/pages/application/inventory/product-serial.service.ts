@@ -13,12 +13,42 @@ export class ProductSerialService {
         return from(this.databaseService.db.product_serials.add(serial as any));
     }
 
-    addMultiple(serials: InventoryModel.ProductSerial[]) {
+    async addMultiple(serials: InventoryModel.ProductSerial[]) {
         const serialsWithDate = serials.map(s => ({
             ...s,
             created_at: new Date()
         }));
-        return from(this.databaseService.db.product_serials.bulkAdd(serialsWithDate as any));
+        return await this.databaseService.db.product_serials.bulkAdd(serialsWithDate as any);
+    }
+
+    /**
+     * Validate serial numbers uniqueness
+     */
+    async validateSerialNumbers(serial_numbers: string[]): Promise<{ valid: boolean; errors: string[] }> {
+        const errors: string[] = [];
+
+        // Check for duplicates in input
+        const duplicates = serial_numbers.filter((item, index) => serial_numbers.indexOf(item) !== index);
+        if (duplicates.length > 0) {
+            errors.push(`Duplicate serial numbers found: ${duplicates.join(', ')}`);
+        }
+
+        // Check if serial already exists in database
+        for (const sn of serial_numbers) {
+            const existing = await this.databaseService.db.product_serials
+                .where('serial_number')
+                .equals(sn)
+                .first();
+
+            if (existing) {
+                errors.push(`Serial number ${sn} already exists in system`);
+            }
+        }
+
+        return {
+            valid: errors.length === 0,
+            errors
+        };
     }
 
     getAll() {

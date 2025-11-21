@@ -9,5 +9,5 @@ import { Component, Input, input } from '@angular/core';
 })
 export class BadgeTitle {
 
-  @Input('title') title: string = "";
+  @Input() title = "";
 }

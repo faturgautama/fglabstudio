@@ -1,0 +1,137 @@
+<p-dialog [(visible)]="visible" [style]="{ width: '80rem', maxHeight: '90vh' }" header="Receive Purchase Order"
+    [modal]="true" [draggable]="false" [resizable]="false" appendTo="body" (onHide)="onClose()">
+
+    <div class="flex flex-col gap-4">
+        <!-- PO Info -->
+        <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="grid grid-cols-3 gap-4 text-sm">
+                <div>
+                    <p class="text-gray-600">PO Number</p>
+                    <p class="font-semibold">{{ poData?.po_number }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Supplier</p>
+                    <p class="font-semibold">{{ poData?.supplier?.name }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Order Date</p>
+                    <p class="font-semibold">{{ poData?.order_date | date:'dd/MM/yyyy' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-3 text-left">Product</th>
+                        <th class="p-3 text-center w-32">Ordered</th>
+                        <th class="p-3 text-center w-32">Received</th>
+                        <th class="p-3 text-center w-32">Receive Now</th>
+                        <th class="p-3 text-left w-64">Batch/Serial</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of receiveItems; track item.id) {
+                    <tr class="border-b">
+                        <td class="p-3">
+                            <div class="flex flex-col gap-1">
+                                <p class="font-medium">{{ item.product?.name }}</p>
+                                <p class="text-xs text-gray-500">SKU: {{ item.product?.sku }}</p>
+
+                                <!-- Tracking Badges -->
+                                <div class="flex gap-2 mt-1">
+                                    @if (item.product?.is_batch_tracked) {
+                                    <span class="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">
+                                        📦 Batch
+                                    </span>
+                                    }
+                                    @if (item.product?.is_serial_tracked) {
+                                    <span class="px-2 py-0.5 text-xs bg-purple-100 text-purple-700 rounded">
+                                        🔢 Serial
+                                    </span>
+                                    }
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-3 text-center">
+                            <span class="font-semibold">{{ item.qty_ordered }}</span>
+                        </td>
+                        <td class="p-3 text-center">
+                            <span class="text-green-600 font-semibold">{{ item.qty_received }}</span>
+                        </td>
+                        <td class="p-3">
+                            <p-inputNumber [(ngModel)]="item.qty_to_receive" [min]="0"
+                                [max]="item.qty_ordered - item.qty_received" [showButtons]="true"
+                                buttonLayout="horizontal" inputStyleClass="text-center" styleClass="w-full"
+                                (ngModelChange)="onQtyChange(item)">
+                            </p-inputNumber>
+                        </td>
+                        <td class="p-3">
+                            @if (item.qty_to_receive > 0) {
+                            <div class="flex flex-col gap-2">
+                                <!-- Batch Input -->
+                                @if (item.product?.is_batch_tracked) {
+                                <div class="flex flex-col gap-1">
+                                    <input pInputText [(ngModel)]="item.batch_number" placeholder="Batch Number *"
+                                        class="p-inputtext-sm"
+                                        [class.border-red-500]="item.qty_to_receive > 0 && !item.batch_number">
+                                    @if (item.product?.is_perishable) {
+                                    <p-datepicker [(ngModel)]="item.expiry_date" placeholder="Expiry Date *"
+                                        styleClass="p-inputtext-sm w-full" dateFormat="dd/mm/yy"
+                                        [class.border-red-500]="item.qty_to_receive > 0 && !item.expiry_date">
+                                    </p-datepicker>
+                                    }
+                                </div>
+                                }
+
+                                <!-- Serial Input -->
+                                @if (item.product?.is_serial_tracked) {
+                                <div class="flex flex-col gap-1">
+                                    <textarea pInputTextarea [(ngModel)]="item.serial_input" (blur)="parseSerials(item)"
+                                        placeholder="Serial Numbers (one per line) *" rows="3"
+                                        class="p-inputtext-sm text-xs"
+                                        [class.border-red-500]="item.qty_to_receive > 0 && (!item.serial_numbers || item.serial_numbers.length !== item.qty_to_receive)">
+                                    </textarea>
+                                    <small class="text-xs"
+                                        [class.text-red-500]="item.serial_numbers && item.serial_numbers.length !== item.qty_to_receive"
+                                        [class.text-green-600]="item.serial_numbers && item.serial_numbers.length === item.qty_to_receive">
+                                        {{ item.serial_numbers?.length || 0 }} / {{ item.qty_to_receive }} serials
+                                    </small>
+                                </div>
+                                }
+                            </div>
+                            }
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Validation Messages -->
+        @if (validationErrors.length > 0) {
+        <div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div class="flex items-start gap-2">
+                <i class="pi pi-exclamation-triangle text-red-600 mt-0.5"></i>
+                <div class="flex flex-col gap-1">
+                    <p class="text-sm font-semibold text-red-800">Validation Errors:</p>
+                    <ul class="list-disc list-inside text-sm text-red-700">
+                        @for (error of validationErrors; track error) {
+                        <li>{{ error }}</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="flex justify-end gap-3 mt-4 pt-4 border-t">
+        <p-button label="Cancel" severity="secondary" (onClick)="onClose()">
+        </p-button>
+        <p-button label="Receive Items" severity="success" [disabled]="!canReceive()" (onClick)="onReceive()">
+        </p-button>
+    </div>
+</p-dialog>

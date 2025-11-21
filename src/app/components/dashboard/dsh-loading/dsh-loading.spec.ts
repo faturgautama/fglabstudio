@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DshLoading } from './dsh-loading';
+import { commonTestProviders, commonTestImports } from '../../../../test-helpers';
 
 describe('DshLoading', () => {
   let component: DshLoading;
@@ -8,7 +9,7 @@ describe('DshLoading', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DshLoading]
+      imports: [DshLoading, ...commonTestImports]
     })
     .compileComponents();
 

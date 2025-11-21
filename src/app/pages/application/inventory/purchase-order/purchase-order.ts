@@ -18,6 +18,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
 import { PurchaseOrderService } from '../../../../services/pages/application/inventory/purchase-order.service';
+import { ReceiveDialog } from './receive-dialog/receive-dialog';
 
 @Component({
     selector: 'app-purchase-order',
@@ -33,7 +34,8 @@ import { PurchaseOrderService } from '../../../../services/pages/application/inv
         SelectModule,
         DatePickerModule,
         InputNumberModule,
-        TextareaModule
+        TextareaModule,
+        ReceiveDialog
     ],
     standalone: true,
     templateUrl: './purchase-order.html',
@@ -48,6 +50,10 @@ export class PurchaseOrder implements OnInit, OnDestroy {
     _formBuilder = inject(FormBuilder);
 
     Destroy$ = new Subject();
+
+    // Receive Dialog
+    _receiveDialogVisible = false;
+    _selectedPOForReceive: any = null;
 
     _pageState = signal<'list' | 'form'>('list');
     _formState: 'insert' | 'update' = 'insert';
@@ -149,6 +155,7 @@ export class PurchaseOrder implements OnInit, OnDestroy {
             },
         ],
         toolbar: [
+            { id: 'receive', icon: 'pi pi-download', title: 'Receive' },
             { id: 'detail', icon: 'pi pi-info', title: 'Detail' },
             { id: 'delete', icon: 'pi pi-trash', title: 'Hapus' },
         ],
@@ -293,6 +300,23 @@ export class PurchaseOrder implements OnInit, OnDestroy {
     }
 
     handleToolbarClicked(args: any) {
+        if (args.toolbar.id == 'receive') {
+            // Load PO with items
+            this._store
+                .dispatch(new PurchaseOrderAction.GetPurchaseOrderWithItems(args.data.id.toString()))
+                .subscribe(() => {
+                    this._store
+                        .select(PurchaseOrderState.getSingle)
+                        .pipe(takeUntil(this.Destroy$))
+                        .subscribe(po => {
+                            if (po) {
+                                this._selectedPOForReceive = po;
+                                this._receiveDialogVisible = true;
+                            }
+                        });
+                });
+        }
+
         if (args.toolbar.id == 'detail') {
             this._formState = 'update';
             this._pageState.set('form');
@@ -365,5 +389,31 @@ export class PurchaseOrder implements OnInit, OnDestroy {
                     }, 3100);
                 })
         }
+    }
+
+    handleReceiveComplete(data: any) {
+        this._store
+            .dispatch(new PurchaseOrderAction.ReceivePurchaseOrder(data.po_id, data.items))
+            .subscribe({
+                next: () => {
+                    setTimeout(() => {
+                        this._messageService.clear();
+                        this._messageService.add({
+                            severity: 'success',
+                            summary: 'Berhasil!',
+                            detail: 'PO berhasil diterima. Stock telah diupdate.'
+                        });
+                        this._receiveDialogVisible = false;
+                        this._selectedPOForReceive = null;
+                    }, 3100);
+                },
+                error: (err) => {
+                    this._messageService.add({
+                        severity: 'error',
+                        summary: 'Error!',
+                        detail: err.message || 'Gagal menerima PO'
+                    });
+                }
+            });
     }
 }

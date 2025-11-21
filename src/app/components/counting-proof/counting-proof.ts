@@ -10,9 +10,9 @@ import { interval, Subscription, takeWhile } from 'rxjs';
 })
 export class CountingProof implements OnInit, OnDestroy {
 
-  @Input('value') value: number;
+  @Input() value: number;
 
-  @Input('label') label: string;
+  @Input() label: string;
 
   speed = 30;
   duration = 2000;

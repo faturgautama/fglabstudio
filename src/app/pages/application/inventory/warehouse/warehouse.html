@@ -6,7 +6,7 @@
         </app-dynamic-table>
 
         <p-dialog appendTo="body" [(visible)]="_modalToggler" [style]="{ width: '40rem' }"
-            [header]="_formState == 'insert' ? 'Tambah Gudang' : 'Ubah Gudang'" [maximizable]="false"
+            [header]="_formState === 'insert' ? 'Tambah Gudang' : 'Ubah Gudang'" [maximizable]="false"
             [resizable]="false" [draggable]="false" [modal]="true">
 
             <div class="flex flex-col w-full mb-7 gap-5" [formGroup]="Form">
@@ -91,7 +91,7 @@
                 <p-button severity="secondary" label="Tutup" styleClass="p-button-sm" (onClick)="_modalToggler = false">
                 </p-button>
 
-                @if (_formState == 'insert') {
+                @if (_formState === 'insert') {
                 <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
                     (onClick)="handleSave(Form.value)">
                 </p-button>

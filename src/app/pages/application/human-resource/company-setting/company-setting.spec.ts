@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CompanySetting } from './company-setting';
+import { commonTestProviders, commonTestImports } from '../../../../../test-helpers';
 
 describe('CompanySetting', () => {
   let component: CompanySetting;
@@ -8,7 +9,7 @@ describe('CompanySetting', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CompanySetting]
+      imports: [CompanySetting, ...commonTestImports]
     })
     .compileComponents();
 

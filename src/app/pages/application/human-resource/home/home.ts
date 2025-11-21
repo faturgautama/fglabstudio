@@ -186,7 +186,7 @@ export class Home implements OnInit {
       .subscribe(result => this.TableProps.datasource = result.map((item: any) => {
         return {
           ...item,
-          employment_status: item.employment_status ? (<String>item.employment_status).toUpperCase() : null
+          employment_status: item.employment_status ? (item.employment_status as string).toUpperCase() : null
         }
       }));
   }

@@ -230,7 +230,7 @@ export class Position implements OnInit, OnDestroy {
 
   handleSave(args: any) {
     if (this.Form.valid) {
-      let { department_id, ...payload } = args;
+      const { department_id, ...payload } = args;
       this._store
         .dispatch(new PositionAction.AddPosition({ ...payload, department_id: department_id.id }))
         .subscribe((result) => {
@@ -245,7 +245,7 @@ export class Position implements OnInit, OnDestroy {
 
   handleUpdate(args: any) {
     if (this.Form.valid) {
-      let { department_id, ...payload } = args;
+      const { department_id, ...payload } = args;
       this._store
         .dispatch(new PositionAction.UpdatePosition({ ...payload, department_id: department_id.id }))
         .subscribe((result) => {

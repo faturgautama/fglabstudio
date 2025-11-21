@@ -80,7 +80,7 @@ export namespace InventoryModel {
 
     export interface StockCard {
         id?: number;
-        product_id: Number;
+        product_id: number;
         transaction_date: Date;
         type: 'IN' | 'OUT' | 'ADJUSTMENT' | 'TRANSFER';
         reference_type?: string;

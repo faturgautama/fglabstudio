@@ -6,7 +6,7 @@
         </app-dynamic-table>
 
         <p-dialog appendTo="body" [(visible)]="_modalToggler" [style]="{ width: '70rem', maxHeight: '90vh' }"
-            [header]="_formState == 'insert' ? 'Tambah Produk' : 'Ubah Produk'" [maximizable]="false"
+            [header]="_formState === 'insert' ? 'Tambah Produk' : 'Ubah Produk'" [maximizable]="false"
             [resizable]="false" [draggable]="false" [modal]="true">
 
             <div class="flex flex-col w-full mb-7 gap-5 overflow-y-auto" style="max-height: 70vh;" [formGroup]="Form">
@@ -399,28 +399,88 @@
                         <p class="text-sm text-gray-500">Pengaturan status dan tracking produk</p>
                     </div>
 
+                    <!-- Tracking Method Section -->
+                    <div class="flex flex-col gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="flex items-center gap-2">
+                            <i class="pi pi-info-circle text-blue-600"></i>
+                            <p class="text-sm font-semibold text-blue-800">Metode Tracking Inventory</p>
+                        </div>
+                        <p class="text-xs text-blue-700">
+                            Pilih metode tracking yang sesuai dengan jenis produk Anda:
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Batch Tracked -->
+                            <div class="flex flex-col gap-2 p-3 bg-white rounded border border-blue-200">
+                                <div class="flex items-center gap-2">
+                                    <p-checkbox formControlName="is_batch_tracked" [binary]="true"
+                                        inputId="is_batch_tracked" />
+                                    <label for="is_batch_tracked" class="text-sm text-gray-700 font-semibold">
+                                        📦 Batch Tracking
+                                    </label>
+                                </div>
+                                <p class="text-xs text-gray-600 ml-6">
+                                    Untuk produk dengan expiry date atau diproduksi dalam batch (makanan, obat,
+                                    kosmetik)
+                                </p>
+                                @if (Form.get('is_batch_tracked')?.value) {
+                                <div class="flex items-center gap-1 ml-6 text-xs text-green-600">
+                                    <i class="pi pi-check-circle"></i>
+                                    <span>Aktif - Batch number & expiry date akan diminta saat receive PO</span>
+                                </div>
+                                }
+                            </div>
+
+                            <!-- Serial Tracked -->
+                            <div class="flex flex-col gap-2 p-3 bg-white rounded border border-blue-200">
+                                <div class="flex items-center gap-2">
+                                    <p-checkbox formControlName="is_serial_tracked" [binary]="true"
+                                        inputId="is_serial_tracked" />
+                                    <label for="is_serial_tracked" class="text-sm text-gray-700 font-semibold">
+                                        🔢 Serial Number Tracking
+                                    </label>
+                                </div>
+                                <p class="text-xs text-gray-600 ml-6">
+                                    Untuk produk high-value dengan warranty (elektronik, kendaraan, mesin)
+                                </p>
+                                @if (Form.get('is_serial_tracked')?.value) {
+                                <div class="flex items-center gap-1 ml-6 text-xs text-green-600">
+                                    <i class="pi pi-check-circle"></i>
+                                    <span>Aktif - Serial number akan diminta saat receive PO (1 serial = 1 unit)</span>
+                                </div>
+                                }
+                            </div>
+                        </div>
+
+                        @if (Form.get('is_batch_tracked')?.value && Form.get('is_serial_tracked')?.value) {
+                        <div class="flex items-start gap-2 p-3 bg-amber-50 rounded border border-amber-300">
+                            <i class="pi pi-exclamation-triangle text-amber-600 mt-0.5"></i>
+                            <div class="flex flex-col gap-1">
+                                <p class="text-xs font-semibold text-amber-800">Kombinasi Batch + Serial</p>
+                                <p class="text-xs text-amber-700">
+                                    Produk ini akan track batch number DAN serial number. Cocok untuk elektronik dengan
+                                    batch produksi (contoh: Handphone dengan IMEI).
+                                </p>
+                            </div>
+                        </div>
+                        }
+
+                        @if (!Form.get('is_batch_tracked')?.value && !Form.get('is_serial_tracked')?.value) {
+                        <div class="flex items-start gap-2 p-3 bg-gray-50 rounded border border-gray-300">
+                            <i class="pi pi-info-circle text-gray-600 mt-0.5"></i>
+                            <div class="flex flex-col gap-1">
+                                <p class="text-xs font-semibold text-gray-800">Standard Tracking</p>
+                                <p class="text-xs text-gray-700">
+                                    Produk ini menggunakan tracking standard (hanya quantity). Cocok untuk produk umum
+                                    tanpa kebutuhan traceability khusus.
+                                </p>
+                            </div>
+                        </div>
+                        }
+                    </div>
+
+                    <!-- Other Flags -->
                     <div class="grid grid-cols-4 gap-4">
-                        <!-- Batch Tracked -->
-                        <div class="flex items-center gap-2">
-                            <p-checkbox formControlName="is_batch_tracked" [binary]="true" inputId="is_batch_tracked" />
-                            <label for="is_batch_tracked" class="text-sm text-gray-700 font-medium">Batch
-                                Tracked</label>
-                        </div>
-
-                        <!-- Serial Tracked -->
-                        <div class="flex items-center gap-2">
-                            <p-checkbox formControlName="is_serial_tracked" [binary]="true"
-                                inputId="is_serial_tracked" />
-                            <label for="is_serial_tracked" class="text-sm text-gray-700 font-medium">Serial
-                                Tracked</label>
-                        </div>
-
-                        <!-- Serialized -->
-                        <div class="flex items-center gap-2">
-                            <p-checkbox formControlName="is_serialized" [binary]="true" inputId="is_serialized" />
-                            <label for="is_serialized" class="text-sm text-gray-700 font-medium">Serialized</label>
-                        </div>
-
                         <!-- Perishable -->
                         <div class="flex items-center gap-2">
                             <p-checkbox formControlName="is_perishable" [binary]="true" inputId="is_perishable" />
@@ -452,7 +512,7 @@
                 <p-button severity="secondary" label="Tutup" styleClass="p-button-sm" (onClick)="_modalToggler = false">
                 </p-button>
 
-                @if (_formState == 'insert') {
+                @if (_formState === 'insert') {
                 <p-button severity="info" label="Simpan" styleClass="p-button-sm" [disabled]="Form.invalid"
                     (onClick)="handleSave(Form.value)">
                 </p-button>

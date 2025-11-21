@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DshNavbarSearch } from './dsh-navbar-search';
+import { commonTestProviders, commonTestImports } from '../../../../test-helpers';
 
 describe('DshNavbarSearch', () => {
   let component: DshNavbarSearch;
@@ -8,7 +9,7 @@ describe('DshNavbarSearch', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DshNavbarSearch]
+      imports: [DshNavbarSearch, ...commonTestImports]
     })
     .compileComponents();
 

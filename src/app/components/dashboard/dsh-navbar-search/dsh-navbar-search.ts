@@ -47,7 +47,7 @@ export class DshNavbarSearch implements OnInit, OnDestroy {
 
   _showModal = false;
 
-  searchBy: string = 'employee';
+  searchBy = 'employee';
   searchValue = new BehaviorSubject<string>('');
   searchByOptions: any[] = [
     { id: 'employee', icon: 'pi pi-users', title: 'Employee' },

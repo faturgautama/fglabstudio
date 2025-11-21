@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SocialMediaList } from './social-media-list';
+import { commonTestProviders, commonTestImports } from '../../../test-helpers';
 
 describe('SocialMediaList', () => {
   let component: SocialMediaList;
@@ -8,7 +9,7 @@ describe('SocialMediaList', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SocialMediaList]
+      imports: [SocialMediaList, ...commonTestImports]
     })
     .compileComponents();
 

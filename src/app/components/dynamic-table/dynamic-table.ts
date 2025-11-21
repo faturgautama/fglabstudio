@@ -38,19 +38,19 @@ export class DynamicTable implements OnInit, OnDestroy {
 
   _originalDatasource: any[] = [];
 
-  @Input('props') props!: DynamicTableModel.ITable;
+  @Input() props!: DynamicTableModel.ITable;
 
-  @Output('onCellClicked') onCellClicked = new EventEmitter<any>();
+  @Output() onCellClicked = new EventEmitter<any>();
 
-  @Output('onRowDoubleClicked') onRowDoubleClicked = new EventEmitter<any>();
+  @Output() onRowDoubleClicked = new EventEmitter<any>();
 
-  @Output('onFilter') onFilter = new EventEmitter<any>();
+  @Output() onFilter = new EventEmitter<any>();
 
-  @Output('onSort') onSort = new EventEmitter<DynamicTableModel.ISort[]>();
+  @Output() onSort = new EventEmitter<DynamicTableModel.ISort[]>();
 
-  @Output('onCustomButtonClicked') onCustomButtonClicked = new EventEmitter<DynamicTableModel.ICustomButton>();
+  @Output() onCustomButtonClicked = new EventEmitter<DynamicTableModel.ICustomButton>();
 
-  @Output('onToolbarClicked') onToolbarClicked = new EventEmitter<any>();
+  @Output() onToolbarClicked = new EventEmitter<any>();
 
   columType = DynamicTableModel.IColumnType;
 

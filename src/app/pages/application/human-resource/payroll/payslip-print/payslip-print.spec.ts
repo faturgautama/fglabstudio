@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PayslipPrint } from './payslip-print';
+import { commonTestProviders, commonTestImports } from '../../../../../../test-helpers';
 
 describe('PayslipPrint', () => {
   let component: PayslipPrint;
@@ -8,7 +9,7 @@ describe('PayslipPrint', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PayslipPrint]
+      imports: [PayslipPrint, ...commonTestImports]
     })
     .compileComponents();
 

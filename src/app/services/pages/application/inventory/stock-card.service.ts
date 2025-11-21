@@ -76,7 +76,7 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
      */
     getStockCardsByProduct(product_id: string, limit?: number) {
         return this.withLoading(async () => {
-            let query = this.databaseService.db.stock_cards
+            const query = this.databaseService.db.stock_cards
                 .where('product_id')
                 .equals(product_id);
 
