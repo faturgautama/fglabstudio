@@ -50,7 +50,7 @@
                         </label>
                         <p-select [options]="MOVEMENT_TYPES" formControlName="type" optionLabel="label"
                             optionValue="value" placeholder="Pilih tipe" size="small" class="w-full" appendTo="body"
-                            (onChange)="onTypeChange()">
+                            size="small" (onChange)="onTypeChange()">
                         </p-select>
                     </div>
 
@@ -59,7 +59,7 @@
                         <label class="text-sm text-gray-700 font-medium">
                             Tanggal <span class="text-red-500">*</span>
                         </label>
-                        <p-datepicker formControlName="movement_date" placeholder="Pilih tanggal"
+                        <p-datepicker formControlName="movement_date" placeholder="Pilih tanggal" size="small"
                             styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
                         </p-datepicker>
                     </div>
@@ -104,7 +104,7 @@
                         <label class="text-sm text-gray-700 font-medium">
                             Quantity <span class="text-red-500">*</span>
                         </label>
-                        <p-inputNumber formControlName="quantity" [min]="1" placeholder="0"
+                        <p-inputNumber formControlName="quantity" [min]="1" placeholder="0" size="small"
                             styleClass="p-inputtext-sm w-full" (onInput)="calculateTotalValue()">
                         </p-inputNumber>
                     </div>
@@ -113,7 +113,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">Harga Satuan</label>
                         <p-inputNumber formControlName="unit_cost" mode="currency" currency="IDR" locale="id-ID"
-                            [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                            [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full" size="small"
                             (onInput)="calculateTotalValue()">
                         </p-inputNumber>
                     </div>
@@ -122,7 +122,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">Total Nilai</label>
                         <p-inputNumber formControlName="total_value" mode="currency" currency="IDR" locale="id-ID"
-                            [readonly]="true" placeholder="0" styleClass="p-inputtext-sm w-full">
+                            [readonly]="true" placeholder="0" styleClass="p-inputtext-sm w-full" size="small">
                         </p-inputNumber>
                     </div>
                 </div>

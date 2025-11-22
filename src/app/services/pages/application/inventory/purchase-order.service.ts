@@ -37,9 +37,10 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
         items: Omit<InventoryModel.PurchaseOrderItem, 'id' | 'purchase_order_id'>[]
     ) {
         return this.withLoading(async () => {
-            // Add PO
+            // Add PO - remove id field if it exists (empty string causes error)
+            const { id, ...poWithoutId } = po as any;
             const po_data: any = {
-                ...po,
+                ...poWithoutId,
                 created_at: new Date(),
                 updated_at: new Date(),
                 is_active: true
@@ -47,12 +48,15 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
 
             const po_id = await this.databaseService.db.purchase_orders.add(po_data);
 
-            // Add PO Items
-            const po_items = items.map(item => ({
-                ...item,
-                purchase_order_id: po_id.toString(),
-                subtotal: item.qty_ordered * item.unit_price
-            }));
+            // Add PO Items - remove id field if it exists
+            const po_items = items.map(item => {
+                const { id, ...itemWithoutId } = item as any;
+                return {
+                    ...itemWithoutId,
+                    purchase_order_id: po_id.toString(),
+                    subtotal: item.qty_ordered * item.unit_price
+                };
+            });
 
             await this.databaseService.db.purchase_order_items.bulkAdd(po_items as any);
 

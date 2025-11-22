@@ -65,7 +65,7 @@
                             Tanggal Order <span class="text-red-500">*</span>
                         </label>
                         <p-datepicker formControlName="order_date" placeholder="Pilih tanggal"
-                            styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                            styleClass="p-inputtext-sm w-full p-0" appendTo="body" dateFormat="dd/mm/yy" size="small">
                         </p-datepicker>
                     </div>
 
@@ -73,7 +73,7 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">Tanggal Diharapkan</label>
                         <p-datepicker formControlName="expected_date" placeholder="Pilih tanggal"
-                            styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                            styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy" size="small">
                         </p-datepicker>
                     </div>
 
@@ -83,7 +83,8 @@
                             Status <span class="text-red-500">*</span>
                         </label>
                         <p-select [options]="STATUS_OPTIONS" formControlName="status" optionLabel="label"
-                            optionValue="value" placeholder="Pilih status" size="small" class="w-full" appendTo="body">
+                            optionValue="value" placeholder="Pilih status" size="small" class="w-full" appendTo="body"
+                            size="small">
                         </p-select>
                     </div>
 
@@ -129,7 +130,8 @@
                                     Qty <span class="text-red-500">*</span>
                                 </label>
                                 <p-inputNumber formControlName="qty_ordered" [min]="1" placeholder="0"
-                                    styleClass="p-inputtext-sm w-full" (onInput)="calculateItemSubtotal($index)">
+                                    styleClass="p-inputtext-sm w-full" (onInput)="calculateItemSubtotal($index)"
+                                    size="small">
                                 </p-inputNumber>
                             </div>
 
@@ -140,7 +142,7 @@
                                 </label>
                                 <p-inputNumber formControlName="unit_price" mode="currency" currency="IDR"
                                     locale="id-ID" [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
-                                    (onInput)="calculateItemSubtotal($index)">
+                                    (onInput)="calculateItemSubtotal($index)" size="small">
                                 </p-inputNumber>
                             </div>
 
@@ -149,7 +151,7 @@
                                 <label class="text-sm text-gray-700 font-medium">Diskon %</label>
                                 <p-inputNumber formControlName="discount_percentage" [min]="0" [max]="100" suffix="%"
                                     placeholder="0" styleClass="p-inputtext-sm w-full"
-                                    (onInput)="calculateItemSubtotal($index)">
+                                    (onInput)="calculateItemSubtotal($index)" size="small">
                                 </p-inputNumber>
                             </div>
 
@@ -157,7 +159,7 @@
                             <div class="flex flex-col gap-1">
                                 <label class="text-sm text-gray-700 font-medium">Subtotal</label>
                                 <p-inputNumber formControlName="subtotal" mode="currency" currency="IDR" locale="id-ID"
-                                    [readonly]="true" placeholder="0" styleClass="p-inputtext-sm w-full">
+                                    [readonly]="true" placeholder="0" styleClass="p-inputtext-sm w-full" size="small">
                                 </p-inputNumber>
                             </div>
 
@@ -192,7 +194,8 @@
                         <div class="flex flex-col gap-1">
                             <label class="text-sm text-gray-700 font-medium">Diskon Global %</label>
                             <p-inputNumber formControlName="discount_percentage" [min]="0" [max]="100" suffix="%"
-                                placeholder="0" styleClass="p-inputtext-sm w-full" (onInput)="calculateTotals()">
+                                placeholder="0" styleClass="p-inputtext-sm w-full" (onInput)="calculateTotals()"
+                                size="small">
                             </p-inputNumber>
                         </div>
 
@@ -200,7 +203,7 @@
                         <div class="flex flex-col gap-1">
                             <label class="text-sm text-gray-700 font-medium">Pajak</label>
                             <p-inputNumber formControlName="tax_amount" mode="currency" currency="IDR" locale="id-ID"
-                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full" size="small"
                                 (onInput)="calculateTotals()">
                             </p-inputNumber>
                         </div>
@@ -209,7 +212,7 @@
                         <div class="flex flex-col gap-1">
                             <label class="text-sm text-gray-700 font-medium">Biaya Pengiriman</label>
                             <p-inputNumber formControlName="shipping_cost" mode="currency" currency="IDR" locale="id-ID"
-                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full" size="small"
                                 (onInput)="calculateTotals()">
                             </p-inputNumber>
                         </div>
@@ -218,7 +221,7 @@
                         <div class="flex flex-col gap-1">
                             <label class="text-sm text-gray-700 font-medium">Biaya Lainnya</label>
                             <p-inputNumber formControlName="other_costs" mode="currency" currency="IDR" locale="id-ID"
-                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full"
+                                [min]="0" placeholder="0" styleClass="p-inputtext-sm w-full" size="small"
                                 (onInput)="calculateTotals()">
                             </p-inputNumber>
                         </div>
