@@ -20,6 +20,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
 import { PurchaseOrderService } from '../../../../services/pages/application/inventory/purchase-order.service';
 import { ReceiveDialog } from './receive-dialog/receive-dialog';
+import { CancelPoDialogComponent } from './cancel-po-dialog/cancel-po-dialog.component';
 
 @Component({
     selector: 'app-purchase-order',
@@ -36,7 +37,8 @@ import { ReceiveDialog } from './receive-dialog/receive-dialog';
         DatePickerModule,
         InputNumberModule,
         TextareaModule,
-        ReceiveDialog
+        ReceiveDialog,
+        CancelPoDialogComponent
     ],
     standalone: true,
     templateUrl: './purchase-order.html',
@@ -55,6 +57,10 @@ export class PurchaseOrder implements OnInit, OnDestroy {
     // Receive Dialog
     _receiveDialogVisible = false;
     _selectedPOForReceive: any = null;
+
+    // Cancel Dialog
+    _cancelDialogVisible = false;
+    _selectedPOForCancel: any = null;
 
     _pageState = signal<'list' | 'form'>('list');
     _formState: 'insert' | 'update' = 'insert';
@@ -165,6 +171,7 @@ export class PurchaseOrder implements OnInit, OnDestroy {
         ],
         toolbar: [
             { id: 'receive', icon: 'pi pi-download', title: 'Receive' },
+            { id: 'cancel', icon: 'pi pi-times', title: 'Batalkan' },
             { id: 'detail', icon: 'pi pi-info', title: 'Detail' },
             { id: 'delete', icon: 'pi pi-trash', title: 'Hapus' },
         ],
@@ -336,6 +343,28 @@ export class PurchaseOrder implements OnInit, OnDestroy {
                 });
         }
 
+        if (args.toolbar.id == 'cancel') {
+            if (args.data.status === 'CANCELLED') {
+                this._messageService.add({ severity: 'warn', summary: 'Peringatan', detail: 'PO ini sudah dibatalkan' });
+                return;
+            }
+
+            // Load PO with items
+            this._store
+                .dispatch(new PurchaseOrderAction.GetPurchaseOrderWithItems(args.data.id.toString()))
+                .subscribe(() => {
+                    this._store
+                        .select(PurchaseOrderState.getSingle)
+                        .pipe(takeUntil(this.Destroy$))
+                        .subscribe(po => {
+                            if (po) {
+                                this._selectedPOForCancel = po;
+                                this._cancelDialogVisible = true;
+                            }
+                        });
+                });
+        }
+
         if (args.toolbar.id == 'detail') {
             this._formState = 'update';
 
@@ -469,6 +498,32 @@ export class PurchaseOrder implements OnInit, OnDestroy {
                         severity: 'error',
                         summary: 'Error!',
                         detail: err.message || 'Gagal menerima PO'
+                    });
+                }
+            });
+    }
+
+    handleCancelComplete(data: any) {
+        this._store
+            .dispatch(new PurchaseOrderAction.CancelPurchaseOrder(data.po_id, data.cancel_reason))
+            .subscribe({
+                next: () => {
+                    setTimeout(() => {
+                        this._messageService.clear();
+                        this._messageService.add({
+                            severity: 'success',
+                            summary: 'Berhasil!',
+                            detail: 'PO berhasil dibatalkan. Stock telah dikembalikan.'
+                        });
+                        this._cancelDialogVisible = false;
+                        this._selectedPOForCancel = null;
+                    }, 3100);
+                },
+                error: (err) => {
+                    this._messageService.add({
+                        severity: 'error',
+                        summary: 'Error!',
+                        detail: err.message || 'Gagal membatalkan PO'
                     });
                 }
             });

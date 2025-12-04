@@ -816,6 +816,185 @@ Setelah receive, status PO akan berubah otomatis:
 
 ---
 
+### ❌ Cara Cancel Purchase Order
+
+**PENTING**: Cancel PO akan **reverse semua stock** yang sudah di-receive!
+
+#### 1️⃣ Kapan Bisa Cancel PO?
+
+✅ **Bisa cancel:**
+
+- PO dengan status DRAFT
+- PO dengan status SUBMITTED
+- PO dengan status PARTIAL (sudah sebagian diterima)
+- PO dengan status RECEIVED (sudah fully received)
+
+❌ **Tidak bisa cancel:**
+
+- PO yang sudah CANCELLED
+
+#### 2️⃣ Cara Cancel PO
+
+1. Buka list Purchase Order
+2. Cari PO yang ingin di-cancel
+3. Klik tombol **❌ Cancel** pada PO tersebut
+4. Konfirmasi cancel
+5. (Optional) Input reason/alasan cancel
+
+#### 3️⃣ Apa yang Terjadi Saat Cancel PO?
+
+**Jika PO belum di-receive (DRAFT/SUBMITTED):**
+
+```typescript
+// Hanya update status
+PO.status = 'CANCELLED';
+```
+
+**Jika PO sudah di-receive (PARTIAL/RECEIVED):**
+
+System akan otomatis **reverse** semua yang sudah di-receive:
+
+**1. Create OUT Stock Card (Reverse IN)**
+
+```typescript
+// Untuk setiap item yang qty_received > 0
+stock_cards.insert({
+  product_id: 5,
+  warehouse_id: 1,
+  type: 'OUT',
+  qty_in: 0,
+  qty_out: 10, // Qty yang di-reverse
+  balance: previous - 10,
+  reference_type: 'PURCHASE_ORDER_CANCEL',
+  reference_id: po_id,
+  notes: 'Cancel PO PO/202501/0001 - Reason: ...',
+});
+```
+
+**2. Decrease Product Warehouse Stock**
+
+```typescript
+product_warehouse_stock.total_stock -= qty_received;
+```
+
+**3. Deactivate Batches (jika batch tracked)**
+
+```typescript
+product_batches.where((purchase_order_id = po_id)).update({ is_active: false });
+```
+
+**4. Update Serial Status (jika serial tracked)**
+
+```typescript
+product_serials.where((purchase_order_id = po_id)).update({
+  status: 'RETURNED',
+  notes: 'PO Cancelled: ...',
+});
+```
+
+**5. Update PO Status**
+
+```typescript
+PO.status = 'CANCELLED';
+PO.internal_notes = 'Cancelled: ...';
+```
+
+**6. Update Product Total Stock**
+
+```typescript
+products.current_stock = SUM(all warehouses)
+```
+
+---
+
+### 📊 Contoh Cancel PO
+
+**Scenario: Cancel PO yang sudah partially received**
+
+```
+PO: PO/202501/0001
+Status: PARTIAL
+Warehouse: Gudang Pusat (ID: 1)
+
+Items:
+- Laptop Dell XPS 15
+  Ordered: 10 pcs
+  Received: 5 pcs ✅
+
+Saat Cancel:
+
+1. Stock Card (OUT entry):
+   product_id: 5
+   warehouse_id: 1
+   type: 'OUT'
+   qty_out: 5
+   balance: 10 → 5
+   reference: 'PURCHASE_ORDER_CANCEL'
+
+2. Product Warehouse Stock:
+   total_stock: 10 → 5
+
+3. Products:
+   current_stock: 10 → 5
+
+4. PO Status:
+   PARTIAL → CANCELLED
+```
+
+---
+
+### ⚠️ Warning Cancel PO
+
+**PERHATIAN:**
+
+1. **Stock akan berkurang!**
+
+   - Pastikan stock cukup sebelum cancel
+   - Jika stock sudah terjual, cancel akan gagal
+
+2. **Batch akan di-deactivate!**
+
+   - Batch yang sudah di-receive akan di-set `is_active = false`
+   - Batch tidak bisa digunakan lagi
+
+3. **Serial akan di-set RETURNED!**
+
+   - Serial yang sudah di-receive akan di-set status `RETURNED`
+   - Serial tidak bisa dijual lagi
+
+4. **Tidak bisa di-undo!**
+
+   - Cancel PO tidak bisa di-reverse
+   - Jika salah cancel, harus buat PO baru
+
+5. **Stock Card tetap ada!**
+   - History IN dan OUT tetap tercatat
+   - Audit trail lengkap
+
+---
+
+### 🔍 Validasi Sebelum Cancel
+
+System akan validasi:
+
+```typescript
+// 1. PO exists?
+if (!po) throw Error('PO not found');
+
+// 2. Already cancelled?
+if (po.status === 'CANCELLED') throw Error('Already cancelled');
+
+// 3. Has warehouse?
+if (!po.warehouse_id) throw Error('Must have warehouse_id');
+
+// 4. Stock cukup untuk di-reverse?
+if (current_stock < qty_received) throw Error('Insufficient stock');
+```
+
+> 💡 **Best Practice**: Sebelum cancel PO yang sudah received, pastikan stock belum terjual!
+
+---
+
 ## 🎯 Fitur Batch & Serial Tracking
 
 ### 📦 Batch Tracking - Detail

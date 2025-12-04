@@ -176,4 +176,23 @@ export class PurchaseOrderState implements NgxsOnInit {
                 })
             );
     }
+
+    @Action(PurchaseOrderAction.CancelPurchaseOrder)
+    cancel(ctx: StateContext<PurchaseOrderStateModel>, payload: any) {
+        ctx.setState({ ...ctx.getState(), loading: true });
+
+        return this._purchaseOrderService
+            .cancelPurchaseOrder(payload.po_id, payload.reason)
+            .pipe(
+                switchMap(() => {
+                    return ctx.dispatch([
+                        new PurchaseOrderAction.GetPurchaseOrder(),
+                        new ProductAction.GetProduct(),
+                        new ProductAction.GetLowStockProducts(),
+                        new StockCardAction.GetStockCard(),
+                        new ProductWarehouseStockAction.GetAllStocks()
+                    ]);
+                })
+            );
+    }
 }

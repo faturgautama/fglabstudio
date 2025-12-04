@@ -218,6 +218,111 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
     }
 
     /**
+     * Cancel Purchase Order
+     * Reverse all received stock and update status to CANCELLED
+     */
+    cancelPurchaseOrder(po_id: number, reason?: string) {
+        return this.withLoading(async () => {
+            const po = await this.databaseService.db.purchase_orders.get(Number(po_id));
+            if (!po) throw new Error('Purchase Order not found');
+
+            if (po.status === 'CANCELLED') {
+                throw new Error('Purchase Order is already cancelled');
+            }
+
+            if (!po.warehouse_id) {
+                throw new Error('Purchase Order must have warehouse_id');
+            }
+
+            // Get all items
+            const items = await this.databaseService.db.purchase_order_items
+                .where('purchase_order_id')
+                .equals(po_id.toString())
+                .toArray();
+
+            // Reverse stock for each item that has been received
+            for (const item of items) {
+                if (item.qty_received > 0) {
+                    const product = await this.databaseService.db.products.get(Number(item.product_id));
+                    if (!product) continue;
+
+                    // Determine tracking type
+                    let tracking_type: 'BATCH' | 'SERIAL' | 'GENERAL' = 'GENERAL';
+                    if (product.is_batch_tracked) {
+                        tracking_type = 'BATCH';
+                    } else if (product.is_serial_tracked) {
+                        tracking_type = 'SERIAL';
+                    }
+
+                    // Create OUT stock card entry (reverse the IN)
+                    await firstValueFrom(this.stockCardService.addStockCard(
+                        item.product_id!,
+                        po.warehouse_id,
+                        'OUT',
+                        item.qty_received,
+                        'PURCHASE_ORDER_CANCEL',
+                        po_id,
+                        `Cancel PO ${po.po_number}${reason ? ' - ' + reason : ''}`,
+                        item.unit_price
+                    ));
+
+                    // Decrease product warehouse stock
+                    await this.productWarehouseStockService.decrementStockOnIssue(
+                        item.product_id!,
+                        po.warehouse_id,
+                        item.qty_received,
+                        tracking_type
+                    );
+
+                    // Deactivate batches if batch tracked
+                    if (product.is_batch_tracked && item.batch_number) {
+                        const batches = await this.databaseService.db.product_batches
+                            .where('[product_id+warehouse_id+batch_number]')
+                            .equals([item.product_id!.toString(), po.warehouse_id, item.batch_number])
+                            .toArray();
+
+                        for (const batch of batches) {
+                            if (batch.purchase_order_id === po_id.toString()) {
+                                await this.databaseService.db.product_batches.update(Number(batch.id), {
+                                    is_active: false
+                                });
+                            }
+                        }
+                    }
+
+                    // Update serial status if serial tracked
+                    if (product.is_serial_tracked && item.serial_numbers) {
+                        for (const serial_number of item.serial_numbers) {
+                            const serials = await this.databaseService.db.product_serials
+                                .where('serial_number')
+                                .equals(serial_number)
+                                .toArray();
+
+                            for (const serial of serials) {
+                                if (serial.purchase_order_id === po_id.toString()) {
+                                    await this.databaseService.db.product_serials.update(Number(serial.id), {
+                                        status: 'RETURNED',
+                                        notes: `PO Cancelled: ${reason || 'No reason provided'}`
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update PO status to CANCELLED
+            await this.databaseService.db.purchase_orders.update(Number(po_id), {
+                status: 'CANCELLED',
+                updated_at: new Date(),
+                internal_notes: `Cancelled: ${reason || 'No reason provided'}`
+            });
+
+            return 'CANCELLED';
+        });
+    }
+
+    /**
      * Get PO with items
      */
     getPurchaseOrderWithItems(po_id: string) {

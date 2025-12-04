@@ -12,6 +12,11 @@
         (onReceiveComplete)="handleReceiveComplete($event)">
     </app-receive-dialog>
 
+    <!-- Cancel Dialog -->
+    <app-cancel-po-dialog [(visible)]="_cancelDialogVisible" [poData]="_selectedPOForCancel"
+        (onCancelComplete)="handleCancelComplete($event)">
+    </app-cancel-po-dialog>
+
     } @else if (_pageState() === 'form') {
     <div class="grid w-full gap-5 p-5">
         <!-- Header -->

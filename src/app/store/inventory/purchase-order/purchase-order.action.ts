@@ -46,4 +46,9 @@ export namespace PurchaseOrderAction {
     export class GeneratePONumber {
         static readonly type = '[Inventory PO] Generate PO Number';
     }
+
+    export class CancelPurchaseOrder {
+        static readonly type = '[Inventory PO] Cancel';
+        constructor(public po_id: string, public reason?: string) { }
+    }
 }
