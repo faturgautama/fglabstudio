@@ -82,6 +82,7 @@ export namespace InventoryModel {
     export interface StockCard {
         id?: number;
         product_id: number;
+        warehouse_id: number;
         transaction_date: Date;
         type: 'IN' | 'OUT' | 'ADJUSTMENT' | 'TRANSFER';
         reference_type?: string;
@@ -132,6 +133,7 @@ export namespace InventoryModel {
         id?: number;
         po_number: string;
         supplier_id: string;
+        warehouse_id: number;
         order_date: Date;
         expected_date?: Date;
         received_date?: Date;
@@ -184,8 +186,9 @@ export namespace InventoryModel {
         movement_number: string;
         type: 'IN' | 'OUT' | 'ADJUSTMENT' | 'TRANSFER';
         product_id: number;
-        warehouse_from?: string;
-        warehouse_to?: string;
+        warehouse_id: number;
+        warehouse_from?: number;
+        warehouse_to?: number;
         quantity: number;
         unit_cost?: number;
         total_value?: number;
@@ -249,6 +252,7 @@ export namespace InventoryModel {
     export interface ProductBatch {
         id?: number;
         product_id: string;
+        warehouse_id: number;
         batch_number: string;
         manufacturing_date?: Date;
         expiry_date?: Date;
@@ -262,6 +266,7 @@ export namespace InventoryModel {
     export interface ProductSerial {
         id?: number
         product_id?: number
+        warehouse_id: number;
         serial_number: string;
         batch_number?: string;
         status: 'IN_STOCK' | 'SOLD' | 'DAMAGED' | 'RETURNED';
@@ -276,7 +281,7 @@ export namespace InventoryModel {
         id?: number
         opname_number: string;
         opname_date: Date;
-        warehouse_id?: string;
+        warehouse_id?: number;
         status: 'DRAFT' | 'IN_PROGRESS' | 'COMPLETED' | 'APPROVED';
         total_products: number;
         total_discrepancy: number;
@@ -298,5 +303,17 @@ export namespace InventoryModel {
         notes?: string;
         verified_by?: string;
         is_active?: boolean;
+    }
+
+    export interface ProductWarehouseStock {
+        id?: number;
+        product_id: number | string;
+        warehouse_id: number | string;
+        total_stock: number;           // Sum dari semua tipe tracking
+        batch_quantity: number;        // Qty dari batch tracking
+        serial_quantity: number;       // Qty dari serial tracking
+        general_quantity: number;      // Qty dari general (non-batch, non-serial)
+        updated_at: Date;
+        last_updated_by?: string;
     }
 }

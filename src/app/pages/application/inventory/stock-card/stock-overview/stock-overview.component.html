@@ -1,0 +1,139 @@
+<div class="stock-overview">
+    <!-- Header -->
+    <div class="overview-header">
+        <div class="header-content">
+            <h2>📊 Stock Summary</h2>
+            <p>Ringkasan stok produk per warehouse</p>
+        </div>
+
+        <!-- Warehouse Filter -->
+        <div class="warehouse-filter">
+            <label>Pilih Warehouse:</label>
+            <select [(ngModel)]="selectedWarehouseId" (change)="onWarehouseChange()" class="warehouse-select">
+                <option [ngValue]="null">-- Semua Warehouse --</option>
+                @for (wh of warehouses; track wh.id) {
+                <option [ngValue]="wh.id">{{ wh.name }}</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <!-- Stock Table -->
+    <div class="stock-table-container">
+        <p-table [value]="stockData" [loading]="isLoading" [paginator]="true" [rows]="10"
+            [globalFilterFields]="['product_name', 'product_sku']" [tableStyle]="{ 'min-width': '50rem' }">
+            <!-- Column: Product -->
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="product_sku">SKU <p-sortIcon field="product_sku"></p-sortIcon></th>
+                    <th pSortableColumn="product_name">Nama Produk <p-sortIcon field="product_name"></p-sortIcon></th>
+                    <th pSortableColumn="total_stock">Total Stock <p-sortIcon field="total_stock"></p-sortIcon></th>
+                    @if (hasBatchTracking) {
+                    <th>Batch Qty</th>
+                    }
+                    @if (hasSerialTracking) {
+                    <th>Serial Qty</th>
+                    }
+                    @if (hasGeneralTracking) {
+                    <th>General Qty</th>
+                    }
+                    <th>Tipe Tracking</th>
+                    <th style="width: 150px;">Action</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-stock>
+                <tr>
+                    <!-- SKU -->
+                    <td>
+                        <span class="badge bg-info">{{ stock.product_sku }}</span>
+                    </td>
+
+                    <!-- Product Name -->
+                    <td>
+                        <strong>{{ stock.product_name }}</strong>
+                    </td>
+
+                    <!-- Total Stock -->
+                    <td>
+                        <span class="badge" [ngClass]="getStockBadgeClass(stock.total_stock)">
+                            {{ stock.total_stock }} unit
+                        </span>
+                    </td>
+
+                    <!-- Batch Quantity -->
+                    @if (hasBatchTracking) {
+                    <td>
+                        @if (stock.is_batch_tracked) {
+                        <span>{{ stock.batch_quantity }}</span>
+                        } @else {
+                        <span class="text-muted">-</span>
+                        }
+                    </td>
+                    }
+
+                    <!-- Serial Quantity -->
+                    @if (hasSerialTracking) {
+                    <td>
+                        @if (stock.is_serial_tracked) {
+                        <span>{{ stock.serial_quantity }}</span>
+                        } @else {
+                        <span class="text-muted">-</span>
+                        }
+                    </td>
+                    }
+
+                    <!-- General Quantity -->
+                    @if (hasGeneralTracking) {
+                    <td>
+                        @if (!stock.is_batch_tracked && !stock.is_serial_tracked) {
+                        <span>{{ stock.general_quantity }}</span>
+                        } @else {
+                        <span class="text-muted">-</span>
+                        }
+                    </td>
+                    }
+
+                    <!-- Tracking Type Badge -->
+                    <td>
+                        @if (stock.is_batch_tracked) {
+                        <span class="badge bg-warning text-dark" pTooltip="Batch Tracking" tooltipPosition="top">
+                            � Baltch
+                        </span>
+                        }
+                        @if (stock.is_serial_tracked) {
+                        <span class="badge bg-primary" pTooltip="Serial Tracking" tooltipPosition="top">
+                            🔢 Serial
+                        </span>
+                        }
+                        @if (!stock.is_batch_tracked && !stock.is_serial_tracked) {
+                        <span class="badge bg-secondary" pTooltip="General Stock" tooltipPosition="top">
+                            📋 General
+                        </span>
+                        }
+                    </td>
+
+                    <!-- Action -->
+                    <td>
+                        <button pButton type="button" icon="pi pi-list"
+                            class="p-button-rounded p-button-info p-button-sm"
+                            [pTooltip]="'Lihat detail pergerakan stok ' + stock.product_name" tooltipPosition="top"
+                            (click)="openDetailModal(stock)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <!-- Empty Message -->
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" class="text-center p-4">
+                        <p class="text-muted">Tidak ada data stok untuk warehouse ini</p>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <!-- Detail Modal Component -->
+    <app-stock-detail-modal [(visible)]="showDetailModal" [selectedStock]="selectedStock"></app-stock-detail-modal>
+</div>

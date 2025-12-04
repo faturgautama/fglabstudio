@@ -39,7 +39,7 @@ export class DshNavbarSearch implements OnInit, OnDestroy {
   _store = inject(Store);
   _router = inject(Router);
   _navigation = inject(Navigation);
-  _cdr = inject(ChangeDetectorRef)
+  _cdr = inject(ChangeDetectorRef);
 
   menuDatasource = this._navigation.SidebarDashboardMenu();
   employeeDatasource: any[] = [];

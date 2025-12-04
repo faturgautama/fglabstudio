@@ -299,7 +299,7 @@ export class StockOpname implements OnInit, OnDestroy {
     handleSave() {
         if (this.Form.valid && this.items.length > 0) {
             const formValue = this.Form.value as any;
-            const { items, ...opnameData } = formValue;
+            const { id, items, ...opnameData } = formValue;
 
             this._store
                 .dispatch(new StockOpnameAction.AddStockOpname(opnameData, items || []))

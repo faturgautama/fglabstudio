@@ -67,6 +67,7 @@ export class StockCardState implements NgxsOnInit {
         return this._stockCardService
             .addStockCard(
                 payload.product_id,
+                payload.warehouse_id,
                 payload.type,
                 payload.qty,
                 payload.reference_type,

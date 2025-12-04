@@ -1,1 +1,10 @@
-// Stock Card styles
+:host ::ng-deep {
+    .p-tablist-tab-list {
+        background-color: transparent !important;
+    }
+
+
+    .p-tabpanels {
+        background-color: transparent !important;
+    }
+}

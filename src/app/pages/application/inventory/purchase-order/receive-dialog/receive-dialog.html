@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-4">
         <!-- PO Info -->
         <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <div class="grid grid-cols-3 gap-4 text-sm">
+            <div class="grid grid-cols-4 gap-4 text-sm">
                 <div>
                     <p class="text-gray-600">PO Number</p>
                     <p class="font-semibold">{{ poData?.po_number }}</p>
@@ -12,6 +12,13 @@
                 <div>
                     <p class="text-gray-600">Supplier</p>
                     <p class="font-semibold">{{ poData?.supplier?.name }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-600">Warehouse</p>
+                    <p class="font-semibold">📦 {{ poData?.warehouse?.name || 'N/A' }}</p>
+                    @if (poData?.warehouse?.code) {
+                    <p class="text-xs text-gray-500">{{ poData?.warehouse?.code }}</p>
+                    }
                 </div>
                 <div>
                     <p class="text-gray-600">Order Date</p>

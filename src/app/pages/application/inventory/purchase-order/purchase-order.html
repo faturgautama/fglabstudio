@@ -50,12 +50,28 @@
                     </div>
 
                     <!-- Supplier -->
-                    <div class="flex flex-col gap-1 col-span-2">
+                    <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">
                             Supplier <span class="text-red-500">*</span>
                         </label>
                         <p-select [options]="_suppliers" formControlName="supplier_id" optionLabel="name"
                             optionValue="id" placeholder="Pilih supplier" size="small" class="w-full" appendTo="body">
+                        </p-select>
+                    </div>
+
+                    <!-- Warehouse -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Warehouse <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="_warehouses" formControlName="warehouse_id" optionLabel="name"
+                            optionValue="id" placeholder="Pilih warehouse" size="small" class="w-full" appendTo="body">
+                            <ng-template let-warehouse pTemplate="item">
+                                <div class="flex flex-col">
+                                    <span class="font-medium">{{ warehouse.name }}</span>
+                                    <span class="text-xs text-gray-500">{{ warehouse.code }}</span>
+                                </div>
+                            </ng-template>
                         </p-select>
                     </div>
 

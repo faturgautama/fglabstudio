@@ -80,7 +80,20 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
             const keyStr = String(key);
             // Check if property ends with '_id' (e.g., department_id, position_id, shift_id)
             if (keyStr.endsWith('_id')) {
-                const tableName = keyStr.replace('_id', '') == 'employee' ? 'employees' : keyStr.replace('_id', ''); // Remove '_id' suffix
+                let tableName = "";
+
+                // keyStr.replace('_id', '') == 'employee' ? 'employees' : keyStr.replace('_id', ''); // Remove '_id' suffix
+
+                if (keyStr.replace('_id', '') === 'employee') {
+                    tableName = 'employees';
+                } else if (keyStr.replace('_id', '') === 'category') {
+                    tableName = 'categories';
+                } else if (keyStr.replace('_id', '') === 'supplier') {
+                    tableName = 'suppliers';
+                } else if (keyStr.replace('_id', '') === 'warehouse') {
+                    tableName = 'warehouses';
+                }
+
                 const foreignKeyValue = record[key];
 
                 // Get the related table dynamically

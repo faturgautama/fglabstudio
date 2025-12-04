@@ -65,36 +65,64 @@
                     </div>
 
                     <!-- Product -->
-                    <div class="flex flex-col gap-1 col-span-3">
+                    <div class="flex flex-col gap-1 col-span-2">
                         <label class="text-sm text-gray-700 font-medium">
                             Produk <span class="text-red-500">*</span>
                         </label>
                         <p-select [options]="_products" formControlName="product_id" optionLabel="name" optionValue="id"
-                            placeholder="Pilih produk" size="small" class="w-full" appendTo="body" [filter]="true">
+                            placeholder="Pilih produk" size="small" class="w-full" appendTo="body" [filter]="true"
+                            (onChange)="onProductChange()">
+                            <ng-template let-product pTemplate="item">
+                                <div class="flex flex-col">
+                                    <span class="font-medium">{{ product.name }}</span>
+                                    <div class="flex gap-2 mt-1">
+                                        <span class="text-xs text-gray-500">{{ product.sku }}</span>
+                                        @if (product.is_batch_tracked) {
+                                        <span class="px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">📦
+                                            Batch</span>
+                                        }
+                                        @if (product.is_serial_tracked) {
+                                        <span class="px-1.5 py-0.5 text-xs bg-purple-100 text-purple-700 rounded">🔢
+                                            Serial</span>
+                                        }
+                                    </div>
+                                </div>
+                            </ng-template>
                         </p-select>
                     </div>
 
-                    <!-- Warehouse From (for OUT and TRANSFER) -->
-                    @if (Form.get('type')?.value === 'OUT' || Form.get('type')?.value === 'TRANSFER') {
+                    <!-- Warehouse (for non-TRANSFER) -->
+                    @if (Form.get('type')?.value !== 'TRANSFER') {
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">
-                            Dari Gudang @if (Form.get('type')?.value === 'TRANSFER') {<span
-                                class="text-red-500">*</span>}
+                            Warehouse <span class="text-red-500">*</span>
                         </label>
-                        <p-select [options]="_warehouses" formControlName="warehouse_from" optionLabel="name"
-                            optionValue="id" placeholder="Pilih gudang" size="small" class="w-full" appendTo="body">
+                        <p-select [options]="_warehouses" formControlName="warehouse_id" optionLabel="name"
+                            optionValue="id" placeholder="Pilih warehouse" size="small" class="w-full" appendTo="body"
+                            (onChange)="onWarehouseChange()">
                         </p-select>
                     </div>
                     }
 
-                    <!-- Warehouse To (for IN and TRANSFER) -->
-                    @if (Form.get('type')?.value === 'IN' || Form.get('type')?.value === 'TRANSFER') {
+                    <!-- Warehouse From (for TRANSFER only) -->
+                    @if (Form.get('type')?.value === 'TRANSFER') {
                     <div class="flex flex-col gap-1">
                         <label class="text-sm text-gray-700 font-medium">
-                            Ke Gudang @if (Form.get('type')?.value === 'TRANSFER') {<span class="text-red-500">*</span>}
+                            Dari Warehouse <span class="text-red-500">*</span>
+                        </label>
+                        <p-select [options]="_warehouses" formControlName="warehouse_from" optionLabel="name"
+                            optionValue="id" placeholder="Pilih warehouse" size="small" class="w-full" appendTo="body"
+                            (onChange)="onWarehouseChange()">
+                        </p-select>
+                    </div>
+
+                    <!-- Warehouse To (for TRANSFER only) -->
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Ke Warehouse <span class="text-red-500">*</span>
                         </label>
                         <p-select [options]="_warehouses" formControlName="warehouse_to" optionLabel="name"
-                            optionValue="id" placeholder="Pilih gudang" size="small" class="w-full" appendTo="body">
+                            optionValue="id" placeholder="Pilih warehouse" size="small" class="w-full" appendTo="body">
                         </p-select>
                     </div>
                     }
@@ -145,11 +173,89 @@
                     </div>
 
                     <!-- Batch Number -->
+                    @if (_selectedProduct?.is_batch_tracked) {
                     <div class="flex flex-col gap-1">
-                        <label class="text-sm text-gray-700 font-medium">Batch Number</label>
+                        <label class="text-sm text-gray-700 font-medium">
+                            Batch Number
+                            @if ((Form.get('type')?.value === 'OUT' || Form.get('type')?.value === 'TRANSFER') &&
+                            _availableBatches.length > 0) {
+                            <span class="text-red-500">*</span>
+                            }
+                        </label>
+
+                        @if ((Form.get('type')?.value === 'OUT' || Form.get('type')?.value === 'TRANSFER') &&
+                        _availableBatches.length > 0) {
+                        <!-- Dropdown for OUT/TRANSFER -->
+                        <p-select [options]="_availableBatches" formControlName="batch_number"
+                            optionLabel="batch_number" optionValue="batch_number" placeholder="Pilih batch" size="small"
+                            class="w-full" appendTo="body">
+                            <ng-template let-batch pTemplate="item">
+                                <div class="flex flex-col">
+                                    <span class="font-medium">{{ batch.batch_number }}</span>
+                                    <div class="flex gap-2 text-xs text-gray-500">
+                                        <span>Qty: {{ batch.quantity }}</span>
+                                        @if (batch.expiry_date) {
+                                        <span>Exp: {{ batch.expiry_date | date:'dd/MM/yyyy' }}</span>
+                                        }
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </p-select>
+                        } @else {
+                        <!-- Free text for IN/ADJUSTMENT -->
                         <input formControlName="batch_number" pInputText placeholder="Masukkan batch number"
                             class="p-inputtext-sm w-full">
+                        }
+
+                        @if (_availableBatches.length === 0 && (Form.get('type')?.value === 'OUT' ||
+                        Form.get('type')?.value === 'TRANSFER')) {
+                        <small class="text-xs text-orange-600">⚠️ Tidak ada batch tersedia di warehouse ini</small>
+                        }
                     </div>
+                    }
+
+                    <!-- Serial Numbers -->
+                    @if (_selectedProduct?.is_serial_tracked) {
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Serial Numbers
+                            @if ((Form.get('type')?.value === 'OUT' || Form.get('type')?.value === 'TRANSFER') &&
+                            _availableSerials.length > 0) {
+                            <span class="text-red-500">*</span>
+                            }
+                        </label>
+
+                        @if ((Form.get('type')?.value === 'OUT' || Form.get('type')?.value === 'TRANSFER') &&
+                        _availableSerials.length > 0) {
+                        <!-- Multi-select for OUT/TRANSFER -->
+                        <p-multiselect [options]="_availableSerials" formControlName="serial_numbers"
+                            optionLabel="serial_number" optionValue="serial_number" placeholder="Pilih serial numbers"
+                            size="small" class="w-full" appendTo="body" [filter]="true">
+                            <ng-template let-serial pTemplate="item">
+                                <div class="flex flex-col">
+                                    <span class="font-medium">{{ serial.serial_number }}</span>
+                                    @if (serial.batch_number) {
+                                    <span class="text-xs text-gray-500">Batch: {{ serial.batch_number }}</span>
+                                    }
+                                </div>
+                            </ng-template>
+                        </p-multiselect>
+                        <small class="text-xs text-gray-500">
+                            {{ serial_numbers.value.length || 0 }} serial(s) dipilih
+                        </small>
+                        } @else {
+                        <!-- Free text for IN/ADJUSTMENT -->
+                        <textarea formControlName="serial_numbers" pInputTextarea rows="2" class="p-inputtext-sm"
+                            placeholder="Masukkan serial numbers (satu per baris)"></textarea>
+                        <small class="text-xs text-gray-500">Pisahkan dengan enter untuk multiple serials</small>
+                        }
+
+                        @if (_availableSerials.length === 0 && (Form.get('type')?.value === 'OUT' ||
+                        Form.get('type')?.value === 'TRANSFER')) {
+                        <small class="text-xs text-orange-600">⚠️ Tidak ada serial tersedia di warehouse ini</small>
+                        }
+                    </div>
+                    }
 
                     <!-- Reference Type -->
                     <div class="flex flex-col gap-1">

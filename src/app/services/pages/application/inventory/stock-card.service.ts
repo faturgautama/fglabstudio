@@ -4,6 +4,7 @@ import { DatabaseService } from '../../../../app.database';
 import { InventoryModel } from '../../../../model/pages/application/inventory/inventory.model';
 import { BaseActionService } from '../../../shared/base-action';
 import { NotificationService } from './notification.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StockCardService extends BaseActionService<InventoryModel.StockCard> {
@@ -13,10 +14,11 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
     protected override table = this.databaseService.db.stock_cards;
 
     /**
-     * Add stock card dan update product stock
+     * Add stock card dan update product stock per warehouse
      */
     addStockCard(
         product_id: number,
+        warehouse_id: number,
         type: InventoryModel.StockCard['type'],
         qty: number,
         reference_type?: string,
@@ -28,21 +30,29 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
             const product = await this.databaseService.db.products.get(Number(product_id));
             if (!product) throw new Error('Product not found');
 
-            // Calculate new balance
+            const warehouse = await this.databaseService.db.warehouses.get(Number(warehouse_id));
+            if (!warehouse) throw new Error('Warehouse not found');
+
+            // Calculate new balance per warehouse
             const lastCard = await this.databaseService.db.stock_cards
-                .where('product_id')
-                .equals(product_id)
+                .where('[product_id+warehouse_id]')
+                .equals([product_id, warehouse_id])
                 .reverse()
                 .first();
 
-            const current_balance = lastCard?.balance || product.current_stock;
+            const current_balance = lastCard?.balance || 0;
             const qty_in = type === 'IN' ? qty : 0;
             const qty_out = type === 'OUT' || type === 'ADJUSTMENT' ? qty : 0;
             const new_balance = current_balance + qty_in - qty_out;
 
+            if (new_balance < 0) {
+                throw new Error(`Insufficient stock in warehouse ${warehouse.name}. Available: ${current_balance}`);
+            }
+
             // Create stock card
             const stock_card: InventoryModel.StockCard = {
                 product_id,
+                warehouse_id,
                 transaction_date: new Date(),
                 type,
                 reference_type,
@@ -58,21 +68,92 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
 
             const id = await this.databaseService.db.stock_cards.add(stock_card as any);
 
-            // Update product stock
-            await this.databaseService.db.products.update(Number(product_id), {
-                current_stock: new_balance,
-                updated_at: new Date()
-            });
+            // Update product warehouse stock
+            await this.updateProductWarehouseStock(product_id, warehouse_id, new_balance);
+
+            // Update total product stock (sum all warehouses)
+            await this.updateTotalProductStock(product_id);
 
             // Check low stock notification
-            await this.checkLowStockNotification(product_id);
+            await this.checkLowStockNotification(product_id, warehouse_id);
 
             return id;
         });
     }
 
     /**
-     * Get stock cards by product
+     * Update product warehouse stock
+     */
+    private async updateProductWarehouseStock(product_id: number, warehouse_id: number, quantity: number) {
+        const product = await this.databaseService.db.products.get(Number(product_id));
+        if (!product) throw new Error('Product not found');
+
+        let tracking_type: 'BATCH' | 'SERIAL' | 'GENERAL' = 'GENERAL';
+        if (product.is_batch_tracked) {
+            tracking_type = 'BATCH';
+        } else if (product.is_serial_tracked) {
+            tracking_type = 'SERIAL';
+        }
+
+        const existing = await this.databaseService.db.product_warehouse_stock
+            .where('[product_id+warehouse_id]')
+            .equals([product_id, warehouse_id])
+            .first();
+
+        if (existing) {
+            let updateData: any = {
+                updated_at: new Date()
+            };
+
+            // Update based on tracking type
+            if (tracking_type === 'BATCH') {
+                updateData.batch_quantity = quantity;
+            } else if (tracking_type === 'SERIAL') {
+                updateData.serial_quantity = quantity;
+            } else {
+                updateData.general_quantity = quantity;
+            }
+
+            // Recalculate total
+            updateData.total_stock = (existing.batch_quantity || 0) +
+                (existing.serial_quantity || 0) +
+                (existing.general_quantity || 0);
+
+            await this.databaseService.db.product_warehouse_stock.update(existing.id!, updateData);
+        } else {
+            const newStock: InventoryModel.ProductWarehouseStock = {
+                product_id,
+                warehouse_id,
+                total_stock: quantity,
+                batch_quantity: tracking_type === 'BATCH' ? quantity : 0,
+                serial_quantity: tracking_type === 'SERIAL' ? quantity : 0,
+                general_quantity: tracking_type === 'GENERAL' ? quantity : 0,
+                updated_at: new Date()
+            };
+
+            await this.databaseService.db.product_warehouse_stock.add(newStock as any);
+        }
+    }
+
+    /**
+     * Update total product stock (sum all warehouses)
+     */
+    private async updateTotalProductStock(product_id: number) {
+        const warehouseStocks = await this.databaseService.db.product_warehouse_stock
+            .where('product_id')
+            .equals(product_id)
+            .toArray();
+
+        const total_stock = warehouseStocks.reduce((sum, ws) => sum + (ws.total_stock || 0), 0);
+
+        await this.databaseService.db.products.update(Number(product_id), {
+            current_stock: total_stock,
+            updated_at: new Date()
+        });
+    }
+
+    /**
+     * Get stock cards by product (all warehouses)
      */
     getStockCardsByProduct(product_id: string, limit?: number) {
         return this.withLoading(async () => {
@@ -85,6 +166,37 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
                 : await query.reverse().toArray();
 
             return cards;
+        });
+    }
+
+    /**
+     * Get stock cards by product and warehouse
+     */
+    getStockCardsByProductAndWarehouse(product_id: number, warehouse_id: number, limit?: number) {
+        return this.withLoading(async () => {
+            const query = this.databaseService.db.stock_cards
+                .where('[product_id+warehouse_id]')
+                .equals([product_id, warehouse_id]);
+
+            const cards = limit
+                ? await query.reverse().limit(limit).toArray()
+                : await query.reverse().toArray();
+
+            return cards;
+        });
+    }
+
+    /**
+     * Get current stock by warehouse
+     */
+    getStockByWarehouse(product_id: number, warehouse_id: number) {
+        return this.withLoading(async () => {
+            const warehouseStock = await this.databaseService.db.product_warehouse_stock
+                .where('[product_id+warehouse_id]')
+                .equals([product_id, warehouse_id])
+                .first();
+
+            return warehouseStock?.total_stock || 0;
         });
     }
 
@@ -102,31 +214,43 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
         });
     }
 
-    private async checkLowStockNotification(product_id: number) {
+    private async checkLowStockNotification(product_id: number, warehouse_id: number) {
         const product = await this.databaseService.db.products.get(Number(product_id));
         if (!product) return;
 
-        if (product.current_stock <= product.min_stock) {
-            await this.notificationService.add({
+        const warehouse = await this.databaseService.db.warehouses.get(Number(warehouse_id));
+        if (!warehouse) return;
+
+        const warehouseStock = await this.databaseService.db.product_warehouse_stock
+            .where('[product_id+warehouse_id]')
+            .equals([product_id, warehouse_id])
+            .first();
+
+        const currentStock = warehouseStock?.total_stock || 0;
+        const minStock = product.min_stock;
+        const reorderPoint = product.reorder_point;
+
+        if (currentStock <= minStock) {
+            await firstValueFrom(this.notificationService.add({
                 type: 'LOW_STOCK',
                 priority: 'HIGH',
                 title: 'Stok Menipis',
-                message: `${product.name} tersisa ${product.current_stock} ${product.unit}`,
+                message: `${product.name} di ${warehouse.name} tersisa ${currentStock} ${product.unit}`,
                 product_id: product.id!.toString(),
                 link: `/inventory/products/${product.id}`
-            } as any);
+            } as any))
         }
 
         // Check reorder point
-        if (product.reorder_point && product.current_stock <= product.reorder_point) {
-            await this.notificationService.add({
+        if (reorderPoint && currentStock <= reorderPoint) {
+            await firstValueFrom(this.notificationService.add({
                 type: 'REORDER_POINT',
                 priority: 'URGENT',
                 title: 'Reorder Point Tercapai',
-                message: `${product.name} sudah mencapai reorder point. Segera lakukan pengadaan.`,
+                message: `${product.name} di ${warehouse.name} sudah mencapai reorder point. Segera lakukan pengadaan.`,
                 product_id: product.id!.toString(),
                 link: `/inventory/procurement/create?product_id=${product.id}`
-            } as any);
+            } as any));
         }
     }
 }

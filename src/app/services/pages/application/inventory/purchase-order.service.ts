@@ -6,6 +6,8 @@ import { BaseActionService } from '../../../shared/base-action';
 import { StockCardService } from './stock-card.service';
 import { ProductBatchService } from './product-batch.service';
 import { ProductSerialService } from './product-serial.service';
+import { ProductWarehouseStockService } from './product-warehouse-stock.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PurchaseOrderService extends BaseActionService<InventoryModel.PurchaseOrder> {
@@ -13,6 +15,7 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
     private stockCardService = inject(StockCardService);
     private productBatchService = inject(ProductBatchService);
     private productSerialService = inject(ProductSerialService);
+    private productWarehouseStockService = inject(ProductWarehouseStockService);
 
     protected override table = this.databaseService.db.purchase_orders;
 
@@ -81,6 +84,8 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
             const po = await this.databaseService.db.purchase_orders.get(Number(po_id));
             if (!po) throw new Error('Purchase Order not found');
 
+            if (!po.warehouse_id) throw new Error('Purchase Order must have warehouse_id');
+
             // Process each item
             for (const item of items) {
                 const po_item = await this.databaseService.db.purchase_order_items.get(Number(item.id));
@@ -126,10 +131,11 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
                     serial_numbers: item.serial_numbers
                 });
 
-                // ✅ SAVE BATCH if batch tracked
+                // ✅ SAVE BATCH if batch tracked (with warehouse)
                 if (product.is_batch_tracked && item.batch_number) {
                     const batchData: any = {
                         product_id: po_item.product_id!.toString(),
+                        warehouse_id: po.warehouse_id,
                         batch_number: item.batch_number,
                         expiry_date: item.expiry_date,
                         quantity: item.qty_received,
@@ -142,10 +148,11 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
                     await this.databaseService.db.product_batches.add(batchData);
                 }
 
-                // ✅ SAVE SERIALS if serial tracked
+                // ✅ SAVE SERIALS if serial tracked (with warehouse)
                 if (product.is_serial_tracked && item.serial_numbers) {
                     const serials = item.serial_numbers.map((sn: string) => ({
                         product_id: po_item.product_id,
+                        warehouse_id: po.warehouse_id,
                         serial_number: sn,
                         batch_number: item.batch_number,
                         status: 'IN_STOCK' as const,
@@ -156,19 +163,35 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
                     await this.databaseService.db.product_serials.bulkAdd(serials as any);
                 }
 
-                // ✅ ADD TO STOCK CARD
+                // ✅ ADD TO STOCK CARD (with warehouse)
                 const notes = [];
                 if (item.batch_number) notes.push(`Batch: ${item.batch_number}`);
                 if (item.serial_numbers) notes.push(`Serials: ${item.serial_numbers.length} units`);
 
-                await this.stockCardService.addStockCard(
+                await firstValueFrom(this.stockCardService.addStockCard(
                     po_item.product_id!,
+                    po.warehouse_id,
                     'IN',
                     item.qty_received,
                     'PURCHASE_ORDER',
                     po_id,
                     `Receive PO ${po.po_number}${notes.length > 0 ? ' - ' + notes.join(', ') : ''}`,
                     po_item.unit_price
+                ));
+
+                // ✅ UPDATE PRODUCT WAREHOUSE STOCK
+                let tracking_type: 'BATCH' | 'SERIAL' | 'GENERAL' = 'GENERAL';
+                if (product.is_batch_tracked) {
+                    tracking_type = 'BATCH';
+                } else if (product.is_serial_tracked) {
+                    tracking_type = 'SERIAL';
+                }
+
+                await this.productWarehouseStockService.updateStockOnReceive(
+                    po_item.product_id!,
+                    po.warehouse_id,
+                    item.qty_received,
+                    tracking_type
                 );
             }
 
@@ -202,6 +225,16 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
             const po = await this.databaseService.db.purchase_orders.get(Number(po_id));
             if (!po) return null;
 
+            // Resolve warehouse info
+            const warehouse = po.warehouse_id
+                ? await this.databaseService.db.warehouses.get(Number(po.warehouse_id))
+                : null;
+
+            // Resolve supplier info
+            const supplier = po.supplier_id
+                ? await this.databaseService.db.suppliers.get(Number(po.supplier_id))
+                : null;
+
             const items = await this.databaseService.db.purchase_order_items
                 .where('purchase_order_id')
                 .equals(po_id)
@@ -215,7 +248,12 @@ export class PurchaseOrderService extends BaseActionService<InventoryModel.Purch
                 })
             );
 
-            return { ...po, items: items_with_product };
+            return {
+                ...po,
+                warehouse,
+                supplier,
+                items: items_with_product
+            };
         });
     }
 }

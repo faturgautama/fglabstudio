@@ -31,6 +31,7 @@ export class AppDatabase extends Dexie {
     product_serials!: Table<InventoryModel.ProductSerial, number>;
     stock_opnames!: Table<InventoryModel.StockOpname, number>;
     stock_opname_items!: Table<InventoryModel.StockOpnameItem, number>;
+    product_warehouse_stock!: Table<InventoryModel.ProductWarehouseStock, number>;
 
     constructor(dbName: string) {
         super(dbName);
@@ -50,18 +51,19 @@ export class AppDatabase extends Dexie {
             // ** Inventory Tables **
             categories: '++id, name',
             products: '++id, sku, name, category_id, current_stock, min_stock, barcode, brand, is_active',
-            stock_cards: '++id, product_id, transaction_date, type, reference_id',
+            stock_cards: '++id, product_id, warehouse_id, transaction_date, type, reference_id',
             suppliers: '++id, name, code, is_active',
-            purchase_orders: '++id, po_number, supplier_id, status, order_date',
+            purchase_orders: '++id, po_number, supplier_id, warehouse_id, status, order_date',
             purchase_order_items: '++id, purchase_order_id, product_id',
-            stock_movements: '++id, movement_number, product_id, type, movement_date',
+            stock_movements: '++id, movement_number, product_id, warehouse_id, type, movement_date',
             warehouses: '++id, code, name, is_default, is_active',
             notifications: '++id, type, priority, is_read, created_at, product_id',
             inventory_setting: '++id, key',
-            product_batches: '++id, product_id, batch_number, expiry_date, is_active',
-            product_serials: '++id, product_id, serial_number, status',
-            stock_opnames: '++id, opname_number, status, opname_date',
-            stock_opname_items: '++id, stock_opname_id, product_id'
+            product_batches: '++id, [product_id+warehouse_id], product_id, warehouse_id, batch_number, expiry_date, is_active',
+            product_serials: '++id, [product_id+warehouse_id], product_id, warehouse_id, serial_number, status',
+            stock_opnames: '++id, opname_number, warehouse_id, status, opname_date',
+            stock_opname_items: '++id, stock_opname_id, product_id',
+            product_warehouse_stock: '++id, [product_id+warehouse_id], product_id, warehouse_id'
         });
     }
 }

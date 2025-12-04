@@ -1,11 +1,12 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { DynamicTableModel } from '../../../../model/components/dynamic-table.model';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 import { DynamicTable } from '../../../../components/dynamic-table/dynamic-table';
 import { Store } from '@ngxs/store';
 import { PurchaseOrderAction, PurchaseOrderState } from '../../../../store/inventory/purchase-order';
 import { SupplierState } from '../../../../store/inventory/supplier';
 import { ProductState } from '../../../../store/inventory/product';
+import { WarehouseState } from '../../../../store/inventory/warehouse';
 import { DshBaseLayout } from "../../../../components/dashboard/dsh-base-layout/dsh-base-layout";
 import { FormArray, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -60,6 +61,7 @@ export class PurchaseOrder implements OnInit, OnDestroy {
 
     _suppliers: any[] = [];
     _products: any[] = [];
+    _warehouses: any[] = [];
 
     STATUS_OPTIONS = [
         { label: 'Draft', value: 'DRAFT' },
@@ -79,6 +81,7 @@ export class PurchaseOrder implements OnInit, OnDestroy {
         id: ['', []],
         po_number: ['', [Validators.required]],
         supplier_id: ['', [Validators.required]],
+        warehouse_id: ['', [Validators.required]],
         order_date: [new Date(), [Validators.required]],
         expected_date: ['', []],
         received_date: ['', []],
@@ -120,7 +123,7 @@ export class PurchaseOrder implements OnInit, OnDestroy {
                 width: '150px'
             },
             {
-                id: 'supplier_id',
+                id: 'suppliers.name',
                 title: 'Supplier',
                 type: DynamicTableModel.IColumnType.TEXT,
                 width: '200px'
@@ -130,6 +133,12 @@ export class PurchaseOrder implements OnInit, OnDestroy {
                 title: 'Total',
                 type: DynamicTableModel.IColumnType.CURRENCY,
                 width: '150px'
+            },
+            {
+                id: 'warehouses.name',
+                title: 'Warehouse',
+                type: DynamicTableModel.IColumnType.TEXT,
+                width: '200px'
             },
             {
                 id: 'status',
@@ -168,7 +177,7 @@ export class PurchaseOrder implements OnInit, OnDestroy {
     ngOnInit(): void {
         this._store
             .select(PurchaseOrderState.getAll)
-            .pipe(takeUntil(this.Destroy$))
+            .pipe(takeUntil(this.Destroy$), tap((result) => { console.log('PO List:', result); }))
             .subscribe(result => this.TableProps.datasource = result);
 
         this._store
@@ -180,6 +189,11 @@ export class PurchaseOrder implements OnInit, OnDestroy {
             .select(ProductState.getAll)
             .pipe(takeUntil(this.Destroy$))
             .subscribe(result => this._products = result.filter((p: any) => p.is_active && p.is_purchasable));
+
+        this._store
+            .select(WarehouseState.getAll)
+            .pipe(takeUntil(this.Destroy$))
+            .subscribe(result => this._warehouses = result.filter((w: any) => w.is_active));
     }
 
     ngOnDestroy(): void {
@@ -301,6 +315,11 @@ export class PurchaseOrder implements OnInit, OnDestroy {
 
     handleToolbarClicked(args: any) {
         if (args.toolbar.id == 'receive') {
+            if (args.data.status === 'RECEIVED' || args.data.status === 'CANCELLED') {
+                this._messageService.add({ severity: 'warn', summary: 'Peringatan', detail: 'PO ini sudah lengkap diterima atau dibatalkan' });
+                return;
+            }
+
             // Load PO with items
             this._store
                 .dispatch(new PurchaseOrderAction.GetPurchaseOrderWithItems(args.data.id.toString()))
@@ -319,9 +338,47 @@ export class PurchaseOrder implements OnInit, OnDestroy {
 
         if (args.toolbar.id == 'detail') {
             this._formState = 'update';
-            this._pageState.set('form');
-            this.Form.patchValue(args.data);
-            // TODO: Load items
+
+            // Load PO with items
+            this._store
+                .dispatch(new PurchaseOrderAction.GetPurchaseOrderWithItems(args.data.id.toString()))
+                .subscribe(() => {
+                    this._store
+                        .select(PurchaseOrderState.getSingle)
+                        .pipe(takeUntil(this.Destroy$))
+                        .subscribe(po => {
+                            if (po) {
+                                // Patch form with PO data
+                                this.Form.patchValue(po);
+
+                                // Clear and load items
+                                this.items.clear();
+                                if (po.items && po.items.length > 0) {
+                                    po.items.forEach((item: any) => {
+                                        const itemForm = this._formBuilder.group({
+                                            id: [item.id, []],
+                                            product_id: [item.product_id, [Validators.required]],
+                                            qty_ordered: [item.qty_ordered, [Validators.required, Validators.min(1)]],
+                                            qty_received: [item.qty_received, []],
+                                            unit_price: [item.unit_price, [Validators.required, Validators.min(0)]],
+                                            discount_percentage: [item.discount_percentage || 0, []],
+                                            discount_amount: [item.discount_amount || 0, []],
+                                            tax_percentage: [item.tax_percentage || 0, []],
+                                            tax_amount: [item.tax_amount || 0, []],
+                                            subtotal: [item.subtotal, []],
+                                            notes: [item.notes || '', []],
+                                            batch_number: [item.batch_number || '', []],
+                                            expiry_date: [item.expiry_date || '', []],
+                                            serial_numbers: [item.serial_numbers || [], []]
+                                        });
+                                        this.items.push(itemForm);
+                                    });
+                                }
+
+                                this._pageState.set('form');
+                            }
+                        });
+                });
         }
 
         if (args.toolbar.id == 'delete') {

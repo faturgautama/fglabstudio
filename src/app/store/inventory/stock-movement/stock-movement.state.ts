@@ -138,6 +138,7 @@ export class StockMovementState implements NgxsOnInit {
         return this._stockMovementService
             .adjustStock(
                 payload.product_id,
+                payload.warehouse_id,
                 payload.new_quantity,
                 payload.reason,
                 payload.notes

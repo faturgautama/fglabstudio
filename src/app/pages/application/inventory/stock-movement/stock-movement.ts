@@ -1,39 +1,43 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { DynamicTableModel } from '../../../../model/components/dynamic-table.model';
 import { Subject, takeUntil } from 'rxjs';
-import { DynamicTable } from '../../../../components/dynamic-table/dynamic-table';
 import { Store } from '@ngxs/store';
 import { StockMovementAction, StockMovementState } from '../../../../store/inventory/stock-movement';
 import { ProductState } from '../../../../store/inventory/product';
 import { WarehouseState } from '../../../../store/inventory/warehouse';
 import { DshBaseLayout } from "../../../../components/dashboard/dsh-base-layout/dsh-base-layout";
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
 import { StockMovementService } from '../../../../services/pages/application/inventory/stock-movement.service';
+import { DatabaseService } from '../../../../app.database';
+import { DynamicTable } from '../../../../components/dynamic-table/dynamic-table';
 
 @Component({
     selector: 'app-stock-movement',
     imports: [
         FormsModule,
         ButtonModule,
-        DynamicTable,
         DshBaseLayout,
+        DynamicTable,
         ReactiveFormsModule,
         CommonModule,
         DialogModule,
         InputTextModule,
         SelectModule,
+        MultiSelectModule,
         DatePickerModule,
         InputNumberModule,
-        TextareaModule
+        TextareaModule,
+        MultiSelectModule
     ],
     standalone: true,
     templateUrl: './stock-movement.html',
@@ -46,6 +50,7 @@ export class StockMovement implements OnInit, OnDestroy {
     _messageService = inject(MessageService);
     _confirmationService = inject(ConfirmationService);
     _formBuilder = inject(FormBuilder);
+    _databaseService = inject(DatabaseService);
 
     Destroy$ = new Subject();
 
@@ -54,6 +59,9 @@ export class StockMovement implements OnInit, OnDestroy {
 
     _products: any[] = [];
     _warehouses: any[] = [];
+    _availableBatches: any[] = [];
+    _availableSerials: any[] = [];
+    _selectedProduct: any = null;
 
     MOVEMENT_TYPES = [
         { label: 'Masuk', value: 'IN' },
@@ -77,6 +85,7 @@ export class StockMovement implements OnInit, OnDestroy {
         movement_number: ['', [Validators.required]],
         type: ['', [Validators.required]],
         product_id: ['', [Validators.required]],
+        warehouse_id: ['', [Validators.required]],
         warehouse_from: ['', []],
         warehouse_to: ['', []],
         quantity: [0, [Validators.required, Validators.min(1)]],
@@ -192,7 +201,7 @@ export class StockMovement implements OnInit, OnDestroy {
         }
     }
 
-    onTypeChange() {
+    async onTypeChange() {
         this.generateMovementNumber();
         const type = this.Form.get('type')?.value;
 
@@ -202,6 +211,9 @@ export class StockMovement implements OnInit, OnDestroy {
         } else if (type === 'OUT') {
             this.Form.patchValue({ warehouse_to: '' });
         }
+
+        // Reload batches/serials
+        await this.loadBatchesAndSerials();
     }
 
     calculateTotalValue() {
@@ -209,6 +221,64 @@ export class StockMovement implements OnInit, OnDestroy {
         const unitCost = this.Form.get('unit_cost')?.value || 0;
         const totalValue = quantity * unitCost;
         this.Form.patchValue({ total_value: totalValue }, { emitEvent: false });
+    }
+
+    async onProductChange() {
+        const productId = this.Form.get('product_id')?.value;
+        if (!productId) {
+            this._selectedProduct = null;
+            this._availableBatches = [];
+            this._availableSerials = [];
+            return;
+        }
+
+        // Get product details
+        this._selectedProduct = await this._databaseService.db.products.get(Number(productId));
+
+        // Load batches/serials based on warehouse and type
+        await this.loadBatchesAndSerials();
+    }
+
+    async onWarehouseChange() {
+        await this.loadBatchesAndSerials();
+    }
+
+    async loadBatchesAndSerials() {
+        const productId = this.Form.get('product_id')?.value;
+        const type = this.Form.get('type')?.value;
+        const warehouseId = this.Form.get('warehouse_id')?.value ||
+            this.Form.get('warehouse_from')?.value;
+
+        if (!productId || !warehouseId) {
+            this._availableBatches = [];
+            this._availableSerials = [];
+            return;
+        }
+
+        // Only load for OUT/TRANSFER (when taking stock out)
+        if (type === 'OUT' || type === 'TRANSFER') {
+            // Load batches if batch-tracked
+            if (this._selectedProduct?.is_batch_tracked) {
+                this._availableBatches = await this._databaseService.db.product_batches
+                    .where('[product_id+warehouse_id]')
+                    .equals([Number(productId), Number(warehouseId)])
+                    .and(batch => batch.is_active && batch.quantity > 0)
+                    .toArray();
+            }
+
+            // Load serials if serial-tracked
+            if (this._selectedProduct?.is_serial_tracked) {
+                this._availableSerials = await this._databaseService.db.product_serials
+                    .where('[product_id+warehouse_id]')
+                    .equals([Number(productId), Number(warehouseId)])
+                    .and(serial => serial.status === 'IN_STOCK')
+                    .toArray();
+            }
+        } else {
+            // For IN/ADJUSTMENT, allow free text
+            this._availableBatches = [];
+            this._availableSerials = [];
+        }
     }
 
     handleCustomButtonClicked(args: DynamicTableModel.ICustomButton) {
@@ -277,8 +347,9 @@ export class StockMovement implements OnInit, OnDestroy {
     handleSave() {
         if (this.Form.valid) {
             const formValue = this.Form.value as any;
+            const { id, ...payload } = formValue;
             this._store
-                .dispatch(new StockMovementAction.AddStockMovement(formValue))
+                .dispatch(new StockMovementAction.AddStockMovement(payload))
                 .subscribe((result) => {
                     setTimeout(() => {
                         this._messageService.clear();
@@ -302,5 +373,9 @@ export class StockMovement implements OnInit, OnDestroy {
                     }, 3100);
                 })
         }
+    }
+
+    get serial_numbers(): FormControl {
+        return this.Form.get('serial_numbers') as FormControl;
     }
 }

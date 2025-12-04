@@ -7,6 +7,7 @@ import { InventoryModel } from "../../../model/pages/application/inventory/inven
 import { PurchaseOrderService } from "../../../services/pages/application/inventory/purchase-order.service";
 import { ProductAction } from "../product/product.action";
 import { StockCardAction } from "../stock-card/stock-card.action";
+import { ProductWarehouseStockAction } from "../product-warehouse-stock/product-warehouse-stock.action";
 
 export interface PurchaseOrderStateModel {
     data: InventoryModel.PurchaseOrder[];
@@ -154,7 +155,8 @@ export class PurchaseOrderState implements NgxsOnInit {
                         new PurchaseOrderAction.GetPurchaseOrder(),
                         new ProductAction.GetProduct(),
                         new ProductAction.GetLowStockProducts(),
-                        new StockCardAction.GetStockCard()
+                        new StockCardAction.GetStockCard(),
+                        new ProductWarehouseStockAction.GetAllStocks()
                     ]);
                 })
             );

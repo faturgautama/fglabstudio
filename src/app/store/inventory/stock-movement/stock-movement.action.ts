@@ -31,6 +31,7 @@ export namespace StockMovementAction {
         static readonly type = '[Inventory Movement] Adjust Stock';
         constructor(
             public product_id: string,
+            public warehouse_id: string,
             public new_quantity: number,
             public reason: string,
             public notes?: string

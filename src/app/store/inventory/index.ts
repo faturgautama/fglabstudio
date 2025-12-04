@@ -9,6 +9,7 @@ import { NotificationState } from "./notification";
 import { WarehouseState } from "./warehouse";
 import { StockOpnameState } from "./stock-opname";
 import { CompanySettingState } from "./company-setting";
+import { ProductWarehouseStockState } from "./product-warehouse-stock/product-warehouse-stock.state";
 
 export const INVENTORY_APP_STATE = [
     CategoryState,
@@ -20,7 +21,8 @@ export const INVENTORY_APP_STATE = [
     NotificationState,
     WarehouseState,
     StockOpnameState,
-    CompanySettingState
+    CompanySettingState,
+    ProductWarehouseStockState
 ];
 
 // Export all actions & states
@@ -34,3 +36,5 @@ export * from './notification';
 export * from './warehouse';
 export * from './stock-opname';
 export * from './company-setting';
+export * from './product-warehouse-stock/product-warehouse-stock.action';
+export * from './product-warehouse-stock/product-warehouse-stock.state';

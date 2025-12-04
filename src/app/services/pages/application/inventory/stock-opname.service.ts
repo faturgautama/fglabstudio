@@ -4,11 +4,14 @@ import { DatabaseService } from '../../../../app.database';
 import { InventoryModel } from '../../../../model/pages/application/inventory/inventory.model';
 import { BaseActionService } from '../../../shared/base-action';
 import { StockCardService } from './stock-card.service';
+import { ProductWarehouseStockService } from './product-warehouse-stock.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StockOpnameService extends BaseActionService<InventoryModel.StockOpname> {
   private databaseService = inject(DatabaseService);
   private stockCardService = inject(StockCardService);
+  private productWarehouseStockService = inject(ProductWarehouseStockService);
 
   protected override table = this.databaseService.db.stock_opnames;
 
@@ -116,7 +119,7 @@ export class StockOpnameService extends BaseActionService<InventoryModel.StockOp
   }
 
   /**
-   * Approve stock opname (update actual stock)
+   * Approve stock opname (update actual stock per warehouse)
    */
   approveStockOpname(opname_id: number, approved_by: string) {
     return this.withLoading(async () => {
@@ -126,6 +129,13 @@ export class StockOpnameService extends BaseActionService<InventoryModel.StockOp
       if (opname.status === 'APPROVED') {
         throw new Error('Stock opname sudah disetujui');
       }
+
+      if (!opname.warehouse_id) {
+        throw new Error('Stock opname must have warehouse_id');
+      }
+
+      const warehouse = await this.databaseService.db.warehouses.get(Number(opname.warehouse_id));
+      if (!warehouse) throw new Error('Warehouse not found');
 
       // Get all items
       const items = await this.databaseService.db.stock_opname_items
@@ -139,22 +149,17 @@ export class StockOpnameService extends BaseActionService<InventoryModel.StockOp
           const product = await this.databaseService.db.products.get(Number(item.product_id));
           if (!product) continue;
 
-          // Update product stock
-          await this.databaseService.db.products.update(Number(item.product_id), {
-            current_stock: item.physical_stock,
-            updated_at: new Date()
-          });
-
-          // Add to stock card
-          await this.stockCardService.addStockCard(
+          // Add to stock card with warehouse
+          await firstValueFrom(this.stockCardService.addStockCard(
             item.product_id!,
+            opname.warehouse_id,
             'ADJUSTMENT',
             Math.abs(item.difference),
             'STOCK_OPNAME',
             opname_id,
-            `Stock Opname: ${opname.opname_number} - ${item.notes || 'Adjustment'}`,
+            `Stock Opname: ${opname.opname_number} at ${warehouse.name} - ${item.notes || 'Adjustment'}`,
             product.purchase_price
-          );
+          ));
         }
       }
 
@@ -201,13 +206,23 @@ export class StockOpnameService extends BaseActionService<InventoryModel.StockOp
    */
   getProductsForOpname(warehouse_id?: number) {
     return this.withLoading(async () => {
-      const products = await this.databaseService.db.products
+      let products = await this.databaseService.db.products
         .filter(p => p.is_active)
         .toArray();
 
+      console.log("products =>", products);
+
       // TODO: Filter by warehouse if needed
       // if (warehouse_id) {
-      //     products = products.filter(p => p.warehouse_id === warehouse_id);
+      //   products = products.map(async (item) => {
+      //     const stock_card = await this.databaseService.db.stock_cards
+      //       .filter(stock => stock.product_id == item.id)
+      //       .first();
+
+      //     item.current_stock = stock_card ? stock_card.total_value! : 0;
+
+      //     return item;
+      //   })
       // }
 
       return products.map(p => ({
