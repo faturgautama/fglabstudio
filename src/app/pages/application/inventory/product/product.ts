@@ -68,19 +68,18 @@ export class Product implements OnInit, OnDestroy {
                 id: 'name',
                 title: 'Nama Produk',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '250px'
             },
             {
                 id: 'current_stock',
                 title: 'Stok',
                 type: DynamicTableModel.IColumnType.NUMBER,
-                width: '100px'
+                width: '150px'
             },
             {
                 id: 'unit',
                 title: 'Satuan',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '100px'
+                width: '150px'
             },
             {
                 id: 'purchase_price',
@@ -92,13 +91,7 @@ export class Product implements OnInit, OnDestroy {
                 id: 'selling_price',
                 title: 'Harga Jual',
                 type: DynamicTableModel.IColumnType.CURRENCY,
-                width: '150px'
-            },
-            {
-                id: 'is_active',
-                title: 'Status',
-                type: DynamicTableModel.IColumnType.TEXT,
-                width: '120px'
+                width: '200px'
             },
         ],
         datasource: [],

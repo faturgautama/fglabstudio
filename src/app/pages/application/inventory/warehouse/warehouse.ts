@@ -47,13 +47,12 @@ export class Warehouse implements OnInit, OnDestroy {
                 id: 'code',
                 title: 'Kode',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'name',
                 title: 'Nama Gudang',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '250px'
             },
             {
                 id: 'address',
@@ -72,12 +71,6 @@ export class Warehouse implements OnInit, OnDestroy {
                 title: 'Default',
                 type: DynamicTableModel.IColumnType.TEXT,
                 width: '100px'
-            },
-            {
-                id: 'is_active',
-                title: 'Status',
-                type: DynamicTableModel.IColumnType.TEXT,
-                width: '120px'
             },
         ],
         datasource: [],
