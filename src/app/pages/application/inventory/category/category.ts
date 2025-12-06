@@ -71,12 +71,6 @@ export class Category implements OnInit, OnDestroy {
                 }
             },
             {
-                id: 'is_active',
-                title: 'Status',
-                type: DynamicTableModel.IColumnType.TEXT,
-                width: '120px'
-            },
-            {
                 id: 'created_at',
                 title: 'Waktu Entry',
                 type: DynamicTableModel.IColumnType.DATETIME,

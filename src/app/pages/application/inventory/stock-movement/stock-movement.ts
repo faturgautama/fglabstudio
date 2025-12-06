@@ -96,6 +96,7 @@ export class StockMovement implements OnInit, OnDestroy {
         reference_type: ['', []],
         reference_id: ['', []],
         batch_number: ['', []],
+        expiry_date: [null, []],
         serial_numbers: [[], []],
         approved_by: ['', []],
         notes: ['', []],
@@ -377,5 +378,87 @@ export class StockMovement implements OnInit, OnDestroy {
 
     get serial_numbers(): FormControl {
         return this.Form.get('serial_numbers') as FormControl;
+    }
+
+    /**
+     * Show batch input fields based on product tracking type and movement type
+     */
+    showBatchInput(): boolean {
+        if (!this._selectedProduct) return false;
+
+        const type = this.Form.get('type')?.value;
+        return this._selectedProduct.is_batch_tracked &&
+            (type === 'IN' || type === 'OUT' || type === 'TRANSFER' || type === 'ADJUSTMENT');
+    }
+
+    /**
+     * Show serial input fields based on product tracking type and movement type
+     */
+    showSerialInput(): boolean {
+        if (!this._selectedProduct) return false;
+
+        const type = this.Form.get('type')?.value;
+        return this._selectedProduct.is_serial_tracked &&
+            (type === 'IN' || type === 'OUT' || type === 'TRANSFER' || type === 'ADJUSTMENT');
+    }
+
+    /**
+     * Get batch label based on movement type
+     */
+    getBatchLabel(): string {
+        const type = this.Form.get('type')?.value;
+        if (type === 'IN') return 'Batch Number (Input)';
+        if (type === 'OUT' || type === 'TRANSFER' || type === 'ADJUSTMENT') return 'Select Batch';
+        return 'Batch Number';
+    }
+
+    /**
+     * Get serial label based on movement type
+     */
+    getSerialLabel(): string {
+        const type = this.Form.get('type')?.value;
+        if (type === 'IN') return 'Serial Numbers (comma-separated)';
+        if (type === 'OUT' || type === 'TRANSFER' || type === 'ADJUSTMENT') return 'Select Serials';
+        return 'Serial Numbers';
+    }
+
+    /**
+     * Handle batch selection for OUT/TRANSFER/ADJUSTMENT
+     */
+    onBatchSelect(event: any) {
+        const selectedBatch = this._availableBatches.find(b => b.batch_number === event.value);
+        if (selectedBatch) {
+            this.Form.patchValue({
+                batch_number: selectedBatch.batch_number,
+                expiry_date: selectedBatch.expiry_date
+            });
+        }
+    }
+
+    /**
+     * Handle serial selection for OUT/TRANSFER/ADJUSTMENT
+     */
+    onSerialSelect(event: any) {
+        this.Form.patchValue({
+            serial_numbers: event.value,
+            quantity: event.value.length
+        });
+    }
+
+    /**
+     * Handle serial text input for IN/ADJUSTMENT
+     */
+    onSerialTextInput(event: any) {
+        const text = event.target.value;
+        // Parse by comma or newline
+        const serials = text
+            .split(/[\n,]+/)
+            .map((s: string) => s.trim())
+            .filter((s: string) => s.length > 0);
+
+        this.Form.patchValue({
+            serial_numbers: serials,
+            quantity: serials.length
+        });
     }
 }

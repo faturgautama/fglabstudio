@@ -36,6 +36,7 @@ export class AppDatabase extends Dexie {
     constructor(dbName: string) {
         super(dbName);
 
+        // Version 2: Initial schema
         this.version(2).stores({
             // ** HR Tables **
             hr_setting: '++id, company_name, effective_date, is_active',
@@ -64,6 +65,18 @@ export class AppDatabase extends Dexie {
             stock_opnames: '++id, opname_number, warehouse_id, status, opname_date',
             stock_opname_items: '++id, stock_opname_id, product_id',
             product_warehouse_stock: '++id, [product_id+warehouse_id], product_id, warehouse_id'
+        });
+
+        // Version 3: Add compound index to stock_cards for efficient warehouse queries
+        this.version(3).stores({
+            stock_cards: '++id, [product_id+warehouse_id], product_id, warehouse_id, transaction_date, type, reference_id'
+        });
+
+        // Version 4: Add tracking enhancement fields for stock movements
+        this.version(4).stores({
+            stock_movements: '++id, movement_number, product_id, warehouse_id, type, movement_date, batch_number',
+            product_batches: '++id, [product_id+warehouse_id], product_id, warehouse_id, batch_number, expiry_date, is_active, stock_movement_id',
+            product_serials: '++id, [product_id+warehouse_id], product_id, warehouse_id, serial_number, status, stock_movement_id'
         });
     }
 }

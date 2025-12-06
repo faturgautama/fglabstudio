@@ -49,13 +49,13 @@ export class Supplier implements OnInit, OnDestroy {
                 id: 'code',
                 title: 'Kode',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '150px'
+                width: '200px'
             },
             {
                 id: 'name',
                 title: 'Nama Supplier',
                 type: DynamicTableModel.IColumnType.TEXT,
-                width: '250px'
+                width: '300px'
             },
             {
                 id: 'contact_person',
@@ -74,12 +74,6 @@ export class Supplier implements OnInit, OnDestroy {
                 title: 'Email',
                 type: DynamicTableModel.IColumnType.TEXT,
                 width: '200px'
-            },
-            {
-                id: 'is_active',
-                title: 'Status',
-                type: DynamicTableModel.IColumnType.TEXT,
-                width: '120px'
             },
         ],
         datasource: [],

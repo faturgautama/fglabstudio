@@ -24,8 +24,8 @@ export class CancelPoDialogComponent implements OnChanges {
     @Output() visibleChange = new EventEmitter<boolean>();
     @Output() onCancelComplete = new EventEmitter<any>();
 
-    cancelReason: string = '';
-    validationError: string = '';
+    cancelReason = "";
+    validationError = "";
 
     ngOnChanges() {
         if (this.visible && this.poData) {
@@ -51,11 +51,21 @@ export class CancelPoDialogComponent implements OnChanges {
     }
 
     canCancel(): boolean {
-        return this.validateForm();
+        // Check validation without modifying state
+        if (!this.cancelReason || this.cancelReason.trim().length === 0) {
+            return false;
+        }
+
+        if (this.cancelReason.trim().length < 10) {
+            return false;
+        }
+
+        return true;
     }
 
     onCancel() {
-        if (!this.canCancel()) return;
+        // Validate and set error message only when user clicks
+        if (!this.validateForm()) return;
 
         this.onCancelComplete.emit({
             po_id: this.poData.id,

@@ -2,19 +2,21 @@
     <!-- Header -->
     <div class="overview-header">
         <div class="header-content">
-            <h2>📊 Stock Summary</h2>
+            <h2 class="text-gray-700 mb-0">Stock Summary</h2>
             <p>Ringkasan stok produk per warehouse</p>
         </div>
 
         <!-- Warehouse Filter -->
-        <div class="warehouse-filter">
-            <label>Pilih Warehouse:</label>
-            <select [(ngModel)]="selectedWarehouseId" (change)="onWarehouseChange()" class="warehouse-select">
-                <option [ngValue]="null">-- Semua Warehouse --</option>
-                @for (wh of warehouses; track wh.id) {
-                <option [ngValue]="wh.id">{{ wh.name }}</option>
-                }
-            </select>
+        <div class="flex gap-5 items-center w-3/12">
+            <div class="w-4/12">
+                <label class="text-sm text-gray-700">Pilih Warehouse :</label>
+            </div>
+            <div class="w-8/12">
+                <p-select [(ngModel)]="selectedWarehouseId" (onChange)="onWarehouseChange($event)"
+                    [options]="warehouses" optionValue="id" optionLabel="name" styleClass="p-inputtext-sm w-full"
+                    size="small" appendTo="body" [filter]="true" [showClear]="false">
+                </p-select>
+            </div>
         </div>
     </div>
 
@@ -25,37 +27,40 @@
             <!-- Column: Product -->
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="product_sku">SKU <p-sortIcon field="product_sku"></p-sortIcon></th>
-                    <th pSortableColumn="product_name">Nama Produk <p-sortIcon field="product_name"></p-sortIcon></th>
-                    <th pSortableColumn="total_stock">Total Stock <p-sortIcon field="total_stock"></p-sortIcon></th>
+                    <th class="text-sm" pSortableColumn="product_sku">SKU <p-sortIcon field="product_sku"></p-sortIcon>
+                    </th>
+                    <th class="text-sm" pSortableColumn="product_name">Nama Produk <p-sortIcon
+                            field="product_name"></p-sortIcon></th>
+                    <th class="text-sm" pSortableColumn="total_stock">Total Stock <p-sortIcon
+                            field="total_stock"></p-sortIcon></th>
                     @if (hasBatchTracking) {
-                    <th>Batch Qty</th>
+                    <th class="text-sm">Batch Qty</th>
                     }
                     @if (hasSerialTracking) {
-                    <th>Serial Qty</th>
+                    <th class="text-sm">Serial Qty</th>
                     }
                     @if (hasGeneralTracking) {
-                    <th>General Qty</th>
+                    <th class="text-sm">General Qty</th>
                     }
-                    <th>Tipe Tracking</th>
-                    <th style="width: 150px;">Action</th>
+                    <th class="text-sm">Tipe Tracking</th>
+                    <th class="text-sm" style="width: 150px;">Detail Stok</th>
                 </tr>
             </ng-template>
 
             <ng-template pTemplate="body" let-stock>
                 <tr>
                     <!-- SKU -->
-                    <td>
+                    <td class="text-sm">
                         <span class="badge bg-info">{{ stock.product_sku }}</span>
                     </td>
 
                     <!-- Product Name -->
-                    <td>
+                    <td class="text-sm">
                         <strong>{{ stock.product_name }}</strong>
                     </td>
 
                     <!-- Total Stock -->
-                    <td>
+                    <td class="text-sm">
                         <span class="badge" [ngClass]="getStockBadgeClass(stock.total_stock)">
                             {{ stock.total_stock }} unit
                         </span>
@@ -63,7 +68,7 @@
 
                     <!-- Batch Quantity -->
                     @if (hasBatchTracking) {
-                    <td>
+                    <td class="text-sm">
                         @if (stock.is_batch_tracked) {
                         <span>{{ stock.batch_quantity }}</span>
                         } @else {
@@ -74,7 +79,7 @@
 
                     <!-- Serial Quantity -->
                     @if (hasSerialTracking) {
-                    <td>
+                    <td class="text-sm">
                         @if (stock.is_serial_tracked) {
                         <span>{{ stock.serial_quantity }}</span>
                         } @else {
@@ -85,7 +90,7 @@
 
                     <!-- General Quantity -->
                     @if (hasGeneralTracking) {
-                    <td>
+                    <td class="text-sm">
                         @if (!stock.is_batch_tracked && !stock.is_serial_tracked) {
                         <span>{{ stock.general_quantity }}</span>
                         } @else {
@@ -95,7 +100,7 @@
                     }
 
                     <!-- Tracking Type Badge -->
-                    <td>
+                    <td class="text-sm">
                         @if (stock.is_batch_tracked) {
                         <span class="badge bg-warning text-dark" pTooltip="Batch Tracking" tooltipPosition="top">
                             � Baltch
@@ -114,11 +119,12 @@
                     </td>
 
                     <!-- Action -->
-                    <td>
+                    <td class="text-sm">
                         <button pButton type="button" icon="pi pi-list"
                             class="p-button-rounded p-button-info p-button-sm"
                             [pTooltip]="'Lihat detail pergerakan stok ' + stock.product_name" tooltipPosition="top"
-                            (click)="openDetailModal(stock)"></button>
+                            (click)="openDetailModal(stock)">
+                        </button>
                     </td>
                 </tr>
             </ng-template>

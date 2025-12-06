@@ -1,0 +1,141 @@
+<p-dialog [(visible)]="visible" [header]="modalTitle" [modal]="true" [style]="{ width: '90vw' }" [maximizable]="true"
+    (onHide)="onClose()">
+    <!-- Header Info -->
+    <div class="modal-header-info" *ngIf="selectedStock">
+        <div class="info-row">
+            <div class="info-item">
+                <label>SKU</label>
+                <p class="value">{{ selectedStock.product_sku }}</p>
+            </div>
+            <div class="info-item">
+                <label>Produk</label>
+                <p class="value">{{ selectedStock.product_name }}</p>
+            </div>
+            <div class="info-item">
+                <label>Warehouse</label>
+                <p class="value">{{ selectedStock.warehouse_name }}</p>
+            </div>
+        </div>
+
+        <div class="stock-summary">
+            <div class="summary-item">
+                <span class="label">Total Stock</span>
+                <span class="value total">{{ selectedStock.total_stock }}</span>
+            </div>
+            <div class="summary-item" *ngIf="selectedStock.is_batch_tracked">
+                <span class="label">Batch</span>
+                <span class="value batch">{{ selectedStock.batch_quantity }}</span>
+            </div>
+            <div class="summary-item" *ngIf="selectedStock.is_serial_tracked">
+                <span class="label">Serial</span>
+                <span class="value serial">{{ selectedStock.serial_quantity }}</span>
+            </div>
+            <div class="summary-item" *ngIf="!selectedStock.is_batch_tracked && !selectedStock.is_serial_tracked">
+                <span class="label">General</span>
+                <span class="value general">{{ selectedStock.general_quantity }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock Movements Table -->
+    <div class="movements-table">
+        <h3>Pergerakan Stok</h3>
+        <p-table [value]="stockMovements" [loading]="isLoading" [paginator]="true" [rows]="10" responsiveLayout="scroll"
+            styleClass="p-datatable-striped p-datatable-sm" [tableStyle]="{ 'min-width': '100%' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-sm">Tanggal</th>
+                    <th class="text-sm">Tipe</th>
+                    <th class="text-sm">Qty Masuk</th>
+                    <th class="text-sm">Qty Keluar</th>
+                    <th class="text-sm">Referensi</th>
+                    <th class="text-sm">Batch/Serial</th>
+                    <th class="text-sm">Notes</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-movement>
+                <tr>
+                    <!-- Date -->
+                    <td class="text-sm">
+                        <span class="date">{{ movement.transaction_date | date: 'dd/MM/yyyy HH:mm' }}</span>
+                    </td>
+
+                    <!-- Type -->
+                    <td class="text-sm">
+                        <p-tag [value]="movement.type" [severity]="getTypeSeverity(movement.type)"></p-tag>
+                    </td>
+
+                    <!-- Qty In -->
+                    <td class="text-sm">
+                        <span *ngIf="movement.qty_in > 0" class="qty-in">
+                            +{{ movement.qty_in }}
+                        </span>
+                        <span *ngIf="!movement.qty_in" class="text-muted">-</span>
+                    </td>
+
+                    <!-- Qty Out -->
+                    <td class="text-sm">
+                        <span *ngIf="movement.qty_out > 0" class="qty-out">
+                            -{{ movement.qty_out }}
+                        </span>
+                        <span *ngIf="!movement.qty_out" class="text-muted">-</span>
+                    </td>
+
+                    <!-- Reference -->
+                    <td class="text-sm">
+                        <span class="reference" *ngIf="movement.reference_type">
+                            <strong>{{ movement.reference_type }}</strong>
+                            <br />
+                            <small>#{{ movement.reference_id }}</small>
+                        </span>
+                        <span *ngIf="!movement.reference_type" class="text-muted">-</span>
+                    </td>
+
+                    <!-- Batch/Serial -->
+                    <td class="text-sm">
+                        <span *ngIf="movement.batch_number" class="badge bg-warning text-dark">
+                            {{ movement.batch_number }}
+                        </span>
+                        <span *ngIf="movement.serial_number" class="badge bg-info">
+                            {{ movement.serial_number }}
+                        </span>
+                        <span *ngIf="!movement.batch_number && !movement.serial_number" class="text-muted">-</span>
+                    </td>
+
+                    <!-- Notes -->
+                    <td class="text-sm">
+                        <span *ngIf="movement.notes" class="notes" [pTooltip]="movement.notes" tooltipPosition="top">
+                            {{ movement.notes | slice:0:30 }}{{ movement.notes.length > 30 ? '...' : '' }}
+                        </span>
+                        <span *ngIf="!movement.notes" class="text-muted">-</span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <!-- Empty Message -->
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7" class="text-center p-4">
+                        <p class="text-muted">Tidak ada pergerakan stok</p>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <!-- Loading Template -->
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="7">
+                        <p-skeleton height="2rem" *ngFor="let i of [1, 2, 3]"></p-skeleton>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+        <button pButton type="button" label="Tutup" icon="pi pi-times" (click)="onClose()"
+            class="p-button-secondary p-button-sm"></button>
+    </ng-template>
+</p-dialog>

@@ -9,6 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ProductWarehouseStockAction, ProductWarehouseStockState } from '../../../../../store/inventory';
 import { WarehouseState } from '../../../../../store/inventory';
 import { StockDetailModalComponent } from '../stock-detail-modal/stock-detail-modal.component';
+import { SelectModule } from 'primeng/select';
 
 @Component({
     selector: 'app-stock-overview',
@@ -19,6 +20,7 @@ import { StockDetailModalComponent } from '../stock-detail-modal/stock-detail-mo
         ButtonModule,
         TableModule,
         TooltipModule,
+        SelectModule,
         StockDetailModalComponent
     ],
     templateUrl: './stock-overview.component.html',
@@ -42,7 +44,6 @@ export class StockOverviewComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadWarehouses();
-        this.loadStockData();
     }
 
     loadWarehouses() {
@@ -50,10 +51,6 @@ export class StockOverviewComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroy$))
             .subscribe((warehouses: any[]) => {
                 this.warehouses = warehouses.filter(w => w.is_active);
-                if (this.warehouses.length > 0) {
-                    this.selectedWarehouseId = this.warehouses[0].id;
-                    this.onWarehouseChange();
-                }
             });
     }
 
@@ -71,7 +68,7 @@ export class StockOverviewComponent implements OnInit, OnDestroy {
             });
     }
 
-    onWarehouseChange() {
+    onWarehouseChange(warehouse?: any) {
         if (this.selectedWarehouseId) {
             this.store.dispatch(
                 new ProductWarehouseStockAction.GetStockByWarehouse(this.selectedWarehouseId)
@@ -102,7 +99,7 @@ export class StockOverviewComponent implements OnInit, OnDestroy {
     }
 
     openDetailModal(stock: any) {
-        this.selectedStock = stock;
+        this.selectedStock = { ...stock, warehouse_name: this.warehouses.find(item => item.id == stock.warehouse_id).name };
         this.showDetailModal = true;
     }
 

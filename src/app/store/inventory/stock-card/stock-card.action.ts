@@ -29,4 +29,10 @@ export namespace StockCardAction {
         static readonly type = '[Inventory StockCard] Get By Date Range';
         constructor(public start_date: Date, public end_date: Date) { }
     }
+
+    export class GetStockCardsByProductAndWarehouse {
+        static readonly type = '[Inventory StockCard] Get By Product And Warehouse';
+        constructor(public product_id: number, public warehouse_id: number) { }
+    }
+
 }

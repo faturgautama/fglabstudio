@@ -173,7 +173,6 @@ export class PurchaseOrder implements OnInit, OnDestroy {
             { id: 'receive', icon: 'pi pi-download', title: 'Receive' },
             { id: 'cancel', icon: 'pi pi-times', title: 'Batalkan' },
             { id: 'detail', icon: 'pi pi-info', title: 'Detail' },
-            { id: 'delete', icon: 'pi pi-trash', title: 'Hapus' },
         ],
         paging: true,
         custom_button: [
@@ -330,16 +329,11 @@ export class PurchaseOrder implements OnInit, OnDestroy {
             // Load PO with items
             this._store
                 .dispatch(new PurchaseOrderAction.GetPurchaseOrderWithItems(args.data.id.toString()))
-                .subscribe(() => {
-                    this._store
-                        .select(PurchaseOrderState.getSingle)
-                        .pipe(takeUntil(this.Destroy$))
-                        .subscribe(po => {
-                            if (po) {
-                                this._selectedPOForReceive = po;
-                                this._receiveDialogVisible = true;
-                            }
-                        });
+                .subscribe((result: any) => {
+                    const po = result.inventoryPurchaseOrder.single;
+                    this._selectedPOForReceive = po;
+                    this._receiveDialogVisible = true;
+                    this._cancelDialogVisible = false;
                 });
         }
 
@@ -352,16 +346,11 @@ export class PurchaseOrder implements OnInit, OnDestroy {
             // Load PO with items
             this._store
                 .dispatch(new PurchaseOrderAction.GetPurchaseOrderWithItems(args.data.id.toString()))
-                .subscribe(() => {
-                    this._store
-                        .select(PurchaseOrderState.getSingle)
-                        .pipe(takeUntil(this.Destroy$))
-                        .subscribe(po => {
-                            if (po) {
-                                this._selectedPOForCancel = po;
-                                this._cancelDialogVisible = true;
-                            }
-                        });
+                .subscribe((result: any) => {
+                    const po = result.inventoryPurchaseOrder.single;
+                    this._selectedPOForCancel = po;
+                    this._cancelDialogVisible = true;
+                    this._receiveDialogVisible = false;
                 });
         }
 

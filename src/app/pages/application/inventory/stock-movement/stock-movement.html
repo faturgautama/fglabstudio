@@ -188,7 +188,7 @@
                         <!-- Dropdown for OUT/TRANSFER -->
                         <p-select [options]="_availableBatches" formControlName="batch_number"
                             optionLabel="batch_number" optionValue="batch_number" placeholder="Pilih batch" size="small"
-                            class="w-full" appendTo="body">
+                            class="w-full" appendTo="body" (onChange)="onBatchSelect($event)">
                             <ng-template let-batch pTemplate="item">
                                 <div class="flex flex-col">
                                     <span class="font-medium">{{ batch.batch_number }}</span>
@@ -212,6 +212,19 @@
                         <small class="text-xs text-orange-600">⚠️ Tidak ada batch tersedia di warehouse ini</small>
                         }
                     </div>
+
+                    <!-- Expiry Date (for IN movements with batch) -->
+                    @if (Form.get('type')?.value === 'IN' && _selectedProduct?.is_perishable) {
+                    <div class="flex flex-col gap-1">
+                        <label class="text-sm text-gray-700 font-medium">
+                            Expiry Date <span class="text-red-500">*</span>
+                        </label>
+                        <p-datepicker formControlName="expiry_date" placeholder="Pilih tanggal kadaluarsa" size="small"
+                            styleClass="p-inputtext-sm w-full" appendTo="body" dateFormat="dd/mm/yy">
+                        </p-datepicker>
+                        <small class="text-xs text-gray-500">Wajib untuk produk perishable</small>
+                    </div>
+                    }
                     }
 
                     <!-- Serial Numbers -->
@@ -230,7 +243,8 @@
                         <!-- Multi-select for OUT/TRANSFER -->
                         <p-multiselect [options]="_availableSerials" formControlName="serial_numbers"
                             optionLabel="serial_number" optionValue="serial_number" placeholder="Pilih serial numbers"
-                            size="small" class="w-full" appendTo="body" [filter]="true">
+                            size="small" class="w-full" appendTo="body" [filter]="true"
+                            (onChange)="onSerialSelect($event)">
                             <ng-template let-serial pTemplate="item">
                                 <div class="flex flex-col">
                                     <span class="font-medium">{{ serial.serial_number }}</span>
@@ -241,13 +255,15 @@
                             </ng-template>
                         </p-multiselect>
                         <small class="text-xs text-gray-500">
-                            {{ serial_numbers.value.length || 0 }} serial(s) dipilih
+                            {{ (serial_numbers.value && serial_numbers.value.length) || 0 }} serial(s) dipilih
                         </small>
                         } @else {
-                        <!-- Free text for IN/ADJUSTMENT -->
-                        <textarea formControlName="serial_numbers" pInputTextarea rows="2" class="p-inputtext-sm"
-                            placeholder="Masukkan serial numbers (satu per baris)"></textarea>
-                        <small class="text-xs text-gray-500">Pisahkan dengan enter untuk multiple serials</small>
+                        <!-- Textarea for IN/ADJUSTMENT -->
+                        <textarea rows="2" pInputTextarea class="p-inputtext-sm"
+                            placeholder="Masukkan serial numbers (pisahkan dengan koma atau enter)"
+                            (input)="onSerialTextInput($event)"></textarea>
+                        <small class="text-xs text-gray-500">Pisahkan dengan koma atau enter untuk multiple
+                            serials</small>
                         }
 
                         @if (_availableSerials.length === 0 && (Form.get('type')?.value === 'OUT' ||

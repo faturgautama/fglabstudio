@@ -11,6 +11,7 @@ export interface StockCardStateModel {
     data: InventoryModel.StockCard[];
     productStockCards: InventoryModel.StockCard[];
     dateRangeMovements: InventoryModel.StockCard[];
+    productWarehouseStockCards: InventoryModel.StockCard[];
 }
 
 @State<StockCardStateModel>({
@@ -18,7 +19,8 @@ export interface StockCardStateModel {
     defaults: {
         data: [],
         productStockCards: [],
-        dateRangeMovements: []
+        dateRangeMovements: [],
+        productWarehouseStockCards: [],
     },
 })
 @Injectable()
@@ -45,6 +47,11 @@ export class StockCardState implements NgxsOnInit {
     @Selector()
     static getDateRangeMovements(state: StockCardStateModel) {
         return state.dateRangeMovements;
+    }
+
+    @Selector()
+    static getStockCardsByProductAndWarehouse(state: StockCardStateModel) {
+        return state.productWarehouseStockCards;
     }
 
     @Action(StockCardAction.GetStockCard)
@@ -111,6 +118,21 @@ export class StockCardState implements NgxsOnInit {
                     ctx.setState({
                         ...state,
                         dateRangeMovements: result
+                    });
+                })
+            );
+    }
+
+    @Action(StockCardAction.GetStockCardsByProductAndWarehouse)
+    getByProductAndWarehouse(ctx: StateContext<StockCardStateModel>, payload: any) {
+        return this._stockCardService
+            .getStockCardsByProductAndWarehouse(payload.product_id, payload.warehouse_id)
+            .pipe(
+                tap((result) => {
+                    const state = ctx.getState();
+                    ctx.setState({
+                        ...state,
+                        productWarehouseStockCards: result
                     });
                 })
             );

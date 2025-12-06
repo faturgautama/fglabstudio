@@ -197,7 +197,10 @@ export namespace InventoryModel {
         reference_type?: string;
         reference_id?: string;
         batch_number?: string;
+        batch_id?: number;
+        expiry_date?: Date;
         serial_numbers?: string[];
+        serial_ids?: number[];
         approved_by?: string;
         approved_at?: Date;
         notes?: string;
@@ -258,9 +261,11 @@ export namespace InventoryModel {
         expiry_date?: Date;
         quantity: number;
         purchase_order_id?: string;
-        cost_per_unit: number;
+        stock_movement_id?: number;
+        cost_per_unit?: number;
         is_active: boolean;
         created_at?: Date;
+        updated_at?: Date;
     }
 
     export interface ProductSerial {
@@ -269,12 +274,14 @@ export namespace InventoryModel {
         warehouse_id: number;
         serial_number: string;
         batch_number?: string;
-        status: 'IN_STOCK' | 'SOLD' | 'DAMAGED' | 'RETURNED';
+        status: 'IN_STOCK' | 'SOLD' | 'DAMAGED' | 'RETURNED' | 'LOST';
         purchase_order_id?: string;
+        stock_movement_id?: number;
         sold_date?: Date;
         warranty_until?: Date;
         notes?: string;
         created_at: Date;
+        updated_at?: Date;
     }
 
     export interface StockOpname {

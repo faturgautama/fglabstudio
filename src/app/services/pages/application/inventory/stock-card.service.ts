@@ -24,7 +24,9 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
         reference_type?: string,
         reference_id?: number,
         notes?: string,
-        unit_cost?: number
+        unit_cost?: number,
+        batch_number?: string,
+        serial_number?: string
     ) {
         return this.withLoading(async () => {
             const product = await this.databaseService.db.products.get(Number(product_id));
@@ -62,6 +64,8 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
                 balance: new_balance,
                 unit_cost,
                 total_value: unit_cost ? qty * unit_cost : undefined,
+                batch_number,
+                serial_number,
                 notes,
                 created_at: new Date()
             };
@@ -172,17 +176,15 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
     /**
      * Get stock cards by product and warehouse
      */
-    getStockCardsByProductAndWarehouse(product_id: number, warehouse_id: number, limit?: number) {
+    getStockCardsByProductAndWarehouse(product_id: number, warehouse_id: number) {
         return this.withLoading(async () => {
-            const query = this.databaseService.db.stock_cards
-                .where('[product_id+warehouse_id]')
-                .equals([product_id, warehouse_id]);
+            const data = await this.databaseService.db.stock_cards
+                .where('product_id')
+                .equals(product_id)
+                // .filter(item => item.warehouse_id == warehouse_id)
+                .toArray();
 
-            const cards = limit
-                ? await query.reverse().limit(limit).toArray()
-                : await query.reverse().toArray();
-
-            return cards;
+            return data;
         });
     }
 
@@ -253,4 +255,6 @@ export class StockCardService extends BaseActionService<InventoryModel.StockCard
             } as any));
         }
     }
+
+
 }

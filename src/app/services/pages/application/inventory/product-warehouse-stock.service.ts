@@ -247,4 +247,112 @@ export class ProductWarehouseStockService {
             })
         );
     }
+
+    /**
+     * Update batch quantity in product_warehouse_stock
+     * Requirements: 1.3
+     */
+    async updateBatchQuantity(
+        product_id: number,
+        warehouse_id: number,
+        quantity: number,
+        operation: 'ADD' | 'SUBTRACT'
+    ): Promise<void> {
+        const existing = await this.databaseService.db.product_warehouse_stock
+            .where('[product_id+warehouse_id]')
+            .equals([Number(product_id), Number(warehouse_id)])
+            .first();
+
+        let stock: InventoryModel.ProductWarehouseStock;
+
+        if (existing) {
+            stock = { ...existing };
+        } else {
+            // Create new if not exists
+            stock = {
+                product_id: Number(product_id),
+                warehouse_id: Number(warehouse_id),
+                total_stock: 0,
+                batch_quantity: 0,
+                serial_quantity: 0,
+                general_quantity: 0,
+                updated_at: new Date()
+            };
+        }
+
+        // Update batch quantity
+        if (operation === 'ADD') {
+            stock.batch_quantity += quantity;
+        } else {
+            if (stock.batch_quantity < quantity) {
+                throw new Error(`Insufficient batch quantity. Available: ${stock.batch_quantity}, Required: ${quantity}`);
+            }
+            stock.batch_quantity -= quantity;
+        }
+
+        // Recalculate total
+        stock.total_stock = stock.batch_quantity + stock.serial_quantity + stock.general_quantity;
+        stock.updated_at = new Date();
+
+        // Upsert
+        if (existing) {
+            await this.databaseService.db.product_warehouse_stock.update(Number(existing.id), stock);
+        } else {
+            await this.databaseService.db.product_warehouse_stock.add(stock as any);
+        }
+    }
+
+    /**
+     * Update serial quantity in product_warehouse_stock
+     * Requirements: 2.3
+     */
+    async updateSerialQuantity(
+        product_id: number,
+        warehouse_id: number,
+        quantity: number,
+        operation: 'ADD' | 'SUBTRACT'
+    ): Promise<void> {
+        const existing = await this.databaseService.db.product_warehouse_stock
+            .where('[product_id+warehouse_id]')
+            .equals([Number(product_id), Number(warehouse_id)])
+            .first();
+
+        let stock: InventoryModel.ProductWarehouseStock;
+
+        if (existing) {
+            stock = { ...existing };
+        } else {
+            // Create new if not exists
+            stock = {
+                product_id: Number(product_id),
+                warehouse_id: Number(warehouse_id),
+                total_stock: 0,
+                batch_quantity: 0,
+                serial_quantity: 0,
+                general_quantity: 0,
+                updated_at: new Date()
+            };
+        }
+
+        // Update serial quantity
+        if (operation === 'ADD') {
+            stock.serial_quantity += quantity;
+        } else {
+            if (stock.serial_quantity < quantity) {
+                throw new Error(`Insufficient serial quantity. Available: ${stock.serial_quantity}, Required: ${quantity}`);
+            }
+            stock.serial_quantity -= quantity;
+        }
+
+        // Recalculate total
+        stock.total_stock = stock.batch_quantity + stock.serial_quantity + stock.general_quantity;
+        stock.updated_at = new Date();
+
+        // Upsert
+        if (existing) {
+            await this.databaseService.db.product_warehouse_stock.update(Number(existing.id), stock);
+        } else {
+            await this.databaseService.db.product_warehouse_stock.add(stock as any);
+        }
+    }
 }
