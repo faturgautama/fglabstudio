@@ -8,7 +8,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 ## Tasks
 
-- [ ] 1. Database schema enhancement
+- [x] 1. Database schema enhancement
 
   - Create stock_opname_batch_items table
   - Create stock_opname_serial_items table
@@ -20,7 +20,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 2. Enhance StockOpnameService with batch tracking for opname creation
 
-  - [ ] 2.1 Implement loadBatchesForOpname() method
+  - [x] 2.1 Implement loadBatchesForOpname() method
 
     - Query product_batches table by product_id and warehouse_id
     - Filter by is_active = true and quantity > 0
@@ -28,7 +28,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
     - Return OpnameBatchItem array
     - _Requirements: 1.1, 5.1, 7.1_
 
-  - [ ] 2.2 Enhance createStockOpname() for batch-tracked products
+  - [x] 2.2 Enhance createStockOpname() for batch-tracked products
 
     - Detect batch-tracked products
     - Call loadBatchesForOpname() for each batch product
@@ -45,14 +45,14 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 3. Enhance StockOpnameService with serial tracking for opname creation
 
-  - [ ] 3.1 Implement loadSerialsForOpname() method
+  - [x] 3.1 Implement loadSerialsForOpname() method
 
     - Query product_serials table by product_id and warehouse_id
     - Filter by status = IN_STOCK
     - Return OpnameSerialItem array
     - _Requirements: 2.1, 5.2_
 
-  - [ ] 3.2 Enhance createStockOpname() for serial-tracked products
+  - [x] 3.2 Enhance createStockOpname() for serial-tracked products
 
     - Detect serial-tracked products
     - Call loadSerialsForOpname() for each serial product
@@ -69,14 +69,14 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 4. Implement physical count update for batch tracking
 
-  - [ ] 4.1 Implement updateBatchPhysicalCount() method
+  - [x] 4.1 Implement updateBatchPhysicalCount() method
 
     - Update physical_quantity for specific batch item
     - Calculate difference = physical_quantity - system_quantity
     - Update opname total_discrepancy and batch_discrepancy
     - _Requirements: 1.2, 1.3_
 
-  - [ ] 4.2 Add validation for batch physical count
+  - [x] 4.2 Add validation for batch physical count
 
     - Validate physical_quantity >= 0
     - Warn if difference > 50% of system_quantity
@@ -90,14 +90,14 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 5. Implement physical count update for serial tracking
 
-  - [ ] 5.1 Implement markSerialAsFound() method
+  - [x] 5.1 Implement markSerialAsFound() method
 
     - Update found flag for specific serial item
     - Calculate found_count and missing_count
     - Update opname total_discrepancy and serial_discrepancy
     - _Requirements: 2.2, 2.3_
 
-  - [ ] 5.2 Add validation for serial marking
+  - [x] 5.2 Add validation for serial marking
 
     - Require notes when marking serial as not found
     - Warn if all serials marked as not found
@@ -114,7 +114,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 7. Implement batch opname approval logic
 
-  - [ ] 7.1 Implement approveBatchOpnameItem() method
+  - [x] 7.1 Implement approveBatchOpnameItem() method
 
     - For each batch with difference != 0:
       - Create ADJUSTMENT stock card with batch reference
@@ -123,7 +123,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
     - Update batch_quantity in product_warehouse_stock
     - _Requirements: 1.5, 1.6, 1.7_
 
-  - [ ] 7.2 Add transaction handling for batch approval
+  - [x] 7.2 Add transaction handling for batch approval
 
     - Wrap all batch updates in Dexie transaction
     - Rollback on any failure
@@ -138,7 +138,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 8. Implement serial opname approval logic
 
-  - [ ] 8.1 Implement approveSerialOpnameItem() method
+  - [x] 8.1 Implement approveSerialOpnameItem() method
 
     - For each serial marked as not found:
       - Update serial status to LOST in product_serials table
@@ -146,7 +146,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
     - Update serial_quantity in product_warehouse_stock
     - _Requirements: 2.5, 2.6_
 
-  - [ ] 8.2 Add support for adding new serials during opname
+  - [x] 8.2 Add support for adding new serials during opname
 
     - Allow adding serial numbers found but not in system
     - Create new serial records with status IN_STOCK
@@ -161,7 +161,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 9. Implement general tracking opname approval logic
 
-  - [ ] 9.1 Implement approveGeneralOpnameItem() method
+  - [x] 9.1 Implement approveGeneralOpnameItem() method
 
     - If difference != 0:
       - Create ADJUSTMENT stock card with difference
@@ -177,7 +177,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 10. Enhance approveStockOpname() with tracking type routing
 
-  - [ ] 10.1 Implement tracking type detection and routing
+  - [x] 10.1 Implement tracking type detection and routing
 
     - For each opname item, detect tracking_type
     - Route to approveBatchOpnameItem(), approveSerialOpnameItem(), or approveGeneralOpnameItem()
@@ -185,7 +185,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
     - Create stock cards with proper references
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-  - [ ] 10.2 Implement total_stock invariant validation
+  - [x] 10.2 Implement total_stock invariant validation
 
     - After all approvals, verify total_stock = batch_quantity + serial_quantity + general_quantity
     - Throw error if invariant violated
@@ -205,7 +205,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 12. Implement stock recalculation logic
 
-  - [ ] 12.1 Implement recalculateSystemStock() method
+  - [x] 12.1 Implement recalculateSystemStock() method
 
     - Rebuild batch quantities from product_batches table
     - Rebuild serial quantities from product_serials table (count IN_STOCK)
@@ -220,7 +220,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 13. Implement opname reversal logic
 
-  - [ ] 13.1 Implement reverseOpnameApproval() method
+  - [x] 13.1 Implement reverseOpnameApproval() method
 
     - Create reversal stock cards (opposite of original adjustments)
     - Restore batch quantities to pre-approval values
@@ -235,7 +235,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 14. Implement validation methods
 
-  - [ ] 14.1 Implement validateOpnameReadyForApproval() method
+  - [x] 14.1 Implement validateOpnameReadyForApproval() method
 
     - Check all items have physical count entered
     - Check warehouse_id consistency across all items
@@ -243,7 +243,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
     - Return validation result with error messages
     - _Requirements: 8.7, 9.1, 9.2_
 
-  - [ ] 14.2 Implement validation for large discrepancies
+  - [x] 14.2 Implement validation for large discrepancies
 
     - Warn if any item has difference > 50% of system stock
     - Require confirmation for large discrepancies
@@ -257,7 +257,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
 
 - [ ] 15. Implement workflow and status management
 
-  - [ ] 15.1 Implement status transition logic
+  - [x] 15.1 Implement status transition logic
 
     - Allow DRAFT → IN_PROGRESS → COMPLETED → APPROVED
     - Prevent edits when status = APPROVED
@@ -265,7 +265,7 @@ This implementation plan adds full batch and serial tracking support to Stock Op
     - Validate status transitions
     - _Requirements: 10.1-10.7_
 
-  - [ ] 15.2 Implement item management based on status
+  - [x] 15.2 Implement item management based on status
 
     - Allow add/remove items when status = DRAFT or IN_PROGRESS
     - Prevent add/remove when status = COMPLETED or APPROVED

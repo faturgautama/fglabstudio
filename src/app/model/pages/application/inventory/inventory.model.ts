@@ -292,6 +292,9 @@ export namespace InventoryModel {
         status: 'DRAFT' | 'IN_PROGRESS' | 'COMPLETED' | 'APPROVED';
         total_products: number;
         total_discrepancy: number;
+        batch_discrepancy?: number;     // NEW: Total batch discrepancy
+        serial_discrepancy?: number;    // NEW: Total serial discrepancy
+        general_discrepancy?: number;   // NEW: Total general discrepancy
         notes?: string;
         created_at: Date;
         created_by?: string;
@@ -307,9 +310,36 @@ export namespace InventoryModel {
         system_stock: number;
         physical_stock: number;
         difference: number;
+        tracking_type?: 'BATCH' | 'SERIAL' | 'GENERAL';  // NEW: Tracking type
         notes?: string;
         verified_by?: string;
         is_active?: boolean;
+    }
+
+    export interface OpnameBatchItem {
+        id?: number;
+        opname_item_id: number;
+        batch_id: number;
+        batch_number: string;
+        expiry_date?: Date;
+        system_quantity: number;
+        physical_quantity: number;
+        difference: number;
+        is_expired?: boolean;           // Calculated field
+        days_to_expiry?: number;        // Calculated field
+        notes?: string;
+        created_at?: Date;
+    }
+
+    export interface OpnameSerialItem {
+        id?: number;
+        opname_item_id: number;
+        serial_id: number;
+        serial_number: string;
+        expected_status?: 'IN_STOCK';   // Always IN_STOCK for opname
+        found: boolean;                 // User marks as found/not found
+        notes?: string;
+        created_at?: Date;
     }
 
     export interface ProductWarehouseStock {

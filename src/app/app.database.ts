@@ -31,6 +31,8 @@ export class AppDatabase extends Dexie {
     product_serials!: Table<InventoryModel.ProductSerial, number>;
     stock_opnames!: Table<InventoryModel.StockOpname, number>;
     stock_opname_items!: Table<InventoryModel.StockOpnameItem, number>;
+    stock_opname_batch_items!: Table<InventoryModel.OpnameBatchItem, number>;
+    stock_opname_serial_items!: Table<InventoryModel.OpnameSerialItem, number>;
     product_warehouse_stock!: Table<InventoryModel.ProductWarehouseStock, number>;
 
     constructor(dbName: string) {
@@ -77,6 +79,14 @@ export class AppDatabase extends Dexie {
             stock_movements: '++id, movement_number, product_id, warehouse_id, type, movement_date, batch_number',
             product_batches: '++id, [product_id+warehouse_id], product_id, warehouse_id, batch_number, expiry_date, is_active, stock_movement_id',
             product_serials: '++id, [product_id+warehouse_id], product_id, warehouse_id, serial_number, status, stock_movement_id'
+        });
+
+        // Version 5: Add batch and serial tracking support for stock opname
+        this.version(5).stores({
+            stock_opnames: '++id, opname_number, warehouse_id, status, opname_date',
+            stock_opname_items: '++id, stock_opname_id, product_id, tracking_type',
+            stock_opname_batch_items: '++id, opname_item_id, batch_id, batch_number',
+            stock_opname_serial_items: '++id, opname_item_id, serial_id, serial_number, found'
         });
     }
 }
