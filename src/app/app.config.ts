@@ -1,5 +1,5 @@
 import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection, isDevMode } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -46,7 +46,11 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(),
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
-        provideRouter(routes),
+        provideRouter(routes,
+            withInMemoryScrolling({
+                scrollPositionRestoration: 'enabled', // Enable position restoration
+            })
+        ),
         provideStore(([...STATE])),
         provideTranslateService({
             lang: 'en',
@@ -64,9 +68,9 @@ export const appConfig: ApplicationConfig = {
         ConfirmationService, provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
-          }), provideServiceWorker('ngsw-worker.js', {
+        }), provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
-          }),
+        }),
     ]
 };
