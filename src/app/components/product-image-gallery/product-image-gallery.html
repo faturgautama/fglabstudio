@@ -1,0 +1,47 @@
+<div class="product-image-gallery">
+    @if (displayImages.length > 0) {
+    <!-- Main Image -->
+    <div class="main-image-container mb-4">
+        <img [src]="mainImage" [alt]="productTitle"
+            class="w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+            (click)="openGalleria(selectedImageIndex)" (error)="handleImageError($event)">
+    </div>
+
+    <!-- Thumbnails -->
+    @if (displayImages.length > 1) {
+    <div class="thumbnails-container flex gap-2 overflow-x-auto">
+        @for (image of displayImages; track $index) {
+        <div class="thumbnail cursor-pointer border-2 rounded-lg overflow-hidden transition-all"
+            [class.border-primary]="selectedImageIndex === $index"
+            [class.border-gray-300]="selectedImageIndex !== $index" (click)="selectImage($index)">
+            <img [src]="image" [alt]="productTitle + ' - ' + ($index + 1)" class="w-20 h-20 object-cover"
+                (error)="handleImageError($event)">
+        </div>
+        }
+    </div>
+    }
+
+    <!-- Galleria for fullscreen view -->
+    <p-galleria [value]="displayImages" [(visible)]="showGalleria" [(activeIndex)]="selectedImageIndex"
+        [responsiveOptions]="[
+        { breakpoint: '1024px', numVisible: 5 },
+        { breakpoint: '768px', numVisible: 3 },
+        { breakpoint: '560px', numVisible: 1 }
+      ]" [containerStyle]="{ 'max-width': '850px' }" [numVisible]="5" [circular]="true" [fullScreen]="true"
+        [showItemNavigators]="true" [showThumbnails]="true">
+        <ng-template pTemplate="item" let-item>
+            <img [src]="item" [alt]="productTitle" class="w-full" />
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item>
+            <div class="grid grid-nogutter justify-content-center">
+                <img [src]="item" [alt]="productTitle" class="w-full" />
+            </div>
+        </ng-template>
+    </p-galleria>
+    } @else {
+    <!-- Placeholder -->
+    <div class="placeholder-container">
+        <img src="/assets/image/placeholder.jpg" [alt]="productTitle" class="w-full rounded-lg">
+    </div>
+    }
+</div>

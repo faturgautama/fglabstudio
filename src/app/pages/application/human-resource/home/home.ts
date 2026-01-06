@@ -182,7 +182,6 @@ export class Home implements OnInit {
 
     this._store
       .select(EmployeeState.getAll)
-      .pipe(tap((result) => console.log(result)))
       .subscribe(result => this.TableProps.datasource = result.map((item: any) => {
         return {
           ...item,

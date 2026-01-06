@@ -115,8 +115,6 @@ export class DshNavbarDbAction {
         prettyJson: true // Format JSON yang mudah dibaca
       });
 
-      console.log('Exported Blob:', blob);
-
       // Buat nama file dengan timestamp
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
       const fileName = `database-backup-${timestamp}.json`;

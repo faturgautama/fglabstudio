@@ -39,5 +39,9 @@ export const routes: Routes = [
         resolve: {
             resolver: inventoryResolver
         }
+    },
+    {
+        path: 'product/:id',
+        loadComponent: async () => (await import('../app/pages/product-detail/product-detail')).ProductDetail
     }
 ];

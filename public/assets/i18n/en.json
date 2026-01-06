@@ -112,7 +112,18 @@
     "Shop Now": "Shop Now",
     "Contact Us": "Contact Us",
     "Learn More": "Learn More",
-    "Buy Now": "Buy Now"
+    "Buy Now": "Buy Now",
+    "Back": "Back"
+  },
+  "PRODUCT_DETAIL": {
+    "Price": "Price",
+    "Description": "Description",
+    "Key Features": "Key Features",
+    "Features Detail": "Features Detail",
+    "Published": "Published",
+    "Customer Reviews": "Customer Reviews",
+    "No reviews yet": "No reviews yet",
+    "Be the first to review": "Be the first to review this product"
   },
   "FORM": {
     "Full Name": {

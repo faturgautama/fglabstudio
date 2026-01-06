@@ -153,8 +153,6 @@ export class DatabaseService {
         this.dbReadySubject.next(false);
 
         this.switchPromise = (async () => {
-            console.log(`🔄 Switching IndexedDB: ${this.currentDbName} → ${newDbName}`);
-
             try {
                 // Close DB lama
                 if (this.db?.isOpen()) {
@@ -165,8 +163,6 @@ export class DatabaseService {
                 this.db = new AppDatabase(newDbName);
                 await this.db.open();
                 this.currentDbName = newDbName;
-
-                console.log(`✅ Database aktif: ${newDbName}`);
                 this.dbReadySubject.next(true);
             } catch (err) {
                 console.error('❌ Gagal switch database:', err);
@@ -199,7 +195,5 @@ export class DatabaseService {
         this.currentDbName = 'CodeByXerenityDatabase';
         this.db = new AppDatabase(this.currentDbName);
         await this.db.open();
-
-        console.log('🔁 Reset ke DB default kosong.');
     }
 }

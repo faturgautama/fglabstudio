@@ -7,4 +7,9 @@ export namespace ProductAction {
         static readonly type = '[Product] Get By Id';
         constructor(public id: string) { }
     }
+
+    export class SetSingleProduct {
+        static readonly type = '[Product] Set Single Product';
+        constructor(public productId: string) { }
+    }
 }

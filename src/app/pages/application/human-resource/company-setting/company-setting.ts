@@ -178,8 +178,6 @@ export class CompanySetting implements OnInit, OnDestroy {
   handleSave(formValue: any) {
     if (this.Form.valid) {
 
-      console.log("payload =>", formValue);
-
       // Remove empty id for new records (Dexie auto-increment requirement)
       const payload = { ...formValue };
       if (!payload.id || payload.id === '') {

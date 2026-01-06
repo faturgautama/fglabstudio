@@ -180,9 +180,6 @@ export class Schedule implements OnInit, OnDestroy {
         return entryStart <= endDate && entryEnd >= startDate;
       })
       .map(entry => {
-
-        console.log("Processing entry:", entry);
-
         const rowIndex = employees.findIndex(emp => emp.id?.toString() === entry.employee_id?.toString());
 
         if (rowIndex === -1) return null;
@@ -254,8 +251,6 @@ export class Schedule implements OnInit, OnDestroy {
     this.store.dispatch(new EmployeeAction.GetEmployee());
     this.store.dispatch(new LeaveAction.GetLeave());
     this.store.dispatch(new DepartementAction.GetDepartement());
-
-    console.log("time off =>", this.timeOffPositions())
   }
 
   ngOnDestroy(): void {

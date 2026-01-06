@@ -1448,41 +1448,55 @@ Stock Opname adalah proses penghitungan fisik stok untuk memastikan data di sist
 
 #### 2️⃣ Buat Stock Opname Baru
 
-1. Klik tombol **➕ Add**
-2. Isi header:
+1. Klik tombol **➕ Add** (di toolbar tabel)
+2. Halaman form akan muncul dengan section **"Informasi Stock Opname"**
+3. Isi header:
 
 | Field         | Wajib? | Contoh                         |
 | ------------- | ------ | ------------------------------ |
 | Opname Number | ✅     | SO/202501/0001 (Auto generate) |
 | Opname Date   | ✅     | 31/01/2025                     |
-| **Warehouse** | ❌     | **Gudang Pusat**               |
 | Status        | ✅     | DRAFT                          |
+| **Warehouse** | ❌     | **Gudang Pusat**               |
 | Notes         | ❌     | Stock opname akhir bulan       |
 
 > 📍 **Info**: Jika warehouse dipilih, hanya produk di warehouse tersebut yang akan di-opname. Jika tidak dipilih, semua produk di semua warehouse.
 
-#### 3️⃣ Tambah Items
+#### 3️⃣ Load & Tambah Items
 
-3. Klik **➕ Add Item** atau **Load Products**
-4. Pilih produk
-5. System akan load **System Stock** (stok di sistem untuk warehouse ini)
-6. Input **Physical Stock** (hasil hitung fisik)
-7. **Difference** akan terhitung otomatis
+4. Klik tombol **"Load Produk"** untuk memuat semua produk dari warehouse yang dipilih
+   - Tombol ini hanya aktif jika warehouse sudah dipilih
+   - System akan otomatis mengisi **System Stock** untuk setiap produk
+5. Atau klik **"Tambah Item"** untuk menambah produk secara manual
+6. Untuk setiap item, isi:
+
+   - **Produk** (pilih dari dropdown)
+   - **Stok Sistem** (otomatis terisi jika load produk)
+   - **Stok Fisik** (hasil hitung fisik) ⭐
+   - **Selisih** (otomatis terhitung: Stok Fisik - Stok Sistem)
+   - **Catatan Item** (opsional)
+
+7. Untuk hapus item, klik tombol **🗑️ (trash)** di sebelah kanan
 
 **Contoh:**
 
 | Product             | System Stock | Physical Stock | Difference |
 | ------------------- | ------------ | -------------- | ---------- |
-| Laptop Dell XPS 15  | 10           | 9              | -1         |
-| Mouse Logitech      | 50           | 52             | +2         |
+| Laptop Dell XPS 15  | 10           | 9              | -1 (merah) |
+| Mouse Logitech      | 50           | 52             | +2 (hijau) |
 | Keyboard Mechanical | 20           | 20             | 0          |
 
-#### 4️⃣ Approve Stock Opname
+#### 4️⃣ Review & Simpan
 
-8. Review semua items
-9. Ubah status menjadi **APPROVED**
-10. Klik **Approve** button
-11. System akan otomatis adjust stok sesuai physical stock
+8. Lihat **Ringkasan** di bagian bawah:
+
+   - Total Produk yang dihitung
+   - Total Selisih (absolute)
+
+9. Review semua items
+10. Jika masih DRAFT, klik **"Simpan"**
+11. Jika ingin langsung approve, ubah **Status** menjadi **APPROVED** lalu klik **"Simpan"**
+12. System akan otomatis adjust stok sesuai physical stock (jika status APPROVED)
 
 ✅ **Hasil:**
 
@@ -1600,42 +1614,83 @@ Stock Card adalah **history transaksi per produk per warehouse**. Setiap transak
 **Cara Akses:**
 
 - Klik **"Stock Card"** di sidebar
-- Akan muncul **Stock Overview** table
+- Akan muncul halaman **"Stock Summary"**
 
-**Stock Overview Table menampilkan:**
+**UI Flow:**
 
-| Column       | Penjelasan                      |
-| ------------ | ------------------------------- |
-| Product Name | Nama produk                     |
-| SKU          | Kode produk                     |
-| Warehouse    | Nama warehouse                  |
-| Total Stock  | Stock saat ini di warehouse ini |
-| Batch Qty    | Qty dari batch tracking         |
-| Serial Qty   | Qty dari serial tracking        |
-| General Qty  | Qty general (non-batch/serial)  |
-| Last Updated | Terakhir diupdate               |
-| **Action**   | **Detail button**               |
+#### Step 1: Stock Summary (Overview)
 
-**Cara Lihat Detail Transaction:**
+Halaman utama menampilkan **Stock Overview Table** dengan fitur:
 
-1. Klik tombol **"Detail"** pada row produk+warehouse
-2. Modal akan muncul menampilkan **Stock Card History**
+1. **Warehouse Filter** (dropdown di header)
 
-**Stock Card History menampilkan:**
+   - Pilih warehouse untuk filter stok
+   - Default: warehouse pertama atau semua
 
-| Column           | Penjelasan                                |
-| ---------------- | ----------------------------------------- |
-| Transaction Date | Tanggal transaksi                         |
-| Type             | IN / OUT / ADJUSTMENT / TRANSFER          |
-| Qty In           | Jumlah masuk                              |
-| Qty Out          | Jumlah keluar                             |
-| Balance          | Saldo stock setelah transaksi (running)   |
-| Unit Cost        | Harga per unit                            |
-| Total Value      | Total nilai transaksi                     |
-| Reference        | PO Number, Movement Number, Opname Number |
-| Notes            | Catatan transaksi                         |
-| Batch Number     | Nomor batch (jika ada)                    |
-| Serial Number    | Nomor serial (jika ada)                   |
+2. **Stock Overview Table** menampilkan:
+
+| Column          | Penjelasan                                     |
+| --------------- | ---------------------------------------------- |
+| SKU             | Kode produk (badge biru)                       |
+| Nama Produk     | Nama produk (bold)                             |
+| Total Stock     | Stock saat ini (badge dengan warna dinamis)    |
+| Batch Qty       | Qty dari batch tracking (jika ada)             |
+| Serial Qty      | Qty dari serial tracking (jika ada)            |
+| General Qty     | Qty general (non-batch/serial, jika ada)       |
+| Tipe Tracking   | Badge: 📦 Batch / 🔢 Serial / 📋 General       |
+| **Detail Stok** | **Button icon list untuk lihat pergerakan** ⭐ |
+
+3. **Fitur Table:**
+
+   - Sortable columns (SKU, Nama Produk, Total Stock)
+   - Pagination (10 rows per page)
+   - Badge warna untuk stock level:
+     - Hijau: Stock cukup
+     - Kuning: Stock rendah
+     - Merah: Stock kritis
+
+4. **Kolom Dinamis:**
+   - Kolom "Batch Qty" hanya muncul jika ada produk dengan batch tracking
+   - Kolom "Serial Qty" hanya muncul jika ada produk dengan serial tracking
+   - Kolom "General Qty" hanya muncul jika ada produk standard
+
+#### Step 2: Stock Detail Modal (Transaction History)
+
+**Cara Buka:**
+
+1. Klik tombol **icon list (📋)** di kolom "Detail Stok"
+2. Modal akan muncul dengan judul: "Detail Stok - [Nama Produk]"
+
+**Modal Header Info menampilkan:**
+
+- SKU produk
+- Nama produk
+- Nama warehouse
+- **Stock Summary Cards:**
+  - Total Stock (besar, highlight)
+  - Batch Qty (jika batch tracked)
+  - Serial Qty (jika serial tracked)
+  - General Qty (jika standard)
+
+**Modal Body: Tabel Pergerakan Stok**
+
+| Column       | Penjelasan                                   |
+| ------------ | -------------------------------------------- |
+| Tanggal      | Tanggal & waktu transaksi (dd/MM/yyyy HH:mm) |
+| Tipe         | Tag badge: IN / OUT / TRANSFER / ADJUSTMENT  |
+| Qty Masuk    | Jumlah masuk (hijau, dengan +)               |
+| Qty Keluar   | Jumlah keluar (merah, dengan -)              |
+| Referensi    | Type + ID (contoh: PURCHASE_ORDER #123)      |
+| Batch/Serial | Badge batch number atau serial number        |
+| Notes        | Catatan transaksi (truncated, hover tooltip) |
+
+**Fitur Modal:**
+
+- Pagination (10 rows per page)
+- Loading skeleton saat fetch data
+- Empty state jika tidak ada pergerakan
+- Responsive layout
+- Button "Tutup" di footer
 
 **Contoh Stock Card:**
 

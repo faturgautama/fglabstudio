@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { CardProductModel } from '../../model/components/card-product.model';
 import { ButtonModule } from 'primeng/button';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -19,5 +20,9 @@ export class CardProduct {
 
   @Input() props!: CardProductModel.ICardProduct;
 
-  constructor() { }
+  constructor(private router: Router) { }
+
+  navigateToDetail(): void {
+    this.router.navigate(['/product', this.props.id]);
+  }
 } 

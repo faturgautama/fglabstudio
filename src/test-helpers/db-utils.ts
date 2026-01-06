@@ -38,7 +38,6 @@ export async function deleteTestDatabase(db: AppDatabase): Promise<void> {
     const dbName = db.name;
     await db.close();
     await db.delete();
-    console.log(`Test database ${dbName} deleted`);
 }
 
 /**

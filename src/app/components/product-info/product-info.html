@@ -1,0 +1,74 @@
+<div class="product-info" *ngIf="product">
+    <!-- Title and Category -->
+    <div class="mb-6">
+        <h1 class="text-4xl font-bold mb-3 text-gray-100">{{ product.title }}</h1>
+        <p-tag [value]="product.category" severity="info" styleClass="text-sm"></p-tag>
+    </div>
+
+    <!-- Price Display -->
+    <div class="price-section mb-6 p-4 bg-gray-800 rounded-lg">
+        <div class="flex items-center gap-4 flex-wrap">
+            @if (hasDiscount) {
+            <div class="flex items-center gap-3">
+                <span class="text-gray-300 line-through text-base">
+                    {{ product.price | currency:'IDR':'symbol':'1.0-0' }}
+                </span>
+                <span class="text-4xl font-bold text-primary text-gray-200">
+                    {{ product.discount_price | currency:'IDR':'symbol':'1.0-0' }}
+                </span>
+                <p-tag [value]="discountPercentage + '% OFF'" severity="danger" styleClass="text-sm font-semibold">
+                </p-tag>
+            </div>
+            } @else {
+            <span class="text-4xl font-bold text-primary text-gray-200">
+                {{ product.price | currency:'IDR':'symbol':'1.0-0' }}
+            </span>
+            }
+        </div>
+    </div>
+
+    <!-- Description -->
+    @if (product.description) {
+    <div class="description-section mb-6">
+        <h2 class="text-2xl font-semibold mb-3 text-gray-100">Description</h2>
+        <p class="text-gray-300 leading-relaxed">{{ product.description }}</p>
+    </div>
+    }
+
+    <!-- Highlight Features -->
+    @if (product.highlight && product.highlight.length > 0) {
+    <div class="highlights-section mb-6">
+        <h2 class="text-2xl font-semibold mb-3 text-gray-100">Key Features</h2>
+        <div class="flex flex-wrap gap-2">
+            @for (feature of product.highlight; track feature) {
+            <p-chip [label]="feature" icon="pi pi-check" class="bg-green-50 text-green-700 text-xs">
+            </p-chip>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- Detailed Features -->
+    @if (product.features && product.features.length > 0) {
+    <div class="features-section mb-6">
+        <h2 class="text-2xl font-semibold mb-3 text-gray-200">Features Detail</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            @for (feature of product.features; track feature.title) {
+            <div class="bg-gray-700 p-4 border rounded-lg hover:shadow-md transition-shadow">
+                @if (feature.icon) {
+                <i [class]="feature.icon + ' text-2xl text-primary mb-2 text-white'"></i>
+                }
+                <h3 class="font-semibold text-lg mb-1 text-gray-100">{{ feature.title }}</h3>
+                <p class="text-gray-400 text-sm">{{ feature.description }}</p>
+            </div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- Published Date -->
+    <div class="published-section text-sm text-gray-400">
+        <i class="pi pi-calendar mr-2"></i>
+        Published: {{ product.published_at }}
+    </div>
+</div>

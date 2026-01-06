@@ -111,7 +111,19 @@
   "BUTTON": {
     "Shop Now": "Beli Sekarang",
     "Contact Us": "Hubungi Kami",
-    "Learn More": "Lebih Lanjut"
+    "Learn More": "Lebih Lanjut",
+    "Buy Now": "Beli Sekarang",
+    "Back": "Kembali"
+  },
+  "PRODUCT_DETAIL": {
+    "Price": "Harga",
+    "Description": "Deskripsi",
+    "Key Features": "Fitur Unggulan",
+    "Features Detail": "Detail Fitur",
+    "Published": "Dipublikasikan",
+    "Customer Reviews": "Review Pelanggan",
+    "No reviews yet": "Belum ada review",
+    "Be the first to review": "Jadilah yang pertama memberikan review untuk produk ini"
   },
   "FORM": {
     "Full Name": {

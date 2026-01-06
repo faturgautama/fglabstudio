@@ -250,7 +250,13 @@ export class Employee implements OnInit, OnDestroy {
     this._store
       .select(EmployeeState.getAll)
       .pipe(takeUntil(this.Destroy$))
-      .subscribe(result => this.TableProps.datasource = result.map((item: any) => { return { ...item, employment_status: (item.employment_status as string).toUpperCase() } }));
+      .subscribe(result => this.TableProps.datasource = result.map((item: any) => {
+        return {
+          ...item,
+          employment_status: item.employment_status ? (item.employment_status as string).toUpperCase() : ''
+        }
+      }
+      ));
   }
 
   ngOnDestroy(): void {

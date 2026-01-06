@@ -107,7 +107,6 @@ export class DynamicTable implements OnInit, OnDestroy {
   }
 
   handleKeydownSearch(args: any) {
-    console.log(args);
     this._keywordSearch$.next(args);
   }
 

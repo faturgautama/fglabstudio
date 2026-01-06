@@ -1,0 +1,34 @@
+:host ::ng-deep {
+    body {
+        background-color: var(--grid-bg) !important;
+    }
+}
+
+.product-detail-page {
+    min-height: 100vh;
+    background-color: var(--grid-bg) !important;
+
+    .container {
+        max-width: 1200px;
+    }
+
+    // Smooth transitions for all interactive elements
+    * {
+        transition: all 0.3s ease;
+    }
+
+    // Loading spinner
+    .pi-spinner {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}

@@ -1175,8 +1175,6 @@ export class StockOpnameService extends BaseActionService<InventoryModel.StockOp
         .filter(p => p.is_active)
         .toArray();
 
-      console.log("products =>", products);
-
       // TODO: Filter by warehouse if needed
       // if (warehouse_id) {
       //   products = products.map(async (item) => {

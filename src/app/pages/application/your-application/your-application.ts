@@ -32,7 +32,6 @@ export class YourApplication implements AfterViewInit, OnInit {
     this._authenticationService
       ._userData
       .subscribe((result) => {
-        console.log("user data =>", result);
         this.user = result;
         this._cdr.detectChanges();
       });

@@ -183,7 +183,7 @@ export class PurchaseOrder implements OnInit, OnDestroy {
     ngOnInit(): void {
         this._store
             .select(PurchaseOrderState.getAll)
-            .pipe(takeUntil(this.Destroy$), tap((result) => { console.log('PO List:', result); }))
+            .pipe(takeUntil(this.Destroy$))
             .subscribe(result => this.TableProps.datasource = result);
 
         this._store

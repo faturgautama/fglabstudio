@@ -8,13 +8,17 @@ import { tap } from "rxjs";
 export interface ProductStateModel {
     data: CardProductModel.ICardProduct[];
     single: CardProductModel.ICardProduct | null;
+    loading: boolean;
+    error: string | null;
 }
 
 @State<ProductStateModel>({
     name: 'product',
     defaults: {
         data: [],
-        single: null
+        single: null,
+        loading: false,
+        error: null
     },
 })
 @Injectable()
@@ -33,6 +37,18 @@ export class ProductState implements NgxsOnInit {
         return state.data;
     }
 
+    @Selector()
+    static getProductById(state: ProductStateModel) {
+        return (id: string) => {
+            return state.data.find(product => product.id === id) || null;
+        };
+    }
+
+    @Selector()
+    static getSingleProduct(state: ProductStateModel) {
+        return state.single;
+    }
+
     @Action(ProductAction.GetProduct)
     getProduct(ctx: StateContext<ProductStateModel>) {
         return this._productService
@@ -46,5 +62,14 @@ export class ProductState implements NgxsOnInit {
                     })
                 })
             )
+    }
+
+    @Action(ProductAction.SetSingleProduct)
+    setSingleProduct(ctx: StateContext<ProductStateModel>, action: ProductAction.SetSingleProduct) {
+        const state = ctx.getState();
+        const product = state.data.find(p => p.id === action.productId) || null;
+        ctx.patchState({
+            single: product
+        });
     }
 }

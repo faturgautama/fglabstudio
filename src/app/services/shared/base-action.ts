@@ -92,6 +92,8 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
                     tableName = 'suppliers';
                 } else if (keyStr.replace('_id', '') === 'warehouse') {
                     tableName = 'warehouses';
+                } else {
+                    tableName = keyStr.replace('_id', '');
                 }
 
                 const foreignKeyValue = record[key];
@@ -192,8 +194,6 @@ export abstract class BaseActionService<T extends { id?: number; is_active?: boo
             created_at: new Date(),
             is_active: true,
         };
-
-        console.log("payload =>", payload);
 
         return this.withLoading(async () => await this.table.add(payload as T));
     }

@@ -55,8 +55,6 @@ export class StockDetailModalComponent implements OnInit, OnChanges, OnDestroy {
         if (this.selectedStock) {
             this.isLoading = true;
 
-            console.log("selected stock =>", this.selectedStock);
-
             this.store.dispatch(
                 new StockCardAction.GetStockCardsByProductAndWarehouse(
                     this.selectedStock.product_id,
@@ -67,8 +65,6 @@ export class StockDetailModalComponent implements OnInit, OnChanges, OnDestroy {
             this.store.select(StockCardState.getStockCardsByProductAndWarehouse)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe((movements: any) => {
-                    console.log("stock card =>", movements);
-
                     if (Array.isArray(movements)) {
                         // Filter by warehouse
                         this.stockMovements = movements.filter(

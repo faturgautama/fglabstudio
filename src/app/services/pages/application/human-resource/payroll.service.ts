@@ -34,8 +34,6 @@ export class PayrollService extends BaseActionService<EmployeeModel.IPayroll> {
 
                         if (existing) {
                             // ✅ Update existing record
-                            console.log(`Updating payroll for employee ${payroll.employee_id} - month ${month}`);
-
                             const updated = {
                                 ...existing,
                                 ...payroll,
@@ -48,8 +46,6 @@ export class PayrollService extends BaseActionService<EmployeeModel.IPayroll> {
                             results.push({ action: 'updated', record: updated });
                         } else {
                             // ✅ Add new record
-                            console.log(`Adding payroll for employee ${payroll.employee_id} - month ${month}`);
-
                             const id = await this.databaseService.db.payroll.add(payroll);
                             results.push({ action: 'added', record: { ...payroll, id } });
                         }
@@ -58,8 +54,6 @@ export class PayrollService extends BaseActionService<EmployeeModel.IPayroll> {
                         results.push({ action: 'error', employee_id: payroll.employee_id, error });
                     }
                 }
-
-                console.log("Payroll generation results =>", results);
                 return results;
             })
         );

@@ -115,8 +115,6 @@ export class AttendanceState implements NgxsOnInit {
 
     @Action(AttendanceAction.UpdateAttendance)
     update(ctx: StateContext<AttendanceStateModel>, payload: any) {
-        console.log("payload =>", payload);
-
         return this._attendanceService
             .update(payload.payload.id, payload.payload)
             .pipe(

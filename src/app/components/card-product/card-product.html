@@ -1,5 +1,6 @@
 <div id="card_product_{{ props.id }}"
-    class="flex flex-col w-full items-start gap-0 p-0 rounded-2xl bg-[rgba(42,42,42,0.32)] backdrop-blur-lg border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] overflow-hidden h-[22rem] md:h-[25rem] relative">
+    class="flex flex-col w-full items-start gap-0 p-0 rounded-2xl bg-[rgba(42,42,42,0.32)] backdrop-blur-lg border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] overflow-hidden h-[22rem] md:h-[25rem] relative cursor-pointer hover:shadow-[0_8px_40px_rgba(0,0,0,0.2)] transition-all"
+    (click)="navigateToDetail()">
     <img [src]="props.image" alt="image" class="rounded-t-lg w-full h-[10rem] md:h-[12rem] object-cover object-center">
 
     <div class="flex w-full flex-col p-5 h-full">
@@ -22,7 +23,7 @@
             </div>
 
             <p-button styleClass="p-button-sm p-button-info" icon="pi pi-cart-plus"
-                [label]="'BUTTON.Shop Now' | translate">
+                [label]="'BUTTON.Shop Now' | translate" (onClick)="navigateToDetail(); $event.stopPropagation()">
             </p-button>
         </div>
     </div>

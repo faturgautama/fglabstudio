@@ -168,7 +168,6 @@ export class Home implements OnInit, OnDestroy {
         .submitForm(data)
         .pipe(takeUntil(this.Destroy$))
         .subscribe((result) => {
-          console.log(result);
           if (result.status == 201 || result.status == 200) {
             this._messageService.clear();
             this._messageService.add({ severity: 'success', summary: 'Yeay!', detail: 'Thanks, we will get back to you' });

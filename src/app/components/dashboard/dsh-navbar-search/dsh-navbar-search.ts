@@ -85,7 +85,9 @@ export class DshNavbarSearch implements OnInit, OnDestroy {
     this._store
       .select(EmployeeState.getAll)
       .pipe(takeUntil(this.Destroy$))
-      .subscribe(employees => this.employeeDatasource = employees);
+      .subscribe((employees) => {
+        this.employeeDatasource = employees;
+      });
 
     this._store
       .select(PayrollState.getAll)

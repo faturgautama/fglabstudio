@@ -16,8 +16,6 @@ export class InventoryMigrationService {
         details: any;
     }> {
         try {
-            console.log('🔄 Starting warehouse tracking migration...');
-
             // 1. Get or create default warehouse
             let defaultWarehouse = await this.databaseService.db.warehouses
                 .where('is_default')
@@ -25,7 +23,6 @@ export class InventoryMigrationService {
                 .first();
 
             if (!defaultWarehouse) {
-                console.log('📦 Creating default warehouse...');
                 const warehouseId = await this.databaseService.db.warehouses.add({
                     code: 'WH-DEFAULT',
                     name: 'Default Warehouse',
@@ -53,7 +50,6 @@ export class InventoryMigrationService {
             };
 
             // 2. Migrate stock_cards
-            console.log('📊 Migrating stock cards...');
             const stockCards = await this.databaseService.db.stock_cards.toArray();
             for (const card of stockCards) {
                 if (!card.warehouse_id) {
@@ -65,7 +61,6 @@ export class InventoryMigrationService {
             }
 
             // 3. Migrate purchase_orders
-            console.log('📦 Migrating purchase orders...');
             const pos = await this.databaseService.db.purchase_orders.toArray();
             for (const po of pos) {
                 if (!po.warehouse_id) {
@@ -77,7 +72,6 @@ export class InventoryMigrationService {
             }
 
             // 4. Migrate stock_movements
-            console.log('🔄 Migrating stock movements...');
             const movements = await this.databaseService.db.stock_movements.toArray();
             for (const movement of movements) {
                 if (!movement.warehouse_id) {
@@ -89,7 +83,6 @@ export class InventoryMigrationService {
             }
 
             // 5. Migrate product_batches
-            console.log('📦 Migrating product batches...');
             const batches = await this.databaseService.db.product_batches.toArray();
             for (const batch of batches) {
                 if (!batch.warehouse_id) {
@@ -101,7 +94,6 @@ export class InventoryMigrationService {
             }
 
             // 6. Migrate product_serials
-            console.log('🔢 Migrating product serials...');
             const serials = await this.databaseService.db.product_serials.toArray();
             for (const serial of serials) {
                 if (!serial.warehouse_id) {
@@ -113,7 +105,6 @@ export class InventoryMigrationService {
             }
 
             // 7. Migrate stock_opnames
-            console.log('📋 Migrating stock opnames...');
             const opnames = await this.databaseService.db.stock_opnames.toArray();
             for (const opname of opnames) {
                 if (!opname.warehouse_id) {
@@ -125,7 +116,6 @@ export class InventoryMigrationService {
             }
 
             // 8. Initialize product_warehouse_stock
-            console.log('📊 Initializing product warehouse stocks...');
             const products = await this.databaseService.db.products.toArray();
 
             for (const product of products) {
@@ -151,9 +141,6 @@ export class InventoryMigrationService {
                 }
             }
 
-            console.log('✅ Migration completed successfully!');
-            console.log('📊 Stats:', stats);
-
             return {
                 success: true,
                 message: 'Migration completed successfully',
@@ -168,7 +155,6 @@ export class InventoryMigrationService {
             };
 
         } catch (error: any) {
-            console.error('❌ Migration failed:', error);
             return {
                 success: false,
                 message: `Migration failed: ${error.message}`,
@@ -238,7 +224,5 @@ export class InventoryMigrationService {
 
         // Clear product_warehouse_stock
         await this.databaseService.db.product_warehouse_stock.clear();
-
-        console.log('✅ Rollback completed');
     }
 }
