@@ -56,10 +56,10 @@
                 "icon": "pi pi-box"
             }
         ],
-        "published_at": "2025-01-09 12:00:00"
+        "published_at": null
     },
     {
-        "id": "inventory",
+        "id": 2,
         "title": "Inventory (Management Stock)",
         "description": "Sistem manajemen inventory yang powerful untuk mengelola stok barang dengan efisien. Dilengkapi dengan fitur tracking, alert stok minimum, dan laporan lengkap untuk membantu bisnis Anda.",
         "image": "/assets/image/coming_soon.jpg",
@@ -111,7 +111,7 @@
         "published_at": "2025-01-09 12:00:00"
     },
     {
-        "id": "human-resource",
+        "id": 1,
         "title": "Human Resource System",
         "description": "Sistem HRIS lengkap untuk mengelola data karyawan, absensi, payroll, dan performance management. Solusi terpadu untuk departemen HR modern.",
         "image": "/assets/image/coming_soon.jpg",
@@ -210,6 +210,6 @@
                 "icon": "pi pi-file"
             }
         ],
-        "published_at": "2025-01-09 12:00:00"
+        "published_at": null
     }
 ]

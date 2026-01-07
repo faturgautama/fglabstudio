@@ -37,6 +37,34 @@ export class AuthenticationService {
     )
   }
 
+  signUp(full_name: string, email: string, password: string, password_confirmation: string, trial_product_id: string) {
+    const payload = {
+      full_name,
+      email,
+      password,
+      password_confirmation,
+      trial_product_id
+    };
+
+    return this._http.post(
+      `${environment.SUPABASE_URL}/register`,
+      payload,
+      {
+        headers: {
+          'Authorization': `Bearer ${environment.SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    ).pipe(
+      tap((result: any) => {
+        if (result['user']) {
+          localStorage.setItem("_CXUSER_", JSON.stringify(result));
+          this._userData.next(result);
+        }
+      })
+    )
+  }
+
   signOut(user_id: number) {
     const payload = {
       user_id,

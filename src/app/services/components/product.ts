@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { CardProductModel } from '../../model/components/card-product.model';
 
 @Injectable({
@@ -13,6 +13,10 @@ export class Product {
   ) { }
 
   getProduct(): Observable<CardProductModel.ICardProduct[]> {
-    return this._httpClient.get<CardProductModel.ICardProduct[]>('/assets/data/product.json');
+    return this._httpClient
+      .get<CardProductModel.ICardProduct[]>('/assets/data/product.json')
+      .pipe(
+        map(result => result.filter(item => item.published_at))
+      )
   }
 }

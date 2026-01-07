@@ -1,1 +1,190 @@
-<p>register works!</p>
+<div class="flex flex-row w-full h-screen bg-gray-100">
+    <div class="flex h-full w-8/12 pattern-bg">
+        <div class="flex flex-col w-full justify-between p-10 gap-0">
+            <img src="/assets/image/logo_transparent_landscape.png" alt="logo" class="w-16 md:w-20" data-aos="fade-up"
+                data-aos-duration="1000" (click)="handleBackToHome()" />
+
+            <div class="flex flex-col gap-1 mb-10">
+                <p class="md:text-5xl text-3xl font-bold text-gray-200 mb-1" data-aos="fade-up"
+                    data-aos-duration="1100">
+                    {{ 'HOME.Power Up Your' | translate | uppercase }}
+                </p>
+                <p class="md:text-8xl text-6xl font-extrabold bg-gradient-to-r from-sky-500 via-blue-500 to-emerald-500 bg-clip-text text-transparent mt-0 mb-3"
+                    data-aos="fade-up" data-aos-duration="1200">
+                    {{ 'HOME.Creativity Workflow' | translate | uppercase }}
+                </p>
+
+                <div class="grid md:w-6/12 w-full">
+                    <p-carousel [value]="WhyChooseUs" [numVisible]="1" [numScroll]="1" [circular]="true"
+                        [showIndicators]="false" [showNavigators]="false" autoplayInterval="50000">
+                        <ng-template let-value #item>
+                            <div class="flex flex-row w-full gap-3 items-center p-5" data-aos="fade-up"
+                                data-aos-duration="1800" data-aos-easing="ease-out-cubic">
+
+                                <p-button [icon]="value.icon" severity="info" styleClass="p-button-sm" [rounded]="true">
+                                </p-button>
+
+                                <div class="flex flex-col">
+                                    <p class="text-base md:text-lg text-gray-100 font-semibold">
+                                        {{ value.title | translate }}
+                                    </p>
+                                    <p class="text-xs md:text-sm text-gray-400">
+                                        {{ value.description | translate }}
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-carousel>
+                </div>
+            </div>
+
+            <div class="flex w-full justify-between">
+                <p class="text-xs text-gray-400 font-medium ">
+                    Powered Code by Xerenity
+                </p>
+
+                <p class="text-xs text-gray-400 font-medium">
+                    2025 - v0.0.1
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="w-4/12 bg-gray-100">
+        <div class="flex flex-col justify-between w-full p-10">
+            <img src="/assets/image/logo_blue.png" alt="logo" class="rounded-2xl w-10 md:w-16 mb-5" data-aos="fade-up"
+                data-aos-duration="1000" />
+
+            <div class="flex flex-col gap-1 mt-20 mb-16" data-aos="fade-up" data-aos-duration="1000">
+                <p class="text-3xl font-semibold text-gray-800">
+                    Selamat Datang 👋
+                </p>
+
+                <p class="text-sm text-gray-500">
+                    Mohon isi detail registrasi dibawah ini
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-5" [formGroup]="Form" data-aos="fade-up" data-aos-duration="1000">
+                <!-- Email -->
+                <div class="flex flex-col w-full gap-2">
+                    <p class="text-sm text-gray-600 font-medium">
+                        Nama Lengkap
+                    </p>
+
+                    <input type="text" pInputText class="w-full" formControlName="full_name">
+
+                    @if (Form.get('full_name')?.touched && Form.get('full_name')?.invalid) {
+                    <span class="text-red-500 bg-red-200 font-medium text-xs p-2 w-full mt-1 rounded">
+                        Nama lengkap tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Email -->
+                <div class="flex flex-col w-full gap-2">
+                    <p class="text-sm text-gray-600 font-medium">
+                        Email
+                    </p>
+
+                    <input type="text" pInputText class="w-full" formControlName="email">
+
+                    @if (Form.get('email')?.touched && Form.get('email')?.invalid) {
+                    <span class="text-red-500 bg-red-200 font-medium text-xs p-2 w-full mt-1 rounded">
+                        Email tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Password -->
+                <div class="flex flex-col w-full gap-2">
+                    <p class="text-sm text-gray-600 font-medium">
+                        Password
+                    </p>
+
+                    <p-password formControlName="password" [feedback]="false" [toggleMask]="true"
+                        styleClass="p-inputtext-sm p-0">
+                    </p-password>
+
+                    @if (Form.get('password')?.touched && Form.get('password')?.invalid) {
+                    <span class="text-red-500 bg-red-200 font-medium text-xs p-2 w-full mt-1 rounded">
+                        Password tidak boleh kosong
+                    </span>
+                    }
+                </div>
+
+                <!-- Konfirmasi Password -->
+                <div class="flex flex-col w-full gap-2">
+                    <p class="text-sm text-gray-600 font-medium">
+                        Konfirmasi Password
+                    </p>
+
+                    <p-password formControlName="password_confirmation" [feedback]="false" [toggleMask]="true"
+                        styleClass="p-inputtext-sm p-0">
+                    </p-password>
+
+                    @if ((Form.get('password_confirmation')?.touched && Form.get('password_confirmation')?.invalid) &&
+                    Form.get('password')?.value !== Form.get('password_confirmation')?.value) {
+                    <span class="text-red-500 bg-red-200 font-medium text-xs p-2 w-full mt-1 rounded">
+                        Password tidak sesuai
+                    </span>
+                    }
+                </div>
+
+                <!-- Pilih Product -->
+                <div
+                    class="flex flex-col w-full gap-0 mt-3 pt-3 border-t border-b-0 border-x-0 border-solid border-gray-300">
+                    <p class="text-sm text-gray-700 font-medium">
+                        Anda Mendapatkan 7 Hari Trial Aplikasi
+                    </p>
+                    <p class="text-xs text-gray-500">
+                        Mohon Pilih Salah 1 Aplikasi Dibawah ini
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        @for(item of ProductDatasource; track item.id) {
+                        @if(SelectedTrialProduct) {
+                        <div class="flex flex-col gap-1 p-2 rounded-lg {{ SelectedTrialProduct.id == item.id ? 'bg-gray-800' : 'bg-sky-100' }} shadow-sm"
+                            (click)="SelectedTrialProduct = item">
+                            <p
+                                class="text-sm {{ SelectedTrialProduct.id == item.id ? 'text-gray-100' : 'text-sky-600' }} font-medium">
+                                {{ item.title }}
+                            </p>
+                            <p
+                                class="text-xs {{ SelectedTrialProduct.id == item.id ? 'text-gray-200' : 'text-sky-400' }} cursor-pointer">
+                                Lihat Detail
+                            </p>
+                        </div>
+                        } @else {
+                        <div class="flex flex-col gap-1 p-2 rounded-lg bg-sky-100 shadow-sm"
+                            (click)="SelectedTrialProduct = item">
+                            <p class="text-sm text-sky-600 font-medium">
+                                {{ item.title }}
+                            </p>
+                            <p class="text-xs text-sky-400 cursor-pointer">
+                                Lihat Detail
+                            </p>
+                        </div>
+                        }
+
+                        }
+                    </div>
+                </div>
+
+                <div class="grid gap-5 items-center w-full mt-4">
+                    <p-button severity="info" label="Register" [disabled]="Form.invalid || !SelectedTrialProduct"
+                        styleClass="w-full" (onClick)="handleRegister(Form.value)">
+                    </p-button>
+
+                    <p class="text-gray-500 text-xs text-center">
+                        Sudah Punya Akun?
+                        <span class="cursor-pointer text-sky-500" (click)="handleGoToLogin()">
+                            Login Disini
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

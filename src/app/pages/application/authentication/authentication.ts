@@ -8,7 +8,6 @@ import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel'
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-import { TableModule } from "primeng/table";
 import { AuthenticationService } from '../../../services/pages/authentication/authentication';
 import { DatabaseService } from '../../../app.database';
 import { from } from 'rxjs';
@@ -24,7 +23,6 @@ import { from } from 'rxjs';
     PasswordModule,
     InputTextModule,
     ReactiveFormsModule,
-    TableModule
   ],
   standalone: true,
   templateUrl: './authentication.html',
@@ -107,6 +105,10 @@ export class Authentication implements OnInit {
           detail: error.error?.error || 'Unknown error',
         });
       });
+  }
+
+  handleGoToRegister() {
+    this._router.navigateByUrl("/register");
   }
 
   handleBackToHome() {

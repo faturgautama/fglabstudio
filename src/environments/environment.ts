@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   SUPABASE_URL: '',
-  SUPABASE_KEY: ''
+  SUPABASE_KEY: '',
+  RESEND_KEY: ''
 };
 
 /*
