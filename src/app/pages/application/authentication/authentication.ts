@@ -108,4 +108,8 @@ export class Authentication implements OnInit {
         });
       });
   }
+
+  handleBackToHome() {
+    this._router.navigateByUrl("");
+  }
 }

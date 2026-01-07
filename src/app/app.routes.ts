@@ -17,6 +17,10 @@ export const routes: Routes = [
         }
     },
     {
+        path: 'register',
+        loadComponent: async () => (await import('../app/pages/register/register')).Register
+    },
+    {
         path: 'your-apps',
         canActivate: [AuthGuard],
         loadComponent: async () => (await import('../app/pages/application/your-application/your-application')).YourApplication,

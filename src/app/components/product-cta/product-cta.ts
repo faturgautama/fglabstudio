@@ -1,12 +1,15 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { TranslatePipe } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-product-cta',
     imports: [
         CommonModule,
-        ButtonModule
+        ButtonModule,
+        TranslatePipe
     ],
     templateUrl: './product-cta.html',
     styleUrl: './product-cta.scss',
@@ -19,11 +22,23 @@ export class ProductCTA {
     @Output() onContactUs = new EventEmitter<void>();
     @Output() onBuyNow = new EventEmitter<string>();
 
-    handleContactUs(): void {
-        this.onContactUs.emit();
-    }
+    _router = inject(Router);
 
-    handleBuyNow(): void {
-        this.onBuyNow.emit(this.productId);
+    handleClickButton(id: string) {
+        if (id == 'login') {
+            this._router.navigateByUrl("/login");
+            return;
+        }
+
+        if (id == 'register') {
+            this._router.navigateByUrl("/register");
+            return;
+        }
+
+        const element = document.getElementById(id);
+        if (element) {
+            const offset = element!.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
     }
 }

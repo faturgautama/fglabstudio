@@ -94,6 +94,11 @@ export class Navbar implements OnInit {
   }
 
   handleClickButton(id: string) {
+    if (id == 'login') {
+      this._router.navigateByUrl("/login");
+      return;
+    }
+
     const element = document.getElementById(id);
     if (element) {
       const offset = element!.getBoundingClientRect().top + window.scrollY - 80;
