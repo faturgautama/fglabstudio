@@ -65,6 +65,26 @@ export class AuthenticationService {
     )
   }
 
+  getProfile(user_id: number) {
+    return this._http.get(
+      `${environment.SUPABASE_URL}/get-profile?user_id=${user_id}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${environment.SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    ).pipe(
+      tap((result: any) => {
+        if (result['user']) {
+          // Update localStorage with fresh data
+          localStorage.setItem("_CXUSER_", JSON.stringify(result));
+          this._userData.next(result);
+        }
+      })
+    )
+  }
+
   signOut(user_id: number) {
     const payload = {
       user_id,

@@ -8,11 +8,11 @@
                     Total Produk
                 </p>
                 <p class="text-5xl font-semibold text-gray-100">
-                    {{ Counting.total_employee }}
+                    {{ Counting.total_product }}
                 </p>
 
                 <span class="absolute bottom-[-20px] right-4">
-                    <i class="pi pi-users text-gray-300" style="font-size: 5rem"></i>
+                    <i class="pi pi-box text-gray-300" style="font-size: 5rem"></i>
                 </span>
             </div>
 
@@ -22,11 +22,11 @@
                     Total Kategori
                 </p>
                 <p class="text-5xl font-semibold text-gray-100">
-                    {{ Counting.total_departement }}
+                    {{ Counting.total_category }}
                 </p>
 
                 <span class="absolute bottom-[-20px] right-4">
-                    <i class="pi pi-building text-gray-300" style="font-size: 5rem"></i>
+                    <i class="pi pi-tags text-gray-300" style="font-size: 5rem"></i>
                 </span>
             </div>
 
@@ -36,7 +36,7 @@
                     Total Purchasing Order
                 </p>
                 <p class="text-2xl font-semibold text-gray-100">
-                    {{ Counting.total_payroll | currency: 'Rp. ' }}
+                    {{ Counting.total_purchase_order | currency: 'Rp. ' }}
                 </p>
 
                 <span class="absolute bottom-[-20px] right-4">
@@ -47,15 +47,15 @@
 
         <!-- Work Hours & Info -->
         <div class="grid grid-cols-3 w-full gap-5 ">
-            <!-- Work Hours -->
+            <!-- Stock Movement Chart -->
             <div class="flex flex-col w-full col-span-2 p-5 bg-white rounded-lg shadow-sm">
                 <div class="flex flex-row justify-between items-center mb-5">
                     <div class="flex flex-col">
                         <p class="text-lg font-semibold text-gray-700">
-                            Jam Kerja Karyawan
+                            Pergerakan Stok Produk
                         </p>
                         <p class="text-sm text-gray-500">
-                            Total jam kerja dan overtime karyawan
+                            Stock masuk dan keluar 7 hari terakhir
                         </p>
                     </div>
 
@@ -67,19 +67,19 @@
                 </div>
 
                 <div class="grid w-full">
-                    <p-chart type="bar" [data]="WorkHoursChart.datasource" [options]="WorkHoursChart.options"
+                    <p-chart type="bar" [data]="StockMovementChart.datasource" [options]="StockMovementChart.options"
                         class="h-[20rem]" [responsive]="true" />
                 </div>
             </div>
 
-            <!-- Info -->
+            <!-- Low Stock Info -->
             <div class="flex flex-col w-full p-5 bg-white rounded-lg">
                 <div class="flex flex-col mb-5">
                     <p class="text-lg font-semibold text-gray-700">
-                        Yang Baru di Bulan Ini
+                        Produk Stok Menipis
                     </p>
                     <p class="text-sm text-gray-500">
-                        Informasi seputar karyawan bulan ini
+                        Produk dengan stok dibawah minimum
                     </p>
                 </div>
 
@@ -87,23 +87,32 @@
                     @for (item of MonthlyInfo; track $index) {
                     <div
                         class="flex flex-row w-full items-center gap-4 pb-3 border-b border-t-0 border-x-0 border-solid border-gray-200">
-                        <p-avatar [label]="item.full_name[0]" />
+                        <i class="pi pi-exclamation-triangle text-orange-500 text-2xl"></i>
 
                         <div class="flex flex-col gap-0">
                             <p class="text-base text-gray-800 font-medium">
-                                {{ item.full_name }}
+                                {{ item.name }}
                             </p>
                             <p class="text-xs text-gray-500">
-                                Berulang tahun pada {{ item.birthday | date: 'dd MMMM' }}
+                                Sisa stok: {{ item.current_stock }} {{ item.unit }}
                             </p>
                         </div>
+                    </div>
+                    }
+
+                    @if (MonthlyInfo.length === 0) {
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <i class="pi pi-check-circle text-green-500 text-4xl mb-2"></i>
+                        <p class="text-sm text-gray-500">
+                            Semua produk stok aman
+                        </p>
                     </div>
                     }
                 </div>
             </div>
         </div>
 
-        <!-- Employee List -->
+        <!-- Product List -->
         <div class="grid w-full p-5 bg-white rounded-lg shadow-sm">
             <app-dynamic-table [props]="TableProps"></app-dynamic-table>
         </div>

@@ -1,3 +1,4 @@
+@if (userData | async; as user) {
 <div class="flex flex-row justify-between p-5 bg-white shadow-sm h-[4.5rem]">
     <div class="flex w-4/12">
         <p-iconfield styleClass="w-full">
@@ -6,6 +7,21 @@
                 (click)="openSearchModal()" />
         </p-iconfield>
     </div>
+
+    @if(user.current_application.is_trial) {
+    <div class="flex items-center gap-2">
+        <span class="px-2 py-1 rounded-md shadow-sm bg-red-100 text-red-500 text-xs font-semibold"
+            style="width: fit-content;">
+            Trial Account
+        </span>
+        <p class="text-red-500 text-sm">
+            Berakhir pada :
+            <span class="text-red-500 font-medium">
+                {{ user.current_application.expired_at | date: 'dd MMMM yyyy' }}
+            </span>
+        </p>
+    </div>
+    }
 
     <div class="flex items-center gap-5">
         <p-button styleClass="p-button-sm" [rounded]="false" icon="pi pi-cloud-download" [outlined]="true"
@@ -25,15 +41,18 @@
 
             <div class="flex flex-col gap-0">
                 <p class="text-sm text-gray-700 font-medium">
-                    Superadmin
+                    {{ user.user.full_name }}
                 </p>
                 <p class="text-xs text-gray-500">
-                    superadmin@codebyxerenity.my.id
+                    {{ user.user.email }}
                 </p>
             </div>
+
         </div>
     </div>
 </div>
+}
+
 
 <app-dsh-navbar-search #navbarSearchModal></app-dsh-navbar-search>
 
