@@ -88,7 +88,7 @@ export class DynamicTable implements OnInit, OnDestroy {
           return;
         }
 
-        if (result.length) {
+        if (result.length > 0) {
           this.props.datasource = this._originalDatasource.filter((item) => {
             const stringified = JSON.stringify(item);
             if (stringified.toLowerCase().includes(result.toLowerCase())) {

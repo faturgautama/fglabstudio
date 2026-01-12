@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Navigation } from '../../../services/components/navigation';
 import { ButtonModule } from 'primeng/button';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { SidebarModel } from '../../../model/components/dashboard/sidebar.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
@@ -11,6 +11,7 @@ import { EmployeeModel } from '../../../model/pages/application/human-resource/e
 import { EmployeeState } from '../../../store/human-resource/employee';
 import { CategoryState } from '../../../store/inventory';
 import { ProductState } from '../../../store/product';
+import { POSSettingState } from '../../../store/point-of-sales';
 
 @Component({
   selector: 'app-dsh-sidebar',
@@ -67,8 +68,19 @@ export class DshSidebar implements OnInit, OnDestroy {
     };
 
     if (this.resolverExtraData.title == 'Kategori Produk') {
-      this._appName = 'My Inventory';
-      this.getInventoryState();
+      // Check if this is POS or Inventory based on app_name
+      if (this.resolverExtraData.app_name === 'My POS') {
+        this._appName = 'My POS';
+        this.getPOSState();
+      } else {
+        this._appName = 'My Inventory';
+        this.getInventoryState();
+      }
+    }
+
+    if (this.resolverExtraData.title == 'POS Kasir') {
+      this._appName = 'My POS';
+      this.getPOSState();
     }
   }
 
@@ -120,6 +132,29 @@ export class DshSidebar implements OnInit, OnDestroy {
     this._store.select(CompanySettingState.getSingle)
       .pipe(takeUntil(this.Destroy$))
       .subscribe(result => this.resolverExtraData.company_setting = result);
+
+    this._store.select(ProductState.getData)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.resolverExtraData.product_count = result.length);
+  }
+
+  private getPOSState() {
+    this._store.select(CategoryState.getAll)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => this.resolverExtraData.datasource = result);
+
+    this._store.select(POSSettingState.getSingle)
+      .pipe(takeUntil(this.Destroy$))
+      .subscribe(result => {
+        // Map POS Setting to company_setting format for template compatibility
+        if (result) {
+          this.resolverExtraData.company_setting = {
+            company_name: result.store_name,
+            company_address: result.store_address,
+            company_phone: result.store_phone
+          };
+        }
+      });
 
     this._store.select(ProductState.getData)
       .pipe(takeUntil(this.Destroy$))

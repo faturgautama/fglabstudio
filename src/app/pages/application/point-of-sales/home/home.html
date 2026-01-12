@@ -1,0 +1,63 @@
+<app-dsh-base-layout>
+    <div class="flex flex-col w-full h-full gap-5 p-3">
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="card-icon sales">
+                    <i class="pi pi-wallet"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Total Penjualan Hari Ini</span>
+                    <span class="card-value">{{ Summary.total_sales | currency:'IDR':'symbol':'1.0-0' }}</span>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-icon transactions">
+                    <i class="pi pi-shopping-cart"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Jumlah Transaksi</span>
+                    <span class="card-value">{{ Summary.total_transactions }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="dashboard-content">
+            <!-- Sales Chart -->
+            <div class="chart-section">
+                <div class="section-header">
+                    <h3>Grafik Penjualan 7 Hari Terakhir</h3>
+                </div>
+                <div class="chart-container">
+                    <p-chart type="bar" [data]="SalesChart.datasource" [options]="SalesChart.options"
+                        height="300px"></p-chart>
+                </div>
+            </div>
+
+            <!-- Top Products -->
+            <div class="top-products-section">
+                <div class="section-header">
+                    <h3>Produk Terlaris</h3>
+                </div>
+                <div class="products-list">
+                    @for (product of TopProducts; track product.product_id; let i = $index) {
+                    <div class="product-item">
+                        <span class="product-rank">{{ i + 1 }}</span>
+                        <div class="product-info">
+                            <span class="product-name">{{ product.product_name }}</span>
+                            <span class="product-qty">{{ product.total_qty }} terjual</span>
+                        </div>
+                    </div>
+                    } @empty {
+                    <div class="empty-state">
+                        <i class="pi pi-inbox"></i>
+                        <p>Belum ada data penjualan</p>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</app-dsh-base-layout>

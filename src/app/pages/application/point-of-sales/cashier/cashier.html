@@ -1,0 +1,383 @@
+<app-dsh-base-layout>
+    <div class="flex flex-col w-full h-full gap-5 p-3">
+        <!-- Header -->
+        <div class="cashier-header">
+            <div class="flex flex-row items-center gap-2 w-4/12">
+                <div class="w-4/12">
+                    <label class="text-sm text-gray-700 font-medium">Kasir</label>
+                </div>
+                <div class="w-8/12">
+                    <p-select [options]="Employees" [(ngModel)]="SelectedCashier" optionLabel="full_name"
+                        placeholder="Pilih Kasir" (onChange)="onCashierChange()" class="w-full" size="small"
+                        appendTo="body">
+                    </p-select>
+                </div>
+            </div>
+
+            @if (IsShiftEnabled) {
+            <div class="shift-info">
+                @if (ActiveShift) {
+                <span class="shift-badge active">
+                    <i class="pi pi-check-circle"></i>
+                    Shift Aktif
+                </span>
+                <p-button label="Tutup Shift" icon="pi pi-stop" severity="secondary" [outlined]="true"
+                    (onClick)="openCloseShiftDialog()">
+                </p-button>
+                } @else {
+                <p-button label="Buka Shift" icon="pi pi-play" [disabled]="!SelectedCashier"
+                    (onClick)="openShiftDialog()">
+                </p-button>
+                }
+            </div>
+            }
+        </div>
+
+        <!-- Main Content -->
+        <div class="cashier-content">
+            <!-- Cart Section (Left) -->
+            <div class="cart-section">
+                <div class="cart-header">
+                    <h3>Keranjang Belanja</h3>
+                    @if (Cart.length > 0) {
+                    <p-button icon="pi pi-trash" severity="danger" [text]="true" (onClick)="clearCart()">
+                    </p-button>
+                    }
+                </div>
+
+                <div class="cart-items">
+                    @for (item of Cart; track item.product_id) {
+                    <div class="cart-item">
+                        <div class="item-info">
+                            <span class="item-name">{{ item.product_name }}</span>
+                            <span class="item-price">{{ item.unit_price | currency: 'Rp. ' }}</span>
+                        </div>
+                        <div class="item-actions">
+                            <p-button icon="pi pi-minus" [rounded]="true" [text]="true" size="small"
+                                (onClick)="updateQuantity(item, item.quantity - 1)"></p-button>
+                            <span class="item-qty">{{ item.quantity }}</span>
+                            <p-button icon="pi pi-plus" [rounded]="true" [text]="true" size="small"
+                                (onClick)="updateQuantity(item, item.quantity + 1)"></p-button>
+                            <p-button icon="pi pi-times" [rounded]="true" [text]="true" size="small" severity="danger"
+                                (onClick)="removeFromCart(item)"></p-button>
+                        </div>
+                        <div class="item-subtotal">
+                            {{ item.subtotal | currency: 'Rp. ' }}
+                        </div>
+                    </div>
+                    } @empty {
+                    <div class="cart-empty">
+                        <i class="pi pi-shopping-cart"></i>
+                        <p>Keranjang kosong</p>
+                        <small>Klik produk untuk menambahkan</small>
+                    </div>
+                    }
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>{{ cartSubtotal | currency: 'Rp. ' }}</span>
+                    </div>
+                    @if (TransactionDiscount > 0) {
+                    <div class="summary-row discount">
+                        <span>Diskon</span>
+                        <span>-{{ TransactionDiscount | currency: 'Rp. ' }}</span>
+                    </div>
+                    }
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span>{{ cartTotal | currency: 'Rp. ' }}</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mt-2">
+                        <p-button label="Diskon" icon="pi pi-percentage" severity="secondary" [outlined]="true"
+                            [disabled]="Cart.length === 0" (onClick)="openDiscountDialog()" styleClass="w-full">
+                        </p-button>
+                        <p-button label="Bayar" icon="pi pi-wallet" [disabled]="Cart.length === 0"
+                            (onClick)="openPaymentDialog()" styleClass="w-full">
+                        </p-button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Section (Right) -->
+            <div class="products-section">
+                <div class="products-header">
+                    <p-iconfield styleClass="w-full">
+                        <p-inputicon class="pi pi-search" />
+                        <input type="text" pInputText [(ngModel)]="SearchQuery" (ngModelChange)="onSearchProduct()"
+                            placeholder="Cari produk atau scan barcode..." class="w-full" />
+                    </p-iconfield>
+                </div>
+
+                <div class="products-grid">
+                    @for (product of FilteredProducts; track product.id) {
+                    <div class="product-card" (click)="addToCart(product)">
+                        <div class="product-image">
+                            @if (product.image_url) {
+                            <img [src]="product.image_url" [alt]="product.name" />
+                            } @else {
+                            <i class="pi pi-box"></i>
+                            }
+                        </div>
+                        <div class="product-info">
+                            <span class="product-name">{{ product.name }}</span>
+                            <span class="product-price">{{ product.selling_price | currency: 'Rp. '
+                                }}</span>
+                            <span class="product-stock">Stok: {{ product.current_stock }}</span>
+                        </div>
+                    </div>
+                    } @empty {
+                    <div class="products-empty">
+                        <i class="pi pi-search"></i>
+                        <p>Produk tidak ditemukan</p>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Open Shift Dialog -->
+    <p-dialog header="Buka Shift" [(visible)]="_modalToggler.shift" [modal]="true" [style]="{ width: '400px' }">
+        <div class="shift-form">
+            <div class="form-group">
+                <label>Modal Awal (Rp)</label>
+                <p-inputNumber [(ngModel)]="ShiftForm.initial_cash" mode="currency" currency="IDR"
+                    [style]="{ width: '100%' }">
+                </p-inputNumber>
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button label="Batal" severity="secondary" (onClick)="_modalToggler.shift = false"></p-button>
+            <p-button label="Buka Shift" icon="pi pi-play" (onClick)="confirmOpenShift()"></p-button>
+        </ng-template>
+    </p-dialog>
+
+    <!-- Discount Dialog -->
+    <p-dialog header="Diskon Transaksi" [(visible)]="_modalToggler.discount" [modal]="true"
+        [style]="{ width: '400px' }">
+        <div class="discount-form">
+            <div class="form-group">
+                <label>Tipe Diskon</label>
+                <p-select [(ngModel)]="DiscountForm.type"
+                    [options]="[{label: 'Persen', value: 'percent'}, {label: 'Nominal', value: 'nominal'}]"
+                    optionLabel="label" optionValue="value" [style]="{ width: '100%' }">
+                </p-select>
+            </div>
+            <div class="form-group">
+                <label>Nilai Diskon</label>
+                <p-inputNumber [(ngModel)]="DiscountForm.value"
+                    [mode]="DiscountForm.type === 'percent' ? 'decimal' : 'currency'" currency="IDR"
+                    [style]="{ width: '100%' }">
+                </p-inputNumber>
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button label="Batal" severity="secondary" (onClick)="_modalToggler.discount = false"></p-button>
+            <p-button label="Terapkan" icon="pi pi-check" (onClick)="applyDiscount()"></p-button>
+        </ng-template>
+    </p-dialog>
+
+    <!-- Payment Dialog -->
+    <p-dialog header="Pembayaran" [(visible)]="_modalToggler.payment" [modal]="true" [style]="{ width: '450px' }"
+        [draggable]="false" [resizable]="false">
+        <div class="payment-form">
+            <div class="payment-total">
+                <span>Total Bayar</span>
+                <span class="total-amount">{{ cartTotal | currency: 'Rp. ' }}</span>
+            </div>
+
+            <div class="form-group">
+                <label>Metode Pembayaran</label>
+                <p-select [(ngModel)]="PaymentForm.method" [options]="PaymentMethods" optionLabel="label"
+                    optionValue="value" [style]="{ width: '100%' }">
+                </p-select>
+            </div>
+
+            @if (PaymentForm.method === 'CASH') {
+            <div class="form-group">
+                <label>Uang Diterima</label>
+                <p-inputNumber [(ngModel)]="PaymentForm.cash_received" mode="currency" currency="IDR"
+                    [style]="{ width: '100%' }">
+                </p-inputNumber>
+            </div>
+
+            <div class="change-amount">
+                <span>Kembalian</span>
+                <span class="change-value">{{ changeAmount | currency: 'Rp. ' }}</span>
+            </div>
+            }
+
+            @if (PaymentForm.method === 'TRANSFER' && Setting?.bank_account) {
+            <div class="bank-info">
+                <p><strong>{{ Setting?.bank_name }}</strong></p>
+                <p>{{ Setting?.bank_account }}</p>
+                <p>a.n. {{ Setting?.bank_holder }}</p>
+            </div>
+            }
+
+            @if (PaymentForm.method === 'QRIS' && Setting?.qris_image) {
+            <div class="qris-info">
+                <img [src]="Setting?.qris_image" alt="QRIS" />
+            </div>
+            }
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button label="Batal" severity="secondary" (onClick)="_modalToggler.payment = false"></p-button>
+            <p-button label="Proses Pembayaran" icon="pi pi-check" (onClick)="processPayment()"></p-button>
+        </ng-template>
+    </p-dialog>
+
+    <!-- Receipt Dialog -->
+    <p-dialog header="Struk Pembayaran" [(visible)]="_modalToggler.receipt" [modal]="true" [style]="{ width: '400px' }"
+        [draggable]="false" [resizable]="false">
+        @if (LastTransaction) {
+        <div id="receipt-print" class="receipt">
+            <div class="receipt-header">
+                @if (Setting?.store_logo) {
+                <img [src]="Setting?.store_logo" alt="Logo" class="receipt-logo" />
+                }
+                <h4>{{ Setting?.store_name || 'Toko' }}</h4>
+                <p>{{ Setting?.store_address }}</p>
+                <p>{{ Setting?.store_phone }}</p>
+            </div>
+
+            <div class="receipt-divider"></div>
+
+            <div class="receipt-info">
+                <div class="receipt-row">
+                    <span>No. Transaksi</span>
+                    <span>{{ LastTransaction.transaction_number }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span>Tanggal</span>
+                    <span>{{ LastTransaction.transaction_date | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span>Kasir</span>
+                    <span>{{ SelectedCashier?.full_name }}</span>
+                </div>
+            </div>
+
+            <div class="receipt-divider"></div>
+
+            <div class="receipt-items">
+                @for (item of LastTransactionItems; track item.product_id) {
+                <div class="receipt-item">
+                    <div class="item-name-qty">
+                        <span class="item-name">{{ item.product_name }}</span>
+                        <span class="item-qty">{{ item.quantity }} x {{ item.unit_price | currency:'Rp':'symbol':'1.0-0'
+                            }}</span>
+                    </div>
+                    <div class="item-subtotal">{{ item.subtotal | currency:'Rp':'symbol':'1.0-0' }}</div>
+                </div>
+                }
+            </div>
+
+            <div class="receipt-divider"></div>
+
+            <div class="receipt-summary">
+                <div class="receipt-row">
+                    <span>Subtotal</span>
+                    <span>{{ LastTransaction.subtotal | currency:'Rp':'symbol':'1.0-0' }}</span>
+                </div>
+                @if (LastTransaction.discount_amount && LastTransaction.discount_amount > 0) {
+                <div class="receipt-row discount">
+                    <span>Diskon</span>
+                    <span>-{{ LastTransaction.discount_amount | currency:'Rp':'symbol':'1.0-0' }}</span>
+                </div>
+                }
+                <div class="receipt-row total">
+                    <span>TOTAL</span>
+                    <span>{{ LastTransaction.total | currency:'Rp':'symbol':'1.0-0' }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span>{{ LastTransaction.payment_method }}</span>
+                    <span>{{ LastTransaction.amount_paid | currency:'Rp':'symbol':'1.0-0' }}</span>
+                </div>
+                @if (LastTransaction.payment_method === 'CASH' && LastTransaction.change_amount > 0) {
+                <div class="receipt-row">
+                    <span>Kembalian</span>
+                    <span>{{ LastTransaction.change_amount | currency:'Rp':'symbol':'1.0-0' }}</span>
+                </div>
+                }
+            </div>
+
+            <div class="receipt-divider"></div>
+
+            <div class="receipt-footer">
+                <p>Terima kasih atas kunjungan Anda!</p>
+                @if (Setting?.receipt_footer) {
+                <p>{{ Setting?.receipt_footer }}</p>
+                }
+            </div>
+        </div>
+        }
+        <ng-template pTemplate="footer">
+            <p-button label="Cetak" icon="pi pi-print" severity="secondary" (onClick)="printReceipt()"></p-button>
+            <p-button label="WhatsApp" icon="pi pi-whatsapp" severity="success" (onClick)="sendWhatsApp()"></p-button>
+            <p-button label="Selesai" (onClick)="closeReceiptDialog()"></p-button>
+        </ng-template>
+    </p-dialog>
+
+    <!-- Close Shift Dialog -->
+    <p-dialog header="Tutup Shift" [(visible)]="_modalToggler.closeShift" [modal]="true" [style]="{ width: '500px' }">
+        <div class="close-shift-form">
+            @if (ShiftSummary) {
+            <div class="shift-summary">
+                <h4>Ringkasan Shift</h4>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="label">Total Penjualan</span>
+                        <span class="value">{{ ShiftSummary.total_sales | currency: 'Rp. ' }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Jumlah Transaksi</span>
+                        <span class="value">{{ ShiftSummary.total_transactions }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Penjualan Tunai</span>
+                        <span class="value">{{ ShiftSummary.cash_sales | currency: 'Rp. ' }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Penjualan Non-Tunai</span>
+                        <span class="value">{{ ShiftSummary.non_cash_sales | currency: 'Rp. ' }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Modal Awal</span>
+                        <span class="value">{{ ActiveShift?.initial_cash | currency: 'Rp. ' }}</span>
+                    </div>
+                    <div class="summary-item highlight">
+                        <span class="label">Expected Cash</span>
+                        <span class="value">{{ expectedCash | currency: 'Rp. ' }}</span>
+                    </div>
+                </div>
+            </div>
+            }
+
+            <div class="form-group">
+                <label>Jumlah Uang Aktual di Laci</label>
+                <p-inputNumber [(ngModel)]="CloseShiftForm.actual_cash" mode="currency" currency="IDR"
+                    [style]="{ width: '100%' }">
+                </p-inputNumber>
+            </div>
+
+            @if (CloseShiftForm.actual_cash > 0) {
+            <div class="discrepancy" [class.positive]="cashDiscrepancy >= 0" [class.negative]="cashDiscrepancy < 0">
+                <span class="label">Selisih</span>
+                <span class="value">{{ cashDiscrepancy | currency: 'Rp. ' }}</span>
+            </div>
+            }
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button label="Batal" severity="secondary" (onClick)="_modalToggler.closeShift = false"></p-button>
+            <p-button label="Tutup Shift" icon="pi pi-stop" severity="danger"
+                (onClick)="confirmCloseShift()"></p-button>
+        </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog></p-confirmDialog>
+</app-dsh-base-layout>

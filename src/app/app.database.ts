@@ -3,6 +3,7 @@ import { EmployeeModel } from './model/pages/application/human-resource/employee
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { InventoryModel } from './model/pages/application/inventory/inventory.model';
+import { POSModel } from './model/pages/application/point-of-sales/pos.model';
 
 export class AppDatabase extends Dexie {
     // HR
@@ -34,6 +35,12 @@ export class AppDatabase extends Dexie {
     stock_opname_batch_items!: Table<InventoryModel.OpnameBatchItem, number>;
     stock_opname_serial_items!: Table<InventoryModel.OpnameSerialItem, number>;
     product_warehouse_stock!: Table<InventoryModel.ProductWarehouseStock, number>;
+
+    // POS
+    pos_transactions!: Table<POSModel.Transaction, number>;
+    pos_transaction_items!: Table<POSModel.TransactionItem, number>;
+    pos_shifts!: Table<POSModel.Shift, number>;
+    pos_settings!: Table<POSModel.Setting, number>;
 
     constructor(dbName: string) {
         super(dbName);
@@ -87,6 +94,14 @@ export class AppDatabase extends Dexie {
             stock_opname_items: '++id, stock_opname_id, product_id, tracking_type',
             stock_opname_batch_items: '++id, opname_item_id, batch_id, batch_number',
             stock_opname_serial_items: '++id, opname_item_id, serial_id, serial_number, found'
+        });
+
+        // Version 6: Add POS tables
+        this.version(6).stores({
+            pos_transactions: '++id, transaction_number, transaction_date, cashier_id, shift_id, payment_method, status, is_active',
+            pos_transaction_items: '++id, transaction_id, product_id, is_active',
+            pos_shifts: '++id, shift_number, cashier_id, status, start_time, is_active',
+            pos_settings: '++id, store_name, is_active'
         });
     }
 }

@@ -19,3 +19,14 @@ export const HR_APP_STATE = [
     OvertimeState,
     PayrollState
 ]
+
+// Export all actions & states
+export * from './attendance';
+export * from './departement';
+export * from './employee';
+export * from './position';
+export * from './shift';
+export * from './company-setting';
+export * from './leave';
+export * from './overtime';
+export * from './payroll';

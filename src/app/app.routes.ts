@@ -3,6 +3,7 @@ import { Home } from './pages/home/home';
 import { humanResourceResolver } from './pages/application/human-resource/human-resource.resolver';
 import { AuthGuard } from './middleware/authentication.guard';
 import { inventoryResolver } from './pages/application/inventory/inventory.resolver';
+import { posResolver } from './pages/application/point-of-sales/pos.resolver';
 
 export const routes: Routes = [
     {
@@ -42,6 +43,14 @@ export const routes: Routes = [
         loadChildren: async () => (await import('../app/pages/application/inventory/inventory.routes')).inventoryRoutes,
         resolve: {
             resolver: inventoryResolver
+        }
+    },
+    {
+        path: 'point-of-sales',
+        canActivate: [AuthGuard],
+        loadChildren: async () => (await import('../app/pages/application/point-of-sales/pos.routes')).posRoutes,
+        resolve: {
+            resolver: posResolver
         }
     },
     {

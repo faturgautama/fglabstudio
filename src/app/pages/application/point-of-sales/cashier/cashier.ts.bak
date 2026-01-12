@@ -1,0 +1,458 @@
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Store } from '@ngxs/store';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
+import { DshBaseLayout } from '../../../../components/dashboard/dsh-base-layout/dsh-base-layout';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { POSModel } from '../../../../model/pages/application/point-of-sales/pos.model';
+import { POSSettingState, POSShiftAction, POSShiftState, POSTransactionAction } from '../../../../store/point-of-sales';
+import { EmployeeState, EmployeeAction } from '../../../../store/human-resource';
+import { ProductState, ProductAction } from '../../../../store/inventory';
+import { InventoryModel } from '../../../../model/pages/application/inventory/inventory.model';
+import { EmployeeModel } from '../../../../model/pages/application/human-resource/employee.model';
+import { printReceipt as printReceiptHelper } from './print-receipt.helper';
+
+@Component({
+    selector: 'app-pos-cashier',
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        CurrencyPipe,
+        DshBaseLayout,
+        ButtonModule,
+        InputTextModule,
+        InputNumberModule,
+        SelectModule,
+        DialogModule,
+        ConfirmDialogModule,
+        IconFieldModule,
+        InputIconModule,
+    ],
+    templateUrl: './cashier.html',
+    styleUrl: './cashier.scss'
+})
+export class Cashier implements OnInit, OnDestroy {
+
+    private _store = inject(Store);
+    private _messageService = inject(MessageService);
+    private _confirmationService = inject(ConfirmationService);
+
+    Destroy$ = new Subject();
+
+    // Data
+    Products: InventoryModel.Product[] = [];
+    FilteredProducts: InventoryModel.Product[] = [];
+    Employees: EmployeeModel.IEmployee[] = [];
+    Cart: POSModel.CartItem[] = [];
+    ActiveShift: POSModel.Shift | null = null;
+    Setting: POSModel.Setting | null = null;
+
+    // State
+    SelectedCashier: EmployeeModel.IEmployee | null = null;
+    SearchQuery = '';
+    IsShiftEnabled = false;
+
+    // Modal togglers
+    _modalToggler = {
+        shift: false,
+        closeShift: false,
+        payment: false,
+        discount: false,
+        receipt: false
+    };
+
+    // Shift form
+    ShiftForm = {
+        initial_cash: 0
+    };
+
+    // Close Shift form
+    CloseShiftForm = {
+        actual_cash: 0
+    };
+
+    // Shift Summary
+    ShiftSummary: {
+        total_sales: number;
+        total_transactions: number;
+        cash_sales: number;
+        non_cash_sales: number;
+    } | null = null;
+
+    // Payment form
+    PaymentForm = {
+        method: 'CASH' as 'CASH' | 'TRANSFER' | 'QRIS',
+        cash_received: 0
+    };
+
+    // Discount form
+    DiscountForm = {
+        type: 'percent' as 'percent' | 'nominal',
+        value: 0
+    };
+
+    // Transaction discount
+    TransactionDiscount = 0;
+
+    // Last completed transaction for receipt
+    LastTransaction: POSModel.Transaction | null = null;
+    LastTransactionItems: POSModel.CartItem[] = [];
+
+    PaymentMethods = [
+        { label: 'Tunai', value: 'CASH' },
+        { label: 'Transfer Bank', value: 'TRANSFER' },
+        { label: 'QRIS', value: 'QRIS' }
+    ];
+
+    ngOnInit(): void {
+        this.loadProducts();
+        this.loadEmployees();
+        this.loadSetting();
+    }
+
+    ngOnDestroy(): void {
+        this.Destroy$.next(0);
+        this.Destroy$.complete();
+    }
+
+    private loadProducts() {
+        this._store.dispatch(new ProductAction.GetProduct());
+        this._store.select(ProductState.getAll)
+            .pipe(takeUntil(this.Destroy$))
+            .subscribe(products => {
+                this.Products = (products as InventoryModel.Product[]).filter((p: any) => p.current_stock > 0);
+                this.FilteredProducts = [...this.Products];
+            });
+    }
+
+    private loadEmployees() {
+        this._store.dispatch(new EmployeeAction.GetEmployee());
+        this._store.select(EmployeeState.getAll)
+            .pipe(takeUntil(this.Destroy$))
+            .subscribe(employees => {
+                this.Employees = employees as EmployeeModel.IEmployee[];
+            });
+    }
+
+    private loadSetting() {
+        this._store.select(POSSettingState.getSingle)
+            .pipe(takeUntil(this.Destroy$))
+            .subscribe(setting => {
+                this.Setting = setting as POSModel.Setting | null;
+                this.IsShiftEnabled = setting?.enable_shift || false;
+            });
+    }
+
+    // Search products
+    onSearchProduct() {
+        if (!this.SearchQuery.trim()) {
+            this.FilteredProducts = [...this.Products];
+            return;
+        }
+
+        const query = this.SearchQuery.toLowerCase();
+        this.FilteredProducts = this.Products.filter(p =>
+            p.name.toLowerCase().includes(query) ||
+            p.sku?.toLowerCase().includes(query) ||
+            p.barcode?.toLowerCase().includes(query)
+        );
+    }
+
+    // Cart operations
+    addToCart(product: InventoryModel.Product) {
+        if (!this.SelectedCashier) {
+            this._messageService.add({
+                severity: 'warn',
+                summary: 'Perhatian',
+                detail: 'Pilih kasir terlebih dahulu'
+            });
+            return;
+        }
+
+        if (this.IsShiftEnabled && !this.ActiveShift) {
+            this._messageService.add({
+                severity: 'warn',
+                summary: 'Perhatian',
+                detail: 'Buka shift terlebih dahulu'
+            });
+            return;
+        }
+
+        const existingItem = this.Cart.find(item => item.product_id === product.id);
+
+        if (existingItem) {
+            if (existingItem.quantity >= product.current_stock) {
+                this._messageService.add({
+                    severity: 'warn',
+                    summary: 'Stok Tidak Cukup',
+                    detail: `Stok ${product.name} hanya tersisa ${product.current_stock}`
+                });
+                return;
+            }
+            existingItem.quantity++;
+            existingItem.subtotal = existingItem.quantity * existingItem.unit_price - existingItem.discount_amount;
+        } else {
+            this.Cart.push({
+                product_id: product.id!,
+                product_name: product.name,
+                product_sku: product.sku || '',
+                quantity: 1,
+                unit_price: product.selling_price,
+                discount_amount: 0,
+                discount_percentage: 0,
+                subtotal: product.selling_price,
+                current_stock: product.current_stock
+            });
+        }
+    }
+
+    updateQuantity(item: POSModel.CartItem, qty: number) {
+        if (qty > item.current_stock) {
+            this._messageService.add({
+                severity: 'warn',
+                summary: 'Stok Tidak Cukup',
+                detail: `Stok ${item.product_name} hanya tersisa ${item.current_stock}`
+            });
+            return;
+        }
+
+        if (qty <= 0) {
+            this.removeFromCart(item);
+            return;
+        }
+
+        item.quantity = qty;
+        item.subtotal = (item.quantity * item.unit_price) - item.discount_amount;
+    }
+
+    removeFromCart(item: POSModel.CartItem) {
+        const index = this.Cart.indexOf(item);
+        if (index > -1) {
+            this.Cart.splice(index, 1);
+        }
+    }
+
+    clearCart() {
+        this._confirmationService.confirm({
+            message: 'Hapus semua item dari keranjang?',
+            header: 'Konfirmasi',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.Cart = [];
+                this.TransactionDiscount = 0;
+            }
+        });
+    }
+
+    // Calculations
+    get cartSubtotal(): number {
+        return this.Cart.reduce((sum, item) => sum + item.subtotal, 0);
+    }
+
+    get cartTotal(): number {
+        return this.cartSubtotal - this.TransactionDiscount;
+    }
+
+    get changeAmount(): number {
+        if (this.PaymentForm.method !== 'CASH') return 0;
+        return Math.max(0, this.PaymentForm.cash_received - this.cartTotal);
+    }
+
+    // Shift operations
+    onCashierChange() {
+        if (this.SelectedCashier && this.IsShiftEnabled) {
+            this._store.dispatch(new POSShiftAction.GetActiveShift(this.SelectedCashier.id!));
+            this._store.select(POSShiftState.getActiveShift)
+                .pipe(takeUntil(this.Destroy$))
+                .subscribe(shift => {
+                    this.ActiveShift = shift;
+                });
+        }
+    }
+
+    openShiftDialog() {
+        this.ShiftForm.initial_cash = 0;
+        this._modalToggler.shift = true;
+    }
+
+    confirmOpenShift() {
+        if (!this.SelectedCashier) return;
+
+        this._store.dispatch(new POSShiftAction.OpenShift(
+            this.SelectedCashier.id!,
+            this.ShiftForm.initial_cash
+        )).subscribe(() => {
+            this._modalToggler.shift = false;
+            this._messageService.add({
+                severity: 'success',
+                summary: 'Berhasil',
+                detail: 'Shift berhasil dibuka'
+            });
+        });
+    }
+
+    // Close Shift operations
+    openCloseShiftDialog() {
+        if (!this.ActiveShift) return;
+
+        // Load shift summary
+        this._store.dispatch(new POSShiftAction.GetShiftSummary(this.ActiveShift.id!));
+        this._store.select(POSShiftState.getShiftSummary)
+            .pipe(takeUntil(this.Destroy$))
+            .subscribe(summary => {
+                this.ShiftSummary = summary;
+            });
+
+        this.CloseShiftForm.actual_cash = 0;
+        this._modalToggler.closeShift = true;
+    }
+
+    get expectedCash(): number {
+        if (!this.ActiveShift || !this.ShiftSummary) return 0;
+        return this.ActiveShift.initial_cash + (this.ShiftSummary.cash_sales || 0);
+    }
+
+    get cashDiscrepancy(): number {
+        return this.CloseShiftForm.actual_cash - this.expectedCash;
+    }
+
+    confirmCloseShift() {
+        if (!this.ActiveShift) return;
+
+        this._store.dispatch(new POSShiftAction.CloseShift(
+            this.ActiveShift.id!,
+            this.CloseShiftForm.actual_cash
+        )).subscribe(() => {
+            this._modalToggler.closeShift = false;
+            this.ActiveShift = null;
+            this.ShiftSummary = null;
+            this._messageService.add({
+                severity: 'success',
+                summary: 'Berhasil',
+                detail: 'Shift berhasil ditutup'
+            });
+        });
+    }
+
+    // Discount operations
+    openDiscountDialog() {
+        this.DiscountForm = { type: 'percent', value: 0 };
+        this._modalToggler.discount = true;
+    }
+
+    applyDiscount() {
+        if (this.DiscountForm.type === 'percent') {
+            this.TransactionDiscount = (this.cartSubtotal * this.DiscountForm.value) / 100;
+        } else {
+            this.TransactionDiscount = this.DiscountForm.value;
+        }
+        this._modalToggler.discount = false;
+    }
+
+    // Payment operations
+    openPaymentDialog() {
+        if (this.Cart.length === 0) {
+            this._messageService.add({
+                severity: 'warn',
+                summary: 'Keranjang Kosong',
+                detail: 'Tambahkan produk ke keranjang terlebih dahulu'
+            });
+            return;
+        }
+
+        this.PaymentForm = { method: 'CASH', cash_received: 0 };
+        this._modalToggler.payment = true;
+    }
+
+    processPayment() {
+        if (this.PaymentForm.method === 'CASH' && this.PaymentForm.cash_received < this.cartTotal) {
+            this._messageService.add({
+                severity: 'warn',
+                summary: 'Pembayaran Kurang',
+                detail: 'Uang yang diterima kurang dari total belanja'
+            });
+            return;
+        }
+
+        const transactionNumber = this.generateTransactionNumber();
+
+        const transaction: POSModel.Transaction = {
+            transaction_number: transactionNumber,
+            transaction_date: new Date(),
+            cashier_id: this.SelectedCashier!.id!,
+            shift_id: this.ActiveShift?.id,
+            subtotal: this.cartSubtotal,
+            discount_amount: this.TransactionDiscount,
+            discount_percentage: this.TransactionDiscount > 0 ? (this.TransactionDiscount / this.cartSubtotal) * 100 : 0,
+            total: this.cartTotal,
+            payment_method: this.PaymentForm.method,
+            amount_paid: this.PaymentForm.method === 'CASH' ? this.PaymentForm.cash_received : this.cartTotal,
+            change_amount: this.PaymentForm.method === 'CASH' ? this.changeAmount : 0,
+            status: 'COMPLETED'
+        };
+
+        const items: POSModel.TransactionItem[] = this.Cart.map(item => ({
+            transaction_id: 0, // Will be set by service
+            product_id: item.product_id,
+            product_name: item.product_name,
+            product_sku: item.product_sku,
+            quantity: item.quantity,
+            unit_price: item.unit_price,
+            discount_amount: item.discount_amount,
+            discount_percentage: item.discount_percentage,
+            subtotal: item.subtotal
+        }));
+
+        this._store.dispatch(new POSTransactionAction.AddTransaction(transaction, items))
+            .subscribe(() => {
+                this._modalToggler.payment = false;
+                this.LastTransaction = transaction;
+                this.LastTransactionItems = [...this.Cart]; // Save cart items before clearing
+                this._modalToggler.receipt = true;
+
+                // Clear cart
+                this.Cart = [];
+                this.TransactionDiscount = 0;
+
+                this._messageService.add({
+                    severity: 'success',
+                    summary: 'Transaksi Berhasil',
+                    detail: 'Pembayaran telah diproses'
+                });
+            });
+    }
+
+    private generateTransactionNumber(): string {
+        const prefix = this.Setting?.transaction_prefix || 'TRX';
+        const date = new Date();
+        const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
+        const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `${prefix}-${dateStr}-${random}`;
+    }
+
+    // Receipt operations
+
+    sendWhatsApp() {
+        if (!this.LastTransaction) return;
+
+        const message = `Terima kasih telah berbelanja di ${this.Setting?.store_name || 'Toko Kami'}!\n\nTotal: Rp ${this.LastTransaction.total?.toLocaleString('id-ID')}`;
+        const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    }
+
+    closeReceiptDialog() {
+        this._modalToggler.receipt = false;
+        this.LastTransaction = null;
+        this.LastTransactionItems = [];
+    }
+}

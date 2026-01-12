@@ -1,0 +1,100 @@
+<app-dsh-base-layout>
+    <div class="flex flex-col w-full h-full gap-5 p-3">
+        <form [formGroup]="Form" class="setting-form">
+            <!-- Informasi Toko -->
+            <div class="form-section">
+                <h3>Informasi Toko</h3>
+
+                <div class="form-group">
+                    <label for="store_name">Nama Toko *</label>
+                    <input pInputText id="store_name" formControlName="store_name" placeholder="Masukkan nama toko" />
+                </div>
+
+                <div class="form-group">
+                    <label for="store_address">Alamat Toko</label>
+                    <textarea pTextarea id="store_address" formControlName="store_address" rows="3"
+                        placeholder="Masukkan alamat lengkap toko"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="store_phone">Nomor Telepon</label>
+                    <input pInputText id="store_phone" formControlName="store_phone"
+                        placeholder="Contoh: 08123456789" />
+                </div>
+
+                <div class="form-group">
+                    <label for="store_logo">URL Logo Toko</label>
+                    <input pInputText id="store_logo" formControlName="store_logo"
+                        placeholder="https://example.com/logo.png" />
+                </div>
+            </div>
+
+            <!-- Informasi Pembayaran -->
+            <div class="form-section">
+                <h3>Informasi Pembayaran</h3>
+
+                <div class="form-group">
+                    <label for="bank_name">Nama Bank</label>
+                    <input pInputText id="bank_name" formControlName="bank_name"
+                        placeholder="Contoh: BCA, Mandiri, BNI" />
+                </div>
+
+                <div class="form-group">
+                    <label for="bank_holder">Nama Pemilik Rekening</label>
+                    <input pInputText id="bank_holder" formControlName="bank_holder"
+                        placeholder="Nama sesuai rekening" />
+                </div>
+
+                <div class="form-group">
+                    <label for="bank_account">Nomor Rekening</label>
+                    <input pInputText id="bank_account" formControlName="bank_account"
+                        placeholder="Nomor rekening bank" />
+                </div>
+
+                <div class="form-group">
+                    <label for="qris_image">URL Gambar QRIS</label>
+                    <input pInputText id="qris_image" formControlName="qris_image"
+                        placeholder="https://example.com/qris.png" />
+                </div>
+            </div>
+
+            <!-- Pengaturan Sistem -->
+            <div class="form-section">
+                <h3>Pengaturan Sistem</h3>
+
+                <div class="form-group checkbox-group">
+                    <p-checkbox formControlName="enable_shift" [binary]="true" inputId="enable_shift"></p-checkbox>
+                    <label for="enable_shift">Aktifkan Fitur Shift Kasir</label>
+                    <small>Jika diaktifkan, kasir harus buka shift sebelum melakukan transaksi</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="transaction_prefix">Prefix Nomor Transaksi *</label>
+                    <input pInputText id="transaction_prefix" formControlName="transaction_prefix" placeholder="TRX" />
+                    <small>Contoh hasil: TRX-20260108-001</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="receipt_footer">Footer Struk</label>
+                    <textarea pTextarea id="receipt_footer" formControlName="receipt_footer" rows="2"
+                        placeholder="Pesan di bagian bawah struk"></textarea>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+                <p-button label="Reset" severity="secondary" [outlined]="true" (onClick)="handleReset()">
+                </p-button>
+
+                @if (_isEditMode) {
+                <p-button label="Simpan Perubahan" icon="pi pi-check" [loading]="_isLoading"
+                    (onClick)="handleUpdate(Form.value)">
+                </p-button>
+                } @else {
+                <p-button label="Simpan" icon="pi pi-check" [loading]="_isLoading" (onClick)="handleSave(Form.value)">
+                </p-button>
+                }
+            </div>
+        </form>
+    </div>
+</app-dsh-base-layout>
