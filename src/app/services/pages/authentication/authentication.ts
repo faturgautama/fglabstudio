@@ -37,7 +37,7 @@ export class AuthenticationService {
     )
   }
 
-  signUp(full_name: string, email: string, password: string, password_confirmation: string, trial_product_id: string) {
+  signUp(full_name: string, email: string, password: string, password_confirmation: string, trial_product_id: number) {
     const payload = {
       full_name,
       email,
@@ -66,8 +66,13 @@ export class AuthenticationService {
   }
 
   getProfile(user_id: number) {
-    return this._http.get(
-      `${environment.SUPABASE_URL}/get-profile?user_id=${user_id}`,
+    const payload = {
+      user_id
+    };
+
+    return this._http.post(
+      `${environment.SUPABASE_URL}/get-profile`,
+      payload,
       {
         headers: {
           'Authorization': `Bearer ${environment.SUPABASE_KEY}`,
@@ -83,6 +88,14 @@ export class AuthenticationService {
         }
       })
     )
+  }
+
+  refreshProfile() {
+    const userData = JSON.parse(localStorage.getItem("_CXUSER_") as string);
+    if (userData && userData.user && userData.user.id) {
+      return this.getProfile(userData.user.id);
+    }
+    throw new Error('No user data found in localStorage');
   }
 
   signOut(user_id: number) {

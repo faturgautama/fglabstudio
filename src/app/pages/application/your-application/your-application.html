@@ -39,7 +39,7 @@
                         Main Menu
                     </p>
 
-                    <div class="grid grid-cols-1 md:grid-cols-4 w-full gap-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full gap-5">
                         @for (item of user.applications; track $index) {
                         <div class="grid w-full bg-gray-100 rounded-lg">
                             <img [src]="item.application.image" alt="image"
@@ -49,13 +49,50 @@
                                 <p class="text-lg font-semibold text-gray-800">
                                     {{ item.application.title }}
                                 </p>
-                                <p class="text-sm text-gray-500 mb-5">
+                                <p class="text-sm text-gray-500 mb-0">
                                     {{ item.application.description }}
                                 </p>
 
-                                <p-button severity="info" label="Masuk" styleClass="p-button-sm w-full" size="small"
-                                    (onClick)="handleClickApps(item.application.url)">
-                                </p-button>
+                                @if(item.is_trial) {
+                                <div
+                                    class="flex flex-row items-center justify-between gap-2 mt-2 pt-3 border-t border-b-0 border-x-0 border-dashed border-gray-300">
+                                    <span
+                                        class="px-2 py-1 text-xs rounded-md bg-red-100 text-red-700 font-semibold w-fit">
+                                        Trial
+                                    </span>
+                                    <p class="text-gray-600 font-medium text-sm">
+                                        Expired At {{ item.expired_at | date }}
+                                    </p>
+                                </div>
+                                }
+
+                                @if(!item.is_trial) {
+                                <div
+                                    class="flex flex-row items-center justify-between gap-2 mt-2 pt-3 border-t border-b-0 border-x-0 border-dashed border-gray-300">
+                                    <span
+                                        class="px-2 py-1 text-xs rounded-md bg-sky-100 text-sky-700 font-semibold w-fit">
+                                        Active
+                                    </span>
+                                    <p class="text-gray-600 font-medium text-sm">
+                                        Purchased at {{ item.created_at | date: 'dd/MM/yyyy' }}
+                                    </p>
+                                </div>
+                                }
+
+                                <div class="grid {{ item.is_trial ? 'grid-cols-2' : 'grid-cols-1' }} gap-3 mt-3">
+                                    <p-button severity="info" label="Masuk" styleClass="p-button-sm w-full mb-2"
+                                        size="small" [disabled]="handleDisableApps(item.expired_at)"
+                                        (onClick)="handleClickApps(item.application.url)">
+                                    </p-button>
+
+                                    @if(item.is_trial) {
+                                    <p-button severity="danger" label="Beli Sekarang" styleClass="p-button-sm w-full"
+                                        size="small" (onClick)="handleBuyApp(item)">
+                                    </p-button>
+                                    }
+                                </div>
+
+
                             </div>
                         </div>
                         }
@@ -69,7 +106,6 @@
                         </div>
                     </div>
                     }
-
                 </div>
             </div>
 
@@ -80,7 +116,7 @@
                 </p>
 
                 <p class="text-xs text-gray-400 font-medium">
-                    2025 - v0.0.1
+                    {{ currentYear }} - v0.0.1
                 </p>
             </div>
 

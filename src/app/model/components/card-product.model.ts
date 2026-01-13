@@ -1,6 +1,6 @@
 export namespace CardProductModel {
     export interface ICardProduct {
-        id: string;
+        id: number;
         title: string;
         description: string;
         image: string;

@@ -46,22 +46,35 @@ export class ProductDetail implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        const productId = this.route.snapshot.paramMap.get('id');
+        this.getRouteParams();
+    }
 
-        console.log("productId =>", productId);
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 
-        if (!productId) {
-            this.router.navigate(['/']);
-            return;
-        }
+    private getRouteParams() {
+        this.loading = true;
 
-        // Set loading to false immediately so the template can render
-        this.loading = false;
+        this.route.queryParams
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((result) => {
+                if (!result['id']) {
+                    this.router.navigate(['/']);
+                    return;
+                }
 
+                this.getProduct(result['id']);
+                this.loading = false;
+            });
+    }
+
+    private getProduct(id: string) {
         this.product$ = this.store
             .select(ProductState.getProductById)
             .pipe(
-                map(fn => fn(productId)),
+                map(fn => fn(parseInt(id))),
                 tap(product => {
                     console.log("product =>", product);
 
@@ -78,11 +91,6 @@ export class ProductDetail implements OnInit, OnDestroy {
                 }),
                 takeUntil(this.destroy$)
             );
-    }
-
-    ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
     }
 
     handleBackNavigation(): void {

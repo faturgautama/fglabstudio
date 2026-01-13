@@ -1,0 +1,202 @@
+<!-- Loading State -->
+<div *ngIf="currentState === 'loading'" class="flex flex-col items-center justify-center p-8">
+    <p-progressSpinner styleClass="w-16 h-16" strokeWidth="4"></p-progressSpinner>
+    <p class="mt-4 text-gray-600">Loading payment methods...</p>
+</div>
+
+<!-- Error State -->
+<div *ngIf="currentState === 'error'" class="flex flex-col items-center justify-center p-8">
+    <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+    <p class="text-gray-600 mb-4">Failed to load payment methods</p>
+    <p-button label="Retry" icon="pi pi-refresh" (onClick)="loadPaymentMethods()"></p-button>
+</div>
+
+<!-- Select Payment Method State -->
+<div *ngIf="currentState === 'select-method'" class="p-6 max-w-md mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold">Pilih Pembayaran</h3>
+        <button (click)="closeDialog()" class="text-gray-400 hover:text-gray-600">
+            <i class="pi pi-times text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Total Amount Card -->
+    <div class="mb-6 p-5 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl text-white shadow-lg">
+        <p class="text-sm opacity-90 mb-1">Total Pembayaran</p>
+        <p class="text-3xl font-bold">{{ formatCurrency(amount) }}</p>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="space-y-6">
+        <div *ngFor="let category of paymentCategories">
+            <!-- Category Header -->
+            <div class="mb-3">
+                <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">{{ category.Name }}</h4>
+            </div>
+
+            <!-- Channels Grid -->
+            <div class="grid grid-cols-1 gap-3">
+                <button *ngFor="let channel of category.Channels" (click)="selectPaymentChannel(channel, category)"
+                    [disabled]="isCreatingPayment || channel.HealthStatus !== 'online'"
+                    class="group relative flex items-center justify-between p-4 bg-white border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:shadow-md transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-gray-200 disabled:hover:shadow-none">
+
+                    <!-- Left: Logo & Name -->
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-14 h-14 flex items-center justify-center bg-gray-50 rounded-lg group-hover:bg-blue-50 transition-colors">
+                            <img [src]="channel.Logo" [alt]="channel.Name" class="w-12 h-12 object-contain"
+                                onerror="this.style.display='none'" />
+                        </div>
+                        <div class="text-left">
+                            <p class="font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                {{ channel.Name }}
+                            </p>
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                {{ channel.Description }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Status & Arrow -->
+                    <div class="flex items-center gap-3">
+                        <span *ngIf="channel.HealthStatus === 'online'"
+                            class="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span *ngIf="channel.HealthStatus !== 'online'"
+                            class="text-xs px-2 py-1 bg-red-100 text-red-600 rounded-full font-medium">
+                            Offline
+                        </span>
+                        <i class="pi pi-chevron-right text-gray-400 group-hover:text-blue-500 transition-colors"></i>
+                    </div>
+
+                    <!-- Loading Spinner Overlay (only for selected channel) -->
+                    <div *ngIf="creatingChannelCode === channel.Code"
+                        class="absolute inset-0 bg-white bg-opacity-90 rounded-xl flex items-center justify-center">
+                        <p-progressSpinner styleClass="w-8 h-8" strokeWidth="4"></p-progressSpinner>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="mt-6 p-4 bg-gray-50 rounded-xl">
+        <div class="flex items-start gap-2">
+            <i class="pi pi-shield text-blue-600 mt-0.5"></i>
+            <p class="text-xs text-gray-600">
+                Pembayaran Anda dilindungi dengan enkripsi SSL dan diproses oleh iPaymu
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Details State -->
+<div *ngIf="currentState === 'payment-details' && paymentData" class="p-6 max-w-md mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded flex items-center justify-center">
+                <span class="text-white font-bold text-lg">CX</span>
+            </div>
+            <span class="font-semibold text-lg">{{ paymentData.payment_name }}</span>
+        </div>
+        <button (click)="closeDialog()" class="text-gray-400 hover:text-gray-600">
+            <i class="pi pi-times text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Total & Timer -->
+    <div class="mb-6 pb-4 border-b">
+        <div class="flex justify-between items-center mb-2">
+            <span class="text-gray-600 text-sm">Total Pembayaran</span>
+            <span class="text-sm">Bayar dalam: <span class="text-red-600 font-semibold">{{
+                    formatExpiry(paymentData.expired) }}</span></span>
+        </div>
+        <div class="text-2xl font-bold">{{ formatCurrency(paymentData.total) }}</div>
+        <div class="text-xs text-gray-500 mt-1">Order ID: {{ paymentData.reference_id }}</div>
+    </div>
+
+    <!-- QRIS Display -->
+    <div *ngIf="paymentData.qr_image" class="mb-6">
+        <h4 class="font-semibold mb-4 text-center">{{ paymentData.via }}</h4>
+
+        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 flex flex-col items-center">
+            <img [src]="paymentData.qr_image" alt="QR Code" class="w-64 h-64 object-contain mb-4" />
+
+            <div class="text-center mb-4">
+                <p class="text-xs text-gray-500 mb-1">NMID: {{ paymentData.payment_no.substring(0, 20) }}...</p>
+            </div>
+
+            <button (click)="copyToClipboard(paymentData.qr_string || '')"
+                class="text-blue-600 text-sm font-medium flex items-center gap-1 hover:text-blue-700">
+                <i class="pi pi-info-circle"></i>
+                Cara bayar
+            </button>
+        </div>
+
+        <button
+            class="w-full mt-4 py-3 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-900 transition-colors">
+            Saya sudah bayar
+        </button>
+    </div>
+
+    <!-- VA Number Display -->
+    <div *ngIf="!paymentData.qr_image && paymentData.payment_no" class="mb-6">
+        <h4 class="font-semibold mb-4">{{ paymentData.via }} - {{ paymentData.channel }}</h4>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-sm text-gray-600">Nomor Virtual Account</span>
+                <button (click)="copyToClipboard(paymentData.payment_no)"
+                    class="text-blue-600 text-sm font-medium hover:text-blue-700 flex items-center gap-1">
+                    <i class="pi pi-copy"></i>
+                    Salin
+                </button>
+            </div>
+            <div class="text-2xl font-mono font-bold tracking-wider">{{ paymentData.payment_no }}</div>
+        </div>
+
+        <!-- Bank Logos -->
+        <div class="flex items-center gap-2 mb-4">
+            <img [src]="getBankLogo(paymentData.channel)" [alt]="paymentData.channel" class="h-8 object-contain"
+                onerror="this.style.display='none'" />
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <div class="flex items-start gap-2">
+                <i class="pi pi-info-circle text-blue-600 mt-1"></i>
+                <div class="text-sm text-blue-800">
+                    <p class="font-semibold mb-1">Cara Pembayaran:</p>
+                    <ol class="list-decimal list-inside space-y-1 text-xs">
+                        <li>Buka aplikasi mobile banking atau ATM</li>
+                        <li>Pilih menu Transfer / Bayar</li>
+                        <li>Masukkan nomor Virtual Account di atas</li>
+                        <li>Masukkan nominal: {{ formatCurrency(paymentData.total) }}</li>
+                        <li>Konfirmasi pembayaran</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <button class="w-full py-3 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-900 transition-colors">
+            Saya sudah bayar
+        </button>
+    </div>
+
+    <!-- Payment Info (No breakdown, just total) -->
+    <div class="bg-gray-50 rounded-lg p-4 text-sm mb-4">
+        <div class="flex justify-between items-center">
+            <span class="font-semibold">Total Pembayaran</span>
+            <span class="font-bold text-lg">{{ formatCurrency(paymentData.total) }}</span>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">Biaya admin ditanggung oleh kami</p>
+    </div>
+
+    <!-- Back Button -->
+    <button (click)="backToSelectMethod()"
+        class="w-full mt-4 py-2 text-red-600 hover:text-red-700 text-sm font-medium flex items-center justify-center gap-2 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+        <i class="pi pi-refresh"></i>
+        Ganti metode pembayaran
+    </button>
+</div>

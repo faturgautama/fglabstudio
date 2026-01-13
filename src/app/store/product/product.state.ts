@@ -39,7 +39,7 @@ export class ProductState implements NgxsOnInit {
 
     @Selector()
     static getProductById(state: ProductStateModel) {
-        return (id: string) => {
+        return (id: number) => {
             return state.data.find(product => product.id === id) || null;
         };
     }

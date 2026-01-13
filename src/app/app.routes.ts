@@ -54,7 +54,7 @@ export const routes: Routes = [
         }
     },
     {
-        path: 'product/:id',
+        path: 'product',
         loadComponent: async () => (await import('../app/pages/product-detail/product-detail')).ProductDetail
     }
 ];
