@@ -51,7 +51,7 @@
                                 <p class="text-xs text-gray-500 mb-2">
                                     {{ item.application.category }} • {{item.application.version }}
                                 </p>
-                                <p class="text-sm text-gray-500 mb-0">
+                                <p class="text-sm text-gray-500 mb-0 line-clamp-3">
                                     {{ item.application.description }}
                                 </p>
 
@@ -83,7 +83,8 @@
 
                                 <div class="grid {{ item.is_trial ? 'grid-cols-2' : 'grid-cols-1' }} gap-3 mt-3">
                                     <p-button severity="info" label="Masuk" styleClass="p-button-sm w-full mb-2"
-                                        size="small" [disabled]="handleDisableApps(item.expired_at)"
+                                        size="small"
+                                        [disabled]="item.is_trial ? handleDisableApps(item.expired_at) : false"
                                         (onClick)="handleClickApps(item.application.url)">
                                     </p-button>
 

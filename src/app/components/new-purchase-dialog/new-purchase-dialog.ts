@@ -116,9 +116,6 @@ export class NewPurchaseDialog implements OnInit, OnDestroy {
   }
 
   selectProduct(product: CardProductModel.ICardProduct): void {
-    // Close this dialog
-    // this.ref.close();
-
     // Open payment dialog
     this.paymentDialogRef = this.dialogService.open(PaymentDialog, {
       header: 'Payment',
