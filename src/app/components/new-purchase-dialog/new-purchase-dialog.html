@@ -1,0 +1,74 @@
+<!-- Loading State -->
+<div *ngIf="currentState === 'loading'" class="flex flex-col items-center justify-center p-8">
+    <p-progressSpinner styleClass="w-16 h-16" strokeWidth="4"></p-progressSpinner>
+    <p class="mt-4 text-gray-600">Loading products...</p>
+</div>
+
+<!-- Error State -->
+<div *ngIf="currentState === 'error'" class="flex flex-col items-center justify-center p-8 w-full">
+    <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+    <p class="text-gray-600 mb-4">Failed to load products</p>
+    <p-button label="Retry" icon="pi pi-refresh" (onClick)="loadProducts()"></p-button>
+</div>
+
+<!-- Select Product State -->
+<div *ngIf="currentState === 'select-product'" class="p-6 flex flex-col w-full">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold">Beli Aplikasi Lain</h3>
+        <button (click)="closeDialog()" class="text-gray-400 hover:text-gray-600">
+            <i class="pi pi-times text-xl"></i>
+        </button>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div *ngFor="let product of availableProducts" (click)="selectProduct(product)"
+            class="group cursor-pointer border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:shadow-lg transition-all duration-200">
+
+            <div class="mb-0 rounded-t-lg overflow-hidden bg-gray-100 h-40 flex items-center justify-center">
+                <img [src]="product.image" alt="image"
+                    class="h-[10rem] md:h-[12rem] w-full object-cover object-center rounded-t-lg">
+            </div>
+
+            <div class="mb-3 flex flex-col gap-1 p-3">
+                <h4 class="font-bold text-lg text-gray-800 group-hover:text-blue-600 transition-colors mb-1">
+                    {{ product.title }}
+                </h4>
+                <p class="text-xs text-gray-500 mb-2">{{ product.category }} • {{ product.version }}</p>
+                <p class="text-sm text-gray-600 text-justify">{{ product.description }}</p>
+            </div>
+
+            <div class="flex items-center justify-between p-3 border-t border-gray-200">
+                <div>
+                    <p *ngIf="product.discount_price" class="text-xs text-gray-400 line-through">
+                        {{ formatCurrency(product.price) }}
+                    </p>
+                    <p class="text-lg font-bold text-blue-600">
+                        {{ formatCurrency(product.discount_price || product.price) }}
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 text-blue-600 group-hover:text-blue-700">
+                    <span class="text-sm font-medium">Beli</span>
+                    <i class="pi pi-arrow-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="availableProducts.length === 0" class="text-center py-8">
+        <i class="pi pi-shopping-cart text-6xl text-gray-300 mb-4"></i>
+        <p class="text-gray-600">Tidak ada produk yang tersedia</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-6 p-4 bg-gray-50 rounded-xl">
+        <div class="flex items-start gap-2">
+            <i class="pi pi-info-circle text-blue-600 mt-0.5"></i>
+            <p class="text-xs text-gray-600">
+                Setelah memilih aplikasi, Anda akan diarahkan ke halaman pembayaran
+            </p>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,7 @@ import { MessageService } from 'primeng/api';
 import { PaymentService } from '../../../services/pages/payment.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { PaymentDialog } from '../../../components/payment-dialog/payment-dialog';
+import { NewPurchaseDialog } from '../../../components/new-purchase-dialog/new-purchase-dialog';
 
 @Component({
   selector: 'app-your-application',
@@ -37,6 +38,7 @@ export class YourApplication implements OnInit {
 
   user: any;
   paymentDialogRef: DynamicDialogRef | undefined;
+  newPurchaseDialogRef: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
     this._authenticationService
@@ -85,6 +87,20 @@ export class YourApplication implements OnInit {
           window.location.reload();
         }, 2000);
       }
+    });
+  }
+
+  handleBuyNewApp() {
+    // Open new purchase dialog
+    this.newPurchaseDialogRef = this._dialogService.open(NewPurchaseDialog, {
+      header: 'New Purchase',
+      width: '90vw',
+      showHeader: false,
+      maximizable: false,
+      resizable: false,
+      draggable: false,
+      modal: true,
+      dismissableMask: false,
     });
   }
 

@@ -13,6 +13,7 @@ export namespace CardProductModel {
         published_at: string;
         updated_at?: string;
         screenshots?: string[];
+        version?: string;
         features?: IProductFeature[];
     }
 

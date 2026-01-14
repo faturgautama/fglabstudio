@@ -4,12 +4,11 @@
             <img src="/assets/image/logo_transparent_landscape.png" alt="logo" class="w-16 md:w-20 mb-10"
                 data-aos="fade-up" data-aos-duration="1000" />
 
-            <div class="flex flex-col gap-1 mb-10 px-24">
-                <p class="md:text-5xl text-3xl font-bold text-gray-200 mb-1" data-aos="fade-up"
-                    data-aos-duration="1100">
+            <div class="flex flex-col gap-1 mb-5 px-24">
+                <p class="md:text-3xl text-xl font-bold text-gray-200 mb-1" data-aos="fade-up" data-aos-duration="1100">
                     {{ 'HOME.Power Up Your' | translate | uppercase }}
                 </p>
-                <p class="md:text-8xl text-6xl font-extrabold bg-gradient-to-r from-sky-500 via-blue-500 to-emerald-500 bg-clip-text text-transparent mt-0 mb-3"
+                <p class="md:text-5xl text-3xl font-extrabold bg-gradient-to-r from-sky-500 via-blue-500 to-emerald-500 bg-clip-text text-transparent mt-0 mb-3"
                     data-aos="fade-up" data-aos-duration="1200">
                     {{ 'HOME.Creativity Workflow' | translate | uppercase }}
                 </p>
@@ -48,6 +47,9 @@
                             <div class="flex flex-col p-5 gap-1">
                                 <p class="text-lg font-semibold text-gray-800">
                                     {{ item.application.title }}
+                                </p>
+                                <p class="text-xs text-gray-500 mb-2">
+                                    {{ item.application.category }} • {{item.application.version }}
                                 </p>
                                 <p class="text-sm text-gray-500 mb-0">
                                     {{ item.application.description }}
@@ -97,8 +99,8 @@
                         </div>
                         }
 
-                        <div
-                            class="flex flex-col gap-2 w-full items-center justify-center rounded-lg border-dashed border-gray-700 bg-gray-900 border">
+                        <div (click)="handleBuyNewApp()"
+                            class="flex flex-col gap-2 w-full items-center justify-center rounded-lg border-dashed border-gray-700 bg-gray-900 border cursor-pointer hover:bg-gray-800 hover:border-blue-500 transition-all duration-200">
                             <i class="pi pi-plus text-gray-100"></i>
                             <p class="text-gray-100 font-bold text-lg">
                                 Beli Aplikasi Lain

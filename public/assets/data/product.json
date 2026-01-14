@@ -1,118 +1,7 @@
 [
     {
-        "id": "pos-kasir",
-        "title": "Point Of Sales (POS Cashier)",
-        "description": "Sistem Point of Sales modern yang dirancang khusus untuk memudahkan pengelolaan transaksi kasir. Dengan interface yang intuitif dan fitur lengkap, aplikasi ini cocok untuk berbagai jenis bisnis retail dan F&B.",
-        "image": "/assets/image/coming_soon.jpg",
-        "images": [
-            "/assets/image/coming_soon.jpg"
-        ],
-        "screenshots": [
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg"
-        ],
-        "price": 250000,
-        "discount_price": 99000,
-        "category": "Web Development",
-        "review": [
-            {
-                "id": "1",
-                "person_name": "Budi Santoso",
-                "review": "Aplikasi POS yang sangat membantu bisnis saya. Interface mudah dipahami dan fitur lengkap!",
-                "rating": 5,
-                "date": "2025-01-10"
-            },
-            {
-                "id": "2",
-                "person_name": "Siti Nurhaliza",
-                "review": "Harga terjangkau dengan kualitas premium. Sangat recommended untuk UMKM!",
-                "rating": 5,
-                "date": "2025-01-08"
-            }
-        ],
-        "highlight": [
-            "Responsive, Clean and Modern Design",
-            "Support Offline Mode",
-            "Fast and Modern Web Framework",
-            "Bug Free",
-            "Installable Like App",
-            "1 Device Life Time License"
-        ],
-        "features": [
-            {
-                "title": "Multi Payment Method",
-                "description": "Support berbagai metode pembayaran: Cash, Debit, Credit, E-Wallet",
-                "icon": "pi pi-wallet"
-            },
-            {
-                "title": "Real-time Reporting",
-                "description": "Laporan penjualan real-time dengan visualisasi data yang menarik",
-                "icon": "pi pi-chart-line"
-            },
-            {
-                "title": "Inventory Management",
-                "description": "Kelola stok barang dengan mudah dan otomatis",
-                "icon": "pi pi-box"
-            }
-        ],
-        "published_at": null
-    },
-    {
-        "id": 2,
-        "title": "Inventory (Management Stock)",
-        "description": "Sistem manajemen inventory yang powerful untuk mengelola stok barang dengan efisien. Dilengkapi dengan fitur tracking, alert stok minimum, dan laporan lengkap untuk membantu bisnis Anda.",
-        "image": "/assets/image/coming_soon.jpg",
-        "images": [
-            "/assets/image/coming_soon.jpg"
-        ],
-        "screenshots": [
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg"
-        ],
-        "price": 250000,
-        "discount_price": 99000,
-        "category": "Web Development",
-        "review": [
-            {
-                "id": "1",
-                "person_name": "Ahmad Fauzi",
-                "review": "Sistem inventory terbaik yang pernah saya gunakan. Tracking stok jadi sangat mudah!",
-                "rating": 5,
-                "date": "2025-01-12"
-            }
-        ],
-        "highlight": [
-            "Responsive, Clean and Modern Design",
-            "Support Offline Mode",
-            "Fast and Modern Web Framework",
-            "Bug Free",
-            "Installable Like App",
-            "1 Device Life Time License"
-        ],
-        "features": [
-            {
-                "title": "Stock Alert",
-                "description": "Notifikasi otomatis ketika stok mencapai batas minimum",
-                "icon": "pi pi-bell"
-            },
-            {
-                "title": "Barcode Scanner",
-                "description": "Support barcode scanner untuk input data lebih cepat",
-                "icon": "pi pi-qrcode"
-            },
-            {
-                "title": "Multi Warehouse",
-                "description": "Kelola inventory di berbagai lokasi gudang",
-                "icon": "pi pi-building"
-            }
-        ],
-        "published_at": "2025-01-09 12:00:00"
-    },
-    {
         "id": 1,
-        "title": "Human Resource System",
+        "title": "My Peoples",
         "description": "Sistem HRIS lengkap untuk mengelola data karyawan, absensi, payroll, dan performance management. Solusi terpadu untuk departemen HR modern.",
         "image": "/assets/image/coming_soon.jpg",
         "images": [
@@ -167,7 +56,121 @@
                 "icon": "pi pi-money-bill"
             }
         ],
-        "published_at": "2025-01-09 12:00:00"
+        "published_at": "2025-01-09 12:00:00",
+        "version": "v0.0.1-alpha"
+    },
+    {
+        "id": 2,
+        "title": "My Inventory",
+        "description": "Sistem manajemen inventory yang powerful untuk mengelola stok barang dengan efisien. Dilengkapi dengan fitur tracking, alert stok minimum, dan laporan lengkap untuk membantu bisnis Anda.",
+        "image": "/assets/image/coming_soon.jpg",
+        "images": [
+            "/assets/image/coming_soon.jpg"
+        ],
+        "screenshots": [
+            "/assets/image/coming_soon.jpg",
+            "/assets/image/coming_soon.jpg",
+            "/assets/image/coming_soon.jpg"
+        ],
+        "price": 250000,
+        "discount_price": 99000,
+        "category": "Web Development",
+        "review": [
+            {
+                "id": "1",
+                "person_name": "Ahmad Fauzi",
+                "review": "Sistem inventory terbaik yang pernah saya gunakan. Tracking stok jadi sangat mudah!",
+                "rating": 5,
+                "date": "2025-01-12"
+            }
+        ],
+        "highlight": [
+            "Responsive, Clean and Modern Design",
+            "Support Offline Mode",
+            "Fast and Modern Web Framework",
+            "Bug Free",
+            "Installable Like App",
+            "1 Device Life Time License"
+        ],
+        "features": [
+            {
+                "title": "Stock Alert",
+                "description": "Notifikasi otomatis ketika stok mencapai batas minimum",
+                "icon": "pi pi-bell"
+            },
+            {
+                "title": "Barcode Scanner",
+                "description": "Support barcode scanner untuk input data lebih cepat",
+                "icon": "pi pi-qrcode"
+            },
+            {
+                "title": "Multi Warehouse",
+                "description": "Kelola inventory di berbagai lokasi gudang",
+                "icon": "pi pi-building"
+            }
+        ],
+        "published_at": "2025-01-09 12:00:00",
+        "version": "v0.0.1-alpha"
+    },
+    {
+        "id": 3,
+        "title": "My POS",
+        "description": "Sistem Point of Sales modern yang dirancang khusus untuk memudahkan pengelolaan transaksi kasir. Dengan interface yang intuitif dan fitur lengkap, aplikasi ini cocok untuk berbagai jenis bisnis retail dan F&B.",
+        "image": "/assets/image/coming_soon.jpg",
+        "images": [
+            "/assets/image/coming_soon.jpg"
+        ],
+        "screenshots": [
+            "/assets/image/coming_soon.jpg",
+            "/assets/image/coming_soon.jpg",
+            "/assets/image/coming_soon.jpg"
+        ],
+        "price": 250000,
+        "discount_price": 99000,
+        "category": "Web Development",
+        "review": [
+            {
+                "id": "1",
+                "person_name": "Budi Santoso",
+                "review": "Aplikasi POS yang sangat membantu bisnis saya. Interface mudah dipahami dan fitur lengkap!",
+                "rating": 5,
+                "date": "2025-01-10"
+            },
+            {
+                "id": "2",
+                "person_name": "Siti Nurhaliza",
+                "review": "Harga terjangkau dengan kualitas premium. Sangat recommended untuk UMKM!",
+                "rating": 5,
+                "date": "2025-01-08"
+            }
+        ],
+        "highlight": [
+            "Responsive, Clean and Modern Design",
+            "Support Offline Mode",
+            "Fast and Modern Web Framework",
+            "Bug Free",
+            "Installable Like App",
+            "1 Device Life Time License"
+        ],
+        "features": [
+            {
+                "title": "Multi Payment Method",
+                "description": "Support berbagai metode pembayaran: Cash, Debit, Credit, E-Wallet",
+                "icon": "pi pi-wallet"
+            },
+            {
+                "title": "Real-time Reporting",
+                "description": "Laporan penjualan real-time dengan visualisasi data yang menarik",
+                "icon": "pi pi-chart-line"
+            },
+            {
+                "title": "Inventory Management",
+                "description": "Kelola stok barang dengan mudah dan otomatis",
+                "icon": "pi pi-box"
+            }
+        ],
+        "published_at": "2025-01-14 12:00:00",
+        "version": "v0.0.1-alpha"
     },
     {
         "id": "surat-jalan",
