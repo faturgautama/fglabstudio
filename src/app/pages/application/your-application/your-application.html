@@ -83,8 +83,7 @@
 
                                 <div class="grid {{ item.is_trial ? 'grid-cols-2' : 'grid-cols-1' }} gap-3 mt-3">
                                     <p-button severity="info" label="Masuk" styleClass="p-button-sm w-full mb-2"
-                                        size="small"
-                                        [disabled]="item.is_trial ? handleDisableApps(item.expired_at) : false"
+                                        size="small" [disabled]="item.is_trial ? handleDisableApps(item) : false"
                                         (onClick)="handleClickApps(item.application.url)">
                                     </p-button>
 

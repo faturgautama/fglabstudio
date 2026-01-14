@@ -44,7 +44,7 @@
                 </p>
 
                 <p class="text-xs text-gray-400 font-medium">
-                    2025 - v0.0.1
+                    {{ currentYear }} - v0.0.2
                 </p>
             </div>
 
@@ -101,7 +101,7 @@
 
                 <div class="grid gap-5 items-center w-full mt-4">
                     <p-button severity="info" label="Sign In" [disabled]="Form.invalid" styleClass="w-full"
-                        (onClick)="handleLogin(Form.value)">
+                        (onClick)="handleLogin(Form.value)" [loading]="loading">
                     </p-button>
 
                     <p class="text-gray-500 text-xs text-center">

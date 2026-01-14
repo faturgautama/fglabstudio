@@ -41,14 +41,16 @@ export class YourApplication implements OnInit {
   newPurchaseDialogRef: DynamicDialogRef | undefined;
 
   ngOnInit(): void {
-    this._authenticationService
-      ._userData
-      .subscribe((result) => {
-        this.user = result;
-        this._cdr.detectChanges();
+    const user = JSON.parse(localStorage.getItem("_CXUSER_") as string);
 
-        console.log("user =>", this.user);
-      });
+    if (user) {
+      this._authenticationService
+        .getProfile(user.user.id)
+        .subscribe((result) => {
+          this.user = result;
+          this._cdr.detectChanges();
+        });
+    }
   }
 
   handleClickApps(url: string) {
@@ -104,8 +106,24 @@ export class YourApplication implements OnInit {
     });
   }
 
-  handleDisableApps(expired_at: string) {
-    return new Date().getTime() > new Date(expired_at).getTime();
+  handleDisableApps(product: any) {
+    const expiredAtDateObj = new Date(product.expired_at);
+    const currentDateObj = new Date();
+
+    // Normalize to date only (set time to 00:00:00)
+    const expiredAtDate = new Date(
+      expiredAtDateObj.getFullYear(),
+      expiredAtDateObj.getMonth(),
+      expiredAtDateObj.getDate()
+    );
+
+    const currentDay = new Date(
+      currentDateObj.getFullYear(),
+      currentDateObj.getMonth(),
+      currentDateObj.getDate()
+    );
+
+    return expiredAtDate.getTime() < currentDay.getTime();
   }
 
   handleSignOut() {

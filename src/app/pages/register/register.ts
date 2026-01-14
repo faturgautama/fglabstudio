@@ -31,6 +31,8 @@ import { CardProductModel } from '../../model/components/card-product.model';
 })
 export class Register implements OnInit {
 
+  currentYear = new Date().getFullYear();
+
   databaseService = inject(DatabaseService);
 
   WhyChooseUs = [
@@ -67,6 +69,7 @@ export class Register implements OnInit {
   Form = this._formBuilder.group({
     full_name: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
+    phone_number: ['', [Validators.required]],
     password: ['', [Validators.required]],
     password_confirmation: ['', [Validators.required]],
   });
@@ -111,6 +114,7 @@ export class Register implements OnInit {
       .signUp(
         form.full_name,
         form.email,
+        form.phone_number,
         form.password,
         form.password_confirmation,
         this.SelectedTrialProduct.id

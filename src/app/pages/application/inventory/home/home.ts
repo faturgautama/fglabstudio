@@ -197,8 +197,6 @@ export class Home implements OnInit {
 
   private loadProductList() {
     this._productService.getAll().subscribe((products) => {
-      console.log("Products from service =>", products);
-
       const mappedData = products.map((item: any) => {
         // Pastikan category ada
         const categoryName = item.category?.name || item.category || '-';
@@ -218,9 +216,6 @@ export class Home implements OnInit {
         ...this.TableProps,
         datasource: mappedData
       };
-
-      console.log("Table datasource =>", this.TableProps.datasource);
-      console.log("First item =>", this.TableProps.datasource[0]);
     });
   }
 

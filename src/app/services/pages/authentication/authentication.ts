@@ -37,10 +37,11 @@ export class AuthenticationService {
     )
   }
 
-  signUp(full_name: string, email: string, password: string, password_confirmation: string, trial_product_id: number) {
+  signUp(full_name: string, email: string, phone_number: string, password: string, password_confirmation: string, trial_product_id: number) {
     const payload = {
       full_name,
       email,
+      phone_number,
       password,
       password_confirmation,
       trial_product_id

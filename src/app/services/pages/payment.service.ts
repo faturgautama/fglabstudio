@@ -243,8 +243,6 @@ export class PaymentService {
      */
     getPendingTransaction(userId: number, appsId: number): Observable<Transaction | null> {
         return new Observable((observer) => {
-            console.log('Querying pending transaction:', { userId, appsId });
-
             this.supabase
                 .from('transaction')
                 .select('*')
@@ -254,8 +252,6 @@ export class PaymentService {
                 .order('created_at', { ascending: false })
                 .limit(1)
                 .then(({ data, error }) => {
-                    console.log('Query result:', { data, error });
-
                     if (error) {
                         console.error('Failed to get pending transaction:', error);
                         observer.next(null);
@@ -268,22 +264,12 @@ export class PaymentService {
                             const expiredAt = new Date(transaction.expired_at);
                             const nowDate = new Date();
 
-                            console.log('Checking expiry:', {
-                                expired_at: transaction.expired_at,
-                                expiredAt: expiredAt.toISOString(),
-                                now: nowDate.toISOString(),
-                                isExpired: expiredAt <= nowDate
-                            });
-
                             if (expiredAt > nowDate) {
-                                console.log('Returning valid transaction:', transaction);
                                 observer.next(transaction);
                             } else {
-                                console.log('Transaction expired, returning null');
                                 observer.next(null);
                             }
                         } else {
-                            console.log('No transaction found');
                             observer.next(null);
                         }
 

@@ -76,8 +76,6 @@ export class ProductDetail implements OnInit, OnDestroy {
             .pipe(
                 map(fn => fn(parseInt(id))),
                 tap(product => {
-                    console.log("product =>", product);
-
                     if (!product) {
                         this.messageService.add({
                             severity: 'error',

@@ -250,10 +250,10 @@ export class PaymentDialog implements OnInit, OnDestroy {
           // Refresh user profile to update applications list
           this.authService.refreshProfile().subscribe({
             next: () => {
-              console.log('Profile refreshed successfully');
+              // console.log('Profile refreshed successfully');
             },
             error: (error) => {
-              console.error('Failed to refresh profile:', error);
+              // console.error('Failed to refresh profile:', error);
             }
           });
 
@@ -306,10 +306,10 @@ export class PaymentDialog implements OnInit, OnDestroy {
   cancelTransaction(referenceId: string): void {
     const sub = this.paymentService.cancelTransaction(referenceId).subscribe({
       next: () => {
-        console.log('Transaction cancelled:', referenceId);
+        // console.log('Transaction cancelled:', referenceId);
       },
       error: (error) => {
-        console.error('Failed to cancel transaction:', error);
+        // console.error('Failed to cancel transaction:', error);
       }
     });
 

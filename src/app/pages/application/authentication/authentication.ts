@@ -30,6 +30,8 @@ import { from } from 'rxjs';
 })
 export class Authentication implements OnInit {
 
+  currentYear = new Date().getFullYear();
+
   databaseService = inject(DatabaseService);
 
   WhyChooseUs = [
@@ -65,6 +67,8 @@ export class Authentication implements OnInit {
     password: ['', [Validators.required]],
   });
 
+  loading = false;
+
   ngOnInit(): void {
     const isLoggedIn = this._authenticationService._userData;
     if (isLoggedIn && isLoggedIn.value) {
@@ -73,6 +77,8 @@ export class Authentication implements OnInit {
   }
 
   handleLogin(form: any) {
+    this.loading = true;
+
     this._authenticationService
       .signIn(form.email, form.password)
       .subscribe(async (result: any) => { // ✅ Tambah async
@@ -87,6 +93,8 @@ export class Authentication implements OnInit {
             detail: 'Sign in successfully',
           });
 
+          this.loading = false;
+
           // ✅ Sekarang aman untuk navigate (State akan auto-fetch)
           this._router.navigateByUrl('/your-apps');
         } else {
@@ -96,6 +104,7 @@ export class Authentication implements OnInit {
             summary: 'Oops',
             detail: 'Sign in failed',
           });
+          this.loading = false;
         }
       }, (error: any) => {
         this._messageService.clear();
@@ -104,6 +113,7 @@ export class Authentication implements OnInit {
           summary: 'Oops',
           detail: error.error?.error || 'Unknown error',
         });
+        this.loading = false;
       });
   }
 
