@@ -1,181 +1,308 @@
 [
     {
         "id": 1,
-        "title": "My Peoples",
-        "description": "Sistem HRIS lengkap untuk mengelola data karyawan, absensi, payroll, dan performance management. Solusi terpadu untuk departemen HR modern.",
-        "image": "/assets/image/coming_soon.jpg",
+        "title": "PRODUCT.My Peoples.title",
+        "short_description": "PRODUCT.My Peoples.short_description",
+        "description": "PRODUCT.My Peoples.description",
+        "image": "/assets/image/hr/HR - Banner.png",
         "images": [
-            "/assets/image/coming_soon.jpg"
+            "/assets/image/hr/HR - Banner.png",
+            "/assets/image/hr/hr_screenshot_1.png",
+            "/assets/image/hr/hr_screenshot_2.png"
         ],
         "screenshots": [
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg"
+            "/assets/image/hr/hr_screenshot_1.png",
+            "/assets/image/hr/hr_screenshot_2.png",
+            "/assets/image/hr/hr_screenshot_3.png",
+            "/assets/image/hr/hr_screenshot_4.png",
+            "/assets/image/hr/hr_screenshot_5.png"
         ],
         "price": 250000,
         "discount_price": 99000,
-        "category": "Web Development",
+        "category": "PRODUCT.Category.Web Development",
         "review": [
             {
                 "id": "1",
                 "person_name": "Dewi Lestari",
-                "review": "HRIS yang sangat membantu pekerjaan HR. Fitur lengkap dan mudah digunakan!",
+                "review": "PRODUCT.My Peoples.reviews.1.review",
                 "rating": 5,
                 "date": "2025-01-11"
             },
             {
                 "id": "2",
                 "person_name": "Rudi Hartono",
-                "review": "Payroll jadi lebih mudah dan akurat. Recommended!",
-                "rating": 4,
+                "review": "PRODUCT.My Peoples.reviews.2.review",
+                "rating": 5,
                 "date": "2025-01-09"
+            },
+            {
+                "id": "3",
+                "person_name": "Sarah Wijaya",
+                "review": "PRODUCT.My Peoples.reviews.3.review",
+                "rating": 4,
+                "date": "2025-01-05"
             }
         ],
         "highlight": [
-            "Responsive, Clean and Modern Design",
-            "Support Offline Mode",
-            "Fast and Modern Web Framework",
-            "Bug Free",
-            "Installable Like App",
-            "1 Device Life Time License"
+            "PRODUCT.Highlight.Responsive Design",
+            "PRODUCT.Highlight.Offline Mode",
+            "PRODUCT.Highlight.Modern Framework",
+            "PRODUCT.Highlight.Bug Free",
+            "PRODUCT.Highlight.PWA",
+            "PRODUCT.Highlight.Lifetime License"
         ],
         "features": [
             {
-                "title": "Employee Database",
-                "description": "Database karyawan lengkap dengan dokumen digital",
+                "title": "PRODUCT.My Peoples.features.1.title",
+                "description": "PRODUCT.My Peoples.features.1.description",
                 "icon": "pi pi-users"
             },
             {
-                "title": "Attendance System",
-                "description": "Sistem absensi terintegrasi dengan berbagai metode",
+                "title": "PRODUCT.My Peoples.features.2.title",
+                "description": "PRODUCT.My Peoples.features.2.description",
                 "icon": "pi pi-clock"
             },
             {
-                "title": "Payroll Management",
-                "description": "Hitung gaji otomatis dengan berbagai komponen",
+                "title": "PRODUCT.My Peoples.features.3.title",
+                "description": "PRODUCT.My Peoples.features.3.description",
                 "icon": "pi pi-money-bill"
+            },
+            {
+                "title": "PRODUCT.My Peoples.features.4.title",
+                "description": "PRODUCT.My Peoples.features.4.description",
+                "icon": "pi pi-calendar"
+            },
+            {
+                "title": "PRODUCT.My Peoples.features.5.title",
+                "description": "PRODUCT.My Peoples.features.5.description",
+                "icon": "pi pi-star"
+            },
+            {
+                "title": "PRODUCT.My Peoples.features.6.title",
+                "description": "PRODUCT.My Peoples.features.6.description",
+                "icon": "pi pi-briefcase"
+            },
+            {
+                "title": "PRODUCT.My Peoples.features.7.title",
+                "description": "PRODUCT.My Peoples.features.7.description",
+                "icon": "pi pi-book"
+            },
+            {
+                "title": "PRODUCT.My Peoples.features.8.title",
+                "description": "PRODUCT.My Peoples.features.8.description",
+                "icon": "pi pi-user"
             }
         ],
+        "business_impact": "PRODUCT.My Peoples.business_impact",
+        "perfect_for": "PRODUCT.My Peoples.perfect_for",
         "published_at": "2025-01-09 12:00:00",
         "version": "v0.0.1-alpha"
     },
     {
         "id": 2,
-        "title": "My Inventory",
-        "description": "Sistem manajemen inventory yang powerful untuk mengelola stok barang dengan efisien. Dilengkapi dengan fitur tracking, alert stok minimum, dan laporan lengkap untuk membantu bisnis Anda.",
-        "image": "/assets/image/coming_soon.jpg",
+        "title": "PRODUCT.My Inventory.title",
+        "short_description": "PRODUCT.My Inventory.short_description",
+        "description": "PRODUCT.My Inventory.description",
+        "image": "/assets/image/inventory/Inventory Banner.png",
         "images": [
-            "/assets/image/coming_soon.jpg"
+            "/assets/image/inventory/Inventory Banner.png",
+            "/assets/image/inventory/inventory_screenshot_1.png",
+            "/assets/image/inventory/inventory_screenshot_2.png"
         ],
         "screenshots": [
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg"
+            "/assets/image/inventory/inventory_screenshot_1.png",
+            "/assets/image/inventory/inventory_screenshot_2.png",
+            "/assets/image/inventory/inventory_screenshot_3.png",
+            "/assets/image/inventory/inventory_screenshot_4.png",
+            "/assets/image/inventory/inventory_screenshot_5.png",
+            "/assets/image/inventory/inventory_screenshot_6.png"
         ],
         "price": 250000,
         "discount_price": 99000,
-        "category": "Web Development",
+        "category": "PRODUCT.Category.Web Development",
         "review": [
             {
                 "id": "1",
                 "person_name": "Ahmad Fauzi",
-                "review": "Sistem inventory terbaik yang pernah saya gunakan. Tracking stok jadi sangat mudah!",
+                "review": "PRODUCT.My Inventory.reviews.1.review",
                 "rating": 5,
                 "date": "2025-01-12"
+            },
+            {
+                "id": "2",
+                "person_name": "Linda Kusuma",
+                "review": "PRODUCT.My Inventory.reviews.2.review",
+                "rating": 5,
+                "date": "2025-01-08"
+            },
+            {
+                "id": "3",
+                "person_name": "Bambang Sutrisno",
+                "review": "PRODUCT.My Inventory.reviews.3.review",
+                "rating": 4,
+                "date": "2025-01-06"
             }
         ],
         "highlight": [
-            "Responsive, Clean and Modern Design",
-            "Support Offline Mode",
-            "Fast and Modern Web Framework",
-            "Bug Free",
-            "Installable Like App",
-            "1 Device Life Time License"
+            "PRODUCT.Highlight.Responsive Design",
+            "PRODUCT.Highlight.Offline Mode",
+            "PRODUCT.Highlight.Modern Framework",
+            "PRODUCT.Highlight.Bug Free",
+            "PRODUCT.Highlight.PWA",
+            "PRODUCT.Highlight.Lifetime License"
         ],
         "features": [
             {
-                "title": "Stock Alert",
-                "description": "Notifikasi otomatis ketika stok mencapai batas minimum",
+                "title": "PRODUCT.My Inventory.features.1.title",
+                "description": "PRODUCT.My Inventory.features.1.description",
                 "icon": "pi pi-bell"
             },
             {
-                "title": "Barcode Scanner",
-                "description": "Support barcode scanner untuk input data lebih cepat",
+                "title": "PRODUCT.My Inventory.features.2.title",
+                "description": "PRODUCT.My Inventory.features.2.description",
                 "icon": "pi pi-qrcode"
             },
             {
-                "title": "Multi Warehouse",
-                "description": "Kelola inventory di berbagai lokasi gudang",
+                "title": "PRODUCT.My Inventory.features.3.title",
+                "description": "PRODUCT.My Inventory.features.3.description",
                 "icon": "pi pi-building"
+            },
+            {
+                "title": "PRODUCT.My Inventory.features.4.title",
+                "description": "PRODUCT.My Inventory.features.4.description",
+                "icon": "pi pi-list"
+            },
+            {
+                "title": "PRODUCT.My Inventory.features.5.title",
+                "description": "PRODUCT.My Inventory.features.5.description",
+                "icon": "pi pi-shopping-cart"
+            },
+            {
+                "title": "PRODUCT.My Inventory.features.6.title",
+                "description": "PRODUCT.My Inventory.features.6.description",
+                "icon": "pi pi-arrows-h"
+            },
+            {
+                "title": "PRODUCT.My Inventory.features.7.title",
+                "description": "PRODUCT.My Inventory.features.7.description",
+                "icon": "pi pi-tag"
+            },
+            {
+                "title": "PRODUCT.My Inventory.features.8.title",
+                "description": "PRODUCT.My Inventory.features.8.description",
+                "icon": "pi pi-chart-bar"
             }
         ],
+        "business_impact": "PRODUCT.My Inventory.business_impact",
+        "perfect_for": "PRODUCT.My Inventory.perfect_for",
         "published_at": "2025-01-09 12:00:00",
         "version": "v0.0.1-alpha"
     },
     {
         "id": 3,
-        "title": "My POS",
-        "description": "Sistem Point of Sales modern yang dirancang khusus untuk memudahkan pengelolaan transaksi kasir. Dengan interface yang intuitif dan fitur lengkap, aplikasi ini cocok untuk berbagai jenis bisnis retail dan F&B.",
-        "image": "/assets/image/coming_soon.jpg",
+        "title": "PRODUCT.My POS.title",
+        "short_description": "PRODUCT.My POS.short_description",
+        "description": "PRODUCT.My POS.description",
+        "image": "/assets/image/pos/POS Banner.png",
         "images": [
-            "/assets/image/coming_soon.jpg"
+            "/assets/image/pos/POS Banner.png",
+            "/assets/image/pos/pos_screenshot_1.png",
+            "/assets/image/pos/pos_screenshot_2.png"
         ],
         "screenshots": [
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg",
-            "/assets/image/coming_soon.jpg"
+            "/assets/image/pos/pos_screenshot_1.png",
+            "/assets/image/pos/pos_screenshot_2.png",
+            "/assets/image/pos/pos_screenshot_3.png",
+            "/assets/image/pos/pos_screenshot_4.png",
+            "/assets/image/pos/pos_screenshot_5.png",
+            "/assets/image/pos/pos_screenshot_6.png"
         ],
         "price": 250000,
         "discount_price": 99000,
-        "category": "Web Development",
+        "category": "PRODUCT.Category.Web Development",
         "review": [
             {
                 "id": "1",
                 "person_name": "Budi Santoso",
-                "review": "Aplikasi POS yang sangat membantu bisnis saya. Interface mudah dipahami dan fitur lengkap!",
+                "review": "PRODUCT.My POS.reviews.1.review",
                 "rating": 5,
                 "date": "2025-01-10"
             },
             {
                 "id": "2",
                 "person_name": "Siti Nurhaliza",
-                "review": "Harga terjangkau dengan kualitas premium. Sangat recommended untuk UMKM!",
+                "review": "PRODUCT.My POS.reviews.2.review",
                 "rating": 5,
                 "date": "2025-01-08"
+            },
+            {
+                "id": "3",
+                "person_name": "Andi Wijaya",
+                "review": "PRODUCT.My POS.reviews.3.review",
+                "rating": 5,
+                "date": "2025-01-07"
             }
         ],
         "highlight": [
-            "Responsive, Clean and Modern Design",
-            "Support Offline Mode",
-            "Fast and Modern Web Framework",
-            "Bug Free",
-            "Installable Like App",
-            "1 Device Life Time License"
+            "PRODUCT.Highlight.Responsive Design",
+            "PRODUCT.Highlight.Offline Mode",
+            "PRODUCT.Highlight.Modern Framework",
+            "PRODUCT.Highlight.Bug Free",
+            "PRODUCT.Highlight.PWA",
+            "PRODUCT.Highlight.Lifetime License"
         ],
         "features": [
             {
-                "title": "Multi Payment Method",
-                "description": "Support berbagai metode pembayaran: Cash, Debit, Credit, E-Wallet",
+                "title": "PRODUCT.My POS.features.1.title",
+                "description": "PRODUCT.My POS.features.1.description",
                 "icon": "pi pi-wallet"
             },
             {
-                "title": "Real-time Reporting",
-                "description": "Laporan penjualan real-time dengan visualisasi data yang menarik",
+                "title": "PRODUCT.My POS.features.2.title",
+                "description": "PRODUCT.My POS.features.2.description",
                 "icon": "pi pi-chart-line"
             },
             {
-                "title": "Inventory Management",
-                "description": "Kelola stok barang dengan mudah dan otomatis",
+                "title": "PRODUCT.My POS.features.3.title",
+                "description": "PRODUCT.My POS.features.3.description",
                 "icon": "pi pi-box"
+            },
+            {
+                "title": "PRODUCT.My POS.features.4.title",
+                "description": "PRODUCT.My POS.features.4.description",
+                "icon": "pi pi-qrcode"
+            },
+            {
+                "title": "PRODUCT.My POS.features.5.title",
+                "description": "PRODUCT.My POS.features.5.description",
+                "icon": "pi pi-users"
+            },
+            {
+                "title": "PRODUCT.My POS.features.6.title",
+                "description": "PRODUCT.My POS.features.6.description",
+                "icon": "pi pi-user"
+            },
+            {
+                "title": "PRODUCT.My POS.features.7.title",
+                "description": "PRODUCT.My POS.features.7.description",
+                "icon": "pi pi-print"
+            },
+            {
+                "title": "PRODUCT.My POS.features.8.title",
+                "description": "PRODUCT.My POS.features.8.description",
+                "icon": "pi pi-wifi"
             }
         ],
+        "business_impact": "PRODUCT.My POS.business_impact",
+        "perfect_for": "PRODUCT.My POS.perfect_for",
         "published_at": "2025-01-14 12:00:00",
         "version": "v0.0.1-alpha"
     },
     {
         "id": "surat-jalan",
-        "title": "Surat Jalan",
-        "description": "Aplikasi untuk membuat dan mengelola surat jalan pengiriman barang. Dilengkapi dengan tracking pengiriman dan digital signature untuk efisiensi operasional.",
+        "title": "PRODUCT.Surat Jalan.title",
+        "short_description": "PRODUCT.Surat Jalan.short_description",
+        "description": "PRODUCT.Surat Jalan.description",
         "image": "/assets/image/coming_soon.jpg",
         "images": [
             "/assets/image/coming_soon.jpg"
@@ -186,33 +313,51 @@
         ],
         "price": 250000,
         "discount_price": 99000,
-        "category": "Web Development",
+        "category": "PRODUCT.Category.Web Development",
         "review": [],
         "highlight": [
-            "Responsive, Clean and Modern Design",
-            "Support Offline Mode",
-            "Fast and Modern Web Framework",
-            "Bug Free",
-            "Installable Like App",
-            "1 Device Life Time License"
+            "PRODUCT.Highlight.Responsive Design",
+            "PRODUCT.Highlight.Offline Mode",
+            "PRODUCT.Highlight.Modern Framework",
+            "PRODUCT.Highlight.Bug Free",
+            "PRODUCT.Highlight.PWA",
+            "PRODUCT.Highlight.Lifetime License"
         ],
         "features": [
             {
-                "title": "Digital Signature",
-                "description": "Tanda tangan digital untuk konfirmasi penerimaan",
+                "title": "PRODUCT.Surat Jalan.features.1.title",
+                "description": "PRODUCT.Surat Jalan.features.1.description",
                 "icon": "pi pi-pencil"
             },
             {
-                "title": "Delivery Tracking",
-                "description": "Track status pengiriman secara real-time",
+                "title": "PRODUCT.Surat Jalan.features.2.title",
+                "description": "PRODUCT.Surat Jalan.features.2.description",
                 "icon": "pi pi-map-marker"
             },
             {
-                "title": "Auto Generate",
-                "description": "Generate surat jalan otomatis dari order",
+                "title": "PRODUCT.Surat Jalan.features.3.title",
+                "description": "PRODUCT.Surat Jalan.features.3.description",
                 "icon": "pi pi-file"
+            },
+            {
+                "title": "PRODUCT.Surat Jalan.features.4.title",
+                "description": "PRODUCT.Surat Jalan.features.4.description",
+                "icon": "pi pi-camera"
+            },
+            {
+                "title": "PRODUCT.Surat Jalan.features.5.title",
+                "description": "PRODUCT.Surat Jalan.features.5.description",
+                "icon": "pi pi-directions"
+            },
+            {
+                "title": "PRODUCT.Surat Jalan.features.6.title",
+                "description": "PRODUCT.Surat Jalan.features.6.description",
+                "icon": "pi pi-car"
             }
         ],
-        "published_at": null
+        "business_impact": "PRODUCT.Surat Jalan.business_impact",
+        "perfect_for": "PRODUCT.Surat Jalan.perfect_for",
+        "published_at": null,
+        "version": "v0.0.1-alpha"
     }
 ]

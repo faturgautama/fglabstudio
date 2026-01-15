@@ -1,29 +1,88 @@
 <div id="card_product_{{ props.id }}"
-    class="flex flex-col w-full items-start gap-0 p-0 rounded-2xl bg-[rgba(42,42,42,0.32)] backdrop-blur-lg border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] overflow-hidden h-[22rem] md:h-[25rem] relative cursor-pointer hover:shadow-[0_8px_40px_rgba(0,0,0,0.2)] transition-all"
+    class="flex flex-col w-full items-start gap-0 p-0 rounded-2xl bg-[rgba(42,42,42,0.32)] backdrop-blur-lg border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] overflow-hidden h-auto md:h-auto relative cursor-pointer hover:shadow-[0_8px_40px_rgba(0,0,0,0.2)] hover:border-sky-500/40 transition-all group"
     (click)="navigateToDetail()">
-    <img [src]="props.image" alt="image" class="rounded-t-lg w-full h-[10rem] md:h-[12rem] object-cover object-center">
 
-    <div class="flex w-full flex-col p-5 h-full">
-        <p class="text-sky-500 text-xs mt-4 mb-1">
-            {{props.category}}
-        </p>
-        <p class="text-white text-lg md:text-xl font-semibold relative z-10">
-            {{ props.title }}
+    <!-- Image Container with Badges -->
+    <div class="relative w-full">
+        <img [src]="props.image" alt="image"
+            class="rounded-t-lg w-full h-[10rem] md:h-[12rem] object-cover object-center group-hover:scale-105 transition-transform duration-300">
+
+        <!-- Discount Badge -->
+        @if (getDiscountPercentage() > 0) {
+        <div
+            class="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+            -{{ getDiscountPercentage() }}%
+        </div>
+        }
+
+        <!-- Version Badge -->
+        @if (props.version) {
+        <div
+            class="absolute top-3 left-3 bg-gray-900/80 backdrop-blur-sm text-gray-300 text-xs font-medium px-2 py-1 rounded-md border border-gray-700">
+            {{ props.version }}
+        </div>
+        }
+    </div>
+
+    <!-- Content -->
+    <div class="flex w-full flex-col p-5 gap-3">
+        <!-- Category & Rating -->
+        <div class="flex items-center justify-between gap-2">
+            <p class="text-sky-500 text-xs font-medium uppercase tracking-wide">
+                {{ props.category | translate }}
+            </p>
+
+            @if (getAverageRating() > 0) {
+            <div class="flex items-center gap-1">
+                <i class="pi pi-star-fill text-yellow-400 text-xs"></i>
+                <span class="text-gray-300 text-xs font-medium">{{ getAverageRating() }}</span>
+                <span class="text-gray-500 text-xs">({{ props.review?.length || 0 }})</span>
+            </div>
+            }
+        </div>
+
+        <!-- Title -->
+        <p
+            class="text-white text-lg md:text-xl font-semibold relative z-10 line-clamp-1 group-hover:text-sky-400 transition-colors">
+            {{ props.title | translate }}
         </p>
 
-        <div class="flex w-full justify-between items-center mt-auto mb-3">
-            <div class="flex flex-col gap-0">
-                <p class="text-gray-400 text-xs line-through">
-                    {{ props.price | currency: 'Rp. ' }}
+        <!-- Short Description -->
+        @if (props.short_description) {
+        <p class="text-gray-400 text-xs md:text-sm relative z-10 line-clamp-2 leading-relaxed">
+            {{ props.short_description | translate }}
+        </p>
+        }
+
+        <!-- Features Count -->
+        @if (props.features && props.features.length > 0) {
+        <div class="flex items-center gap-2 text-gray-500 text-xs">
+            <i class="pi pi-check-circle text-emerald-400"></i>
+            <span>{{ props.features.length }} {{ 'PRODUCT_DETAIL.Key Features' | translate }}</span>
+        </div>
+        }
+
+        <!-- Divider -->
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"></div>
+
+        <!-- Price & Action -->
+        <div class="flex w-full justify-between items-end gap-3">
+            <div class="flex flex-col gap-1">
+                <p class="text-gray-500 text-xs line-through">
+                    {{ props.price | currency: 'Rp ' : 'symbol' : '1.0-0' }}
                 </p>
 
-                <p class="text-gray-100 font-medium text-base">
-                    {{ props.discount_price | currency: 'Rp. ' }}
+                <p class="text-white font-bold text-lg md:text-xl">
+                    {{ props.discount_price | currency: 'Rp ' : 'symbol' : '1.0-0' }}
+                </p>
+
+                <p class="text-emerald-400 text-xs font-medium">
+                    {{ 'PRODUCT.Highlight.Lifetime License' | translate }}
                 </p>
             </div>
 
-            <p-button styleClass="p-button-sm p-button-info" icon="pi pi-cart-plus"
-                [label]="'BUTTON.Shop Now' | translate" (onClick)="navigateToDetail(); $event.stopPropagation()">
+            <p-button styleClass="p-button-sm p-button-info" icon="pi pi-shopping-cart"
+                [label]="'BUTTON.Buy Now' | translate" (onClick)="navigateToDetail(); $event.stopPropagation()">
             </p-button>
         </div>
     </div>

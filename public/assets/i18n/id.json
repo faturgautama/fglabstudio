@@ -1,156 +1,359 @@
 {
   "NAVBAR": {
-    "Home": "Home",
+    "Home": "Beranda",
     "Product": "Produk",
     "Service": "Layanan",
     "AboutUs": "Tentang Kami",
     "FAQ": "FAQ"
   },
   "HOME": {
-    "Power Up Your": "Upgrade Level Cara",
-    "Creativity Workflow": "Kerja Kamu",
-    "Digital Solution Sub Headline": "Solusi digital sederhana untuk mengelola kerjaan kamu dengan cepat, mudah, dan efisien",
-    "Services": "Butuh Solusi Yang Lebih Spesifik?",
-    "Services Subheader": "Selain produk digital siap pakai, kami juga menyediakan layanan kustom sesuai kebutuhan bisnis Anda.",
+    "Power Up Your": "Tingkatkan",
+    "Creativity Workflow": "Alur Kerja Kreatif Anda",
+    "Digital Solution Sub Headline": "Sederhanakan alur kerja Anda dengan solusi digital yang cepat, mudah, dan efisien",
+    "Services": "Butuh Solusi yang Lebih Disesuaikan?",
+    "Services Subheader": "Selain produk digital siap pakai, kami juga menyediakan layanan custom yang dirancang sesuai kebutuhan bisnis unik Anda.",
     "Services List": {
       "UI/UX Design": {
-        "title": "UI/UX Design",
-        "description": "Desain antarmuka modern dengan pengalaman pengguna yang lebih baik."
+        "title": "Desain UI/UX",
+        "description": "Interface modern yang dibuat untuk pengalaman pengguna yang lebih baik."
       },
       "Web Development": {
-        "title": "Web Development",
-        "description": "Bangun website sesuai kebutuhan bisnismu, cepat, aman, dan scalable."
+        "title": "Pengembangan Web",
+        "description": "Bangun website yang disesuaikan dengan kebutuhan bisnis Anda — cepat, aman, dan scalable."
       },
       "App Development": {
-        "title": "App Development",
-        "description": "Aplikasi IOS atau Android yang fungsional, elegan, dan user-friendly."
+        "title": "Pengembangan Aplikasi",
+        "description": "Aplikasi iOS atau Android yang fungsional, elegan, dan user-friendly."
       },
       "Custom Enterprise System": {
-        "title": "Custom Enterprise System",
-        "description": "Bangun sistem kustom untuk automatisasi proses bisnis dan meningkatkan efisiensi."
+        "title": "Sistem Enterprise Custom",
+        "description": "Sistem custom untuk mengotomatisasi proses bisnis dan meningkatkan efisiensi."
       }
     },
-    "Count Headline": "Dipercaya oleh Banyak Client, Terbukti Dalam Angka",
-    "Count Sub Headline": "Dipercaya oleh banyak client bukan sekadar klaim, melainkan fakta. Setiap harinya ratusan jam kerja berhasil dihemat dengan solusi yang kami tawarkan. Angka-angka ini membuktikan bagaimana kami benar-benar membuat perbedaan.",
-    "Product": "Produk Unggulan",
-    "Product Subheader": "Semua yang Anda butuhkan untuk bekerja lebih efisien, dalam satu tempat",
-    "Why Choose Us": "Kenapa Memilih Kami",
-    "Why Choose Us Subheader": "Kami menghadirkan kombinasi inovasi, kualitas, dan komitmen untuk memberikan pengalaman terbaik bagi Anda.",
-    "Proven Expertise": "Pengalaman Terbukti",
-    "Proven Expertise Description": "Pengalaman bertahun-tahun dalam menghadirkan solusi yang andal dan efektif",
+    "Count Headline": "Dipercaya oleh Klien, Terbukti dalam Angka",
+    "Count Sub Headline": "Dipercaya oleh banyak klien bukan hanya pernyataan — ini adalah kenyataan yang terbukti. Setiap hari, kami menghemat ratusan jam kerja untuk tim di seluruh dunia. Data menunjukkan bagaimana kami benar-benar membuat perbedaan.",
+    "Product": "Produk Terbaru",
+    "Product Subheader": "Semua yang Anda butuhkan untuk bekerja lebih cerdas, semua dalam satu tempat",
+    "Why Choose Us": "Mengapa Memilih Kami",
+    "Why Choose Us Subheader": "Kami menggabungkan inovasi, kualitas, dan komitmen untuk memberikan pengalaman terbaik.",
+    "Proven Expertise": "Keahlian Terbukti",
+    "Proven Expertise Description": "Bertahun-tahun pengalaman menghadirkan solusi yang reliable dan efektif",
     "Innovative Approach": "Pendekatan Inovatif",
-    "Innovative Approach Description": "Mengutamakan kreativitas dan teknologi terbaru untuk selalu selangkah di depan",
-    "Customer-Centric Service": "Layanan Berorientasi Pelanggan",
-    "Customer-Centric Service Description": "Kebutuhan Anda adalah prioritas kami, dengan solusi yang disesuaikan",
+    "Innovative Approach Description": "Kami embrace kreativitas dan teknologi terkini untuk tetap unggul",
+    "Customer-Centric Service": "Layanan Berfokus pada Pelanggan",
+    "Customer-Centric Service Description": "Kebutuhan Anda adalah prioritas kami, dan kami menyesuaikan solusi untuk Anda",
     "Quality Commitment": "Komitmen Kualitas",
-    "Quality Commitment Description": "Kami tidak pernah mengabaikan standar demi hasil terbaik",
-    "Who We Are": "Siapakah Kami",
-    "Who We Are Subheader": "Mengubah Ide Menjadi Produk Digital yang Sederhana tapi Hebat",
-    "Who We Are Description": "Kami lahir dengan satu misi: membuat teknologi bisa diakses oleh semua orang. Kami fokus menciptakan aplikasi yang ringan namun andal, dirancang untuk memenuhi kebutuhan pasar tanpa kerumitan yang tidak perlu. Perjalanan kreatif kami adalah tentang inovasi yang punya tujuan—membangun alat yang memberdayakan orang dan bisnis untuk berkembang.",
+    "Quality Commitment Description": "Kami tidak pernah kompromi dengan standar untuk memastikan hasil terbaik",
+    "Who We Are": "Siapa Kami",
+    "Who We Are Subheader": "Mengubah Ide Menjadi Produk Digital yang Sederhana dan Powerful",
+    "Who We Are Description": "Kami memulai dengan satu misi: membuat teknologi dapat diakses oleh semua orang. Kami fokus pada pembuatan aplikasi yang ringan namun handal, dirancang untuk memenuhi kebutuhan pasar tanpa kompleksitas yang tidak perlu. Perjalanan kreatif kami adalah tentang inovasi dengan tujuan—membangun tools yang memberdayakan orang dan bisnis untuk tumbuh.",
     "Who We Are Values": {
       "Innovation at Core": "Inovasi sebagai Inti",
-      "Customer-Centric Thinking": "Berpikir Berpusat pada Pelanggan",
+      "Customer-Centric Thinking": "Berpikir Berfokus pada Pelanggan",
       "Trust and Transparency": "Kepercayaan dan Transparansi",
       "Empowering Creators": "Memberdayakan Kreator",
-      "Inclusive by Design": "Inklusif sejak Awal",
+      "Inclusive by Design": "Inklusif dalam Desain",
       "Sustainable Growth": "Pertumbuhan Berkelanjutan",
       "Data-Informed Decisions": "Keputusan Berdasarkan Data",
       "Community Driven": "Didorong oleh Komunitas"
     },
-    "FAQ": "Frequently Ask Question",
-    "FAQ Description": "Jawaban Untuk Pertanyaan Umum Pengguna",
+    "FAQ": "Pertanyaan yang Sering Diajukan",
+    "FAQ Description": "Jawaban Membantu untuk Pertanyaan Umum Pengguna",
     "FAQ Datasource": {
       "1": {
-        "question": "Apakah aplikasi ini bisa digunakan tanpa internet?",
-        "answer": "Ya. Semua transaksi tetap tersimpan di perangkat (offline). Saat ada koneksi internet, data otomatis tersinkron ke server."
+        "question": "Apakah aplikasi bisa digunakan tanpa internet?",
+        "answer": "Ya. Semua transaksi disimpan secara lokal (offline). Ketika internet tersedia, data akan otomatis sync ke server."
       },
       "2": {
-        "question": "Apakah harus install di komputer atau HP?",
-        "answer": "Tidak perlu install. Aplikasi ini berbasis web, cukup buka lewat browser (Chrome, Safari, Edge). Bisa juga dipasang sebagai PWA sehingga terlihat seperti aplikasi di HP/laptop."
+        "question": "Apakah perlu install di komputer atau HP?",
+        "answer": "Tidak perlu install. Aplikasi berbasis web, tinggal buka di browser (Chrome, Safari, Edge). Bisa juga diinstall sebagai PWA agar terlihat seperti aplikasi native di HP/laptop."
       },
       "3": {
-        "question": "Bagaimana cara mendapatkan akun setelah membeli?",
-        "answer": "Setelah membeli di marketplace, Anda akan menerima email berisi username & password untuk login."
+        "question": "Bagaimana cara mendapatkan akun setelah pembelian?",
+        "answer": "Setelah pembelian dari marketplace, Anda akan menerima email berisi username dan password untuk login."
       },
       "4": {
-        "question": "Apakah saya bisa memilih hanya modul tertentu?",
-        "answer": "Bisa. Sistem ini modular. Misalnya, Anda hanya butuh Kasir & Stok, modul lainnya bisa ditambahkan kapan saja sesuai kebutuhan."
+        "question": "Apakah bisa pilih modul tertentu saja?",
+        "answer": "Ya. Sistem kami modular. Misalnya jika hanya butuh POS & Inventory, bisa tambah modul lain kapan saja."
       },
       "5": {
-        "question": "Berapa biaya langganannya?",
-        "answer": "Kami menyediakan beberapa paket: Starter (POS + Invoice + Stok dasar), Business (Starter + Purchasing + Finance + Surat Jalan), dan Enterprise UMKM (semua modul termasuk HR/Payroll). Harga mulai dari Rp xx.xxx/bulan."
+        "question": "Berapa biaya subscription?",
+        "answer": "Kami menyediakan beberapa paket: Starter (POS + Invoice + Basic Inventory), Business (Starter + Purchasing + Finance + Delivery), dan Enterprise (semua modul termasuk HR/Payroll). Harga mulai dari Rp 99.000 untuk lisensi lifetime."
       },
       "6": {
-        "question": "Apakah ada masa trial gratis?",
-        "answer": "Ya. Anda bisa mencoba aplikasi selama 7 hari gratis."
+        "question": "Apakah ada free trial?",
+        "answer": "Ya. Anda bisa coba aplikasi gratis selama 7 hari."
       },
       "7": {
-        "question": "Apakah aplikasi ini bisa dipakai multi cabang?",
-        "answer": "Ya, tersedia dukungan multi user & multi cabang di paket tertentu."
+        "question": "Apakah bisa digunakan untuk multiple cabang?",
+        "answer": "Ya, support multi-user dan multi-branch tersedia di paket tertentu."
       },
       "8": {
         "question": "Apakah data saya aman?",
-        "answer": "Ya, data tersimpan di server dengan enkripsi standar industri, serta bisa diakses kembali walau perangkat Anda hilang atau rusak."
+        "answer": "Ya, data Anda disimpan di server yang aman dengan enkripsi standar industri dan bisa di-restore meskipun device hilang atau rusak."
       },
       "9": {
-        "question": "Apakah ada dukungan customer service?",
+        "question": "Apakah ada customer support?",
         "answer": "Ya, kami menyediakan support via WhatsApp, email, dan grup komunitas pengguna."
       }
     },
     "Contact Us": "Hubungi Kami",
-    "Contact Us Subheader": "Mari terhubung dengan kami. Apabila ada yang ingin Anda tanyakan, jangan sungkan untuk kirimkan pesan"
+    "Contact Us Subheader": "Mari terhubung dengan kami. Jika ada pertanyaan, jangan ragu untuk menulis"
   },
   "FOOTER": {
     "Product": "Produk",
-    "Service": "Layanan & Solusi",
+    "Service": "Layanan",
     "Support": "Dukungan",
     "Contact Us": "Hubungi Kami",
     "License": "Lisensi",
-    "Refund Policy": "Kebijakan Refund"
+    "Refund Policy": "Kebijakan Pengembalian"
   },
   "BUTTON": {
-    "Shop Now": "Beli Sekarang",
+    "Shop Now": "Belanja Sekarang",
     "Contact Us": "Hubungi Kami",
-    "Learn More": "Lebih Lanjut",
+    "Learn More": "Pelajari Lebih Lanjut",
     "Buy Now": "Beli Sekarang",
     "Back": "Kembali",
-    "Sign In": "Masuk Ke Akun Anda"
+    "Sign In": "Masuk ke Akun Anda"
   },
   "PRODUCT_DETAIL": {
     "Price": "Harga",
     "Description": "Deskripsi",
-    "Key Features": "Fitur Unggulan",
+    "Key Features": "Fitur Utama",
     "Features Detail": "Detail Fitur",
     "Published": "Dipublikasikan",
-    "Customer Reviews": "Review Pelanggan",
-    "No reviews yet": "Belum ada review",
-    "Be the first to review": "Jadilah yang pertama memberikan review untuk produk ini"
+    "Customer Reviews": "Ulasan Pelanggan",
+    "No reviews yet": "Belum ada ulasan",
+    "Be the first to review": "Jadilah yang pertama mengulas produk ini"
   },
   "FORM": {
     "Full Name": {
       "Label": "Nama Lengkap",
-      "Placeholder": "Masukkan nama lengkap disini..."
+      "Placeholder": "Masukkan nama lengkap di sini..."
     },
     "Email": {
       "Label": "Email",
-      "Placeholder": "Masukkan email disini..."
+      "Placeholder": "Masukkan email di sini..."
     },
     "Phone Number": {
-      "Label": "No. Handphone",
-      "Placeholder": "Masukkan no. handphone disini..."
+      "Label": "Nomor Telepon",
+      "Placeholder": "Masukkan nomor telepon di sini..."
     },
     "Subject": {
-      "Label": "Judul",
-      "Placeholder": "Masukkan judul disini..."
+      "Label": "Subjek",
+      "Placeholder": "Masukkan subjek di sini..."
     },
     "Content": {
-      "Label": "Isi Pesan",
-      "Placeholder": "Masukkan isi pesan disini..."
+      "Label": "Pesan",
+      "Placeholder": "Masukkan pesan di sini..."
     },
-    "Chat With Us": "Kirim Pesan Kepada Kami",
-    "Speak To Our Friendly Team": "Ngobrol dengan tim kami via",
-    "Message Whatsapp": "Kirim pesan ke Whatsapp",
-    "Message Email": "Kirim pesan ke Email",
-    "Lets Connect": "atau mari terhubung ke social media kami"
+    "Chat With Us": "Chat dengan Kami",
+    "Speak To Our Friendly Team": "Bicara dengan tim ramah kami via",
+    "Message Whatsapp": "Kirim pesan di Whatsapp",
+    "Message Email": "Kirim email kepada kami",
+    "Lets Connect": "atau Mari terhubung di social media kami"
+  },
+  "PRODUCT": {
+    "Category": {
+      "Business Application": "Aplikasi Bisnis",
+      "Web Development": "Web Development"
+    },
+    "Highlight": {
+      "Responsive Design": "Desain Responsif, Bersih dan Modern",
+      "Offline Mode": "Dukungan Mode Offline",
+      "Modern Framework": "Framework Web yang Cepat dan Modern",
+      "Bug Free": "Bebas Bug",
+      "PWA": "Dapat Diinstall Seperti Aplikasi",
+      "Lifetime License": "Lisensi Lifetime 1 Device"
+    },
+    "My Peoples": {
+      "title": "My Peoples",
+      "short_description": "Sistem HRIS lengkap untuk HR modern",
+      "description": "Sistem HRIS lengkap untuk mengelola data karyawan, absensi, payroll, dan performance management. Solusi terpadu untuk departemen HR modern yang ingin digitalisasi proses HR mereka. Mengotomatisasi tugas rutin dan mengubah HR dari peran administratif menjadi strategis.",
+      "business_impact": "Mengubah departemen HR dari peran administratif menjadi strategis dengan mengotomatisasi tugas rutin. Meningkatkan kepuasan karyawan dengan portal self-service yang transparan. Memastikan pemrosesan payroll yang akurat dan tepat waktu. Menghemat 20+ jam per bulan untuk pemrosesan payroll.",
+      "perfect_for": "Perusahaan dengan 10-500 karyawan, startup yang ingin digitalisasi HR, konsultan HR, dan perusahaan outsourcing.",
+      "features": {
+        "1": {
+          "title": "Database Karyawan",
+          "description": "Database karyawan lengkap dengan penyimpanan dokumen digital"
+        },
+        "2": {
+          "title": "Sistem Absensi",
+          "description": "Sistem absensi multi-metode (GPS, Face Recognition, Fingerprint)"
+        },
+        "3": {
+          "title": "Manajemen Payroll",
+          "description": "Perhitungan gaji otomatis dengan berbagai komponen"
+        },
+        "4": {
+          "title": "Manajemen Cuti",
+          "description": "Kelola cuti tahunan, sakit, dan izin karyawan"
+        },
+        "5": {
+          "title": "Performance Review",
+          "description": "Sistem penilaian kinerja dan appraisal karyawan"
+        },
+        "6": {
+          "title": "Manajemen Rekrutmen",
+          "description": "Kelola proses rekrutmen dari job posting hingga onboarding"
+        },
+        "7": {
+          "title": "Training Management",
+          "description": "Track training dan development karyawan"
+        },
+        "8": {
+          "title": "Employee Self Service",
+          "description": "Portal untuk karyawan akses data pribadi mereka"
+        }
+      },
+      "reviews": {
+        "1": {
+          "review": "HRIS yang sangat membantu pekerjaan HR. Fitur lengkap dan mudah digunakan! Payroll jadi otomatis dan akurat."
+        },
+        "2": {
+          "review": "Payroll jadi lebih mudah dan akurat. Recommended! Menghemat banyak waktu tim HR kami."
+        },
+        "3": {
+          "review": "Portal self-service sangat membantu karyawan. Mereka bisa cek slip gaji dan ajukan cuti sendiri."
+        }
+      }
+    },
+    "My Inventory": {
+      "title": "My Inventory",
+      "short_description": "Sistem manajemen inventory yang powerful",
+      "description": "Sistem manajemen inventory yang powerful untuk mengelola stok barang dengan efisien. Dilengkapi dengan fitur tracking, alert stok minimum, dan laporan lengkap untuk membantu bisnis Anda. Memberikan visibilitas real-time inventory dan alert otomatis untuk mencegah stockout.",
+      "business_impact": "Mengurangi waktu manajemen inventory hingga 60%, meminimalkan perbedaan stok, dan menyediakan data akurat untuk keputusan pembelian yang lebih baik. Membantu bisnis menghemat biaya dengan mencegah overstocking dan stockout.",
+      "perfect_for": "Distributor, wholesaler, manufacturer, operasi warehouse, dan bisnis retail dengan multiple lokasi penyimpanan.",
+      "features": {
+        "1": {
+          "title": "Stock Alert",
+          "description": "Notifikasi otomatis ketika stok mencapai batas minimum"
+        },
+        "2": {
+          "title": "Barcode Scanner",
+          "description": "Support barcode scanner untuk input data lebih cepat"
+        },
+        "3": {
+          "title": "Multi Warehouse",
+          "description": "Kelola inventory di berbagai lokasi gudang"
+        },
+        "4": {
+          "title": "Stock Opname",
+          "description": "Fitur stock opname untuk audit inventory"
+        },
+        "5": {
+          "title": "Purchase Order",
+          "description": "Kelola pembelian dari supplier"
+        },
+        "6": {
+          "title": "Stock Movement",
+          "description": "Track perpindahan barang antar gudang"
+        },
+        "7": {
+          "title": "Batch & Expiry Date",
+          "description": "Kelola produk dengan batch number dan tanggal kadaluarsa"
+        },
+        "8": {
+          "title": "Comprehensive Reports",
+          "description": "Laporan lengkap: stock card, aging, turnover ratio"
+        }
+      },
+      "reviews": {
+        "1": {
+          "review": "Sistem inventory terbaik yang pernah saya gunakan. Tracking stok jadi sangat mudah! Alert otomatis sangat membantu."
+        },
+        "2": {
+          "review": "Multi warehouse feature sangat berguna untuk bisnis kami. Bisa track stok di semua cabang dengan mudah."
+        },
+        "3": {
+          "review": "Laporan yang lengkap dan mudah dipahami. Membantu kami dalam pengambilan keputusan pembelian."
+        }
+      }
+    },
+    "My POS": {
+      "title": "My POS",
+      "short_description": "Sistem kasir modern untuk retail dan F&B",
+      "description": "Sistem Point of Sales modern yang dirancang khusus untuk memudahkan pengelolaan transaksi kasir. Dengan interface yang intuitif dan fitur lengkap, aplikasi ini cocok untuk berbagai jenis bisnis retail dan F&B. Memproses transaksi 3x lebih cepat dibanding metode tradisional.",
+      "business_impact": "Sistem POS ini membantu bisnis memproses transaksi 3x lebih cepat dibanding metode tradisional, mengurangi kesalahan manusia dalam perhitungan, dan memberikan insight instan tentang performa penjualan.",
+      "perfect_for": "Toko retail, minimarket, cafe, restaurant, barbershop, salon, apotek, dan toko kelontong.",
+      "features": {
+        "1": {
+          "title": "Multi Payment Method",
+          "description": "Support Cash, Debit, Credit Card, E-Wallet (GoPay, OVO, Dana)"
+        },
+        "2": {
+          "title": "Real-time Reporting",
+          "description": "Laporan penjualan real-time dengan visualisasi data menarik"
+        },
+        "3": {
+          "title": "Inventory Management",
+          "description": "Kelola stok barang dengan mudah dan otomatis"
+        },
+        "4": {
+          "title": "Barcode Scanner",
+          "description": "Input produk lebih cepat dengan scan barcode"
+        },
+        "5": {
+          "title": "Multi User & Role",
+          "description": "Atur akses untuk kasir, manager, owner"
+        },
+        "6": {
+          "title": "Customer Management",
+          "description": "Database pelanggan dengan loyalty program"
+        },
+        "7": {
+          "title": "Receipt Printing",
+          "description": "Print struk otomatis via thermal printer"
+        },
+        "8": {
+          "title": "Offline Mode",
+          "description": "Tetap bisa transaksi meskipun internet mati"
+        }
+      },
+      "reviews": {
+        "1": {
+          "review": "Aplikasi POS yang sangat membantu bisnis saya. Interface mudah dipahami dan fitur lengkap! Kasir jadi lebih cepat."
+        },
+        "2": {
+          "review": "Harga terjangkau dengan kualitas premium. Sangat recommended untuk UMKM! ROI cepat banget."
+        },
+        "3": {
+          "review": "Offline mode sangat membantu saat internet bermasalah. Transaksi tetap jalan lancar."
+        }
+      }
+    },
+    "Surat Jalan": {
+      "title": "Surat Jalan",
+      "short_description": "Aplikasi untuk mengelola surat jalan pengiriman",
+      "description": "Aplikasi untuk membuat dan mengelola surat jalan pengiriman barang. Dilengkapi dengan tracking pengiriman dan digital signature untuk efisiensi operasional. Meningkatkan efisiensi operasional pengiriman dengan digitalisasi proses.",
+      "business_impact": "Meningkatkan efisiensi operasional pengiriman dengan digitalisasi proses surat jalan. Mengurangi penggunaan kertas dan mempercepat konfirmasi penerimaan barang.",
+      "perfect_for": "Perusahaan distribusi, logistik, dan bisnis dengan operasi pengiriman barang reguler.",
+      "features": {
+        "1": {
+          "title": "Digital Signature",
+          "description": "Tanda tangan digital untuk konfirmasi penerimaan"
+        },
+        "2": {
+          "title": "Delivery Tracking",
+          "description": "Track status pengiriman secara real-time"
+        },
+        "3": {
+          "title": "Auto Generate",
+          "description": "Generate surat jalan otomatis dari order"
+        },
+        "4": {
+          "title": "Photo Evidence",
+          "description": "Upload foto barang saat pengiriman"
+        },
+        "5": {
+          "title": "Route Optimization",
+          "description": "Optimasi rute pengiriman"
+        },
+        "6": {
+          "title": "Driver Management",
+          "description": "Kelola driver dan kendaraan"
+        }
+      }
+    }
   }
 }

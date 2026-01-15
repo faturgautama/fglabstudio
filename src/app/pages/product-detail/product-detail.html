@@ -2,38 +2,43 @@
     <div class="product-detail-page min-h-screen">
         @if (loading) {
         <div class="flex items-center justify-center min-h-screen">
-            <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+            <i class="pi pi-spin pi-spinner text-4xl text-sky-500"></i>
         </div>
         } @else if (product$ | async; as product) {
         <div class="container mx-auto px-4 py-8">
             <!-- Back Button -->
             <div class="mb-6">
-                <p-button icon="pi pi-arrow-left" label="Back" [text]="true" (onClick)="handleBackNavigation()">
+                <p-button icon="pi pi-arrow-left" [label]="'BUTTON.Back' | translate" [text]="true" severity="secondary"
+                    (onClick)="handleBackNavigation()">
                 </p-button>
             </div>
 
             <!-- Product Content - Responsive Grid Layout -->
             <div class="flex flex-col gap-8 mb-8">
                 <!-- Left Column: Image Gallery -->
-                <div class="rounded-lg shadow-lg p-6" data-aos="fade-right" data-aos-duration="800">
+                <div class="rounded-xl shadow-lg p-6 bg-gray-900/50 backdrop-blur-sm border border-gray-800"
+                    data-aos="fade-right" data-aos-duration="800">
                     <app-product-image-gallery [images]="product.images || [product.image]"
-                        [screenshots]="product.screenshots || []" [productTitle]="product.title">
+                        [screenshots]="product.screenshots || []" [productTitle]="product.title | translate">
                     </app-product-image-gallery>
                 </div>
 
                 <!-- Right Column: Product Info -->
-                <div class="rounded-lg shadow-lg p-6" data-aos="fade-left" data-aos-duration="800">
+                <div class="rounded-xl shadow-lg p-6 bg-gray-900/50 backdrop-blur-sm border border-gray-800"
+                    data-aos="fade-left" data-aos-duration="800">
                     <app-product-info [product]="product"></app-product-info>
                 </div>
             </div>
 
             <!-- Full Width: Reviews -->
-            <div class="rounded-lg shadow-lg p-6 mb-8" data-aos="fade-up" data-aos-duration="800">
+            <div class="rounded-xl shadow-lg p-6 mb-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800"
+                data-aos="fade-up" data-aos-duration="800">
                 <app-product-reviews [reviews]="product.review || []"></app-product-reviews>
             </div>
 
             <!-- CTA Section -->
-            <div class="rounded-lg shadow-lg p-6" data-aos="fade-up" data-aos-duration="800">
+            <div class="rounded-xl shadow-lg p-6 bg-gradient-to-br from-sky-900/20 to-blue-900/20 backdrop-blur-sm border border-sky-700/30"
+                data-aos="fade-up" data-aos-duration="800">
                 <app-product-cta [productId]="product.id.toString()" [productPrice]="product.discount_price"
                     (onContactUs)="handleContactUs()">
                 </app-product-cta>

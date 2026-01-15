@@ -2,6 +2,7 @@ export namespace CardProductModel {
     export interface ICardProduct {
         id: number;
         title: string;
+        short_description?: string;
         description: string;
         image: string;
         images?: string[];
@@ -15,6 +16,8 @@ export namespace CardProductModel {
         screenshots?: string[];
         version?: string;
         features?: IProductFeature[];
+        perfect_for?: string;
+        business_impact?: string;
     }
 
     export enum ICardProductCategory {

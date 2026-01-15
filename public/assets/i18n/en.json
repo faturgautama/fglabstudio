@@ -152,5 +152,208 @@
     "Message Whatsapp": "Message us on Whatsapp",
     "Message Email": "Shoot us an email",
     "Lets Connect": "or Let's connect our social media"
+  },
+  "PRODUCT": {
+    "Category": {
+      "Business Application": "Business Application",
+      "Web Development": "Web Development"
+    },
+    "Highlight": {
+      "Responsive Design": "Responsive, Clean and Modern Design",
+      "Offline Mode": "Support Offline Mode",
+      "Modern Framework": "Fast and Modern Web Framework",
+      "Bug Free": "Bug Free",
+      "PWA": "Installable Like App",
+      "Lifetime License": "1 Device Life Time License"
+    },
+    "My Peoples": {
+      "title": "My Peoples",
+      "short_description": "Complete HRIS system for modern HR",
+      "description": "Complete HRIS system for managing employee data, attendance, payroll, and performance management. An integrated solution for modern HR departments looking to digitize their HR processes. Automates routine tasks and transforms HR from administrative to strategic role.",
+      "business_impact": "Transforms HR department from administrative to strategic role by automating routine tasks. Improves employee satisfaction with transparent self-service portal. Ensures accurate and timely payroll processing. Saves 20+ hours per month on payroll processing.",
+      "perfect_for": "Companies with 10-500 employees, startups digitalizing HR processes, HR consultants, and outsourcing companies.",
+      "features": {
+        "1": {
+          "title": "Employee Database",
+          "description": "Complete employee database with digital document storage"
+        },
+        "2": {
+          "title": "Attendance System",
+          "description": "Multi-method attendance system (GPS, Face Recognition, Fingerprint)"
+        },
+        "3": {
+          "title": "Payroll Management",
+          "description": "Automated salary calculation with multiple components"
+        },
+        "4": {
+          "title": "Leave Management",
+          "description": "Manage annual leave, sick leave, and employee permissions"
+        },
+        "5": {
+          "title": "Performance Review",
+          "description": "Employee performance appraisal system"
+        },
+        "6": {
+          "title": "Recruitment Management",
+          "description": "Manage recruitment process from job posting to onboarding"
+        },
+        "7": {
+          "title": "Training Management",
+          "description": "Track employee training and development"
+        },
+        "8": {
+          "title": "Employee Self Service",
+          "description": "Portal for employees to access their personal data"
+        }
+      },
+      "reviews": {
+        "1": {
+          "review": "HRIS that really helps HR work. Complete features and easy to use! Payroll is now automatic and accurate."
+        },
+        "2": {
+          "review": "Payroll is now easier and more accurate. Recommended! Saves a lot of time for our HR team."
+        },
+        "3": {
+          "review": "The self-service portal is very helpful for employees. They can check payslips and apply for leave themselves."
+        }
+      }
+    },
+    "My Inventory": {
+      "title": "My Inventory",
+      "short_description": "Powerful inventory management system",
+      "description": "Powerful inventory management system for efficiently managing stock. Equipped with tracking features, minimum stock alerts, and comprehensive reports to help your business. Provides real-time inventory visibility and automated alerts to prevent stockouts.",
+      "business_impact": "Reduces inventory management time by 60%, minimizes stock discrepancies, and provides accurate data for better purchasing decisions. Helps businesses save costs by preventing overstocking and stockouts.",
+      "perfect_for": "Distributors, wholesalers, manufacturers, warehouse operations, and retail businesses with multiple storage locations.",
+      "features": {
+        "1": {
+          "title": "Stock Alert",
+          "description": "Automatic notifications when stock reaches minimum level"
+        },
+        "2": {
+          "title": "Barcode Scanner",
+          "description": "Barcode scanner support for faster data entry"
+        },
+        "3": {
+          "title": "Multi Warehouse",
+          "description": "Manage inventory across multiple warehouse locations"
+        },
+        "4": {
+          "title": "Stock Opname",
+          "description": "Stock opname feature for inventory audits"
+        },
+        "5": {
+          "title": "Purchase Order",
+          "description": "Manage purchases from suppliers"
+        },
+        "6": {
+          "title": "Stock Movement",
+          "description": "Track goods movement between warehouses"
+        },
+        "7": {
+          "title": "Batch & Expiry Date",
+          "description": "Manage products with batch numbers and expiry dates"
+        },
+        "8": {
+          "title": "Comprehensive Reports",
+          "description": "Complete reports: stock card, aging, turnover ratio"
+        }
+      },
+      "reviews": {
+        "1": {
+          "review": "Best inventory system I've ever used. Stock tracking is so easy! Automatic alerts are very helpful."
+        },
+        "2": {
+          "review": "Multi warehouse feature is very useful for our business. Can track stock at all branches easily."
+        },
+        "3": {
+          "review": "Complete and easy-to-understand reports. Helps us in making purchasing decisions."
+        }
+      }
+    },
+    "My POS": {
+      "title": "My POS",
+      "short_description": "Modern POS system for retail and F&B",
+      "description": "Modern Point of Sales system specifically designed to facilitate cashier transaction management. With an intuitive interface and complete features, this application is suitable for various types of retail and F&B businesses. Processes transactions 3x faster than traditional methods.",
+      "business_impact": "This POS system helps businesses process transactions 3x faster than traditional methods, reduces human errors in calculations, and provides instant insights into sales performance.",
+      "perfect_for": "Retail stores, minimarkets, cafes, restaurants, barbershops, salons, pharmacies, and grocery stores.",
+      "features": {
+        "1": {
+          "title": "Multi Payment Method",
+          "description": "Support Cash, Debit, Credit Card, E-Wallet (GoPay, OVO, Dana)"
+        },
+        "2": {
+          "title": "Real-time Reporting",
+          "description": "Real-time sales reports with attractive data visualization"
+        },
+        "3": {
+          "title": "Inventory Management",
+          "description": "Manage stock easily and automatically"
+        },
+        "4": {
+          "title": "Barcode Scanner",
+          "description": "Faster product input with barcode scanning"
+        },
+        "5": {
+          "title": "Multi User & Role",
+          "description": "Set access for cashier, manager, owner"
+        },
+        "6": {
+          "title": "Customer Management",
+          "description": "Customer database with loyalty program"
+        },
+        "7": {
+          "title": "Receipt Printing",
+          "description": "Automatic receipt printing via thermal printer"
+        },
+        "8": {
+          "title": "Offline Mode",
+          "description": "Can still transact even when internet is down"
+        }
+      },
+      "reviews": {
+        "1": {
+          "review": "POS app that really helps my business. Easy to understand interface and complete features! Cashier is now faster."
+        },
+        "2": {
+          "review": "Affordable price with premium quality. Highly recommended for SMEs! Very fast ROI."
+        },
+        "3": {
+          "review": "Offline mode is very helpful when internet has problems. Transactions still run smoothly."
+        }
+      }
+    },
+    "Surat Jalan": {
+      "title": "Delivery Note",
+      "short_description": "App for managing delivery notes",
+      "description": "Application for creating and managing goods delivery notes. Equipped with delivery tracking and digital signature for operational efficiency. Improves delivery operational efficiency through process digitization.",
+      "business_impact": "Improves delivery operational efficiency through delivery note process digitization. Reduces paper usage and speeds up goods receipt confirmation.",
+      "perfect_for": "Distribution companies, logistics, and businesses with regular goods delivery operations.",
+      "features": {
+        "1": {
+          "title": "Digital Signature",
+          "description": "Digital signature for receipt confirmation"
+        },
+        "2": {
+          "title": "Delivery Tracking",
+          "description": "Track delivery status in real-time"
+        },
+        "3": {
+          "title": "Auto Generate",
+          "description": "Automatically generate delivery notes from orders"
+        },
+        "4": {
+          "title": "Photo Evidence",
+          "description": "Upload photos of goods during delivery"
+        },
+        "5": {
+          "title": "Route Optimization",
+          "description": "Optimize delivery routes"
+        },
+        "6": {
+          "title": "Driver Management",
+          "description": "Manage drivers and vehicles"
+        }
+      }
+    }
   }
 }

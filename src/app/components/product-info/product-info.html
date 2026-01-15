@@ -1,48 +1,141 @@
 <div class="product-info" *ngIf="product">
-    <!-- Title and Category -->
+    <!-- Title, Category, and Rating -->
     <div class="mb-6">
-        <h1 class="text-4xl font-bold mb-3 text-gray-100">{{ product.title }}</h1>
-        <p-tag [value]="product.category" severity="info" styleClass="text-sm"></p-tag>
+        <div class="flex items-start justify-between gap-4 mb-3 flex-wrap">
+            <div class="flex-1">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2 text-gray-100">
+                    {{ product.title | translate }}
+                </h1>
+
+                <!-- Short Description -->
+                @if (product.short_description) {
+                <p class="text-gray-400 text-base md:text-lg mb-3 leading-relaxed">
+                    {{ product.short_description | translate }}
+                </p>
+                }
+            </div>
+
+            <!-- Rating Badge -->
+            @if (averageRating > 0) {
+            <div class="flex flex-col items-end gap-1 bg-gray-800 px-4 py-3 rounded-lg border border-gray-700">
+                <div class="flex items-center gap-2">
+                    <i class="pi pi-star-fill text-yellow-400 text-xl"></i>
+                    <span class="text-2xl font-bold text-gray-100">{{ averageRating }}</span>
+                </div>
+                <span class="text-xs text-gray-400">{{ totalReviews }} {{ 'PRODUCT_DETAIL.Customer Reviews' | translate
+                    }}</span>
+            </div>
+            }
+        </div>
+
+        <div class="flex items-center gap-3 flex-wrap">
+            <p-tag [value]="product.category | translate" severity="info" styleClass="text-sm"></p-tag>
+
+            @if (product.version) {
+            <p-tag [value]="product.version" severity="secondary" styleClass="text-sm" icon="pi pi-code"></p-tag>
+            }
+
+            @if (product.published_at) {
+            <span class="text-sm text-gray-400 flex items-center gap-1">
+                <i class="pi pi-calendar text-xs"></i>
+                {{ 'PRODUCT_DETAIL.Published' | translate }}: {{ product.published_at | date: 'MMM dd, yyyy' }}
+            </span>
+            }
+        </div>
     </div>
 
     <!-- Price Display -->
-    <div class="price-section mb-6 p-4 bg-gray-800 rounded-lg">
-        <div class="flex items-center gap-4 flex-wrap">
-            @if (hasDiscount) {
-            <div class="flex items-center gap-3">
-                <span class="text-gray-300 line-through text-base">
-                    {{ product.price | currency:'IDR':'symbol':'1.0-0' }}
-                </span>
-                <span class="text-4xl font-bold text-primary text-gray-200">
-                    {{ product.discount_price | currency:'IDR':'symbol':'1.0-0' }}
-                </span>
-                <p-tag [value]="discountPercentage + '% OFF'" severity="danger" styleClass="text-sm font-semibold">
-                </p-tag>
+    <div
+        class="price-section mb-6 p-5 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-700 shadow-lg">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+            <div class="flex-1">
+                <p class="text-sm text-gray-400 mb-2">{{ 'PRODUCT_DETAIL.Price' | translate }}</p>
+                <div class="flex items-center gap-3 flex-wrap">
+                    @if (hasDiscount) {
+                    <span class="text-gray-400 line-through text-lg">
+                        {{ product.price | currency:'Rp ':'symbol':'1.0-0' }}
+                    </span>
+                    <span class="text-3xl md:text-4xl font-bold text-white">
+                        {{ product.discount_price | currency:'Rp ':'symbol':'1.0-0' }}
+                    </span>
+                    <p-tag [value]="'-' + discountPercentage + '%'" severity="danger"
+                        styleClass="text-sm font-semibold">
+                    </p-tag>
+                    } @else {
+                    <span class="text-3xl md:text-4xl font-bold text-white">
+                        {{ product.price | currency:'Rp ':'symbol':'1.0-0' }}
+                    </span>
+                    }
+                </div>
+                <p class="text-emerald-400 text-sm font-medium mt-2 flex items-center gap-1">
+                    <i class="pi pi-check-circle text-xs"></i>
+                    {{ 'PRODUCT.Highlight.Lifetime License' | translate }}
+                </p>
             </div>
-            } @else {
-            <span class="text-4xl font-bold text-primary text-gray-200">
-                {{ product.price | currency:'IDR':'symbol':'1.0-0' }}
-            </span>
-            }
         </div>
     </div>
 
     <!-- Description -->
     @if (product.description) {
     <div class="description-section mb-6">
-        <h2 class="text-2xl font-semibold mb-3 text-gray-100">Description</h2>
-        <p class="text-gray-300 leading-relaxed">{{ product.description }}</p>
+        <h2 class="text-xl md:text-2xl font-semibold mb-3 text-gray-100 flex items-center gap-2">
+            <i class="pi pi-info-circle text-sky-500"></i>
+            {{ 'PRODUCT_DETAIL.Description' | translate }}
+        </h2>
+        <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+            {{ product.description | translate }}
+        </p>
     </div>
     }
+
+    <p-divider></p-divider>
+
+    <!-- Business Impact -->
+    @if (product.business_impact) {
+    <div class="business-impact-section mb-6">
+        <h2 class="text-xl md:text-2xl font-semibold mb-3 text-gray-100 flex items-center gap-2">
+            <i class="pi pi-chart-line text-emerald-500"></i>
+            Business Impact
+        </h2>
+        <div class="bg-gradient-to-r from-emerald-900/20 to-sky-900/20 border border-emerald-700/30 rounded-lg p-4">
+            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                {{ product.business_impact | translate }}
+            </p>
+        </div>
+    </div>
+    }
+
+    <!-- Perfect For -->
+    @if (product.perfect_for) {
+    <div class="perfect-for-section mb-6">
+        <h2 class="text-xl md:text-2xl font-semibold mb-3 text-gray-100 flex items-center gap-2">
+            <i class="pi pi-users text-purple-500"></i>
+            Perfect For
+        </h2>
+        <div class="bg-gradient-to-r from-purple-900/20 to-pink-900/20 border border-purple-700/30 rounded-lg p-4">
+            <p class="text-gray-300 leading-relaxed text-sm md:text-base">
+                {{ product.perfect_for | translate }}
+            </p>
+        </div>
+    </div>
+    }
+
+    <p-divider></p-divider>
 
     <!-- Highlight Features -->
     @if (product.highlight && product.highlight.length > 0) {
     <div class="highlights-section mb-6">
-        <h2 class="text-2xl font-semibold mb-3 text-gray-100">Key Features</h2>
-        <div class="flex flex-wrap gap-2">
+        <h2 class="text-xl md:text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
+            <i class="pi pi-star text-yellow-500"></i>
+            {{ 'PRODUCT_DETAIL.Key Features' | translate }}
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             @for (feature of product.highlight; track feature) {
-            <p-chip [label]="feature" icon="pi pi-check" class="bg-green-50 text-green-700 text-xs">
-            </p-chip>
+            <div
+                class="flex items-center gap-2 bg-gray-800 px-4 py-3 rounded-lg border border-gray-700 hover:border-sky-500/50 transition-colors">
+                <i class="pi pi-check-circle text-emerald-400"></i>
+                <span class="text-gray-300 text-sm">{{ feature | translate }}</span>
+            </div>
             }
         </div>
     </div>
@@ -51,24 +144,29 @@
     <!-- Detailed Features -->
     @if (product.features && product.features.length > 0) {
     <div class="features-section mb-6">
-        <h2 class="text-2xl font-semibold mb-3 text-gray-200">Features Detail</h2>
+        <h2 class="text-xl md:text-2xl font-semibold mb-4 text-gray-100 flex items-center gap-2">
+            <i class="pi pi-list text-sky-500"></i>
+            {{ 'PRODUCT_DETAIL.Features Detail' | translate }}
+        </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @for (feature of product.features; track feature.title) {
-            <div class="bg-gray-700 p-4 border rounded-lg hover:shadow-md transition-shadow">
+            <div
+                class="bg-gray-800 p-5 border border-gray-700 rounded-xl hover:shadow-lg hover:border-sky-500/50 transition-all group">
                 @if (feature.icon) {
-                <i [class]="feature.icon + ' text-2xl text-primary mb-2 text-white'"></i>
+                <div
+                    class="flex items-center justify-center w-12 h-12 bg-sky-500/10 rounded-lg mb-3 group-hover:bg-sky-500/20 transition-colors">
+                    <i [class]="feature.icon + ' text-2xl text-sky-400'"></i>
+                </div>
                 }
-                <h3 class="font-semibold text-lg mb-1 text-gray-100">{{ feature.title }}</h3>
-                <p class="text-gray-400 text-sm">{{ feature.description }}</p>
+                <h3 class="font-semibold text-base md:text-lg mb-2 text-gray-100">
+                    {{ feature.title | translate }}
+                </h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    {{ feature.description | translate }}
+                </p>
             </div>
             }
         </div>
     </div>
     }
-
-    <!-- Published Date -->
-    <div class="published-section text-sm text-gray-400">
-        <i class="pi pi-calendar mr-2"></i>
-        Published: {{ product.published_at }}
-    </div>
 </div>

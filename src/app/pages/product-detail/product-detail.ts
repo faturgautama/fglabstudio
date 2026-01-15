@@ -12,6 +12,7 @@ import { ProductInfo } from '../../components/product-info/product-info';
 import { ProductReviews } from '../../components/product-reviews/product-reviews';
 import { ProductCTA } from '../../components/product-cta/product-cta';
 import { LandingLayout } from '../../components/landing-layout/landing-layout';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-product-detail',
@@ -23,7 +24,8 @@ import { LandingLayout } from '../../components/landing-layout/landing-layout';
         ProductImageGallery,
         ProductInfo,
         ProductReviews,
-        ProductCTA
+        ProductCTA,
+        TranslatePipe
     ],
     templateUrl: './product-detail.html',
     styleUrl: './product-detail.scss',
@@ -102,7 +104,7 @@ export class ProductDetail implements OnInit, OnDestroy {
     handleContactUs(): void {
         this.router.navigate(['/']).then(() => {
             setTimeout(() => {
-                const element = document.getElementById('contact');
+                const element = document.getElementById('contact_us');
                 if (element) {
                     const offset = element.getBoundingClientRect().top + window.scrollY - 80;
                     window.scrollTo({ top: offset, behavior: 'smooth' });
