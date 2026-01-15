@@ -35,10 +35,26 @@ export const SubscriptionGuard: CanActivateFn = (route, state) => {
         return false;
     }
 
-    // Check if subscription expired
-    const isExpired = new Date() > new Date(userApp.expired_at);
+    const expiredAtDateObj = new Date(userApp.expired_at);
+    const currentDateObj = new Date();
 
-    if (isExpired) {
+
+    // Check if subscription expired
+    const expiredAtDate = new Date(
+        expiredAtDateObj.getFullYear(),
+        expiredAtDateObj.getMonth(),
+        expiredAtDateObj.getDate()
+    );
+
+    const currentDay = new Date(
+        currentDateObj.getFullYear(),
+        currentDateObj.getMonth(),
+        currentDateObj.getDate()
+    );
+
+    const isExpired = expiredAtDate.getTime() < currentDay.getTime();
+
+    if (userApp.is_trial && isExpired) {
         messageService.add({
             severity: 'error',
             summary: 'Subscription Expired',
@@ -46,20 +62,6 @@ export const SubscriptionGuard: CanActivateFn = (route, state) => {
         });
         router.navigate(['/your-apps']);
         return false;
-    }
-
-    // Check if trial and show info
-    if (userApp.is_trial) {
-        const daysLeft = Math.ceil((new Date(userApp.expired_at).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-
-        if (daysLeft <= 3) {
-            messageService.add({
-                severity: 'info',
-                summary: 'Trial Ending Soon',
-                detail: `Your trial will expire in ${daysLeft} day(s). Upgrade now to continue using this app.`,
-                life: 5000
-            });
-        }
     }
 
     return true;
