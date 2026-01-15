@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, computed } from '@angular/core';
 import { Navigation } from '../../../services/components/navigation';
 import { ButtonModule } from 'primeng/button';
 import { Subject, takeUntil } from 'rxjs';
@@ -12,6 +12,7 @@ import { EmployeeState } from '../../../store/human-resource/employee';
 import { CategoryState } from '../../../store/inventory';
 import { ProductState } from '../../../store/product';
 import { POSSettingState } from '../../../store/point-of-sales';
+import { ViewportService } from '../../../services/shared/viewport.service';
 
 @Component({
   selector: 'app-dsh-sidebar',
@@ -29,6 +30,15 @@ export class DshSidebar implements OnInit, OnDestroy {
   _appName = 'Inventory Management';
 
   _navigationService = inject(Navigation);
+  _viewportService = inject(ViewportService);
+
+  // Responsive state
+  isMobile = this._viewportService.isMobile;
+  isDesktop = this._viewportService.isDesktop;
+
+  // Sidebar state - collapsed on mobile/tablet, expanded on desktop
+  isCollapsed = computed(() => !this.isDesktop());
+  showOverlay = signal(false);
 
   toggleSidebar = false;
 
@@ -90,12 +100,26 @@ export class DshSidebar implements OnInit, OnDestroy {
   }
 
   handleToggleSidebar() {
-    const currentState = this._navigationService.toggleDashboardSidebar.value;
-    this._navigationService.toggleDashboardSidebar.next(!currentState);
+    if (this.isMobile()) {
+      // On mobile, toggle overlay
+      this.showOverlay.set(!this.showOverlay());
+    } else {
+      // On desktop, use existing toggle behavior
+      const currentState = this._navigationService.toggleDashboardSidebar.value;
+      this._navigationService.toggleDashboardSidebar.next(!currentState);
+    }
+  }
+
+  handleCloseOverlay() {
+    this.showOverlay.set(false);
   }
 
   handleClickMenu(item: SidebarModel.ISidebar) {
     this._router.navigateByUrl(item.path);
+    // Close overlay on mobile after navigation
+    if (this.isMobile()) {
+      this.showOverlay.set(false);
+    }
   }
 
   handleClickExtraData(item?: any) {
@@ -104,10 +128,18 @@ export class DshSidebar implements OnInit, OnDestroy {
     } else {
       this._router.navigateByUrl(`${this.resolverExtraData.routes}`);
     }
+    // Close overlay on mobile after navigation
+    if (this.isMobile()) {
+      this.showOverlay.set(false);
+    }
   }
 
   handleClickSetting() {
     this._router.navigateByUrl(this._settingUrl);
+    // Close overlay on mobile after navigation
+    if (this.isMobile()) {
+      this.showOverlay.set(false);
+    }
   }
 
   private getHumanResourceState() {

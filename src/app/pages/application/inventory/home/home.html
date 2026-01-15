@@ -1,65 +1,65 @@
 <app-dsh-base-layout>
     <div class="flex flex-col w-full h-full gap-5 p-3">
         <!-- Counting -->
-        <div class="grid grid-cols-3 w-full gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-3 md:gap-5">
             <div
-                class="flex flex-col w-full bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 gap-1 p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
-                <p class="text-sm text-gray-300">
+                class="flex flex-col w-full bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 gap-1 p-4 md:p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
+                <p class="text-xs md:text-sm text-gray-300">
                     Total Produk
                 </p>
-                <p class="text-5xl font-semibold text-gray-100">
+                <p class="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-100">
                     {{ Counting.total_product }}
                 </p>
 
                 <span class="absolute bottom-[-20px] right-4">
-                    <i class="pi pi-box text-gray-300" style="font-size: 5rem"></i>
+                    <i class="pi pi-box text-gray-300" style="font-size: 4rem;"></i>
                 </span>
             </div>
 
             <div
-                class="flex flex-col w-full bg-gradient-to-r from-purple-700 via-purple-600 to-purple-500 gap-1 p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
-                <p class="text-sm text-gray-300">
+                class="flex flex-col w-full bg-gradient-to-r from-purple-700 via-purple-600 to-purple-500 gap-1 p-4 md:p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
+                <p class="text-xs md:text-sm text-gray-300">
                     Total Kategori
                 </p>
-                <p class="text-5xl font-semibold text-gray-100">
+                <p class="text-3xl md:text-4xl lg:text-5xl font-semibold text-gray-100">
                     {{ Counting.total_category }}
                 </p>
 
                 <span class="absolute bottom-[-20px] right-4">
-                    <i class="pi pi-tags text-gray-300" style="font-size: 5rem"></i>
+                    <i class="pi pi-tags text-gray-300" style="font-size: 4rem;"></i>
                 </span>
             </div>
 
             <div
-                class="flex flex-col w-full bg-gradient-to-r from-sky-700 via-sky-600 to-sky-500 gap-1 p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
-                <p class="text-sm text-gray-300">
+                class="flex flex-col w-full bg-gradient-to-r from-sky-700 via-sky-600 to-sky-500 gap-1 p-4 md:p-5 rounded-lg shadow-md drop-shadow relative overflow-hidden">
+                <p class="text-xs md:text-sm text-gray-300">
                     Total Purchasing Order
                 </p>
-                <p class="text-2xl font-semibold text-gray-100">
+                <p class="text-xl md:text-2xl font-semibold text-gray-100">
                     {{ Counting.total_purchase_order | currency: 'Rp. ' }}
                 </p>
 
                 <span class="absolute bottom-[-20px] right-4">
-                    <i class="pi pi-receipt text-gray-300" style="font-size: 5rem"></i>
+                    <i class="pi pi-receipt text-gray-300" style="font-size: 4rem;"></i>
                 </span>
             </div>
         </div>
 
         <!-- Work Hours & Info -->
-        <div class="grid grid-cols-3 w-full gap-5 ">
+        <div class="grid grid-cols-1 lg:grid-cols-3 w-full gap-3 md:gap-5">
             <!-- Stock Movement Chart -->
-            <div class="flex flex-col w-full col-span-2 p-5 bg-white rounded-lg shadow-sm">
-                <div class="flex flex-row justify-between items-center mb-5">
+            <div class="flex flex-col w-full lg:col-span-2 p-4 md:p-5 bg-white rounded-lg shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-5 gap-3">
                     <div class="flex flex-col">
-                        <p class="text-lg font-semibold text-gray-700">
+                        <p class="text-base md:text-lg font-semibold text-gray-700">
                             Pergerakan Stok Produk
                         </p>
-                        <p class="text-sm text-gray-500">
+                        <p class="text-xs md:text-sm text-gray-500">
                             Stock masuk dan keluar 7 hari terakhir
                         </p>
                     </div>
 
-                    <div class="w-4/12">
+                    <div class="w-full md:w-6/12 lg:w-4/12">
                         <p-datepicker selectionMode="range" [readonlyInput]="true" dateFormat="dd MM yy"
                             placeholder="Cari tanggal mulai s.d tanggal selesai" styleClass="p-inputtext-sm w-full"
                             size="small" />
@@ -68,17 +68,17 @@
 
                 <div class="grid w-full">
                     <p-chart type="bar" [data]="StockMovementChart.datasource" [options]="StockMovementChart.options"
-                        class="h-[20rem]" [responsive]="true" />
+                        class="h-64 md:h-80" [responsive]="true" />
                 </div>
             </div>
 
             <!-- Low Stock Info -->
-            <div class="flex flex-col w-full p-5 bg-white rounded-lg">
+            <div class="flex flex-col w-full p-4 md:p-5 bg-white rounded-lg">
                 <div class="flex flex-col mb-5">
-                    <p class="text-lg font-semibold text-gray-700">
+                    <p class="text-base md:text-lg font-semibold text-gray-700">
                         Produk Stok Menipis
                     </p>
-                    <p class="text-sm text-gray-500">
+                    <p class="text-xs md:text-sm text-gray-500">
                         Produk dengan stok dibawah minimum
                     </p>
                 </div>
@@ -87,10 +87,10 @@
                     @for (item of MonthlyInfo; track $index) {
                     <div
                         class="flex flex-row w-full items-center gap-4 pb-3 border-b border-t-0 border-x-0 border-solid border-gray-200">
-                        <i class="pi pi-exclamation-triangle text-orange-500 text-2xl"></i>
+                        <i class="pi pi-exclamation-triangle text-orange-500 text-xl md:text-2xl"></i>
 
                         <div class="flex flex-col gap-0">
-                            <p class="text-base text-gray-800 font-medium">
+                            <p class="text-sm md:text-base text-gray-800 font-medium">
                                 {{ item.name }}
                             </p>
                             <p class="text-xs text-gray-500">
@@ -102,8 +102,8 @@
 
                     @if (MonthlyInfo.length === 0) {
                     <div class="flex flex-col items-center justify-center py-8">
-                        <i class="pi pi-check-circle text-green-500 text-4xl mb-2"></i>
-                        <p class="text-sm text-gray-500">
+                        <i class="pi pi-check-circle text-green-500 text-3xl md:text-4xl mb-2"></i>
+                        <p class="text-xs md:text-sm text-gray-500">
                             Semua produk stok aman
                         </p>
                     </div>

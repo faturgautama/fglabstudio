@@ -44,6 +44,10 @@
                 </app-product-cta>
             </div>
         </div>
+        } @else {
+        <div class="flex items-center justify-center min-h-screen">
+            <p class="text-gray-400">{{ 'PRODUCT.Not Found' | translate }}</p>
+        </div>
         }
     </div>
 </app-landing-layout>

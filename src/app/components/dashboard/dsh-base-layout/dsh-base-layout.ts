@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { DshSidebar } from '../dsh-sidebar/dsh-sidebar';
 import { DshNavbar } from '../dsh-navbar/dsh-navbar';
 import { IconTitle } from "../../icon-title/icon-title";
@@ -20,6 +20,14 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   templateUrl: './dsh-base-layout.html',
   styleUrl: './dsh-base-layout.scss'
 })
-export class DshBaseLayout {
+export class DshBaseLayout implements AfterViewInit {
+  @ViewChild(DshSidebar) sidebar!: DshSidebar;
+  @ViewChild(DshNavbar) navbar!: DshNavbar;
 
+  ngAfterViewInit() {
+    // Connect navbar to sidebar for mobile toggle
+    if (this.navbar && this.sidebar) {
+      this.navbar.setSidebarRef(this.sidebar);
+    }
+  }
 }

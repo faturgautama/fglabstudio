@@ -11,6 +11,8 @@ import { AuthenticationService } from '../../../services/pages/authentication/au
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { map, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ViewportService } from '../../../services/shared/viewport.service';
+import { DshSidebar } from '../dsh-sidebar/dsh-sidebar';
 
 @Component({
   selector: 'app-dsh-navbar',
@@ -37,8 +39,13 @@ export class DshNavbar {
   @ViewChild('navbarDbAction') navbarDbAction!: DshNavbarDbAction;
 
   private _authService = inject(AuthenticationService);
-
   private _router = inject(Router);
+  private _viewportService = inject(ViewportService);
+
+  isMobile = this._viewportService.isMobile;
+
+  // Reference to sidebar for mobile toggle
+  sidebarRef?: DshSidebar;
 
   userData = this._authService._userData
     .pipe(
@@ -55,6 +62,16 @@ export class DshNavbar {
         };
       })
     );
+
+  setSidebarRef(sidebar: DshSidebar) {
+    this.sidebarRef = sidebar;
+  }
+
+  handleToggleMobileSidebar() {
+    if (this.sidebarRef) {
+      this.sidebarRef.handleToggleSidebar();
+    }
+  }
 
   openSearchModal() {
     this.navbarSearchModal._showModal = true;

@@ -1,5 +1,5 @@
 <app-landing-layout>
-    <div class="service-detail-page min-h-screen">
+    <div class="service-detail-page min-h-screen bg-black">
         @if (loading) {
         <div class="flex items-center justify-center min-h-screen">
             <i class="pi pi-spin pi-spinner text-4xl text-sky-500"></i>
@@ -147,6 +147,10 @@
                 styleClass="p-button-sm" (onClick)="handleContactUs()">
             </p-button>
         </div>
+    </div>
+    } @else {
+    <div class="flex items-center justify-center min-h-screen">
+        <p class="text-gray-400">{{ 'SERVICE.Not Found' | translate }}</p>
     </div>
     }
     </div>

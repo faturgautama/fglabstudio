@@ -1,8 +1,15 @@
+<!-- Overlay backdrop for mobile -->
+@if (isMobile() && showOverlay()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 z-40" (click)="handleCloseOverlay()"></div>
+}
+
+<!-- Sidebar -->
 <div
-    class="flex flex-col bg-white p-5 {{ toggleSidebar ? 'w-[20rem]' : 'w-[5rem]' }} h-full border-r border-y-0 border-l-0 border-gray-200 border-solid transition-all duration-300">
+    class="flex flex-col bg-white p-5 h-full border-r border-y-0 border-l-0 border-gray-200 border-solid transition-all duration-300
+    {{ isMobile() ? (showOverlay() ? 'fixed left-0 top-0 z-50 w-[20rem]' : 'hidden') : (toggleSidebar ? 'w-[20rem]' : 'w-[5rem]') }}">
     <!-- Brand -->
     <div class="flex flex-row gap-2 items-center mb-5 pb-5 border-b border-t-0 border-x-0 border-solid border-gray-300">
-        @if (toggleSidebar) {
+        @if (toggleSidebar || isMobile()) {
         <img src="/assets/image/logo_blue.png" alt="brand" class="h-[2rem] rounded-lg shadow-sm">
         <span class="text-sky-700 font-bold text-base leading-4 mr-auto">
             Code by Xerenity
@@ -13,9 +20,17 @@
         </span>
         }
 
+        @if (!isMobile()) {
         <p-button [rounded]="true" severity="secondary" icon="pi pi-angle-double-{{ toggleSidebar ? 'left' : 'right' }}"
             styleClass="p-button-sm" (onClick)="handleToggleSidebar()">
         </p-button>
+        }
+
+        @if (isMobile()) {
+        <p-button [rounded]="true" severity="secondary" icon="pi pi-times" styleClass="p-button-sm"
+            (onClick)="handleCloseOverlay()">
+        </p-button>
+        }
     </div>
 
     <!-- Company -->
@@ -24,7 +39,7 @@
             <i class="pi pi-building text-3xl"></i>
         </span>
 
-        @if (toggleSidebar) {
+        @if (toggleSidebar || isMobile()) {
         <div class="flex flex-col">
             <p class="text-sm text-gray-700 font-medium mb-0">
                 {{ resolverExtraData.company_setting
@@ -50,19 +65,19 @@
 
     <!-- Menu -->
     <div class="flex flex-col w-full px-4 mb-5 pb-3 border-b border-t-0 border-x-0 border-solid border-gray-300">
-        @if (toggleSidebar) {
+        @if (toggleSidebar || isMobile()) {
         <p class="text-sm text-gray-400 mb-4">
             Main Menu
         </p>
         }
 
         @for (item of sidebarMenu; track $index) {
-        <div class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer"
-            (click)="handleClickMenu(item); toggleSidebar = false">
+        <div class="flex flex-row gap-3 w-full items-center {{ (toggleSidebar || isMobile()) ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors"
+            (click)="handleClickMenu(item)" [title]="!toggleSidebar && !isMobile() ? item.title : ''">
             <span class="text-gray-700">
                 <i [class]="item.icon"></i>
             </span>
-            @if (toggleSidebar) {
+            @if (toggleSidebar || isMobile()) {
             <p class="text-sm text-gray-700">
                 {{ item.title }}
             </p>
@@ -74,26 +89,26 @@
     <!-- Department -->
     @if (resolverExtraData) {
     <div class="flex flex-col w-full px-4">
-        @if (toggleSidebar) {
+        @if (toggleSidebar || isMobile()) {
         <div class="flex flex-row items-center justify-between mb-4">
             <p class="text-sm text-gray-400">
                 {{ resolverExtraData.title }}
             </p>
 
-            <span class="px-2 py-[0.5px] rounded-lg bg-gray-100 cursor-pointer"
-                (click)="handleClickExtraData(); toggleSidebar = false">
+            <span class="px-2 py-[0.5px] rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 transition-colors"
+                (click)="handleClickExtraData()">
                 <i class="pi pi-plus text-gray-600" style="font-size: 10px;"></i>
             </span>
         </div>
         }
 
         @for (item of resolverExtraData.datasource; track $index) {
-        <div
-            class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer">
+        <div class="flex flex-row gap-3 w-full items-center {{ (toggleSidebar || isMobile()) ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors"
+            [title]="!toggleSidebar && !isMobile() ? (item.title || item.name) : ''">
             <span class="text-gray-700">
                 <i class="pi pi-circle-fill {{ item.color }}" style="font-size: 10px;"></i>
             </span>
-            @if (toggleSidebar) {
+            @if (toggleSidebar || isMobile()) {
             <p class="text-sm text-gray-700">
                 {{ item.title ? item.title : item.name }}
             </p>
@@ -105,18 +120,18 @@
 
     <!-- Others -->
     <div class="flex flex-col w-full px-4 mt-auto">
-        @if (toggleSidebar) {
+        @if (toggleSidebar || isMobile()) {
         <p class="text-sm text-gray-400 mb-4">
             Lainnya
         </p>
         }
 
-        <div class="flex flex-row gap-3 w-full items-center {{ toggleSidebar ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer"
-            (click)="handleClickSetting()">
+        <div class="flex flex-row gap-3 w-full items-center {{ (toggleSidebar || isMobile()) ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors"
+            (click)="handleClickSetting()" [title]="!toggleSidebar && !isMobile() ? 'Pengaturan' : ''">
             <span class="text-gray-700">
                 <i class="pi pi-cog"></i>
             </span>
-            @if (toggleSidebar) {
+            @if (toggleSidebar || isMobile()) {
             <p class="text-sm text-gray-700">
                 Pengaturan
             </p>

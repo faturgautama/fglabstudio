@@ -1,15 +1,17 @@
 <div class="grid w-full">
-    <div class="flex items-center w-full mb-5">
-        <div class="flex flex-col">
-            <p class="text-lg font-semibold text-gray-700">
+    <!-- Header section - responsive -->
+    <div class="flex flex-col md:flex-row items-start md:items-center w-full mb-5 gap-3">
+        <div class="flex flex-col w-full md:w-auto">
+            <p class="text-base md:text-lg font-semibold text-gray-700">
                 {{ props.title }}
             </p>
-            <p class="text-sm text-gray-500">
+            <p class="text-xs md:text-sm text-gray-500">
                 {{ props.description }}
             </p>
         </div>
 
-        <div class="flex w-3/12 ml-auto mr-10">
+        <!-- Search bar - full width on mobile -->
+        <div class="flex w-full md:w-3/12 md:ml-auto md:mr-10">
             <p-iconfield styleClass="w-full">
                 <p-inputicon class="pi pi-search" />
                 <input type="text" pInputText placeholder="Search" class="p-inputtext-sm w-full"
@@ -17,12 +19,13 @@
             </p-iconfield>
         </div>
 
-        <div class="flex flex-row gap-3">
-            <p-button severity="secondary" [outlined]="true" icon="pi pi-filter" label="Filter" styleClass="p-button-sm"
-                (onClick)="opFilter.toggle($event)" [badge]="FilterCount">
+        <!-- Action buttons - responsive -->
+        <div class="flex flex-row gap-2 md:gap-3 w-full md:w-auto overflow-x-auto">
+            <p-button severity="secondary" [outlined]="true" icon="pi pi-filter" [label]="'Filter'"
+                styleClass="p-button-sm" (onClick)="opFilter.toggle($event)" [badge]="FilterCount">
             </p-button>
 
-            <p-button severity="secondary" [outlined]="true" icon="pi pi-sort" label="Sort" styleClass="p-button-sm"
+            <p-button severity="secondary" [outlined]="true" icon="pi pi-sort" [label]="'Sort'" styleClass="p-button-sm"
                 (onClick)="opSort.toggle($event)">
             </p-button>
 
@@ -34,22 +37,23 @@
         </div>
     </div>
 
-    <div class="grid w-full pt-1 border-t border-b-0 border-x-0 border-gray-200 border-solid">
+    <!-- Table section - responsive with horizontal scroll -->
+    <div class="grid w-full pt-1 border-t border-b-0 border-x-0 border-gray-200 border-solid overflow-x-auto">
         <p-table id="GridComponents" [value]="props.datasource" [columns]="props.column"
             styleClass="p-datatable-striped transition-all" [tableStyle]="{'min-width': '50rem'}" selectionMode="single"
             [(selection)]="selectedRow" [paginator]="props.paging" [first]="0" [showCurrentPageReport]="true"
             currentPageReportTemplate="Data ke {first} - {last} dari {totalRecords} total data" [rows]="5"
-            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [scrollable]="true" scrollHeight="calc(100vh - 19rem)"
+            [rowsPerPageOptions]="[5, 10, 25, 50, 100]" [scrollable]="true" scrollHeight="calc(100vh - 22rem)"
             appendTo="body" paginatorDropdownAppendTo="body">
             <ng-template pTemplate="header" let-columns>
                 <tr class="bg-gray-100">
                     @for (col of columns; track $index) {
-                    <th class="text-sm">
+                    <th class="text-xs md:text-sm whitespace-nowrap">
                         {{ col.title }}
                     </th>
                     }
 
-                    <th class="text-sm text-center">
+                    <th class="text-xs md:text-sm text-center whitespace-nowrap">
                         Aksi
                     </th>
                 </tr>
@@ -58,12 +62,12 @@
             <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRow]="rowData" (dblclick)="handleRowDoubbleClicked(rowData)">
                     @for (col of columns; track $index) {
-                    <td class="text-sm {{ col.class }}" [style.width]="col.width ? col.width : 'auto'"
-                        (click)="handleCellClicked(rowData, col)">
+                    <td class="text-xs md:text-sm {{ col.class }} whitespace-nowrap"
+                        [style.width]="col.width ? col.width : 'auto'" (click)="handleCellClicked(rowData, col)">
                         @if (col.type == columType.TEXT) {
                         {{ handleGetNestedValue(rowData, col.id) }}
                         } @else if (col.type == columType.TEXTWITHDESCRIPTION) {
-                        <span class="text-sm text-gray-700 font-medium mb-0">
+                        <span class="text-xs md:text-sm text-gray-700 font-medium mb-0">
                             {{ handleGetNestedValue(rowData, col.id) }}
                         </span>
                         <br>
@@ -95,11 +99,11 @@
                                     style="font-size: 9px;"></i>
                             </span>
                             @if (col.button_icon.use_parsing_func) {
-                            <p class="text-sm text-gray-700">
+                            <p class="text-xs md:text-sm text-gray-700">
                                 {{ handleFormatColor(rowData[col.button_icon.title]) | titlecase}}
                             </p>
                             } @else {
-                            <p class="text-sm text-gray-700">
+                            <p class="text-xs md:text-sm text-gray-700">
                                 {{ handleGetNestedValue(rowData, col.button_icon.title) | titlecase}}
                             </p>
                             }
@@ -112,14 +116,15 @@
                     </td>
                     }
 
-                    <!-- toolbar -->
+                    <!-- toolbar - icon only on mobile -->
                     @if (props.toolbar) {
                     <td>
-                        <div class="flex justify-center w-full gap-3">
+                        <div class="flex justify-center w-full gap-2 md:gap-3">
                             @for (item of props.toolbar; track $index) {
                             <p-button [id]="item.id" [severity]="item.id === 'delete' ? 'danger' : 'secondary'"
                                 [icon]="item.icon" [outlined]="true" styleClass="p-button-sm"
-                                (onClick)="handleToolbarClicked(item, rowData)">
+                                (onClick)="handleToolbarClicked(item, rowData)" [pTooltip]="item.title"
+                                tooltipPosition="top">
                             </p-button>
                             }
                         </div>
@@ -130,7 +135,7 @@
             } @else {
             <ng-template>
                 <div class="flex w-full justify-center">
-                    <p class="text-sm font-medium text-gray-700">
+                    <p class="text-xs md:text-sm font-medium text-gray-700">
                         Tidak ada data
                     </p>
                 </div>
@@ -141,9 +146,9 @@
 </div>
 
 <p-popover #opFilter appendTo="body">
-    <div class="flex flex-col gap-4 w-[25rem]">
+    <div class="flex flex-col gap-4 w-full md:w-[25rem] max-w-[90vw]">
         <div class="flex flex-row justify-between items-center">
-            <p class="text-gray-700 font-medium text-base">Filter</p>
+            <p class="text-gray-700 font-medium text-sm md:text-base">Filter</p>
 
             <p class="text-sky-600 text-xs cursor-pointer" (click)="handleClearFilter(); opFilter.hide()">
                 Hapus Semua
@@ -157,9 +162,9 @@
 </p-popover>
 
 <p-popover #opSort appendTo="body">
-    <div class="flex flex-col gap-4 w-[25rem]">
+    <div class="flex flex-col gap-4 w-full md:w-[25rem] max-w-[90vw]">
         <div class="flex flex-row justify-between items-center">
-            <p class="text-gray-700 font-medium text-base">Sort</p>
+            <p class="text-gray-700 font-medium text-sm md:text-base">Sort</p>
         </div>
 
         <app-dynamic-table-sort #SortComps [props]="props.sort!" (onSort)="handleSort($event); opSort.hide()">

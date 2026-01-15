@@ -1,6 +1,14 @@
 @if (userData | async; as user) {
-<div class="flex flex-row justify-between p-5 bg-white shadow-sm h-[4.5rem]">
-    <div class="flex w-4/12">
+<div class="flex flex-row justify-between items-center p-3 md:p-5 bg-white shadow-sm h-[4.5rem]">
+    <!-- Hamburger menu for mobile -->
+    @if (isMobile()) {
+    <p-button styleClass="p-button-sm mr-3" [rounded]="false" icon="pi pi-bars" [outlined]="true" severity="secondary"
+        (onClick)="handleToggleMobileSidebar()">
+    </p-button>
+    }
+
+    <!-- Search bar -->
+    <div class="flex w-full md:w-4/12">
         <p-iconfield styleClass="w-full">
             <p-inputicon class="pi pi-search" />
             <input type="text" pInputText placeholder="Search" class="p-inputtext-sm w-full" readonly
@@ -8,7 +16,8 @@
         </p-iconfield>
     </div>
 
-    @if(user.current_application.is_trial) {
+    <!-- Trial badge - hide on mobile -->
+    @if(user.current_application.is_trial && !isMobile()) {
     <div class="flex items-center gap-2">
         <span class="px-2 py-1 rounded-md shadow-sm bg-red-100 text-red-500 text-xs font-semibold"
             style="width: fit-content;">
@@ -23,22 +32,32 @@
     </div>
     }
 
-    <div class="flex items-center gap-5">
+    <!-- Action buttons -->
+    <div class="flex items-center gap-2 md:gap-5">
+        <!-- Hide download button on mobile -->
+        @if (!isMobile()) {
         <p-button styleClass="p-button-sm" [rounded]="false" icon="pi pi-cloud-download" [outlined]="true"
             severity="secondary" [pTooltip]="'Download Database'" tooltipStyleClass="text-sm" tooltipPosition="bottom"
             (onClick)="handleDownloadDatabase()">
         </p-button>
+        }
 
+        <!-- Hide apps button on mobile -->
+        @if (!isMobile()) {
         <p-button styleClass="p-button-sm mr-2" [rounded]="false" icon="pi pi-external-link" [outlined]="true"
             severity="secondary" [pTooltip]="'Apps Lainnya'" tooltipStyleClass="text-sm" tooltipPosition="bottom"
             (onClick)="handleNavigateToYourApps()">
         </p-button>
+        }
 
-        <div class="flex flex-row items-center gap-3 pl-6 border-l border-y-0 border-r-0 border-solid border-gray-200">
+        <!-- User info - icon only on mobile -->
+        <div
+            class="flex flex-row items-center gap-3 pl-3 md:pl-6 border-l border-y-0 border-r-0 border-solid border-gray-200">
             <p-button styleClass="p-button-sm" [rounded]="true" icon="pi pi-user" [outlined]="true"
                 severity="secondary">
             </p-button>
 
+            @if (!isMobile()) {
             <div class="flex flex-col gap-0">
                 <p class="text-sm text-gray-700 font-medium">
                     {{ user.user.full_name }}
@@ -47,7 +66,7 @@
                     {{ user.user.email }}
                 </p>
             </div>
-
+            }
         </div>
     </div>
 </div>

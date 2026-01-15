@@ -12,6 +12,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { FormsModule } from '@angular/forms';
 import { DynamicTableFilter } from "./dynamic-table-filter/dynamic-table-filter";
 import { DynamicTableSort } from './dynamic-table-sort/dynamic-table-sort';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -26,7 +27,8 @@ import { DynamicTableSort } from './dynamic-table-sort/dynamic-table-sort';
     InputIconModule,
     PopoverModule,
     DynamicTableFilter,
-    DynamicTableSort
+    DynamicTableSort,
+    TooltipModule
   ],
   standalone: true,
   templateUrl: './dynamic-table.html',
