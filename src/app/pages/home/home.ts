@@ -105,6 +105,12 @@ export class Home implements OnInit, OnDestroy {
     { question: 'HOME.FAQ Datasource.7.question', answer: 'HOME.FAQ Datasource.7.answer' },
     { question: 'HOME.FAQ Datasource.8.question', answer: 'HOME.FAQ Datasource.8.answer' },
     { question: 'HOME.FAQ Datasource.9.question', answer: 'HOME.FAQ Datasource.9.answer' },
+    { question: 'HOME.FAQ Datasource.10.question', answer: 'HOME.FAQ Datasource.10.answer' },
+    { question: 'HOME.FAQ Datasource.11.question', answer: 'HOME.FAQ Datasource.11.answer' },
+    { question: 'HOME.FAQ Datasource.12.question', answer: 'HOME.FAQ Datasource.12.answer' },
+    { question: 'HOME.FAQ Datasource.13.question', answer: 'HOME.FAQ Datasource.13.answer' },
+    { question: 'HOME.FAQ Datasource.14.question', answer: 'HOME.FAQ Datasource.14.answer' },
+    { question: 'HOME.FAQ Datasource.15.question', answer: 'HOME.FAQ Datasource.15.answer' },
   ];
 
   ContactForm: FormGroup;

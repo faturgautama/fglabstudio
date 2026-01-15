@@ -1,7 +1,7 @@
-<div id="landing-layout" aria-label="Landing Layout" class="grid w-screen max-w-100vw">
+<div id="landing-layout" aria-label="Landing Layout" class="grid w-screen max-w-full overflow-x-hidden">
   <app-navbar (onClick)="handleClickNavbar($event)"></app-navbar>
 
-  <div id="landing-content" class="grid container-fluid mx-auto w-full">
+  <div id="landing-content" class="grid w-full">
     <ng-content></ng-content>
   </div>
 

@@ -8,7 +8,9 @@
   </p>
 
   <div class="flex mt-auto">
-    <p-button styleClass="p-button-sm p-button-info" [label]="'BUTTON.Learn More' | translate"></p-button>
+    <p-button styleClass="p-button-sm p-button-info" [label]="'BUTTON.Learn More' | translate"
+      (onClick)="handleLearnMore()">
+    </p-button>
   </div>
 
   <span class="absolute bottom-[-25px] right-4">

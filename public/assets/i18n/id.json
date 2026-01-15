@@ -61,40 +61,64 @@
     "FAQ Description": "Jawaban Membantu untuk Pertanyaan Umum Pengguna",
     "FAQ Datasource": {
       "1": {
-        "question": "Apakah aplikasi bisa digunakan tanpa internet?",
-        "answer": "Ya. Semua transaksi disimpan secara lokal (offline). Ketika internet tersedia, data akan otomatis sync ke server."
+        "question": "Bagaimana cara memulai menggunakan produk?",
+        "answer": "Cukup daftar di website kami, pilih 1 produk untuk dicoba gratis selama 7 hari, lalu masuk ke halaman Your Apps untuk mulai menggunakan produk pilihan Anda."
       },
       "2": {
-        "question": "Apakah perlu install di komputer atau HP?",
-        "answer": "Tidak perlu install. Aplikasi berbasis web, tinggal buka di browser (Chrome, Safari, Edge). Bisa juga diinstall sebagai PWA agar terlihat seperti aplikasi native di HP/laptop."
+        "question": "Apakah ada trial gratis?",
+        "answer": "Ya! Saat mendaftar, Anda bisa memilih 1 produk untuk dicoba gratis selama 7 hari tanpa perlu kartu kredit."
       },
       "3": {
-        "question": "Bagaimana cara mendapatkan akun setelah pembelian?",
-        "answer": "Setelah pembelian dari marketplace, Anda akan menerima email berisi username dan password untuk login."
+        "question": "Bagaimana cara membeli produk setelah trial?",
+        "answer": "Setelah masuk ke halaman Your Apps, Anda bisa membeli produk yang sedang dicoba atau membeli produk lain yang tersedia."
       },
       "4": {
-        "question": "Apakah bisa pilih modul tertentu saja?",
-        "answer": "Ya. Sistem kami modular. Misalnya jika hanya butuh POS & Inventory, bisa tambah modul lain kapan saja."
+        "question": "Apa saja metode pembayaran yang tersedia?",
+        "answer": "Kami menerima pembayaran melalui transfer bank (Virtual Account) dan QRIS. Semua pembayaran aman dan otomatis terverifikasi."
       },
       "5": {
-        "question": "Berapa biaya subscription?",
-        "answer": "Kami menyediakan beberapa paket: Starter (POS + Invoice + Basic Inventory), Business (Starter + Purchasing + Finance + Delivery), dan Enterprise (semua modul termasuk HR/Payroll). Harga mulai dari Rp 99.000 untuk lisensi lifetime."
+        "question": "Apakah pembayaran aman?",
+        "answer": "Ya, sangat aman. Semua transaksi pembayaran diproses melalui sistem pembayaran terpercaya dan otomatis terverifikasi."
       },
       "6": {
-        "question": "Apakah ada free trial?",
-        "answer": "Ya. Anda bisa coba aplikasi gratis selama 7 hari."
+        "question": "Apakah ada sistem berlangganan bulanan?",
+        "answer": "Tidak. Kami hanya menyediakan lisensi seumur hidup (bayar sekali pakai selamanya) untuk setiap produk."
       },
       "7": {
-        "question": "Apakah bisa digunakan untuk multiple cabang?",
-        "answer": "Ya, support multi-user dan multi-branch tersedia di paket tertentu."
+        "question": "Berapa banyak perangkat yang bisa digunakan?",
+        "answer": "1 akun hanya untuk 1 perangkat. Jika ingin ganti perangkat, pastikan backup data Anda terlebih dahulu melalui menu di aplikasi, lalu restore di perangkat baru."
       },
       "8": {
-        "question": "Apakah data saya aman?",
-        "answer": "Ya, data Anda disimpan di server yang aman dengan enkripsi standar industri dan bisa di-restore meskipun device hilang atau rusak."
+        "question": "Apakah aplikasi bisa digunakan tanpa internet?",
+        "answer": "Ya, bisa. Semua data tersimpan di perangkat Anda, jadi tetap bisa digunakan meskipun tidak ada koneksi internet."
       },
       "9": {
-        "question": "Apakah ada customer support?",
-        "answer": "Ya, kami menyediakan support via WhatsApp, email, dan grup komunitas pengguna."
+        "question": "Apakah perlu download dan install aplikasi?",
+        "answer": "Tidak perlu. Cukup buka di browser seperti Chrome atau Safari. Anda juga bisa menyimpannya di layar utama agar lebih mudah diakses."
+      },
+      "10": {
+        "question": "Dimana data saya disimpan?",
+        "answer": "Semua data tersimpan di perangkat Anda. Pastikan untuk rutin backup data melalui menu di aplikasi agar data tidak hilang."
+      },
+      "11": {
+        "question": "Bagaimana jika saya tidak puas dengan produk?",
+        "answer": "Kami tidak menyediakan pengembalian dana, namun kami berkomitmen untuk mendengarkan keluhan Anda dan terus memperbaiki produk agar sesuai kebutuhan."
+      },
+      "12": {
+        "question": "Apakah bisa membeli lebih dari 1 produk?",
+        "answer": "Ya, tentu! Setelah masuk ke Your Apps, Anda bisa membeli produk lain yang Anda butuhkan kapan saja."
+      },
+      "13": {
+        "question": "Bagaimana cara mendapatkan bantuan?",
+        "answer": "Kami siap membantu Anda melalui WhatsApp, email, dan grup komunitas pengguna."
+      },
+      "14": {
+        "question": "Apakah bisa digunakan untuk banyak cabang?",
+        "answer": "Ya, beberapa produk kami mendukung fitur untuk banyak pengguna dan banyak cabang. Silakan cek detail fitur setiap produk."
+      },
+      "15": {
+        "question": "Bagaimana cara mengaktifkan produk setelah pembayaran?",
+        "answer": "Setelah pembayaran terverifikasi, produk akan otomatis aktif di akun Anda dan bisa langsung digunakan dari halaman Your Apps."
       }
     },
     "Contact Us": "Hubungi Kami",
@@ -152,6 +176,185 @@
     "Message Whatsapp": "Kirim pesan di Whatsapp",
     "Message Email": "Kirim email kepada kami",
     "Lets Connect": "atau Mari terhubung di social media kami"
+  },
+  "SERVICE_DETAIL": {
+    "Benefits": "Keuntungan",
+    "Workflow": "Alur Kerja",
+    "What You Get": "Yang Anda Dapatkan",
+    "Estimation & Price": "Estimasi & Harga",
+    "Working Time": "Waktu Pengerjaan",
+    "Price": "Harga",
+    "Price Note": "*Harga dapat disesuaikan dengan kebutuhan",
+    "Interested Title": "Tertarik dengan Layanan Ini?",
+    "Interested Description": "Mari diskusikan kebutuhan Anda dan bagaimana kami bisa membantu mewujudkan ide Anda menjadi kenyataan.",
+    "Contact Us Button": "Hubungi Kami",
+    "Step": "Step"
+  },
+  "SERVICE": {
+    "UI/UX Design": {
+      "title": "Desain UI/UX",
+      "description": "Kami menciptakan pengalaman digital yang intuitif dan menarik. Dari riset pengguna hingga prototype interaktif, kami memastikan setiap elemen desain memiliki tujuan dan meningkatkan kepuasan pengguna.",
+      "benefits": {
+        "1": "Desain yang user-friendly dan mudah digunakan",
+        "2": "Meningkatkan engagement dan konversi pengguna",
+        "3": "Konsisten dengan brand identity Anda",
+        "4": "Responsive untuk semua perangkat"
+      },
+      "workflow": {
+        "1": {
+          "title": "Riset & Analisis",
+          "description": "Kami mulai dengan memahami target pengguna, kompetitor, dan kebutuhan bisnis Anda"
+        },
+        "2": {
+          "title": "Wireframe & Prototype",
+          "description": "Membuat sketsa dan prototype interaktif untuk visualisasi awal"
+        },
+        "3": {
+          "title": "Desain Visual",
+          "description": "Mengembangkan desain visual yang menarik dengan color scheme dan typography yang tepat"
+        },
+        "4": {
+          "title": "Testing & Iterasi",
+          "description": "Melakukan user testing dan perbaikan berdasarkan feedback"
+        },
+        "5": {
+          "title": "Handoff ke Developer",
+          "description": "Menyerahkan design system dan asset yang siap untuk development"
+        }
+      },
+      "deliverables": {
+        "1": "Wireframe & User Flow",
+        "2": "High-Fidelity Design (Figma/Adobe XD)",
+        "3": "Design System & Style Guide",
+        "4": "Prototype Interaktif",
+        "5": "Asset untuk Development"
+      },
+      "timeline": "2-4 minggu",
+      "price_start": "Mulai dari Rp 5.000.000"
+    },
+    "Web Development": {
+      "title": "Pengembangan Web",
+      "description": "Kami membangun website yang cepat, aman, dan scalable sesuai kebutuhan bisnis Anda. Dari landing page hingga aplikasi web kompleks, kami menggunakan teknologi terkini untuk hasil terbaik.",
+      "benefits": {
+        "1": "Website cepat dan optimal untuk SEO",
+        "2": "Responsive di semua perangkat",
+        "3": "Keamanan tingkat enterprise",
+        "4": "Mudah di-maintain dan dikembangkan"
+      },
+      "workflow": {
+        "1": {
+          "title": "Requirement Gathering",
+          "description": "Diskusi mendalam tentang kebutuhan, fitur, dan target bisnis Anda"
+        },
+        "2": {
+          "title": "Planning & Architecture",
+          "description": "Merancang struktur database, API, dan arsitektur sistem"
+        },
+        "3": {
+          "title": "Development",
+          "description": "Coding dengan best practices dan regular progress update"
+        },
+        "4": {
+          "title": "Testing & QA",
+          "description": "Testing menyeluruh untuk memastikan kualitas dan performa"
+        },
+        "5": {
+          "title": "Deployment & Training",
+          "description": "Deploy ke server dan training penggunaan untuk tim Anda"
+        }
+      },
+      "deliverables": {
+        "1": "Source Code (GitHub Repository)",
+        "2": "Database Schema & Documentation",
+        "3": "API Documentation",
+        "4": "User Manual & Admin Guide",
+        "5": "1 Bulan Support & Maintenance"
+      },
+      "timeline": "4-12 minggu",
+      "price_start": "Mulai dari Rp 10.000.000"
+    },
+    "App Development": {
+      "title": "Pengembangan Aplikasi Mobile",
+      "description": "Kami mengembangkan aplikasi mobile yang fungsional dan elegan untuk iOS dan Android. Dari konsep hingga publish di App Store/Play Store, kami handle semuanya.",
+      "benefits": {
+        "1": "Native atau Cross-platform (Flutter/React Native)",
+        "2": "Performa optimal dan user experience yang smooth",
+        "3": "Integrasi dengan backend dan API",
+        "4": "Support untuk iOS dan Android"
+      },
+      "workflow": {
+        "1": {
+          "title": "Discovery & Planning",
+          "description": "Memahami kebutuhan, target user, dan platform yang diinginkan"
+        },
+        "2": {
+          "title": "UI/UX Design",
+          "description": "Desain interface yang sesuai dengan guideline iOS/Android"
+        },
+        "3": {
+          "title": "Development",
+          "description": "Coding aplikasi dengan regular testing di real device"
+        },
+        "4": {
+          "title": "Testing & Bug Fixing",
+          "description": "Testing menyeluruh di berbagai device dan OS version"
+        },
+        "5": {
+          "title": "Publish & Support",
+          "description": "Submit ke App Store/Play Store dan support post-launch"
+        }
+      },
+      "deliverables": {
+        "1": "Source Code (GitHub Repository)",
+        "2": "Aplikasi di App Store & Play Store",
+        "3": "API Documentation (jika ada backend)",
+        "4": "User Manual",
+        "5": "1 Bulan Support & Bug Fixing"
+      },
+      "timeline": "6-16 minggu",
+      "price_start": "Mulai dari Rp 15.000.000"
+    },
+    "Custom Enterprise System": {
+      "title": "Sistem Enterprise Custom",
+      "description": "Kami membangun sistem enterprise yang disesuaikan dengan proses bisnis unik Anda. Dari ERP, CRM, hingga sistem internal, kami siap mengotomatisasi dan meningkatkan efisiensi operasional Anda.",
+      "benefits": {
+        "1": "Disesuaikan 100% dengan proses bisnis Anda",
+        "2": "Integrasi dengan sistem existing",
+        "3": "Scalable untuk pertumbuhan bisnis",
+        "4": "Training dan dokumentasi lengkap"
+      },
+      "workflow": {
+        "1": {
+          "title": "Business Analysis",
+          "description": "Analisis mendalam proses bisnis dan pain points yang ada"
+        },
+        "2": {
+          "title": "System Design",
+          "description": "Merancang arsitektur sistem, database, dan workflow"
+        },
+        "3": {
+          "title": "Development Sprint",
+          "description": "Development dengan metode agile dan regular demo"
+        },
+        "4": {
+          "title": "UAT & Refinement",
+          "description": "User Acceptance Testing dan penyesuaian berdasarkan feedback"
+        },
+        "5": {
+          "title": "Go-Live & Support",
+          "description": "Deployment, training, dan ongoing support"
+        }
+      },
+      "deliverables": {
+        "1": "Custom Enterprise System",
+        "2": "Source Code & Documentation",
+        "3": "Database & System Architecture",
+        "4": "Training untuk Admin & User",
+        "5": "3 Bulan Support & Maintenance"
+      },
+      "timeline": "12-24 minggu",
+      "price_start": "Mulai dari Rp 30.000.000"
+    }
   },
   "PRODUCT": {
     "Category": {

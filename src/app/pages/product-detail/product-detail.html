@@ -1,5 +1,5 @@
 <app-landing-layout>
-    <div class="product-detail-page min-h-screen">
+    <div class="product-detail-page min-h-screen pt-[4rem]">
         @if (loading) {
         <div class="flex items-center justify-center min-h-screen">
             <i class="pi pi-spin pi-spinner text-4xl text-sky-500"></i>
@@ -9,7 +9,7 @@
             <!-- Back Button -->
             <div class="mb-6">
                 <p-button icon="pi pi-arrow-left" [label]="'BUTTON.Back' | translate" [text]="true" severity="secondary"
-                    (onClick)="handleBackNavigation()">
+                    (onClick)="handleBackNavigation()" styleClass="p-button-sm">
                 </p-button>
             </div>
 

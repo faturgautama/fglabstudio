@@ -61,40 +61,64 @@
     "FAQ Description": "Helpful Answer to Common User Questions",
     "FAQ Datasource": {
       "1": {
-        "question": "Can this app be used without internet?",
-        "answer": "Yes. All transactions are stored locally (offline). When the internet is available, data will automatically sync to the server."
+        "question": "How do I start using the product?",
+        "answer": "Simply register on our website, choose 1 product to try free for 7 days, then login to Your Apps page to start using your chosen product."
       },
       "2": {
-        "question": "Do I need to install it on my computer or phone?",
-        "answer": "No installation needed. The app is web-based, just open it in a browser (Chrome, Safari, Edge). It can also be installed as a PWA to look like a native app on your phone/laptop."
+        "question": "Is there a free trial?",
+        "answer": "Yes! During registration, you can choose 1 product to try free for 7 days without needing a credit card."
       },
       "3": {
-        "question": "How do I get an account after purchase?",
-        "answer": "After purchasing from the marketplace, you will receive an email with a username and password to log in."
+        "question": "How do I purchase a product after the trial?",
+        "answer": "After logging into Your Apps page, you can purchase the product you're trying or buy other available products."
       },
       "4": {
-        "question": "Can I choose only specific modules?",
-        "answer": "Yes. The system is modular. For example, if you only need POS & Inventory, you can add other modules anytime later."
+        "question": "What payment methods are available?",
+        "answer": "We accept payments via bank transfer (Virtual Account) and QRIS. All payments are secure and automatically verified."
       },
       "5": {
-        "question": "How much is the subscription fee?",
-        "answer": "We provide several packages: Starter (POS + Invoice + Basic Inventory), Business (Starter + Purchasing + Finance + Delivery), and Enterprise (all modules including HR/Payroll). Pricing starts from Rp xx.xxx/month."
+        "question": "Is payment secure?",
+        "answer": "Yes, very secure. All payment transactions are processed through a trusted payment system and automatically verified."
       },
       "6": {
-        "question": "Is there a free trial?",
-        "answer": "Yes. You can try the app free for 7 days."
+        "question": "Is there a monthly subscription system?",
+        "answer": "No. We only provide lifetime licenses (pay once, use forever) for each product."
       },
       "7": {
-        "question": "Can the app be used for multiple branches?",
-        "answer": "Yes, multi-user and multi-branch support is available in certain packages."
+        "question": "How many devices can be used?",
+        "answer": "1 account is for 1 device only. If you want to switch devices, make sure to backup your data first through the menu in the app, then restore it on the new device."
       },
       "8": {
-        "question": "Is my data safe?",
-        "answer": "Yes, your data is stored on secure servers with industry-standard encryption and can be restored even if your device is lost or damaged."
+        "question": "Can the app be used without internet?",
+        "answer": "Yes, it can. All data is stored on your device, so it can still be used even without an internet connection."
       },
       "9": {
-        "question": "Is customer support available?",
-        "answer": "Yes, we provide support via WhatsApp, email, and a user community group."
+        "question": "Do I need to download and install the app?",
+        "answer": "No need. Just open it in a browser like Chrome or Safari. You can also save it to your home screen for easier access."
+      },
+      "10": {
+        "question": "Where is my data stored?",
+        "answer": "All data is stored on your device. Make sure to regularly backup your data through the menu in the app so your data won't be lost."
+      },
+      "11": {
+        "question": "What if I'm not satisfied with the product?",
+        "answer": "We don't provide refunds, but we are committed to listening to your complaints and continuously improving our products to meet your needs."
+      },
+      "12": {
+        "question": "Can I purchase more than 1 product?",
+        "answer": "Yes, of course! After logging into Your Apps, you can purchase other products you need anytime."
+      },
+      "13": {
+        "question": "How do I get help?",
+        "answer": "We're ready to help you via WhatsApp, email, and user community groups."
+      },
+      "14": {
+        "question": "Can it be used for multiple branches?",
+        "answer": "Yes, some of our products support features for multiple users and multiple branches. Please check the feature details of each product."
+      },
+      "15": {
+        "question": "How do I activate the product after payment?",
+        "answer": "After payment is verified, the product will automatically activate in your account and can be used immediately from Your Apps page."
       }
     },
     "Contact Us": "Contact Us",
@@ -152,6 +176,185 @@
     "Message Whatsapp": "Message us on Whatsapp",
     "Message Email": "Shoot us an email",
     "Lets Connect": "or Let's connect our social media"
+  },
+  "SERVICE_DETAIL": {
+    "Benefits": "Benefits",
+    "Workflow": "Workflow",
+    "What You Get": "What You Get",
+    "Estimation & Price": "Estimation & Price",
+    "Working Time": "Working Time",
+    "Price": "Price",
+    "Price Note": "*Price can be adjusted according to needs",
+    "Interested Title": "Interested in This Service?",
+    "Interested Description": "Let's discuss your needs and how we can help turn your ideas into reality.",
+    "Contact Us Button": "Contact Us",
+    "Step": "Step"
+  },
+  "SERVICE": {
+    "UI/UX Design": {
+      "title": "UI/UX Design",
+      "description": "We create intuitive and engaging digital experiences. From user research to interactive prototypes, we ensure every design element has a purpose and enhances user satisfaction.",
+      "benefits": {
+        "1": "User-friendly and easy-to-use design",
+        "2": "Increase user engagement and conversion",
+        "3": "Consistent with your brand identity",
+        "4": "Responsive for all devices"
+      },
+      "workflow": {
+        "1": {
+          "title": "Research & Analysis",
+          "description": "We start by understanding target users, competitors, and your business needs"
+        },
+        "2": {
+          "title": "Wireframe & Prototype",
+          "description": "Create sketches and interactive prototypes for initial visualization"
+        },
+        "3": {
+          "title": "Visual Design",
+          "description": "Develop attractive visual design with proper color scheme and typography"
+        },
+        "4": {
+          "title": "Testing & Iteration",
+          "description": "Conduct user testing and improvements based on feedback"
+        },
+        "5": {
+          "title": "Handoff to Developer",
+          "description": "Deliver design system and assets ready for development"
+        }
+      },
+      "deliverables": {
+        "1": "Wireframe & User Flow",
+        "2": "High-Fidelity Design (Figma/Adobe XD)",
+        "3": "Design System & Style Guide",
+        "4": "Interactive Prototype",
+        "5": "Assets for Development"
+      },
+      "timeline": "2-4 weeks",
+      "price_start": "Starting from Rp 1.000.000"
+    },
+    "Web Development": {
+      "title": "Web Development",
+      "description": "We build fast, secure, and scalable websites according to your business needs. From landing pages to complex web applications, we use the latest technology for the best results.",
+      "benefits": {
+        "1": "Fast website optimized for SEO",
+        "2": "Responsive on all devices",
+        "3": "Enterprise-level security",
+        "4": "Easy to maintain and develop"
+      },
+      "workflow": {
+        "1": {
+          "title": "Requirement Gathering",
+          "description": "In-depth discussion about your needs, features, and business targets"
+        },
+        "2": {
+          "title": "Planning & Architecture",
+          "description": "Design database structure, API, and system architecture"
+        },
+        "3": {
+          "title": "Development",
+          "description": "Coding with best practices and regular progress updates"
+        },
+        "4": {
+          "title": "Testing & QA",
+          "description": "Comprehensive testing to ensure quality and performance"
+        },
+        "5": {
+          "title": "Deployment & Training",
+          "description": "Deploy to server and usage training for your team"
+        }
+      },
+      "deliverables": {
+        "1": "Source Code (GitHub Repository)",
+        "2": "Database Schema & Documentation",
+        "3": "API Documentation",
+        "4": "User Manual & Admin Guide",
+        "5": "1 Month Support & Maintenance"
+      },
+      "timeline": "4-12 weeks",
+      "price_start": "Starting from Rp 1.500.000"
+    },
+    "App Development": {
+      "title": "Mobile App Development",
+      "description": "We develop functional and elegant mobile applications for iOS and Android. From concept to publishing on App Store/Play Store, we handle everything.",
+      "benefits": {
+        "1": "Native or Cross-platform (Flutter/React Native)",
+        "2": "Optimal performance and smooth user experience",
+        "3": "Integration with backend and API",
+        "4": "Support for iOS and Android"
+      },
+      "workflow": {
+        "1": {
+          "title": "Discovery & Planning",
+          "description": "Understanding needs, target users, and desired platform"
+        },
+        "2": {
+          "title": "UI/UX Design",
+          "description": "Interface design according to iOS/Android guidelines"
+        },
+        "3": {
+          "title": "Development",
+          "description": "Coding app with regular testing on real devices"
+        },
+        "4": {
+          "title": "Testing & Bug Fixing",
+          "description": "Comprehensive testing on various devices and OS versions"
+        },
+        "5": {
+          "title": "Publish & Support",
+          "description": "Submit to App Store/Play Store and post-launch support"
+        }
+      },
+      "deliverables": {
+        "1": "Source Code (GitHub Repository)",
+        "2": "App on App Store & Play Store",
+        "3": "API Documentation (if backend exists)",
+        "4": "User Manual",
+        "5": "1 Month Support & Bug Fixing"
+      },
+      "timeline": "6-16 weeks",
+      "price_start": "Starting from Rp 2.000.000"
+    },
+    "Custom Enterprise System": {
+      "title": "Custom Enterprise System",
+      "description": "We build enterprise systems tailored to your unique business processes. From ERP, CRM, to internal systems, we're ready to automate and improve your operational efficiency.",
+      "benefits": {
+        "1": "100% customized to your business processes",
+        "2": "Integration with existing systems",
+        "3": "Scalable for business growth",
+        "4": "Complete training and documentation"
+      },
+      "workflow": {
+        "1": {
+          "title": "Business Analysis",
+          "description": "In-depth analysis of business processes and existing pain points"
+        },
+        "2": {
+          "title": "System Design",
+          "description": "Design system architecture, database, and workflow"
+        },
+        "3": {
+          "title": "Development Sprint",
+          "description": "Development with agile method and regular demos"
+        },
+        "4": {
+          "title": "UAT & Refinement",
+          "description": "User Acceptance Testing and adjustments based on feedback"
+        },
+        "5": {
+          "title": "Go-Live & Support",
+          "description": "Deployment, training, and ongoing support"
+        }
+      },
+      "deliverables": {
+        "1": "Custom Enterprise System",
+        "2": "Source Code & Documentation",
+        "3": "Database & System Architecture",
+        "4": "Training for Admin & User",
+        "5": "3 Months Support & Maintenance"
+      },
+      "timeline": "12-24 weeks",
+      "price_start": "Starting from Rp 3.000.000"
+    }
   },
   "PRODUCT": {
     "Category": {

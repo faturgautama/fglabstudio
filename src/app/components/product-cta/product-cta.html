@@ -1,10 +1,10 @@
 <div class="product-cta">
-    <div class="cta-container flex gap-4 flex-wrap">
-        <p-button styleClass="p-button-info p-button-sm" label="{{ 'BUTTON.Buy Now' | translate }}"
+    <div class="cta-container grid md:flex gap-4 flex-wrap">
+        <p-button styleClass="p-button-info p-button-sm w-full" label="{{ 'BUTTON.Buy Now' | translate }}"
             icon="pi pi-shopping-cart" (onClick)="handleClickButton('register')">
         </p-button>
 
-        <p-button styleClass="p-button-secondary p-button-sm" label="{{ 'BUTTON.Sign In' | translate }}"
+        <p-button styleClass="p-button-secondary p-button-sm w-full" label="{{ 'BUTTON.Sign In' | translate }}"
             icon="pi pi-sign-in" (onClick)="handleClickButton('login')">
         </p-button>
     </div>

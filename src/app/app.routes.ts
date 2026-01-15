@@ -60,5 +60,9 @@ export const routes: Routes = [
     {
         path: 'product',
         loadComponent: async () => (await import('../app/pages/product-detail/product-detail')).ProductDetail
+    },
+    {
+        path: 'service',
+        loadComponent: async () => (await import('../app/pages/service-detail/service-detail')).ServiceDetail
     }
 ];

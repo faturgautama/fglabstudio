@@ -1,0 +1,153 @@
+<app-landing-layout>
+    <div class="service-detail-page min-h-screen">
+        @if (loading) {
+        <div class="flex items-center justify-center min-h-screen">
+            <i class="pi pi-spin pi-spinner text-4xl text-sky-500"></i>
+        </div>
+        } @else if (service) {
+        <div class="container mx-auto px-4 py-8">
+            <!-- Back Button -->
+            <div class="mb-6">
+                <p-button icon="pi pi-arrow-left" [label]="'BUTTON.Back' | translate" [text]="true" severity="secondary"
+                    (onClick)="handleBackNavigation()">
+                </p-button>
+            </div>
+
+            <!-- Service Header -->
+            <div class="rounded-xl shadow-lg p-6 md:p-8 mb-8 bg-gradient-to-br from-sky-900/20 to-blue-900/20 backdrop-blur-sm border border-sky-700/30"
+                data-aos="fade-up" data-aos-duration="800">
+                <div class="flex flex-col md:flex-row items-start gap-6">
+                    <div
+                        class="flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-sky-500/20 border border-sky-500/30">
+                        <i [class]="service.icon + ' text-3xl md:text-4xl text-sky-400'"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h1 class="text-2xl md:text-4xl font-bold text-gray-100 mb-3">
+                            {{ service.title | translate }}
+                        </h1>
+                        <p class="text-sm md:text-lg text-gray-300 leading-relaxed">
+                            {{ service.description | translate }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="rounded-xl shadow-lg p-6 mb-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800"
+                data-aos="fade-up" data-aos-duration="800">
+                <h2 class="text-2xl font-bold text-gray-100 mb-6 flex items-center gap-3">
+                    <i class="pi pi-star-fill text-yellow-400"></i>
+                    {{ 'SERVICE_DETAIL.Benefits' | translate }}
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @for (benefit of service.benefits; track $index) {
+                    <div class="flex items-start gap-3 p-4 rounded-lg bg-gray-800/50 border border-gray-700/50">
+                        <i class="pi pi-check-circle text-emerald-400 text-xl mt-1"></i>
+                        <p class="text-gray-300 text-sm md:text-base">{{ benefit | translate }}</p>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Workflow Section -->
+            <div class="rounded-xl shadow-lg p-6 mb-8 bg-gray-900/50 backdrop-blur-sm border border-gray-800"
+                data-aos="fade-up" data-aos-duration="800">
+                <h2 class="text-2xl font-bold text-gray-100 mb-6 flex items-center gap-3">
+                    <i class="pi pi-sitemap text-sky-400"></i>
+                    {{ 'SERVICE_DETAIL.Workflow' | translate }}
+                </h2>
+                <div class="relative">
+                    @for (step of service.workflow; track $index) {
+                    <div class="flex gap-4 mb-6 last:mb-0">
+                        <!-- Step Number & Icon -->
+                        <div class="flex flex-col items-center">
+                            <div
+                                class="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-sky-500 to-blue-600 border-4 border-gray-900 shadow-lg relative z-10">
+                                <i [class]="step.icon + ' text-white text-xl'"></i>
+                            </div>
+                            @if ($index < service.workflow.length - 1) { <div
+                                class="w-1 h-full bg-gradient-to-b from-sky-500 to-blue-600 mt-2">
+                        </div>
+                        }
+                    </div>
+
+                    <!-- Step Content -->
+                    <div class="flex-1 pb-8">
+                        <div class="bg-gray-800/50 rounded-lg p-5 border border-gray-700/50">
+                            <div class="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+                                <span class="text-sm font-bold text-sky-400">
+                                    {{ 'SERVICE_DETAIL.Step' | translate }}
+                                    {{ step.step }}</span>
+                                <h3 class="text-lg font-semibold text-gray-100">
+                                    {{ step.title | translate }}
+                                </h3>
+                            </div>
+                            <p class="text-gray-400 text-sm">
+                                {{ step.description | translate }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Deliverables & Timeline -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Deliverables -->
+            <div class="rounded-xl shadow-lg p-6 bg-gray-900/50 backdrop-blur-sm border border-gray-800"
+                data-aos="fade-right" data-aos-duration="800">
+                <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center gap-3">
+                    <i class="pi pi-box text-emerald-400"></i>
+                    {{ 'SERVICE_DETAIL.What You Get' | translate }}
+                </h2>
+                <ul class="space-y-3">
+                    @for (deliverable of service.deliverables; track $index) {
+                    <li class="flex items-start gap-3 text-gray-300">
+                        <i class="pi pi-check text-emerald-400 mt-1"></i>
+                        <span class="text-sm md:text-base">{{ deliverable | translate }}</span>
+                    </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- Timeline & Price -->
+            <div class="rounded-xl shadow-lg p-6 bg-gray-900/50 backdrop-blur-sm border border-gray-800"
+                data-aos="fade-left" data-aos-duration="800">
+                <h2 class="text-xl font-bold text-gray-100 mb-4 flex items-center gap-3">
+                    <i class="pi pi-clock text-sky-400"></i>
+                    {{ 'SERVICE_DETAIL.Estimation & Price' | translate }}
+                </h2>
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg bg-gray-800/50 border border-gray-700/50">
+                        <p class="text-sm text-gray-400 mb-1">{{ 'SERVICE_DETAIL.Working Time' | translate }}</p>
+                        <p class="text-base md:text-lg font-semibold text-gray-100">{{ service.timeline | translate }}
+                        </p>
+                    </div>
+                    <div
+                        class="p-4 rounded-lg bg-gradient-to-br from-sky-900/30 to-blue-900/30 border border-sky-700/30">
+                        <p class="text-sm text-gray-400 mb-1">{{ 'SERVICE_DETAIL.Price' | translate }}</p>
+                        <p class="text-xl md:text-2xl font-bold text-sky-400">{{ service.price_start | translate }}</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ 'SERVICE_DETAIL.Price Note' | translate }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="rounded-xl shadow-lg p-8 bg-gradient-to-br from-sky-900/20 to-blue-900/20 backdrop-blur-sm border border-sky-700/30 text-center"
+            data-aos="fade-up" data-aos-duration="800">
+            <h2 class="text-xl md:text-3xl font-bold text-gray-100 mb-3">
+                {{ 'SERVICE_DETAIL.Interested Title' | translate }}
+            </h2>
+            <p class="text-sm md:text-base text-gray-300 mb-6 max-w-2xl mx-auto">
+                {{ 'SERVICE_DETAIL.Interested Description' | translate }}
+            </p>
+            <p-button [label]="'SERVICE_DETAIL.Contact Us Button' | translate" icon="pi pi-envelope" severity="info"
+                styleClass="p-button-sm" (onClick)="handleContactUs()">
+            </p-button>
+        </div>
+    </div>
+    }
+    </div>
+</app-landing-layout>

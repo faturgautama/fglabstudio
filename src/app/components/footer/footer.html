@@ -32,7 +32,7 @@
 
             @for (item of Product$ | async; track $index) {
             <p class="text-sm text-gray-400 font-medium mb-3">
-                {{ item.title }}
+                {{ item.title | translate }}
             </p>
             }
         </div>

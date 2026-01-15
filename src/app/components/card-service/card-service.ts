@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardServiceModel } from '../../model/components/card-service.model';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from "primeng/button";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-card-service',
@@ -17,7 +18,9 @@ export class CardService {
 
   @Input() props!: CardServiceModel.ICardService;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
-
+  handleLearnMore(): void {
+    this.router.navigate(['/service'], { queryParams: { id: this.props.id } });
+  }
 }
