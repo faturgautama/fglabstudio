@@ -36,6 +36,7 @@ export class YourApplication implements OnInit {
 
   currentYear = new Date().getFullYear();
 
+  loading = false;
   user: any;
   paymentDialogRef: DynamicDialogRef | undefined;
   newPurchaseDialogRef: DynamicDialogRef | undefined;
@@ -127,6 +128,8 @@ export class YourApplication implements OnInit {
   }
 
   handleSignOut() {
+    this.loading = true;
+
     this._authenticationService
       .signOut(this.user.user.id)
       .subscribe(async (result: any) => {
@@ -135,6 +138,7 @@ export class YourApplication implements OnInit {
           await this._databaseService.switchToUserDatabase(result.data.id);
           localStorage.clear();
           this._authenticationService._userData.next(null);
+          this.loading = false;
 
           setTimeout(() => {
             this._router.navigateByUrl("/login");
