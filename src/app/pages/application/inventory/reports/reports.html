@@ -1,0 +1,13 @@
+<app-dsh-base-layout>
+    <div class="inventory-reports-page">
+        <div class="page-header mb-4">
+            <h1>Inventory Reports</h1>
+            <p class="text-color-secondary">Generate and export inventory reports including stock levels, low stock
+                alerts, and stock movements</p>
+        </div>
+
+        <app-report-container [reportConfigs]="inventoryReportConfigs" [reportService]="reportService"
+            [defaultReportType]="'stock'">
+        </app-report-container>
+    </div>
+</app-dsh-base-layout>

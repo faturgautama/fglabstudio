@@ -1,0 +1,13 @@
+<app-dsh-base-layout>
+    <div class="hr-reports-page">
+        <div class="page-header mb-4">
+            <h1>HR Reports</h1>
+            <p class="text-color-secondary">Generate and export various HR reports including attendance, payroll, leave,
+                overtime, and employee information</p>
+        </div>
+
+        <app-report-container [reportConfigs]="hrReportConfigs" [reportService]="reportService"
+            [defaultReportType]="'attendance'">
+        </app-report-container>
+    </div>
+</app-dsh-base-layout>

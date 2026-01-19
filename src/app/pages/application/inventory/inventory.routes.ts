@@ -95,5 +95,14 @@ export const inventoryRoutes: Routes = [
             title: 'Pengaturan Perusahaan',
             description: 'Manage dan atur data pengaturan perusahaan'
         }
+    },
+    {
+        path: 'reports',
+        loadComponent: async () => (await import('./reports/reports')).InventoryReports,
+        data: {
+            icon: 'pi pi-chart-bar',
+            title: 'Laporan Inventory',
+            description: 'Lihat dan export berbagai laporan inventory'
+        }
     }
 ];

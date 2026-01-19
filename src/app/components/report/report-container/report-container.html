@@ -1,0 +1,54 @@
+<div class="report-container">
+    <!-- Report Type Selection -->
+    <p-card header="Select Report Type" styleClass="mb-4">
+        <div class="grid">
+            <div class="col-12 md:col-6">
+                <label for="reportType" class="block mb-2">Report Type</label>
+                <p-select id="reportType" [(ngModel)]="selectedReportType" [options]="reportTypeOptions"
+                    optionLabel="label" optionValue="value" placeholder="Select Report Type" styleClass="w-full"
+                    (onChange)="selectReportType($event.value)">
+                </p-select>
+            </div>
+            <div class="col-12 md:col-6" *ngIf="selectedConfig">
+                <label class="block mb-2">Description</label>
+                <p class="text-color-secondary">{{ selectedConfig.description }}</p>
+            </div>
+        </div>
+    </p-card>
+
+    <!-- Filters -->
+    <app-report-filters *ngIf="selectedConfig" [reportConfig]="selectedConfig" [dataProvider]="getDataProvider()"
+        (generateClicked)="generateReport($event)">
+    </app-report-filters>
+
+    <!-- Error Message -->
+    <p-message *ngIf="error" severity="error" [text]="error" styleClass="mb-4 w-full">
+    </p-message>
+
+    <!-- Export and Print Actions -->
+    <div class="action-bar mb-4" *ngIf="currentReportData && !loading">
+        <div class="flex gap-2 justify-content-end flex-wrap">
+            <button pButton type="button" label="Export Excel" icon="pi pi-file-excel" class="p-button-success"
+                (click)="exportReport(ExportFormat.EXCEL)">
+            </button>
+            <button pButton type="button" label="Export PDF" icon="pi pi-file-pdf" class="p-button-danger"
+                (click)="exportReport(ExportFormat.PDF)">
+            </button>
+            <button pButton type="button" label="Print" icon="pi pi-print" class="p-button-secondary"
+                (click)="printReport()">
+            </button>
+            <button pButton type="button" label="Clear" icon="pi pi-times" class="p-button-outlined"
+                (click)="clearReport()">
+            </button>
+        </div>
+    </div>
+
+    <!-- Report Summary -->
+    <app-report-summary *ngIf="currentReportData && !loading" [summary]="currentReportData.summary">
+    </app-report-summary>
+
+    <!-- Report Preview -->
+    <app-report-preview *ngIf="selectedConfig" [reportData]="currentReportData" [columns]="selectedConfig.columns"
+        [loading]="loading">
+    </app-report-preview>
+</div>

@@ -1,0 +1,37 @@
+.inventory-reports-page {
+    .page-header {
+        h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        p {
+            margin: 0;
+            font-size: 1rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .inventory-reports-page {
+        .page-header {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 0.875rem;
+            }
+        }
+    }
+}
+
+@media print {
+    .inventory-reports-page {
+        .page-header {
+            display: none;
+        }
+    }
+}

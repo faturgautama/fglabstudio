@@ -28,6 +28,16 @@
             ],
             "styles": [
               "src/styles.scss"
+            ],
+            "allowedCommonJsDependencies": [
+              "canvg",
+              "core-js",
+              "raf",
+              "rgbcolor",
+              "papaparse",
+              "aos",
+              "exceljs",
+              "html2canvas"
             ]
           },
           "configurations": {

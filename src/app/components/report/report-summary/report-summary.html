@@ -1,0 +1,10 @@
+<p-card *ngIf="summary" header="Summary" styleClass="mb-4">
+    <div class="grid">
+        <div class="col-12 md:col-6 lg:col-4" *ngFor="let entry of getSummaryEntries()">
+            <div class="summary-item">
+                <label class="summary-label">{{ formatKey(entry[0]) }}</label>
+                <div class="summary-value">{{ entry[1] }}</div>
+            </div>
+        </div>
+    </div>
+</p-card>

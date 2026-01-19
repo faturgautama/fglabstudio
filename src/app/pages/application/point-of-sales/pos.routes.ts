@@ -68,5 +68,14 @@ export const posRoutes: Routes = [
             title: 'Pengaturan',
             description: 'Pengaturan POS Kasir'
         }
+    },
+    {
+        path: 'reports',
+        loadComponent: async () => (await import('./reports/reports')).POSReports,
+        data: {
+            icon: 'pi pi-chart-line',
+            title: 'Laporan POS',
+            description: 'Lihat dan export berbagai laporan POS'
+        }
     }
 ];

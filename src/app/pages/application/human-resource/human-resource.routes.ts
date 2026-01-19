@@ -109,4 +109,13 @@ export const humanResourceRoutes: Routes = [
             description: 'Lihat schedule cuti karyawan'
         }
     },
+    {
+        path: 'reports',
+        loadComponent: async () => (await import('./reports/reports')).HRReportsComponent,
+        data: {
+            icon: 'pi pi-chart-bar',
+            title: 'Reports',
+            description: 'Generate dan export laporan HR'
+        }
+    },
 ];

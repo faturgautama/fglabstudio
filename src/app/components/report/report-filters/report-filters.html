@@ -1,0 +1,114 @@
+<form [formGroup]="filterForm" class="report-filters" *ngIf="reportConfig">
+    <div class="grid">
+        <!-- Period Type Selection -->
+        <div class="col-12 md:col-4" *ngIf="hasFilter(FilterType.PERIOD)">
+            <label for="periodType" class="block mb-2">Period Type</label>
+            <p-select id="periodType" formControlName="periodType" [options]="periodTypes" optionLabel="label"
+                optionValue="value" placeholder="Select Period Type" styleClass="w-full">
+            </p-select>
+        </div>
+
+        <!-- Date Range -->
+        <ng-container *ngIf="filterForm.get('periodType')?.value === PeriodType.DATE_RANGE">
+            <div class="col-12 md:col-4">
+                <label for="startDate" class="block mb-2">Start Date *</label>
+                <p-datepicker id="startDate" formControlName="startDate" dateFormat="dd/mm/yy"
+                    placeholder="Select Start Date" styleClass="w-full" [showIcon]="true">
+                </p-datepicker>
+                <small class="p-error"
+                    *ngIf="filterForm.get('startDate')?.invalid && filterForm.get('startDate')?.touched">
+                    Start date is required
+                </small>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <label for="endDate" class="block mb-2">End Date *</label>
+                <p-datepicker id="endDate" formControlName="endDate" dateFormat="dd/mm/yy" placeholder="Select End Date"
+                    styleClass="w-full" [showIcon]="true">
+                </p-datepicker>
+                <small class="p-error" *ngIf="filterForm.get('endDate')?.invalid && filterForm.get('endDate')?.touched">
+                    End date is required
+                </small>
+            </div>
+        </ng-container>
+
+        <!-- Month Selection -->
+        <ng-container *ngIf="filterForm.get('periodType')?.value === PeriodType.MONTH">
+            <div class="col-12 md:col-4">
+                <label for="month" class="block mb-2">Month *</label>
+                <p-select id="month" formControlName="month" [options]="months" optionLabel="label" optionValue="value"
+                    placeholder="Select Month" styleClass="w-full">
+                </p-select>
+                <small class="p-error" *ngIf="filterForm.get('month')?.invalid && filterForm.get('month')?.touched">
+                    Month is required
+                </small>
+            </div>
+
+            <div class="col-12 md:col-4">
+                <label for="year" class="block mb-2">Year *</label>
+                <p-select id="year" formControlName="year" [options]="years" optionLabel="label" optionValue="value"
+                    placeholder="Select Year" styleClass="w-full">
+                </p-select>
+                <small class="p-error" *ngIf="filterForm.get('year')?.invalid && filterForm.get('year')?.touched">
+                    Year is required
+                </small>
+            </div>
+        </ng-container>
+
+        <!-- Year Selection -->
+        <ng-container *ngIf="filterForm.get('periodType')?.value === PeriodType.YEAR">
+            <div class="col-12 md:col-4">
+                <label for="yearOnly" class="block mb-2">Year *</label>
+                <p-select id="yearOnly" formControlName="year" [options]="years" optionLabel="label" optionValue="value"
+                    placeholder="Select Year" styleClass="w-full">
+                </p-select>
+                <small class="p-error" *ngIf="filterForm.get('year')?.invalid && filterForm.get('year')?.touched">
+                    Year is required
+                </small>
+            </div>
+        </ng-container>
+
+        <!-- Department Filter -->
+        <div class="col-12 md:col-4" *ngIf="hasFilter(FilterType.DEPARTMENT)">
+            <label for="department" class="block mb-2">Department</label>
+            <p-select id="department" formControlName="department" [options]="departments" optionLabel="label"
+                optionValue="value" placeholder="All Departments" styleClass="w-full" [showClear]="true">
+            </p-select>
+        </div>
+
+        <!-- Employee Filter -->
+        <div class="col-12 md:col-4" *ngIf="hasFilter(FilterType.EMPLOYEE)">
+            <label for="employee" class="block mb-2">Employee</label>
+            <p-select id="employee" formControlName="employee" [options]="employees" optionLabel="label"
+                optionValue="value" placeholder="All Employees" styleClass="w-full" [showClear]="true" [filter]="true">
+            </p-select>
+        </div>
+
+        <!-- Position Filter -->
+        <div class="col-12 md:col-4" *ngIf="hasFilter(FilterType.POSITION)">
+            <label for="position" class="block mb-2">Position</label>
+            <p-select id="position" formControlName="position" [options]="positions" optionLabel="label"
+                optionValue="value" placeholder="All Positions" styleClass="w-full" [showClear]="true">
+            </p-select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="col-12 md:col-4" *ngIf="hasFilter(FilterType.STATUS)">
+            <label for="status" class="block mb-2">Status</label>
+            <p-select id="status" formControlName="status" [options]="statuses" optionLabel="label" optionValue="value"
+                placeholder="All Statuses" styleClass="w-full" [showClear]="true">
+            </p-select>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="col-12">
+            <div class="flex gap-2 justify-content-end">
+                <button pButton type="button" label="Reset" icon="pi pi-refresh" class="p-button-outlined"
+                    (click)="resetFilters()">
+                </button>
+                <button pButton type="button" label="Generate Report" icon="pi pi-chart-bar" (click)="applyFilters()">
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
