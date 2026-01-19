@@ -309,7 +309,6 @@
             <div class="receipt-divider"></div>
 
             <div class="receipt-footer">
-                <p>Terima kasih atas kunjungan Anda!</p>
                 @if (Setting?.receipt_footer) {
                 <p>{{ Setting?.receipt_footer }}</p>
                 }
@@ -318,7 +317,6 @@
         }
         <ng-template pTemplate="footer">
             <p-button label="Cetak" icon="pi pi-print" severity="secondary" (onClick)="printReceipt()"></p-button>
-            <p-button label="WhatsApp" icon="pi pi-whatsapp" severity="success" (onClick)="sendWhatsApp()"></p-button>
             <p-button label="Selesai" (onClick)="closeReceiptDialog()"></p-button>
         </ng-template>
     </p-dialog>

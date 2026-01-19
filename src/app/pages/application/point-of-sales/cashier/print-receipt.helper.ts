@@ -187,7 +187,6 @@ export function printReceipt(
                 <div class="receipt-divider"></div>
                 
                 <div class="receipt-footer">
-                    <p>Terima kasih atas kunjungan Anda!</p>
                     ${setting?.receipt_footer ? `<p>${setting.receipt_footer}</p>` : ''}
                 </div>
             </div>

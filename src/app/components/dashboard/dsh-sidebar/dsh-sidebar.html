@@ -72,7 +72,7 @@
         }
 
         @for (item of sidebarMenu; track $index) {
-        <div class="flex flex-row gap-3 w-full items-center {{ (toggleSidebar || isMobile()) ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors"
+        <div class="flex flex-row gap-3 w-full items-center {{ (toggleSidebar || isMobile()) ? 'justify-start' : 'justify-center' }} mb-1 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors"
             (click)="handleClickMenu(item)" [title]="!toggleSidebar && !isMobile() ? item.title : ''">
             <span class="text-gray-700">
                 <i [class]="item.icon"></i>
@@ -90,7 +90,7 @@
     @if (resolverExtraData) {
     <div class="flex flex-col w-full px-4">
         @if (toggleSidebar || isMobile()) {
-        <div class="flex flex-row items-center justify-between mb-4">
+        <div class="flex flex-row items-center justify-between mb-2">
             <p class="text-sm text-gray-400">
                 {{ resolverExtraData.title }}
             </p>
@@ -103,7 +103,7 @@
         }
 
         @for (item of resolverExtraData.datasource; track $index) {
-        <div class="flex flex-row gap-3 w-full items-center {{ (toggleSidebar || isMobile()) ? 'justify-start' : 'justify-center' }} mb-4 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors"
+        <div class="flex flex-row gap-3 w-full items-center {{ (toggleSidebar || isMobile()) ? 'justify-start' : 'justify-center' }} mb-1 cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors"
             [title]="!toggleSidebar && !isMobile() ? (item.title || item.name) : ''">
             <span class="text-gray-700">
                 <i class="pi pi-circle-fill {{ item.color }}" style="font-size: 10px;"></i>
