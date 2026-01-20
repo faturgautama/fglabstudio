@@ -35,19 +35,24 @@ export class ServiceDetail implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        const serviceId = this.route.snapshot.queryParamMap.get('id');
+        this.route.queryParams
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((result) => {
+                if (!result['id']) {
+                    this.router.navigate(['/']);
+                    return;
+                };
 
-        if (serviceId) {
-            this.serviceDetailService
-                .getServiceById(serviceId)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe(service => {
-                    this.service = service;
-                    this.loading = false;
-                });
-        } else {
-            this.router.navigate(['/']);
-        }
+                this.serviceDetailService
+                    .getServiceById(result['id'])
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe(service => {
+                        this.service = service;
+                        this.loading = false;
+                    });
+            })
+
+
     }
 
     ngOnDestroy(): void {

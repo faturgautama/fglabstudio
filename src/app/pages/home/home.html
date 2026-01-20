@@ -285,25 +285,21 @@
 
   <!-- Contact Us -->
   <div id="contact_us" class="grid-bg grid-vignette w-full mx-auto relative">
-    <div class="container flex flex-col w-full items-center justify-center mx-auto py-10 md:px-0 px-10">
+    <div class="container flex flex-col w-full items-center justify-center mx-auto py-10 md:px-0 px-10"
+      data-aos="fade-right" data-aos-duration="1500" data-aos-easing="ease-out-cubic">
       <!-- Contact Us -->
-      <div class="flex mx-auto mb-5">
-        <app-badge-title [title]="'HOME.Contact Us' | translate" data-aos="fade-right" data-aos-duration="1500"
-          data-aos-easing="ease-out-cubic"></app-badge-title>
-      </div>
+      <app-badge-title [title]="'HOME.Contact Us' | translate"></app-badge-title>
 
       <!-- Sub heading  -->
-      <div class="flex w-full md:w-5/12 mb-10">
-        <p class="text-lg md:text-xl text-center font-semibold text-gray-200" data-aos="fade-right"
-          data-aos-duration="1600" data-aos-easing="ease-out-cubic">
+      <div class="flex w-full md:w-5/12 mb-10 mt-5">
+        <p class="text-lg md:text-xl text-center font-semibold text-gray-200">
           {{ 'HOME.Contact Us Subheader' | translate }}
         </p>
       </div>
 
       <!-- Form and Whatsapp number  -->
       <div
-        class="flex flex-col md:flex-row justify-center w-full md:w-8/12 gap-3 bg-gray-900/80 p-0 md:p-10 rounded-xl shadow"
-        data-aos="fade-right" data-aos-duration="1700" data-aos-easing="ease-out-cubic">
+        class="flex flex-col md:flex-row justify-center w-full md:w-8/12 gap-3 bg-gray-900/80 p-0 md:p-10 rounded-xl shadow">
         <div class="flex flex-col w-full md:w-6/12 p-5 gap-5" [formGroup]="ContactForm">
           <!-- Full Name -->
           <div class="flex flex-col gap-1 w-full">
@@ -360,20 +356,20 @@
 
           </div>
 
-          <div class="flex flex-row gap-1 mb-2 cursor-pointer">
+          <!-- <div class="flex flex-row gap-1 mb-2 cursor-pointer">
             <span>
               <i class="pi pi-whatsapp text-gray-400"></i>
             </span>
             <p class="text-gray-400 text-sm font-medium underline">
               {{ 'FORM.Message Whatsapp' | translate}}
             </p>
-          </div>
+          </div> -->
 
           <div class="flex flex-row gap-1 cursor-pointer mb-10">
             <span>
               <i class="pi pi-envelope text-gray-400"></i>
             </span>
-            <p class="text-gray-400 text-sm font-medium underline">
+            <p class="text-gray-400 text-sm font-medium underline" (click)="handleClickSendEmail()">
               {{ 'FORM.Message Email' | translate}}
             </p>
           </div>

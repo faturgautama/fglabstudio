@@ -8,6 +8,7 @@ import { SolutionState } from '../../store/solution';
 import { AsyncPipe, NgFor } from '@angular/common';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SocialMediaList } from "../social-media-list/social-media-list";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -31,7 +32,8 @@ export class Footer implements OnInit, OnDestroy {
   Service$: Observable<CardServiceModel.ICardService[]>;
 
   constructor(
-    private _store: Store
+    private _store: Store,
+    private _router: Router,
   ) {
     this.Product$ = this._store
       .select(ProductState.getData)
@@ -48,5 +50,47 @@ export class Footer implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.Destroy$.next(0);
     this.Destroy$.complete();
+  }
+
+  handleClickProduct(item: CardProductModel.ICardProduct) {
+    this._router.navigateByUrl(`/product?id=${item.id}`)
+  }
+
+  handleClickService(item: CardServiceModel.ICardService) {
+    this._router.navigateByUrl(`/service?id=${item.id}`)
+  }
+
+  handleClickContactUs() {
+    const currentUrl = this._router.url;
+
+    // Jika sedang di halaman home, langsung scroll
+    if (currentUrl === '/' || currentUrl === '') {
+      const element = document.getElementById('contact_us');
+      if (element) {
+        const offset = element.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      }
+    } else {
+      // Jika tidak di home, navigate ke home dulu baru scroll
+      this._router.navigateByUrl('/').then(() => {
+        setTimeout(() => {
+          const element = document.getElementById('contact_us');
+          if (element) {
+            const offset = element.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+          }
+        }, 100);
+      });
+    }
+  }
+
+  handleClickTerms() {
+    this._router.navigateByUrl('/terms-and-conditions');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  handleClickRefund() {
+    this._router.navigateByUrl('/refund-policy');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

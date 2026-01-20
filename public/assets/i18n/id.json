@@ -125,11 +125,12 @@
     "Contact Us Subheader": "Mari terhubung dengan kami. Jika ada pertanyaan, jangan ragu untuk menulis"
   },
   "FOOTER": {
+    "Address": "Alamat",
     "Product": "Produk",
     "Service": "Layanan",
     "Support": "Dukungan",
     "Contact Us": "Hubungi Kami",
-    "License": "Lisensi",
+    "Terms and Conditions": "Syarat dan Ketentuan",
     "Refund Policy": "Kebijakan Pengembalian"
   },
   "BUTTON": {
@@ -176,6 +177,90 @@
     "Message Whatsapp": "Kirim pesan di Whatsapp",
     "Message Email": "Kirim email kepada kami",
     "Lets Connect": "atau Mari terhubung di social media kami"
+  },
+  "TERMS": {
+    "Title": "Syarat dan Ketentuan",
+    "Section1": {
+      "Title": "1. Penerimaan Ketentuan",
+      "Content": "Dengan mengakses dan menggunakan produk dan layanan kami, Anda setuju untuk terikat dengan Syarat dan Ketentuan ini. Jika Anda tidak setuju dengan bagian mana pun dari ketentuan ini, mohon untuk tidak menggunakan layanan kami."
+    },
+    "Section2": {
+      "Title": "2. Lisensi dan Penggunaan",
+      "Content": "Kami menyediakan lisensi seumur hidup untuk produk kami dengan ketentuan sebagai berikut:",
+      "List": {
+        "1": "Satu lisensi hanya berlaku untuk satu perangkat",
+        "2": "Anda dapat memindahkan lisensi ke perangkat lain dengan melakukan backup dan restore data",
+        "3": "Anda tidak diperkenankan untuk membagikan, menjual kembali, atau mendistribusikan lisensi kepada pihak lain",
+        "4": "Anda bertanggung jawab untuk menjaga keamanan akun dan lisensi Anda"
+      }
+    },
+    "Section3": {
+      "Title": "3. Uji Coba Gratis",
+      "Content": "Kami menyediakan uji coba gratis selama 7 hari untuk satu produk dengan ketentuan:",
+      "List": {
+        "1": "Uji coba gratis hanya tersedia satu kali per akun",
+        "2": "Tidak memerlukan kartu kredit untuk aktivasi trial",
+        "3": "Setelah masa trial berakhir, Anda harus membeli lisensi untuk melanjutkan penggunaan produk"
+      }
+    },
+    "Section4": {
+      "Title": "4. Pembayaran dan Harga",
+      "Content": "Semua pembayaran diproses secara aman melalui mitra pembayaran terpercaya kami. Harga tercantum dalam Rupiah Indonesia (IDR) dan dapat berubah sewaktu-waktu tanpa pemberitahuan sebelumnya. Setelah pembayaran terverifikasi, lisensi Anda akan otomatis aktif."
+    },
+    "Section5": {
+      "Title": "5. Data dan Privasi",
+      "Content": "Semua data Anda tersimpan secara lokal di perangkat Anda. Kami tidak menyimpan atau mengakses data bisnis Anda di server kami. Anda bertanggung jawab untuk melakukan backup data secara berkala melalui fitur backup di aplikasi."
+    },
+    "Section6": {
+      "Title": "6. Update Produk dan Dukungan",
+      "Content": "Kami berkomitmen untuk terus meningkatkan produk kami. Update akan diberikan secara otomatis dan gratis. Dukungan teknis tersedia melalui WhatsApp, email, dan grup komunitas pengguna."
+    },
+    "Section7": {
+      "Title": "7. Batasan Tanggung Jawab",
+      "Content": "Kami berusaha memberikan produk dan layanan terbaik. Namun, kami tidak bertanggung jawab atas kerugian langsung maupun tidak langsung yang timbul dari penggunaan produk kami. Anda menggunakan produk kami dengan risiko Anda sendiri."
+    },
+    "Section8": {
+      "Title": "8. Perubahan Ketentuan",
+      "Content": "Kami berhak untuk mengubah Syarat dan Ketentuan ini sewaktu-waktu. Perubahan akan diberitahukan melalui website atau email kami. Penggunaan layanan kami setelah perubahan berarti Anda menerima ketentuan yang baru."
+    }
+  },
+  "REFUND": {
+    "Title": "Kebijakan Pengembalian Dana",
+    "Important": "⚠️ Penting: Kami tidak menyediakan pengembalian dana untuk produk yang telah dibeli",
+    "Section1": {
+      "Title": "1. Kebijakan Tanpa Pengembalian Dana",
+      "Content": "Semua penjualan produk kami bersifat final. Kami tidak menyediakan pengembalian dana, penukaran, atau penggantian produk dengan alasan apapun setelah pembayaran dilakukan dan lisensi telah diaktifkan."
+    },
+    "Section2": {
+      "Title": "2. Mengapa Kami Tidak Menyediakan Pengembalian Dana",
+      "Content": "Kami menerapkan kebijakan tanpa pengembalian dana karena alasan berikut:",
+      "List": {
+        "1": "Kami menyediakan uji coba gratis selama 7 hari agar Anda dapat mencoba produk sebelum membeli",
+        "2": "Produk kami berupa lisensi digital yang langsung aktif setelah pembayaran",
+        "3": "Kami menawarkan lisensi seumur hidup dengan harga yang terjangkau"
+      }
+    },
+    "Section3": {
+      "Title": "3. Coba Sebelum Membeli",
+      "Content": "Kami sangat menyarankan Anda untuk memanfaatkan masa uji coba gratis 7 hari sebelum melakukan pembelian. Periode trial ini memungkinkan Anda untuk mengevaluasi secara penuh apakah produk kami sesuai dengan kebutuhan Anda."
+    },
+    "Section4": {
+      "Title": "4. Komitmen Kami untuk Anda",
+      "Content": "Meskipun kami tidak menyediakan pengembalian dana, kami berkomitmen untuk:",
+      "List": {
+        "1": "Mendengarkan semua feedback dan keluhan Anda",
+        "2": "Terus memperbaiki produk kami berdasarkan masukan pengguna",
+        "3": "Menyediakan dukungan teknis yang responsif melalui WhatsApp, email, dan grup komunitas"
+      }
+    },
+    "Section5": {
+      "Title": "5. Masalah Teknis",
+      "Content": "Jika Anda mengalami masalah teknis dengan produk kami, silakan hubungi tim support kami segera. Kami akan berusaha sebaik mungkin untuk membantu menyelesaikan masalah teknis yang Anda hadapi."
+    },
+    "Section6": {
+      "Title": "6. Hubungi Kami",
+      "Content": "Jika Anda memiliki pertanyaan atau kekhawatiran tentang kebijakan ini, silakan hubungi kami melalui WhatsApp, email, atau melalui formulir kontak di website kami. Kami siap membantu Anda."
+    }
   },
   "SERVICE_DETAIL": {
     "Benefits": "Keuntungan",

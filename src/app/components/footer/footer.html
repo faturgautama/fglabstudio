@@ -27,11 +27,25 @@
         <!-- Product -->
         <div class="flex flex-col gap-0 w-full md:w-3/12 md:mb-0 mb-5 md:pl-0 pl-2">
             <p class="text-lg text-gray-300 font-medium mb-5">
+                {{ 'FOOTER.Address' | translate }}
+            </p>
+
+            <p class="text-sm text-gray-400 font-medium mb-1">
+                Grand Rudensia Blok C1
+            </p>
+            <p class="text-sm text-gray-400 font-medium mb-3">
+                Semarang, Indonesia
+            </p>
+        </div>
+
+        <!-- Product -->
+        <div class="flex flex-col gap-0 w-full md:w-3/12 md:mb-0 mb-5 md:pl-0 pl-2">
+            <p class="text-lg text-gray-300 font-medium mb-5">
                 {{ 'FOOTER.Product' | translate }}
             </p>
 
             @for (item of Product$ | async; track $index) {
-            <p class="text-sm text-gray-400 font-medium mb-3">
+            <p class="text-sm text-gray-400 font-medium mb-3 cursor-pointer" (click)="handleClickProduct(item)">
                 {{ item.title | translate }}
             </p>
             }
@@ -44,7 +58,7 @@
             </p>
 
             @for (item of Service$ | async; track $index) {
-            <p class="text-sm text-gray-400 font-medium mb-3">
+            <p class="text-sm text-gray-400 font-medium mb-3 cursor-pointer" (click)="handleClickService(item)">
                 {{ item.title }}
             </p>
             }
@@ -56,15 +70,15 @@
                 {{ 'FOOTER.Support' | translate }}
             </p>
 
-            <p class="text-sm text-gray-400 font-medium mb-3">
+            <p class="text-sm text-gray-400 font-medium mb-3 cursor-pointer" (click)="handleClickContactUs()">
                 {{ 'FOOTER.Contact Us' | translate }}
             </p>
 
-            <p class="text-sm text-gray-400 font-medium mb-3">
-                {{ 'FOOTER.License' | translate }}
+            <p class="text-sm text-gray-400 font-medium mb-3 cursor-pointer" (click)="handleClickTerms()">
+                {{ 'FOOTER.Terms and Conditions' | translate }}
             </p>
 
-            <p class="text-sm text-gray-400 font-medium mb-3">
+            <p class="text-sm text-gray-400 font-medium mb-3 cursor-pointer" (click)="handleClickRefund()">
                 {{ 'FOOTER.Refund Policy' | translate }}
             </p>
         </div>

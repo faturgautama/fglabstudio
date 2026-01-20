@@ -125,11 +125,12 @@
     "Contact Us Subheader": "Let's connect with us. If there is any question, feel free to write"
   },
   "FOOTER": {
+    "Address": "Address",
     "Product": "Product",
     "Service": "Service",
     "Support": "Support",
     "Contact Us": "Contact Us",
-    "License": "License",
+    "Terms and Conditions": "Terms and Conditions",
     "Refund Policy": "Refund Policy"
   },
   "BUTTON": {
@@ -176,6 +177,90 @@
     "Message Whatsapp": "Message us on Whatsapp",
     "Message Email": "Shoot us an email",
     "Lets Connect": "or Let's connect our social media"
+  },
+  "TERMS": {
+    "Title": "Terms and Conditions",
+    "Section1": {
+      "Title": "1. Acceptance of Terms",
+      "Content": "By accessing and using our products and services, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use our services."
+    },
+    "Section2": {
+      "Title": "2. License and Usage",
+      "Content": "We provide lifetime licenses for our products with the following conditions:",
+      "List": {
+        "1": "One license is valid for one device only",
+        "2": "You may transfer the license to another device by backing up and restoring your data",
+        "3": "You may not share, resell, or distribute the license to other parties",
+        "4": "You are responsible for maintaining the security of your account and license"
+      }
+    },
+    "Section3": {
+      "Title": "3. Free Trial",
+      "Content": "We offer a 7-day free trial for one product with the following conditions:",
+      "List": {
+        "1": "Free trial is only available once per account",
+        "2": "No credit card required for trial activation",
+        "3": "After the trial period ends, you must purchase a license to continue using the product"
+      }
+    },
+    "Section4": {
+      "Title": "4. Payment and Pricing",
+      "Content": "All payments are processed securely through our trusted payment partners. Prices are listed in Indonesian Rupiah (IDR) and may change without prior notice. Once payment is verified, your license will be automatically activated."
+    },
+    "Section5": {
+      "Title": "5. Data and Privacy",
+      "Content": "All your data is stored locally on your device. We do not store or access your business data on our servers. You are responsible for regularly backing up your data through the backup feature in the application."
+    },
+    "Section6": {
+      "Title": "6. Product Updates and Support",
+      "Content": "We are committed to continuously improving our products. Updates will be provided automatically and free of charge. Technical support is available via WhatsApp, email, and user community groups."
+    },
+    "Section7": {
+      "Title": "7. Limitation of Liability",
+      "Content": "We strive to provide the best products and services. However, we are not responsible for any direct or indirect losses arising from the use of our products. You use our products at your own risk."
+    },
+    "Section8": {
+      "Title": "8. Changes to Terms",
+      "Content": "We reserve the right to modify these Terms and Conditions at any time. Changes will be notified through our website or email. Continued use of our services after changes constitutes acceptance of the new terms."
+    }
+  },
+  "REFUND": {
+    "Title": "Refund Policy",
+    "Important": "⚠️ Important: We do not provide refunds for purchased products",
+    "Section1": {
+      "Title": "1. No Refund Policy",
+      "Content": "All sales of our products are final. We do not provide refunds, returns, or exchanges for any reason after payment has been made and the license has been activated."
+    },
+    "Section2": {
+      "Title": "2. Why We Don't Provide Refunds",
+      "Content": "We implement a no-refund policy for the following reasons:",
+      "List": {
+        "1": "We provide a 7-day free trial so you can try the product before purchasing",
+        "2": "Our products are digital licenses that are immediately activated after payment",
+        "3": "We offer lifetime licenses at affordable prices"
+      }
+    },
+    "Section3": {
+      "Title": "3. Try Before You Buy",
+      "Content": "We strongly encourage you to take advantage of the 7-day free trial before making a purchase. This trial period allows you to fully evaluate whether our product meets your needs."
+    },
+    "Section4": {
+      "Title": "4. Our Commitment to You",
+      "Content": "Although we don't provide refunds, we are committed to:",
+      "List": {
+        "1": "Listening to all your feedback and complaints",
+        "2": "Continuously improving our products based on user input",
+        "3": "Providing responsive technical support via WhatsApp, email, and community groups"
+      }
+    },
+    "Section5": {
+      "Title": "5. Technical Issues",
+      "Content": "If you experience technical issues with our product, please contact our support team immediately. We will do our best to help resolve any technical problems you encounter."
+    },
+    "Section6": {
+      "Title": "6. Contact Us",
+      "Content": "If you have questions or concerns about this policy, please contact us via WhatsApp, email, or through the contact form on our website. We are ready to help you."
+    }
   },
   "SERVICE_DETAIL": {
     "Benefits": "Benefits",

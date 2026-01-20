@@ -186,6 +186,13 @@ export class Home implements OnInit, OnDestroy {
       this._messageService.clear();
       this._messageService.add({ severity: 'error', summary: 'Oops', detail: 'Please check your data' });
     }
+  }
 
+  handleClickSendEmail() {
+    const emails = ['fglabstudio.com'];
+    const subject = 'Inquiry from Website';
+    const body = 'Hello Team,\n\nI need help with...';
+
+    window.location.href = `mailto:${emails.join(',')}?&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 }

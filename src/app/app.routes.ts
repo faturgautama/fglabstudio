@@ -64,5 +64,13 @@ export const routes: Routes = [
     {
         path: 'service',
         loadComponent: async () => (await import('../app/pages/service-detail/service-detail')).ServiceDetail
+    },
+    {
+        path: 'terms-and-conditions',
+        loadComponent: async () => (await import('../app/pages/terms-and-conditions/terms-and-conditions')).TermsAndConditions
+    },
+    {
+        path: 'refund-policy',
+        loadComponent: async () => (await import('../app/pages/refund-policy/refund-policy')).RefundPolicy
     }
 ];
